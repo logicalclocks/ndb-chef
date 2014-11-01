@@ -1,0 +1,32 @@
+#!/bin/sh 
+
+
+MGM_CONN=<%= node[:ndb][:connect_string] %>
+SKIP_MYSQLDS=0
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--help|-help)
+              echo "usage: <prog> [ -c | --connectstring MGMD_HOST:MGMD_PORT ] [ -s|--skip-mysqlds ]"
+	      echo ""
+	      echo "connectstring is set to <%=  %>"
+	      exit 0 
+	      ;;
+    -c|--connectstring)
+              shift
+	      MGM_CONN=$1
+	      break 
+	      ;;
+    -s|--skip-mysqlds)
+              SKIP_MYSQLDS=1
+	      ;;
+	   * )
+              echo "Unknown option '$1'" 
+              exit -1
+  esac
+  shift       
+done
+
+<%= node[:ndb][:scripts_dir] %>/mysql-server-stop.sh
+<%= node[:ndb][:scripts_dir] %>/memcached-stop.sh
+<%= node[:mysql][:base_dir] %>/bin/ndb_mgm -c $MGM_CONN -e "shutdown"

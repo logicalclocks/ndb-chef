@@ -1,0 +1,11 @@
+#!/bin/sh
+if [ $# -ne 2 ] ; then
+echo "Usage: <prog> username password"
+exit 1
+fi
+
+COMMAND="\"GRANT ALL PRIVILEGES ON \\*.\\* to '$1'@'%' IDENTIFIED BY '$2'\""
+./mysql-client-1.sh -S -e $COMMAND
+
+exit $?
+

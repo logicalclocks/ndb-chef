@@ -1,0 +1,79 @@
+  
+#################################################
+# MySQL Cluster client, Jim Dowling.
+#################################################
+[mysql]
+default-character-set = utf8
+
+[mysqld]
+user           = <%= node[:ndb][:user] %>
+basedir         = <%= node[:mysql][:base_dir] %>
+datadir         = <%= node[:ndb][:mysql_server_dir] %>
+port            = <%= node[:ndb][:mysql_port] %>
+socket          = <%= node[:ndb][:mysql_socket] %>
+bind-address    = <%= @my_ip %>
+pid-file        = <%= node[:ndb][:log_dir] %>/mysql_<%= @mysql_id %>.pid
+tmpdir          = /tmp
+
+
+collation-server = utf8_unicode_ci
+init-connect='SET NAMES utf8'
+character-set-server = utf8
+
+# use NDB storage engine and make NDB the default table type
+ndbcluster
+default-storage-engine = ndbcluster
+
+#################################################
+# optimizations to improve performance of NDB
+#################################################
+#
+# We only use the mysql-server for SELECT COUNT(*) operations. 
+# This makes most other queries become much slower. 
+# It can have a significant effect on performance. 
+ndb-use-exact-count=0
+
+# flush the adaptive-send buffer immediately 
+ndb-force-send=0
+
+# allow indexes to be used on ndb nodes (rather than joins performed in MySQL Server)
+optimizer_switch=engine_condition_pushdown=on
+
+# activate AQL for faster joins
+ndb-join-pushdown=1
+
+# use the cluster connection pool to reduce cluster connection setup time
+ndb-cluster-connection-pool=<%= node[:ndb][:num_ndb_slots_per_client] %>
+
+# Log more data at MySQL Server about ndb
+ndb-extra-logging=0
+
+# for autoincrement, size of prefetching 
+ndb-autoincrement-prefetch-sz=1024
+
+# NDB transaction batche sizes. Higher batch sizes to optimize for throughput.
+ndb-batch-size=24M
+
+#################################################
+# Other [mysqld] params
+#################################################
+
+# replication settings go here
+<% if node[:mysql][:replication_enabled] == "true" -%>
+server-id=@server_id
+log-bin=mysql-bin
+<% end -%>
+
+
+#################################################
+# mysql_cluster connection params
+#################################################
+
+[mysql_cluster]
+# set connectstring to ndb management server (used by all executables)
+ndb-connectstring=<%= node[:ndb][:connect_string] %>
+ndb-wait-setup=<%= node[:ndb][:wait_startup] %>
+
+[client]
+default-character-set = utf8
+socket                = <%= node[:ndb][:mysql_socket] %>

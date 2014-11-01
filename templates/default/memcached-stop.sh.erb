@@ -1,0 +1,15 @@
+#!/bin/sh
+FORCE=0
+if [ $# -gt 0 ] ;then
+  if [ $1 = "--force" ] ; then
+    $FORCE=1
+  else 
+    echo "Incorrect parameter. Usage: <prog> [--force]"
+    exit 1
+  fi
+fi
+
+ID=<%= @node_id %>
+PID_FILE=<%= node[:ndb][:log_dir] %>/memcached_$ID.pid
+<%= node[:ndb][:scripts_dir] %>/util/kill-process.sh memcached $PID_FILE 0 $FORCE
+exit $?

@@ -1,0 +1,43 @@
+127.0.0.1       localhost.localdomain localhost
+<%= @my_ip %>     <%= @fqdn %>
+
+#TODO - merge the arrays and remove duplicates
+<% id = @mgm_id -%>
+<% for n in node[:ndb][:mgmd][:private_ips] -%>
+<%= n %>     mgmd<%= id %>
+<% id += 1 -%>
+<% end -%>
+<% id = 1 -%>
+<% for n in node[:ndb][:ndbd][:private_ips] -%>
+<%= n %>     ndbd<%= id %>
+<% id += 1 -%>
+<% end -%>
+<% id = @mysql_id -%>
+<% for n in node[:ndb][:mysqld][:private_ips] -%>
+<% if ! n.empty? -%>
+<%= n %>     ndbapi<%= id %>
+<% id += 1 -%>
+<% end -%>
+<% end -%>
+<% for n in node[:ndb][:memcached][:private_ips] -%>
+<% if ! n.empty? -%>
+<%= n %>     ndbapi<%= id %>
+<% id += 1 -%>
+<% end -%>
+<% end -%>
+<% if node.attribute?(:hop) && node[:hop].attribute?(:nn) -%>
+<% for n in node[:hop][:nn][:private_ips] -%>
+<% if ! n.empty? -%>
+<%= n %>     ndbapi<%= id %>
+<% id += 1 -%>
+<% end -%>
+<% end -%>
+<% end -%>
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+

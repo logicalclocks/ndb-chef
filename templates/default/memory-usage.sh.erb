@@ -1,0 +1,45 @@
+#!/bin/sh
+
+usage()
+{
+   echo ""
+   echo "Usage: prog_name [-n NUM_LINES (to parse in cluster.log (20 default))]"
+   echo ""
+}
+
+NUM_LINES=20
+
+  case $1 in
+    "-h"|"--help"|"-help")
+      usage
+      exit 0
+      ;;      
+    "-n")
+      shift
+      NUM_LINES=$1
+      usage
+      exit 0
+      ;;      
+     "")
+      # do nothing
+      ;;
+      *)
+      echo "Invalid switch or parameter: $1"
+      usage
+      exit 0
+      ;;
+  esac 
+
+  <%= node[:mysql][:base_dir] %>/bin/ndb_mgm -c <%=  %> -e "all dump 1000"
+  DATA_USAGE_STR=`tail -$NUM_LINES <%= node[:ndb][:log_dir] %>/cluster.log | grep "Data usage"`
+  INDEX_USAGE_STR=`tail -$NUM_LINES <%= node[:ndb][:log_dir] %>/cluster.log | grep "Index usage"`
+  RESOURCE_USAGE_STR=`tail -$NUM_LINES <%= node[:ndb][:log_dir] %>/cluster.log | grep "Resource"`
+  echo "Data Usage:"
+  echo "$DATA_USAGE_STR"
+  echo "Index Usage:"
+  echo "$INDEX_USAGE_STR"
+  echo "Resource Usage:"
+  echo "$RESOURCE_USAGE_STR"
+
+  exit 0
+

@@ -1,0 +1,195 @@
+# For documentation on config params, see:
+# http://dev.mysql.com/doc/refman/5.5/en/mysql-cluster-ndbd-definition.html
+# For overview:
+# http://docs.oracle.com/cd/E17952_01/refman-5.5-en/mysql-cluster-ndb-innodb-engines.html
+
+[NDBD DEFAULT]
+#Used by ndbmdmt to determine the number of LQH threads
+<% cpus = (node[:cpu][:total] / 2) + 1 -%>
+<% if cpus < 2
+     cpus =2 
+   end
+-%>
+MaxNoOfExecutionThreads=<%= cpus  %>
+
+#More flexible than MaxNoOfExecutionThreads
+#Threadconfig=main={cpubind=0},ldm={count=8,cpubind=1,2,3,4,13,14,15,16},io={count=4,cpubind=5,6,17,18},rep={cpubind=7},recv={count=2,cpubind=8,19}
+
+#The number of copies of the data stored on different nodes in the cluster
+NoOfReplicas=<%= node[:ndb][:num_replicas] %>
+
+#The amount of main memory (RAM) used to store columns and ordered indexes in tables, plus some overhead
+# <% dataMemory = (node['memory']['total'][0..-3].to_i / (1024 * 100)) * ((node[:ndb][:memory].to_i) / 5 ) -%>
+#The amount of main memory (RAM) used to hash indexes in tables, plus some overhead
+#IndexMemory=<%= dataMemory / 4 %>M
+DataMemory=<%= node[:ndb][:data_memory] %>M
+IndexMemory=<%= node[:ndb][:index_memory] %>M
+
+#   REDO_LOG_SIZE=`expr ${NUM_FRAGMENT_LOGFILES} \* 64`
+#  NUM_FRAGMENT_LOGFILES=`expr ${DATA_MEMORY} \* 6 / 64`
+# See: http://www.slideshare.net/Severalnines/severalnines-my-sqlclusterpt2013
+#The amount of disk space (NoOfFragmentLogFiles * 64MB) used to store the Redo Log (used for node recovery)
+NoOfFragmentLogFiles=<%= node[:ndb][:data_memory].to_i / 2 %>
+
+#The size of a Redo Log file on disk.
+FragmentLogFileSize=256M
+
+#The speed at which LocalCheckpoints (LCP) are written to disk
+DiskCheckpointSpeed=10M
+
+#The speed at which LocalCheckpoints (LCP) are written to disk, as part of a node recovery 
+DiskCheckpointSpeedInRestart=100M
+
+#The size of the RedoLog Buffer in memory; Reduce for improved disk throughput (but slower recovery time)
+DiskSyncSize=4M
+
+#The size of the RedoBuffer used to buffer writes to the disk subsystem. Increase for high write-rate or slow disk.
+RedoBuffer=64M
+
+#Internal buffer used for passing messages within individual nodes and between nodes. Increase for huge batches.
+LongMessageBuffer=64M
+
+#The maximum time in ms that is permitted to lapse between operations in the same transaction before the transaction is aborted.
+TransactionInactiveTimeout=10000
+
+TransactionDeadlockDetectionTimeout=10000
+
+#0: Disables locking. This is the default value.
+#1: Performs the lock after allocating memory for the process.
+#2: Performs the lock before memory for the process is allocated.
+# Needs root privileges
+LockPagesInMainMemory=1
+
+# Setting these parameters allows you to take advantage of real-time scheduling
+# of NDBCLUSTER threads to get higher throughput.
+RealTimeScheduler=1
+# This parameter specifies the time in microseconds for threads to be executed in the scheduler before sleeping.
+# Default = 0. Higher value to optimize latency over throughput.
+SchedulerSpinTimer=0
+# Specifies the time in microseconds for threads to be executed in the scheduler before being sent. 
+# Default is 50. Higher values give higher throughput at cost of increased latency.
+SchedulerExecutionTimer=100
+
+# Number of threads to create when rebuilding indexes during a system or node start
+BuildIndexThreads=10
+
+# Savings of up to 50% over noncompressed LCPs and backups
+# CompressedLCP=1
+# CompressedBackup=1
+
+BackupMaxWriteSize=    1M
+BackupLogBufferSize=    4M
+BackupDataBufferSize=   16M
+BackupMemory        =   20M
+
+#Configure the maximum number of parallel scans (TUP scans and TUX scans) allowed before they begin queuing for serial handling
+MaxParallelScansPerFragment=256
+
+#The maximum size of the memory unit to use when allocating memory for tables
+MaxAllocate=32M
+
+#The size of the table hash maps used by NDB
+DefaultHashMapSize=3840
+
+# Needs root privileges
+ODirect=1
+
+[MYSQLD DEFAULT]
+
+[NDB_MGMD DEFAULT]
+
+[TCP DEFAULT]
+SendBufferMemory=2M
+ReceiveBufferMemory=2M
+
+<% id = node[:mgm][:id] -%>
+<% rank = 0 -%>
+<% for mgmd in node[:ndb][:mgmd][:private_ips] -%>
+[NDB_MGMD]
+NodeId=<%= id %>
+HostName=<%= mgmd %>
+PortNumber=<%= node[:ndb][:mgmd][:port] %>
+DataDir=<%= node[:ndb][:log_dir] %>
+LogDestination=FILE:filename=<%= node[:ndb][:log_dir] %>/cluster.log,maxsize=10000000,maxfiles=6
+ArbitrationRank=<%= rank %>
+<% id += 1 -%>
+<% rank += 1 -%>
+<% end -%>
+
+<% id = 1 -%>
+<% for ndbdNode in node[:ndb][:ndbd][:private_ips] -%>
+[NDBD] 
+NodeId=<%= id %>
+HostName=<%= ndbdNode %>
+ServerPort=<%= node[:ndb][:ndbd][:port] %>
+DataDir=<%= node[:ndb][:log_dir] %>
+FileSystemPath=<%= "#{node[:ndb][:data_dir]}/#{id}" %>
+<% id += 1 -%>
+<% end -%>
+
+#MySQL Servers, Memcached servers, and Clusterj clients.
+<% hostId = node[:mysql][:id] -%>
+<% if (node.attribute?(:ndb) && node[:ndb].attribute?(:mysqld) && node[:ndb][:mysqld].attribute?(:private_ips) && !node[:ndb][:mysqld][:private_ips].empty?) -%>
+<% for mysql in node[:ndb][:mysqld][:private_ips] -%>
+# for count in 0..(@num_client_slots-1)
+[MYSQLD]
+NodeId=<%= hostId %>
+HostName=<%= mysql %>
+<% hostId += 1 -%>
+<% end -%>
+<% end -%>
+
+<% hostId = node[:memcached][:id] -%>
+<% if (node.attribute?(:ndb) && node[:ndb].attribute?(:memcached) && node[:ndb][:memcached].attribute?(:private_ips) && !node[:ndb][:memcached][:private_ips].empty?) -%>
+<% for memcached in node[:ndb][:memcached][:private_ips] -%>
+[MYSQLD]
+NodeId=<%= hostId %>
+HostName=<%= memcached %>
+<% hostId += 1 -%>
+<% end -%>
+<% end -%>
+
+<% hostId = node[:nn][:id] -%>
+<% if (node.attribute?(:hop) && node[:hop].attribute?(:nn) && node[:hop][:nn].attribute?(:private_ips) && !node[:hop][:nn][:private_ips].empty?) -%>
+<% for nn in node[:hop][:nn][:private_ips] -%>
+[MYSQLD]
+NodeId=<%= hostId %>
+HostName=<%= nn %>
+<% hostId += 1 -%>
+<% end -%>
+<% end -%>
+
+# These slots are extra slots for any clients.
+# Remove these slots for production use.
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]
+[MYSQLD]

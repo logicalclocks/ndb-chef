@@ -1,0 +1,26 @@
+  
+#################################################
+# MySQL Cluster client, Jim Dowling.
+#################################################
+[mysql]
+default-character-set = utf8
+
+[mysqld]
+user           = <%= node[:mysql][:run_as_user] %>
+basedir         = <%= node[:mysql][:base_dir] %>
+datadir         = <%= node[:ndb][:mysql_server_dir] %>
+port            = <%= node[:ndb][:mysql_port] %>
+socket          = <%= node[:ndb][:mysql_socket] %>
+bind-address    = <%= node[:ndb][:mysql_ip] %>
+pid-file        = <%= node[:ndb][:log_dir] %>/mysql_<%= @mysql_id %>.pid
+tmpdir          = /tmp
+
+
+collation-server = utf8_unicode_ci
+init-connect='SET NAMES utf8'
+character-set-server = utf8
+
+
+[client]
+default-character-set = utf8
+socket                = <%= node[:ndb][:mysql_socket] %>

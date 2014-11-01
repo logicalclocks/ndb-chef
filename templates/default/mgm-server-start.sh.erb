@@ -1,0 +1,36 @@
+#!/bin/sh 
+
+USERID=`id | sed -e 's/).*//; s/^.*(//;'`
+if [ "X$USERID" != "X<%= node[:ndb][:user] %>" ]; then
+   echo "You should have started the cluster as user: '<%= node[:ndb][:user] %>'."
+   echo "If you continue, you will change ownership of database files"
+   echo "from '<%= node[:ndb][:user] %>' to '$USERID'."
+   exit -3
+fi  
+
+echo "Testing to see if a cluster is already running on <%= node[:ndb][:connect_string] %> ..." 
+# <%= node[:mysql][:base_dir] %>/bin/ndb_mgm -c <%= node[:ndb][:connect_string] %> -e \"show\"> /dev/null
+netstat -a | grep " <%= node[:ndb][:mgmd][:port] %>"
+
+if [ $? -eq 0 ] ; then
+    echo "A management server is already running on <%= node[:ndb][:connect_string] %>" 
+    exit 2
+fi
+
+
+if [ ! -e <%= node[:mysql][:base_dir] %>/bin/ndb_mgmd ] ; then
+    echo "Error: could not find file: <%= node[:mysql][:base_dir] %>/bin/ndb_mgmd"
+    exit 3
+fi
+
+su <%= node[:ndb][:user] %> -c "<%= node[:mysql][:base_dir] %>/bin/ndb_mgmd -f  <%= node[:ndb][:root_dir] %>/config.ini  --configdir=<%= node[:ndb][:mgm_dir] %> --reload --initial"
+RES=`echo $?`
+if [ $RES -ne 0 ] ; then
+    echo ""
+    echo "Error when starting the management server: $?."
+    echo ""
+    exit 1
+fi
+echo "Started the MySQL Management server - ndb_mgmd." 
+exit $RES
+

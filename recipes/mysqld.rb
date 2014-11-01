@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
 require File.expand_path(File.dirname(__FILE__) + '/find_mysqld')
-libpath = File.expand_path '../../../hopagent/libraries', __FILE__
+libpath = File.expand_path '../../../kagent/libraries', __FILE__
 require File.join(libpath, 'inifile')
 
 ndb_connectstring()
@@ -150,7 +150,7 @@ if node[:ndb][:enabled] == "true"
   if node[:hop][:enabled] == "true"
 
     include_recipe "ndb::hop"
-    hopagent_config "mysqld" do
+    kagent_config "mysqld" do
       service "NDB"
       start_script "#{node[:ndb][:scripts_dir]}/mysql-server-start.sh"
       stop_script  "#{node[:ndb][:scripts_dir]}/mysql-server-stop.sh"

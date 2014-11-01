@@ -1,5 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
-libpath = File.expand_path '../../../hopagent/libraries', __FILE__
+libpath = File.expand_path '../../../kagent/libraries', __FILE__
 require File.join(libpath, 'inifile')
 
 ndb_connectstring()
@@ -98,7 +98,7 @@ end
 
     include_recipe "ndb::hop"
 
-    hopagent_config "mgmserver" do
+    kagent_config "mgmserver" do
       service "NDB"
       start_script "#{node[:ndb][:scripts_dir]}/mgm-server-start.sh"
       stop_script  "#{node[:ndb][:scripts_dir]}/mgm-server-stop.sh"

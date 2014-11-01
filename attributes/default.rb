@@ -1,4 +1,4 @@
-include_attribute "hopagent"
+include_attribute "kagent"
 include_attribute "btsync"
 
 version="7"
@@ -83,7 +83,7 @@ default[:btsync][:ndb][:port]            = 44445
 default[:btsync][:ndb][:seed_secret]     = ""
 default[:btsync][:ndb][:leecher_secret]  = ""
 default[:btsync][:ndb][:device_name]     = ""
-# default[:btsync][:ndb][:seeder_ip]     = "#{default[:hopagent][:dashboard_ip]}"
+# default[:btsync][:ndb][:seeder_ip]     = "#{default[:kagent][:dashboard_ip]}"
 default[:btsync][:ndb][:leechers]        = ['10.0.2.15']
 default[:ndb][:shared_folder]            = "#{node[:btsync][:shared_folder]}/ndb"
 

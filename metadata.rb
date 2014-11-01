@@ -9,7 +9,7 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "1.0"
 
 depends           "btsync"
-depends           "hopagent"
+depends           "kagent"
 
 recipe            "ndb::install", "Installs MySQL Cluster binaries"
 
@@ -28,7 +28,7 @@ recipe            "ndb::btsync", "Installs MySQL Cluster binaries"
 recipe            "ndb::purge", "Removes all data and all binaries related to a MySQL Cluster installation"
 
 # internal recipes, not to be called from outside the cookbook
-recipe            "ndb::hop", "Inifile processing for the hopagent by ndb"
+recipe            "ndb::hop", "Inifile processing for the kagent by ndb"
 
 supports 'ubuntu', ">= 12.04"
 supports 'rhel',   ">= 6.3"

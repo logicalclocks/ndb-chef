@@ -71,7 +71,7 @@ template "/etc/init.d/ndbd" do
   notifies :restart,"service[ndbd]", :immediately
 end
 
-if node[:hop][:enabled] == "true"
+if node[:kagent][:enabled] == "true"
   Chef::Log.info "Trying to infer the ndbd ID by examining the local IP. If it matches the config.ini file, then we have our node."
 
   found_id = -1
@@ -92,7 +92,6 @@ if node[:hop][:enabled] == "true"
     Chef::Log.fatal "Could not find matching IP address is list of data nodes."
   end
 
-  include_recipe "ndb::hop"
   kagent_config "ndb" do
     service "NDB"
     start_script "#{node[:ndb][:scripts_dir]}/ndbd-start.sh"

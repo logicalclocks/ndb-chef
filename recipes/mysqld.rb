@@ -147,9 +147,8 @@ if node[:ndb][:enabled] == "true"
     notifies :install_memcached, "ndb_mysql_ndb[install]", :immediately
   end
 
-  if node[:hop][:enabled] == "true"
+  if node[:kagent][:enabled] == "true"
 
-    include_recipe "ndb::hop"
     kagent_config "mysqld" do
       service "NDB"
       start_script "#{node[:ndb][:scripts_dir]}/mysql-server-start.sh"

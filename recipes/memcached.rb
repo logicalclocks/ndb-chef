@@ -60,9 +60,8 @@ end
 
 
 
-if node[:hop][:enabled] == "true"
+if node[:kagent][:enabled] == "true"
 
-  include_recipe "ndb::hop"
   kagent_config "memcached" do
    service "NDB"
    start_script "#{node[:ndb][:scripts_dir]}/memcached-start.sh"

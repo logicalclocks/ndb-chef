@@ -93,10 +93,8 @@ template "#{node[:ndb][:root_dir]}/config.ini" do
 end
 
 
-  if node[:hop][:enabled] == "true"
+  if node[:kagent][:enabled] == "true"
    mgm_id = found_id + (node[:mgm][:id]-1)
-
-    include_recipe "ndb::hop"
 
     kagent_config "mgmserver" do
       service "NDB"
@@ -109,5 +107,4 @@ end
       command_user "root"
       command_script "#{node[:ndb][:scripts_dir]}/mgm-client.sh"
     end
-
-end
+  end

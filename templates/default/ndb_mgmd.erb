@@ -57,9 +57,12 @@ restart() {
 status() {  
   ID=<%= @node_id %>
   PID_FILE=<%= "#{node[:ndb][:log_dir]}/ndb_${ID}.pid" %> 
-  PID=`cat $PID_FILE`
-  kill -0 $PID
-  return $?
+  if [ -f $PID_FILE ] ; then
+     PID=`cat $PID_FILE`
+     kill -0 $PID
+     return $?
+  fi
+  return 1
 }
 
 

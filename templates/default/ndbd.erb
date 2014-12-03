@@ -19,16 +19,13 @@ START_PROG=<%= "#{node[:ndb][:base_dir]}/scripts/ndbd-start.sh" %>
 STOP_PROG=<%= "#{node[:ndb][:base_dir]}/scripts/ndbd-stop.sh" %>
 RESTART_PROG=<%= "#{node[:ndb][:base_dir]}/scripts/ndbd-restart.sh" %>
 
-
 RETVAL=0
-
 
 init() {
   echo "Executing : $INIT_PROG"
   $INIT_PROG
   return $?
 }
-
 
 start() {
   echo "Executing : $START_PROG"
@@ -48,6 +45,13 @@ restart() {
   return $?
 }
 
+status() {  
+  ID=<%= @node_id %>
+  PID_FILE=<%= "#{node[:ndb][:log_dir]}/ndb_${ID}.pid" %> 
+  PID=`cat $PID_FILE`
+  kill -0 $PID
+  return $?
+}
 
 # user-supplied parameter to stop/start/restart process.
 case "$1" in
@@ -66,14 +70,17 @@ case "$1" in
   reload)
     restart
     ;;
+  status)
+    status
+    ;;
   -h|--help)
     echo ""
-    echo "usage: <prog> start|stop|restart"
+    echo "usage: <prog> start|stop|restart|status"
     echo ""
     exit 0
     ;;
   *)
-    echo $"Usage: <prog> {start|stop|restart}"
+    echo $"Usage: <prog> {start|stop|restart|status}"
     exit 1
   esac
 

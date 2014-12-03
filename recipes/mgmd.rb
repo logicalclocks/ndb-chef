@@ -38,9 +38,7 @@ for script in node[:mgm][:scripts] do
     owner "root"
     group "root"
     mode 0655
-    variables({
-                :node_id => found_id
-              })
+    variables({ :node_id => found_id })
   end
 end 
 
@@ -54,29 +52,9 @@ template "/etc/init.d/ndb_mgmd" do
   owner node[:ndb][:user]
   group node[:ndb][:user]
   mode 0754
+  variables({ :node_id => found_id })
   notifies :enable, "service[ndb_mgmd]"
 end
-
-
-Chef::Log.info "Trying to infer the mgmd ID by examining the local IP. If it matches the config.ini file, then we have our node."
-found_id = -1
-id = 1
-my_ip = my_private_ip()
-
-for mgmd in node[:ndb][:mgmd][:private_ips]
-  if my_ip.eql? mgmd
-    Chef::Log.info "Found matching IP address in the list of nodes: #{mgmd}. ID= #{id}"
-    found_id = id
-  end
-  id += 1
-end 
-
-Chef::Log.info "ID IS: #{id}"
-
-if found_id == -1
-  Chef::Log.fatal "Could not find matching IP address is list of data nodes."
-end
-
 
 # Need to call get_ndbapi_addrs to set them before instantiating config.ini
 get_ndbapi_addrs()

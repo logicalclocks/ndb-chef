@@ -67,6 +67,7 @@ template "/etc/init.d/ndbd" do
   owner node[:ndb][:user]
   group node[:ndb][:group]
   mode 0754
+  variables({ :node_id => found_id })
   notifies :enable, "service[ndbd]"
   notifies :restart,"service[ndbd]", :immediately
 end

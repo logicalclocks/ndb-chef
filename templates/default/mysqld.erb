@@ -50,6 +50,7 @@ restart() {
   return $?
 }
 
+
 status() {
 	PID=$( cat "$PIDFILE" 2> /dev/null ) || true
 
@@ -89,12 +90,12 @@ case "$1" in
     ;;
   -h|--help)
     echo ""
-    echo "usage: <prog> start|stop|restart"
+    echo "usage: <prog> start|stop|restart|status"
     echo ""
     exit 0
     ;;
   *)
-    echo $"Usage: <prog> {start|stop|restart}"
+    echo $"Usage: <prog> {start|stop|restart|status}"
     exit 1
   esac
 

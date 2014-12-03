@@ -72,7 +72,8 @@ template "/etc/init.d/mysqld" do
   group node[:ndb][:user]
   mode 0755
   variables({
-              :pid_file => pid_file
+              :pid_file => pid_file,
+              :node_id => found_id
             })
 end
 

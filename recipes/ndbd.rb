@@ -58,7 +58,7 @@ for script in node[:ndb][:scripts]
 end 
 
 service "ndbd" do
-  supports :restart => true, :stop => true, :start => true
+  supports :restart => true, :stop => true, :start => true, :status => true
   action :nothing
 end
 

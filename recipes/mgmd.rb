@@ -43,7 +43,7 @@ for script in node[:mgm][:scripts] do
 end 
 
 service "ndb_mgmd" do
-  supports :restart => true, :stop => true, :start => true
+  supports :restart => true, :stop => true, :start => true, :status => true
   action :nothing
 end
 

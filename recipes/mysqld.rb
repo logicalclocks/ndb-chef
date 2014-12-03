@@ -78,7 +78,7 @@ template "/etc/init.d/mysqld" do
 end
 
 service "mysqld" do
-  supports :restart => true, :stop => true, :start => true
+  supports :restart => true, :stop => true, :start => true, :status => true
   action :nothing
 end
 

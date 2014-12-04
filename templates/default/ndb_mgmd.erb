@@ -60,9 +60,16 @@ status() {
   if [ -f $PID_FILE ] ; then
      PID=`cat $PID_FILE`
      kill -0 $PID
-     return $?
+     res=$?
+  else 
+     res=1
   fi
-  return 1
+  if [ $res -eq 0 ] ; then
+    echo "ndb_mgmd($PID) is running"
+  else
+    echo "ndb_mgmd is not running"
+  fi
+  return $res
 }
 
 

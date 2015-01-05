@@ -11,10 +11,13 @@ dependencies:
     local: 
       - ndb::install
     global:  
+      - ndb::mgmd
       - ndb::ndbd
   - recipe: ndb::memcached,
     local:   
       - ndb::install
     global:  
+      - ndb::mgmd
+      - ndb::ndbd
       - ndb::mysqld
 

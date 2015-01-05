@@ -2,7 +2,7 @@
 
 EXECUTE_SQL=""
 DB=
-MYSQL_CONF="<%= [:ndb][:root_dir] %>/my.cnf"
+MYSQL_CONF=<%= node[:ndb][:root_dir] %>/my.cnf
 # Either a 'db' will be passed as an argument, or not:
 # Case 1:
 # mysql -u root -pPasswd mysql -e "show tables"

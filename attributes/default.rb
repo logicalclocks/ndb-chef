@@ -7,7 +7,7 @@ minorVersion="2"
 versionStr                         = "#{version}.#{majorVersion}.#{minorVersion}"
 
 default[:ndb][:enabled]            = "true"
-default[:kagent][:enabled]         = "true"
+default[:kagent][:enabled]         = "false"
 
 default[:ndb][:version]            = versionStr
 #default[:ndb][:package_url]       = "http://dev.mysql.com/get/Downloads/MySQL-Cluster-#{version}.#{majorVersion}/mysql-cluster-gpl-#{versionStr}-linux-glibc2.5-x86_64.tar.gz"

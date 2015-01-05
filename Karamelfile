@@ -1,0 +1,20 @@
+dependencies: 
+  - recipe: ndb::mgmd,
+    local:  
+      - ndb::install
+  - recipe: ndb::ndbd,
+    local:  
+      - ndb::install
+    global:  
+      - ndb::mgmd
+  - recipe: ndb::mysqld,
+    local: 
+      - ndb::install
+    global:  
+      - ndb::ndbd
+  - recipe: ndb::memcached,
+    local:   
+      - ndb::install
+    global:  
+      - ndb::mysqld
+

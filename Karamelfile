@@ -1,21 +1,12 @@
 dependencies: 
-  - recipe: ndb::mgmd,
-    local:  
-      - ndb::install
-  - recipe: ndb::ndbd,
-    local:  
-      - ndb::install
+  - recipe: ndb::ndbd
     global:  
       - ndb::mgmd
-  - recipe: ndb::mysqld,
-    local: 
-      - ndb::install
+  - recipe: ndb::mysqld
     global:  
       - ndb::mgmd
       - ndb::ndbd
-  - recipe: ndb::memcached,
-    local:   
-      - ndb::install
+  - recipe: ndb::memcached
     global:  
       - ndb::mgmd
       - ndb::ndbd

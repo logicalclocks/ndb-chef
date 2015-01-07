@@ -203,3 +203,10 @@ attribute "ndb/memcached/public_ips",
 :description => "List of public IP addresses of memcached processes",
 :type => 'array',
 :default => ""
+
+attribute "kagent/enabled",
+:display_name => "Install kagent",
+:description =>  "Install kagent",
+:type => 'string',
+:default => "false"
+

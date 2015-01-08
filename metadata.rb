@@ -210,3 +210,10 @@ attribute "kagent/enabled",
 :type => 'string',
 :default => "false"
 
+
+attribute "ndb/version",
+:display_name => "Ndb version",
+:description =>  "MySQL Cluster Version",
+:type => 'string',
+:default => "7.4.2"
+

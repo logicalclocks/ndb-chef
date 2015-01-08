@@ -2,8 +2,8 @@ include_attribute "kagent"
 include_attribute "btsync"
 
 version="7"
-majorVersion="4"
-minorVersion="2"
+majorVersion="3"
+minorVersion="5"
 versionStr                         = "#{version}.#{majorVersion}.#{minorVersion}"
 
 default[:ndb][:enabled]            = "true"

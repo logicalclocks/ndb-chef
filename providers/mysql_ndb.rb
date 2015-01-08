@@ -67,7 +67,6 @@ end
 end
 
 
-
 action :install_hops do
 
 new_resource.updated_by_last_action(false)

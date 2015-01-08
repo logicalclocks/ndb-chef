@@ -148,6 +148,15 @@ if node[:ndb][:enabled] == "true"
     notifies :install_memcached, "ndb_mysql_ndb[install]", :immediately
   end
 
+  hops_path = "#{Chef::Config[:file_cache_path]}/hop.sql"
+  template hops_path do
+    source "hops.sql.erb"
+    owner "root" 
+    mode "0755"
+#    notifies :install_distributed_privileges, "ndb_mysql_ndb[install]", :immediately 
+  end
+
+
   if node[:kagent][:enabled] == "true"
 
     kagent_config "mysqld" do

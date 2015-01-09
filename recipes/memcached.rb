@@ -72,3 +72,6 @@ if node[:kagent][:enabled] == "true"
  end
 
 end
+
+ndb_start "memcached" do
+end

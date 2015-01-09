@@ -86,3 +86,6 @@ end
       command_script "#{node[:ndb][:scripts_dir]}/mgm-client.sh"
     end
   end
+
+ndb_start "ndb_mgmd" do
+end

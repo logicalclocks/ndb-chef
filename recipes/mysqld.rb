@@ -146,3 +146,6 @@ if node[:ndb][:enabled] == "true"
     end
   end
 end
+
+ndb_start "mysqld" do
+end

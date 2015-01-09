@@ -103,3 +103,6 @@ if node[:kagent][:enabled] == "true"
   end
 
 end
+
+ndb_start "ndbd" do
+end

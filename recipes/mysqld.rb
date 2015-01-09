@@ -130,26 +130,10 @@ grants_path = "#{Chef::Config[:file_cache_path]}/grants.sql"
 if node[:ndb][:enabled] == "true"
 
   ndb_mysql_ndb "install" do
-    action :nothing
-  end
-
-  hop_path = "#{Chef::Config[:file_cache_path]}/hop.sql"
-  ndb_mysql_basic "mysqld_started" do
-    wait_time 60
-    action :wait_until_started
-  end
-
-  Chef::Log.info("Could not find previously defined #{hop_path} resource")
-  template hop_path do
-    source "hop.sql.erb"
-    owner "root" 
-    mode "0755"
-    notifies :install_distributed_privileges, "ndb_mysql_ndb[install]", :immediately 
-    notifies :install_memcached, "ndb_mysql_ndb[install]", :immediately
+    action [:install_distributed_privileges, :install_memcached]
   end
 
   if node[:kagent][:enabled] == "true"
-
     kagent_config "mysqld" do
       service "NDB"
       start_script "#{node[:ndb][:scripts_dir]}/mysql-server-start.sh"
@@ -160,6 +144,5 @@ if node[:ndb][:enabled] == "true"
       command_user node[:ndb][:user] 
       command_script "#{node[:ndb][:scripts_dir]}/mysql-client.sh"
     end
-
   end
 end

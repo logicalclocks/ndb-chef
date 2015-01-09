@@ -14,16 +14,6 @@ if node[:ndb][:enabled] == "true"
     action :wait_until_started
   end
 
-  bash "mysql-install-hop" do
-    user node[:ndb][:user]
-    code <<-EOF
-    #{node[:ndb][:scripts_dir]}/mysql-client.sh hop < #{Chef::Config[:file_cache_path]}/hop.sql
-    EOF
-    new_resource.updated_by_last_action(true)
-    not_if "#{node[:ndb][:scripts_dir]}/mysql-client.sh hop -e \"SELECT 1 FROM cluster limit 1;\""
-  end
-
-
   distusers = "#{node[:mysql][:version_dir]}/share/ndb_dist_priv.sql"
   bash 'create_distributed_privileges' do
     user node[:ndb][:user]

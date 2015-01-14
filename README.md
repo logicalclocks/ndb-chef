@@ -49,6 +49,31 @@ For example, on an Ubuntu system:
       }
     }
 
+###Karamel usage
+This cookbook is karamelized (www.karamel.io). 
+You can launch a MySQL Cluster using the following yml file. It will create 5 VMs on EC2, and install ndb datanodes on 4 VMs, and a management server, a MySQL Server, and a Memcached server on 1 VM.
+
+name: MySqlCluster                                                             
+
+cookbooks:                                                                      
+  ndb:
+    github: "hopshadoop/ndb-chef"
+    version: "v0.1"
+    
+groups: 
+  datanodes:
+    size: 4 
+    recipes: 
+        - ndb::ndbd
+  server:
+    size: 1 
+    recipes: 
+        - ndb::mysqld
+        - ndb::memcached
+        - ndb::mgmd
+
+
+
 ## Contributing
 
 1. Fork it

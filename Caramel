@@ -1,4 +1,0 @@
-ndb/mgmd:L/ndb/install,kagent
-ndb/ndbd:L/ndb/install,ndb/mgmd,kagent
-ndb/mysqld:L/ndb/install,ndb/ndbd,kagent
-ndb/memcached:L/ndb/install,ndb/mysqld,kagent

@@ -23,12 +23,11 @@ recipe            "ndb::ndbd-purge", "Removes a MySQL Cluster data node (ndbd)"
 recipe            "ndb::mysqld-purge", "Removes a MySQL Server connected to the MySQL Cluster (mysqld)"
 recipe            "ndb::memcached-purge", "Removes a memcached Server connected to the MySQL Cluster (memcached)"
 
-recipe            "ndb::btsync", "Installs MySQL Cluster binaries"
+#recipe            "ndb::btsync", "Installs MySQL Cluster binaries"
 
 recipe            "ndb::purge", "Removes all data and all binaries related to a MySQL Cluster installation"
 
-# internal recipes, not to be called from outside the cookbook
-recipe            "ndb::hop", "Inifile processing for the kagent by ndb"
+
 
 supports 'ubuntu', ">= 12.04"
 supports 'rhel',   ">= 6.3"
@@ -93,7 +92,7 @@ attribute "mysql/user",
 :display_name => "Mysql username for hop",
 :description => "User that runs hop database",
 :type => 'string',
-:default => 'kthfs'
+:default => 'mysql'
 
 attribute "mysql/password",
 :display_name => "Mysql password for hop user",
@@ -105,18 +104,6 @@ attribute "mysql/root/password",
 :description => "Password for the root mysql user",
 :type => 'string',
 :default => 'randomly generated'
-
-attribute 'mgm/id',
-:display_name => 'Mgm Server Id',
-:description => 'Id of Mgm server being launched',
-:type => 'string',
-:default => '49'
-
-attribute 'mysql/id',
-:display_name => 'Mysql Id',
-:description => 'Id of Mysql server being launched',
-:type => 'string',
-:default => '52'
 
 attribute "btsync/ndb/seeder_ip",
 :display_name => "Bootstrap node IP address",
@@ -136,73 +123,11 @@ attribute "btsync/ndb/seeder_secret",
 :type => 'string',
 :default => "AY27AAZKTKO3GONE6PBCZZRA6MKGRKBX2"
 
-
 attribute "btsync/ndb/leecher_secret",
 :display_name => "Ndb leecher's secret key.",
 :description => "Ndb's random secret (key) generated using the seeder's secret key. 20 chars or more (normally 32 chars)",
 :type => 'string',
 :default => "BTHKJKK4PIPIOJZ7GITF2SJ2IYDLSSJVY"
-
-attribute 'ndb/public_ips',
-:display_name => 'Public ips for these nodes',
-:description => 'Public ips of nodes in this group',
-:type => 'array',
-:default => '[10.0.2.15]'
-
-attribute 'ndb/private_ips',
-:display_name => 'Private ips for these nodes',
-:description => 'Private ips of nodes in this group',
-:type => 'array',
-:default => '[10.0.2.15]'
-
-
-attribute "ndb/mgmd/private_ips",
-:display_name => "Ndb Mgm server Private IP addresses",
-:description => "List of private IP addresses of ndb_mgmd processes",
-:type => 'array',
-:default => '[10.0.2.15]'
-
-attribute "ndb/mgmd/public_ips",
-:display_name => "Ndb Mgm server public IP addresses",
-:description => "List of public IP addresses of ndb_mgmd processes",
-:type => 'array',
-:default => ""
-
-attribute "ndb/ndbd/private_ips",
-:display_name => "Data node private IP addresses",
-:description => "List of private IP addresses of ndbd processes (data nodes)",
-:type => 'array',
-:default => '[10.0.2.15]'
-
-attribute "ndb/ndbd/public_ips",
-:display_name => "Data node public IP addresses",
-:description => "List of public IP addresses of ndbd processes (data nodes)",
-:type => 'array',
-:default => ""
-
-attribute "ndb/mysqld/private_ips",
-:display_name => "MySQL Server private IP addresses",
-:description => "List of private IP addresses of mysqld processes",
-:type => 'array',
-:default => '[10.0.2.15]'
-
-attribute "ndb/mysqld/public_ips",
-:display_name => "MySQL server public IP addresses",
-:description => "List of public IP addresses of mysqld processes",
-:type => 'array',
-:default => ""
-
-attribute "ndb/memcached/private_ips",
-:display_name => "Memcached server private IP addresses",
-:description => "List of private IP addresses of memcached processes",
-:type => 'array',
-:default => '[10.0.2.15]'
-
-attribute "ndb/memcached/public_ips",
-:display_name => "Memcached server public IP addresses",
-:description => "List of public IP addresses of memcached processes",
-:type => 'array',
-:default => ""
 
 attribute "kagent/enabled",
 :display_name => "Install kagent",
@@ -210,10 +135,19 @@ attribute "kagent/enabled",
 :type => 'string',
 :default => "false"
 
-
 attribute "ndb/version",
 :display_name => "Ndb version",
 :description =>  "MySQL Cluster Version",
-:type => 'string',
-:default => "7.3.5"
+:type => 'string'
 
+attribute "ndb/user",
+:display_name => "Ndb username",
+:description => "User that runs ndb database",
+:type => 'string',
+:default => 'root'
+
+attribute "ndb/group",
+:display_name => "Ndb groupname",
+:description => "Group that runs ndb database",
+:type => 'string',
+:default => 'root'

@@ -5,6 +5,8 @@ driver:
     memory: 2048
     cpuexecutioncap: 90
     cpus: 2
+    natdnshostresolver1: "on"
+    natdnsproxy1: "on"
 
 provisioner:
   name: chef_solo

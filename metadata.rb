@@ -215,5 +215,5 @@ attribute "ndb/version",
 :display_name => "Ndb version",
 :description =>  "MySQL Cluster Version",
 :type => 'string',
-:default => "7.4.2"
+:default => "7.3.5"
 

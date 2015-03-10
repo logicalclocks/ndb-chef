@@ -35,13 +35,16 @@ NoOfFragmentLogFiles=<%= node[:ndb][:data_memory].to_i / 2 %>
 FragmentLogFileSize=256M
 
 #The speed at which LocalCheckpoints (LCP) are written to disk
-DiskCheckpointSpeed=10M
+#The amount of data,in bytes per second, that is sent to disk during a local checkpoint. 
+DiskCheckpointSpeed=30M
 
 #The speed at which LocalCheckpoints (LCP) are written to disk, as part of a node recovery 
+#The amount of data,in bytes per second, that is sent to disk during a local checkpoint as part of a restart operation.
 DiskCheckpointSpeedInRestart=100M
 
-#The size of the RedoLog Buffer in memory; Reduce for improved disk throughput (but slower recovery time)
-DiskSyncSize=4M
+#The maximum number of bytes to store before flushing data to a local checkpoint file
+#Ignored when ODirect is set to tru
+# DiskSyncSize=12M
 
 #The size of the RedoBuffer used to buffer writes to the disk subsystem. Increase for high write-rate or slow disk.
 RedoBuffer=64M
@@ -63,9 +66,11 @@ LockPagesInMainMemory=1
 # Setting these parameters allows you to take advantage of real-time scheduling
 # of NDBCLUSTER threads to get higher throughput.
 RealTimeScheduler=1
+
 # This parameter specifies the time in microseconds for threads to be executed in the scheduler before sleeping.
 # Default = 0. Higher value to optimize latency over throughput.
 SchedulerSpinTimer=0
+
 # Specifies the time in microseconds for threads to be executed in the scheduler before being sent. 
 # Default is 50. Higher values give higher throughput at cost of increased latency.
 SchedulerExecutionTimer=100
@@ -74,8 +79,8 @@ SchedulerExecutionTimer=100
 BuildIndexThreads=10
 
 # Savings of up to 50% over noncompressed LCPs and backups
-# CompressedLCP=1
-# CompressedBackup=1
+CompressedLCP=1
+CompressedBackup=1
 
 BackupMaxWriteSize=    1M
 BackupLogBufferSize=    4M

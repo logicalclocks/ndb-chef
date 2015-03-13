@@ -34,20 +34,26 @@ NoOfFragmentLogFiles=<%= node[:ndb][:data_memory].to_i / 2 %>
 #The size of a Redo Log file on disk.
 FragmentLogFileSize=256M
 
+# maximum number of attributes, tables, indexes, and trigger objects used by indexes, events, and replication between clusters
+MaxNoOfAttributes=10000
+
+# A table object is allocated for each table and for each unique hash index in the cluster.
+MaxNoOfTables=1024
+
 #The speed at which LocalCheckpoints (LCP) are written to disk
 #The amount of data,in bytes per second, that is sent to disk during a local checkpoint. 
-DiskCheckpointSpeed=30M
+DiskCheckpointSpeed=1M
 
 #The speed at which LocalCheckpoints (LCP) are written to disk, as part of a node recovery 
 #The amount of data,in bytes per second, that is sent to disk during a local checkpoint as part of a restart operation.
-DiskCheckpointSpeedInRestart=100M
+DiskCheckpointSpeedInRestart=10M
 
 #The maximum number of bytes to store before flushing data to a local checkpoint file
 #Ignored when ODirect is set to tru
 # DiskSyncSize=12M
 
 #The size of the RedoBuffer used to buffer writes to the disk subsystem. Increase for high write-rate or slow disk.
-RedoBuffer=64M
+RedoBuffer=32M
 
 #Internal buffer used for passing messages within individual nodes and between nodes. Increase for huge batches.
 LongMessageBuffer=64M

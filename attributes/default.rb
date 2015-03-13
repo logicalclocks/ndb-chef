@@ -25,8 +25,8 @@ default[:ndb][:loglevel]           = "notice"
 default[:ndb][:user]               = "root"
 default[:ndb][:group]              = "root"
 default[:ndb][:connect_string]     = ""
-default[:ndb][:data_memory]        = 80
-default[:ndb][:index_memory]       = 20
+default[:ndb][:data_memory]        = 200
+default[:ndb][:index_memory]       = 50
 default[:ndb][:num_replicas]       = 1
 default[:ndb][:num_ndb_slots_per_client] = 1
 

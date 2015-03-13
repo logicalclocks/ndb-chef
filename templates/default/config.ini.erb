@@ -40,13 +40,13 @@ MaxNoOfAttributes=10000
 # A table object is allocated for each table and for each unique hash index in the cluster.
 MaxNoOfTables=1024
 
-#The speed at which LocalCheckpoints (LCP) are written to disk
 #The amount of data,in bytes per second, that is sent to disk during a local checkpoint. 
-DiskCheckpointSpeed=1M
+#Deprecated
+#DiskCheckpointSpeed=30M
 
 #The speed at which LocalCheckpoints (LCP) are written to disk, as part of a node recovery 
-#The amount of data,in bytes per second, that is sent to disk during a local checkpoint as part of a restart operation.
-DiskCheckpointSpeedInRestart=10M
+#Deprecated
+#DiskCheckpointSpeedInRestart=100M
 
 #The maximum number of bytes to store before flushing data to a local checkpoint file
 #Ignored when ODirect is set to tru
@@ -79,7 +79,7 @@ SchedulerSpinTimer=0
 
 # Specifies the time in microseconds for threads to be executed in the scheduler before being sent. 
 # Default is 50. Higher values give higher throughput at cost of increased latency.
-SchedulerExecutionTimer=100
+# SchedulerExecutionTimer=100
 
 # Number of threads to create when rebuilding indexes during a system or node start
 BuildIndexThreads=10

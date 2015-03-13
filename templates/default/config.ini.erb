@@ -81,11 +81,11 @@ TransactionDeadlockDetectionTimeout=10000
 #1: Performs the lock after allocating memory for the process.
 #2: Performs the lock before memory for the process is allocated.
 # Needs root privileges
-LockPagesInMainMemory=1
+LockPagesInMainMemory=2
 
 # Setting these parameters allows you to take advantage of real-time scheduling
 # of NDBCLUSTER threads to get higher throughput.
-RealTimeScheduler=1
+# RealTimeScheduler=1
 
 # This parameter specifies the time in microseconds for threads to be executed in the scheduler before sleeping.
 # Default = 0. Higher value to optimize latency over throughput.
@@ -106,9 +106,6 @@ BackupMaxWriteSize=    1M
 BackupLogBufferSize=    4M
 BackupDataBufferSize=   16M
 BackupMemory        =   20M
-
-#Configure the maximum number of parallel scans (TUP scans and TUX scans) allowed before they begin queuing for serial handling
-MaxParallelScansPerFragment=256
 
 #The maximum size of the memory unit to use when allocating memory for tables
 MaxAllocate=32M

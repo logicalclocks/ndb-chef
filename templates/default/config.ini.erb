@@ -29,10 +29,10 @@ IndexMemory=<%= node[:ndb][:index_memory] %>M
 #  NUM_FRAGMENT_LOGFILES=`expr ${DATA_MEMORY} \* 6 / 64`
 # See: http://www.slideshare.net/Severalnines/severalnines-my-sqlclusterpt2013
 #The amount of disk space (NoOfFragmentLogFiles * 64MB) used to store the Redo Log (used for node recovery)
-NoOfFragmentLogFiles=<%= node[:ndb][:data_memory].to_i / 2 %>
+NoOfFragmentLogFiles=<%= node[:ndb][:data_memory].to_i / 10 %>
 
 #The size of a Redo Log file on disk.
-FragmentLogFileSize=256M
+FragmentLogFileSize=64M
 
 # maximum number of attributes, tables, indexes, and trigger objects used by indexes, events, and replication between clusters
 MaxNoOfAttributes=10000

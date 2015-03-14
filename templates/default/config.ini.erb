@@ -109,8 +109,12 @@ ODirect=1
 SendBufferMemory=2M
 ReceiveBufferMemory=2M
 
+
+#
+# Supports up to Max 2 ndb_mgmds. First one gets ArbitrationRank=1, second gets lower priority ArbitrationRank=2
+#
 <% id = node[:mgm][:id] -%>
-<% rank = 0 -%>
+<% rank = 1 -%>
 <% for mgmd in node[:ndb][:mgmd][:private_ips] -%>
 [NDB_MGMD]
 NodeId=<%= id %>

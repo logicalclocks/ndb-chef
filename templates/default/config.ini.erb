@@ -70,7 +70,7 @@ DiskSyncSize=<%= node[:ndb][:DiskSyncSize] %>
 RedoBuffer=<%= node[:ndb][:RedoBuffer] %>
 
 #Internal buffer used for passing messages within individual nodes and between nodes. Increase for huge batches.
-LongMessageBuffer=<%= node %>
+LongMessageBuffer=<%= node[:ndb][:LongMessageBuffer] %>
 
 #The maximum time in ms that is permitted to lapse between operations in the same transaction before the transaction is aborted.
 TransactionInactiveTimeout=<%= node[:ndb][:TransactionInactiveTimeout] %>

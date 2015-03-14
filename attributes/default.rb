@@ -27,7 +27,7 @@ default[:ndb][:group]              = "root"
 default[:ndb][:connect_string]     = ""
 default[:ndb][:data_memory]        = 80
 # Calculate index_memory size by default, can be overriden by user.
-default[:ndb][:index_memory]       =
+default[:ndb][:index_memory]       = ""
 default[:ndb][:num_replicas]       = 1
 default[:ndb][:num_ndb_slots_per_client] = 1
 

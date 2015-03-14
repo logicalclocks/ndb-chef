@@ -8,7 +8,7 @@
 <% cpus = (node[:cpu][:total] / 2) + 1 -%>
 <% if cpus < 2
      cpus = 2
-   else if cpus > 8
+   elsif cpus > 8
      cpus = 8
    end
 -%>

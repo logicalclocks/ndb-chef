@@ -30,6 +30,47 @@ default[:ndb][:index_memory]       = 20
 default[:ndb][:num_replicas]       = 1
 default[:ndb][:num_ndb_slots_per_client] = 1
 
+default[:ndb][:FragmentLogFileSize]      = 64M
+default[:ndb][:MaxNoOfAttributes]        = 60000
+default[:ndb][:MaxNoOfTables]           = 2024
+default[:ndb][:MaxNoOfOrderedIndexes]    = 256
+default[:ndb][:MaxNoOfUniqueHashIndexes] = 128
+default[:ndb][:MaxDMLOperationsPerTransaction] = 128
+default[:ndb][:] = 
+  default[:ndb][:] =
+  default[:ndb][:] =
+  default[:ndb][:] =
+  default[:ndb][:] = 
+
+
+default[:ndb][:TransactionBufferMemory]           = 1M
+default[:ndb][:MaxParallelScansPerFragment]       = 256
+default[:ndb][:MaxDiskWriteSpeed]                 = 20M
+default[:ndb][:MaxDiskWriteSpeedOtherNodeRestart] = 50M
+default[:ndb][:MaxDiskWriteSpeedOwnRestart]       = 200M
+default[:ndb][:MinDiskWriteSpeed]                 = 5M
+default[:ndb][:DiskSyncSize]                      = 4M
+default[:ndb][:RedoBuffer]                        = 32M
+default[:ndb][:LongMessageBuffer]                 = 64M 
+default[:ndb][:TransactionInactiveTimeout]        = 10000
+default[:ndb][:TransactionDeadlockDetectionTimeout] = 10000
+default[:ndb][:LockPagesInMainMemory] = 2
+default[:ndb][:RealTimeScheduler]     = 0
+default[:ndb][:SchedulerSpinTimer]    = 0
+default[:ndb][:BuildIndexThreads]     = 10
+default[:ndb][:CompressedLCP]         = 1
+default[:ndb][:CompressedBackup]      = 1
+default[:ndb][:BackupMaxWriteSize]    = 1M
+default[:ndb][:BackupLogBufferSize]   = 4M
+default[:ndb][:BackupDataBufferSize]  = 16M
+default[:ndb][:BackupMemory]          = 20M
+default[:ndb][:MaxAllocate]           = 32M
+default[:ndb][:DefaultHashMapSize]    = 3840
+default[:ndb][:ODirect]               = 0
+default[:ndb][:SendBufferMemory]      = 2M
+default[:ndb][:ReceiveBufferMemory]   = 2M
+
+    
 default[:mgm][:scripts]            = %w{ enter-singleuser-mode.sh mgm-client.sh mgm-server-start.sh mgm-server-stop.sh mgm-server-restart.sh cluster-shutdown.sh  exit-singleuser-mode.sh }
 default[:ndb][:scripts]            = %w{ backup-start.sh backup-restore.sh ndbd-start.sh ndbd-init.sh ndbd-stop.sh ndbd-restart.sh }
 default[:mysql][:scripts]          = %w{ get-mysql-socket.sh get-mysql-port.sh mysql-server-start.sh mysql-server-stop.sh mysql-server-restart.sh mysql-client.sh }

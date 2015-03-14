@@ -32,97 +32,97 @@ IndexMemory=<%= node[:ndb][:index_memory] %>M
 NoOfFragmentLogFiles=<%= node[:ndb][:data_memory].to_i / 10 %>
 
 #The size of a Redo Log file on disk.
-FragmentLogFileSize=64M
+FragmentLogFileSize=<%= node[:ndb][:FragmentLogFileSize] %>
 
 # maximum number of attributes, tables, indexes, and trigger objects used by indexes, events, and replication between clusters
-MaxNoOfAttributes=60000
+MaxNoOfAttributes=<%= node[:ndb][:MaxNoOfAttributes] %>
 
 # A table object is allocated for each table and for each unique hash index in the cluster.
-MaxNoOfTables=2024
+MaxNoOfTables=<%= node[:ndb][:MaxNoOfTables] %>
 
-MaxNoOfOrderedIndexes=256
+MaxNoOfOrderedIndexes=<%= node[:ndb][:MaxNoOfOrderedIndexes] %>
 
-MaxNoOfUniqueHashIndexes=128
+MaxNoOfUniqueHashIndexes=<%= node[:ndb][:MaxNoOfUniqueHashIndexes] %>
 
-MaxDMLOperationsPerTransaction=128
+MaxDMLOperationsPerTransaction=<%= node[:ndb][:MaxDMLOperationsPerTransaction] %>
 
-TransactionBufferMemory=1M
+TransactionBufferMemory=<%= node[:ndb][:TransactionBufferMemory] %>
 
-MaxParallelScansPerFragment=256
+MaxParallelScansPerFragment=<%= node[:ndb][:MaxParallelScansPerFragment] %>
 
 # Set the maximum rate for writing to disk, in bytes per second, by local checkpoints and backup operations when no restarts 
 # (by this data node or any other data node) are taking place in this MySQL Cluster.
-MaxDiskWriteSpeed=20M
+MaxDiskWriteSpeed=<%= node[:ndb][:MaxDiskWriteSpeed] %>
 
 # Set the maximum rate for writing to disk, in bytes per second, by local checkpoints and backup operations when one or more data nodes 
 # in this MySQL Cluster are restarting, other than this node.
-MaxDiskWriteSpeedOtherNodeRestart=50M
+MaxDiskWriteSpeedOtherNodeRestart=<%= node[:ndb][:MaxDiskWriteSpeedOtherNodeRestart] %>
 
-MaxDiskWriteSpeedOwnRestart=200M
+MaxDiskWriteSpeedOwnRestart=<%= node[:ndb][:MaxDiskWriteSpeedOwnRestart] %>
 
-MinDiskWriteSpeed=5M
+MinDiskWriteSpeed=<%= node[:ndb][:MinDiskWriteSpeed] %>
 
 #The maximum number of bytes to store before flushing data to a local checkpoint file
 #Ignored when ODirect is set to true
-DiskSyncSize=4M
+DiskSyncSize=<%= node[:ndb][:DiskSyncSize] %>
 
 #The size of the RedoBuffer used to buffer writes to the disk subsystem. Increase for high write-rate or slow disk.
-RedoBuffer=32M
+RedoBuffer=<%= node[:ndb][:RedoBuffer] %>
 
 #Internal buffer used for passing messages within individual nodes and between nodes. Increase for huge batches.
-LongMessageBuffer=64M
+LongMessageBuffer=<%= node %>
 
 #The maximum time in ms that is permitted to lapse between operations in the same transaction before the transaction is aborted.
-TransactionInactiveTimeout=10000
+TransactionInactiveTimeout=<%= node[:ndb][:TransactionInactiveTimeout] %>
 
-TransactionDeadlockDetectionTimeout=10000
+TransactionDeadlockDetectionTimeout=<%= node[:ndb][:TransactionDeadlockDetectionTimeout] %>
 
 #0: Disables locking. This is the default value.
 #1: Performs the lock after allocating memory for the process.
 #2: Performs the lock before memory for the process is allocated.
 # Needs root privileges
-LockPagesInMainMemory=2
+LockPagesInMainMemory=<%= node[:ndb][:LockPagesInMainMemory] %>
 
 # Setting these parameters allows you to take advantage of real-time scheduling
 # of NDBCLUSTER threads to get higher throughput.
-# RealTimeScheduler=1
+RealTimeScheduler=<%= node[:ndb][:RealTimeScheduler] %>
 
 # This parameter specifies the time in microseconds for threads to be executed in the scheduler before sleeping.
 # Default = 0. Higher value to optimize latency over throughput.
-SchedulerSpinTimer=0
+SchedulerSpinTimer=<%= node[:ndb][:SchedulerSpinTimer] %>
 
 # Specifies the time in microseconds for threads to be executed in the scheduler before being sent. 
 # Default is 50. Higher values give higher throughput at cost of increased latency.
 # SchedulerExecutionTimer=100
 
 # Number of threads to create when rebuilding indexes during a system or node start
-BuildIndexThreads=10
+BuildIndexThreads=<%= node[:ndb][:BuildIndexThreads] %>
 
 # Savings of up to 50% over noncompressed LCPs and backups
-CompressedLCP=1
-CompressedBackup=1
+CompressedLCP=<%= node[:ndb][:CompressedLCP] %>
+CompressedBackup=<%= node[:ndb][:CompressedBackup] %>
 
-BackupMaxWriteSize=    1M
-BackupLogBufferSize=    4M
-BackupDataBufferSize=   16M
-BackupMemory        =   20M
+BackupMaxWriteSize= <%= node[:ndb][:BackupMaxWriteSize] %>
+BackupLogBufferSize= <%= node[:ndb][:BackupLogBufferSize] %>
+BackupDataBufferSize= <%= node[:ndb][:BackupDataBufferSize] %>  
+BackupMemory        = <%= node[:ndb][:BackupMemory] %>  
 
 #The maximum size of the memory unit to use when allocating memory for tables
-MaxAllocate=32M
+MaxAllocate=<%= node[:ndb][:MaxAllocate] %>
 
 #The size of the table hash maps used by NDB
-DefaultHashMapSize=3840
+DefaultHashMapSize=<%= node[:ndb][:DefaultHashMapSize] %>
 
 # Needs root privileges
-# ODirect=1
+ODirect=<%= node[:ndb][:ODirect] %>
 
 [MYSQLD DEFAULT]
 
 [NDB_MGMD DEFAULT]
 
 [TCP DEFAULT]
-SendBufferMemory=2M
-ReceiveBufferMemory=2M
+SendBufferMemory=<%= node[:ndb][:SendBufferMemory] %>
+ReceiveBufferMemory=<%= node[:ndb][:ReceiveBufferMemory]%>
 
 
 #

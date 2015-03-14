@@ -29,27 +29,45 @@ IndexMemory=<%= node[:ndb][:index_memory] %>M
 #  NUM_FRAGMENT_LOGFILES=`expr ${DATA_MEMORY} \* 6 / 64`
 # See: http://www.slideshare.net/Severalnines/severalnines-my-sqlclusterpt2013
 #The amount of disk space (NoOfFragmentLogFiles * 64MB) used to store the Redo Log (used for node recovery)
-NoOfFragmentLogFiles=<%= node[:ndb][:data_memory].to_i / 2 %>
+NoOfFragmentLogFiles=<%= node[:ndb][:data_memory].to_i / 10 %>
 
 #The size of a Redo Log file on disk.
-FragmentLogFileSize=256M
+FragmentLogFileSize=64M
 
-#The speed at which LocalCheckpoints (LCP) are written to disk
-#The amount of data,in bytes per second, that is sent to disk during a local checkpoint. 
-#Deprecated
-#DiskCheckpointSpeed=30M
+# maximum number of attributes, tables, indexes, and trigger objects used by indexes, events, and replication between clusters
+MaxNoOfAttributes=60000
 
-#The speed at which LocalCheckpoints (LCP) are written to disk, as part of a node recovery 
-#The amount of data,in bytes per second, that is sent to disk during a local checkpoint as part of a restart operation.
-#Deprecated
-#DiskCheckpointSpeedInRestart=100M
+# A table object is allocated for each table and for each unique hash index in the cluster.
+MaxNoOfTables=2024
+
+MaxNoOfOrderedIndexes=256
+
+MaxNoOfUniqueHashIndexes=128
+
+MaxDMLOperationsPerTransaction=128
+
+TransactionBufferMemory=1M
+
+MaxParallelScansPerFragment=256
+
+# Set the maximum rate for writing to disk, in bytes per second, by local checkpoints and backup operations when no restarts 
+# (by this data node or any other data node) are taking place in this MySQL Cluster.
+MaxDiskWriteSpeed=20M
+
+# Set the maximum rate for writing to disk, in bytes per second, by local checkpoints and backup operations when one or more data nodes 
+# in this MySQL Cluster are restarting, other than this node.
+MaxDiskWriteSpeedOtherNodeRestart=50M
+
+MaxDiskWriteSpeedOwnRestart=200M
+
+MinDiskWriteSpeed=5M
 
 #The maximum number of bytes to store before flushing data to a local checkpoint file
-#Ignored when ODirect is set to tru
-# DiskSyncSize=12M
+#Ignored when ODirect is set to true
+DiskSyncSize=4M
 
 #The size of the RedoBuffer used to buffer writes to the disk subsystem. Increase for high write-rate or slow disk.
-RedoBuffer=64M
+RedoBuffer=32M
 
 #Internal buffer used for passing messages within individual nodes and between nodes. Increase for huge batches.
 LongMessageBuffer=64M
@@ -63,11 +81,11 @@ TransactionDeadlockDetectionTimeout=10000
 #1: Performs the lock after allocating memory for the process.
 #2: Performs the lock before memory for the process is allocated.
 # Needs root privileges
-LockPagesInMainMemory=1
+LockPagesInMainMemory=2
 
 # Setting these parameters allows you to take advantage of real-time scheduling
 # of NDBCLUSTER threads to get higher throughput.
-RealTimeScheduler=1
+# RealTimeScheduler=1
 
 # This parameter specifies the time in microseconds for threads to be executed in the scheduler before sleeping.
 # Default = 0. Higher value to optimize latency over throughput.
@@ -75,7 +93,7 @@ SchedulerSpinTimer=0
 
 # Specifies the time in microseconds for threads to be executed in the scheduler before being sent. 
 # Default is 50. Higher values give higher throughput at cost of increased latency.
-SchedulerExecutionTimer=100
+# SchedulerExecutionTimer=100
 
 # Number of threads to create when rebuilding indexes during a system or node start
 BuildIndexThreads=10
@@ -89,9 +107,6 @@ BackupLogBufferSize=    4M
 BackupDataBufferSize=   16M
 BackupMemory        =   20M
 
-#Configure the maximum number of parallel scans (TUP scans and TUX scans) allowed before they begin queuing for serial handling
-MaxParallelScansPerFragment=256
-
 #The maximum size of the memory unit to use when allocating memory for tables
 MaxAllocate=32M
 
@@ -99,7 +114,7 @@ MaxAllocate=32M
 DefaultHashMapSize=3840
 
 # Needs root privileges
-ODirect=1
+# ODirect=1
 
 [MYSQLD DEFAULT]
 

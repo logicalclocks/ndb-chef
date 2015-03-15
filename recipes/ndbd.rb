@@ -110,7 +110,7 @@ end
 
 # Here we set interrupts to be handled by only the first CPU
 
-if node[:ndb][:interrupts_isolated_to_single_cpu] == "true" && not File.exists?( "#{node[:mysql][:base_dir]}/.balance_irqs"
+if (node[:ndb][:interrupts_isolated_to_single_cpu] == "true") && (not ::File.exists?( "#{node[:mysql][:base_dir]}/.balance_irqs"))
   case node["platform_family"]
   when "debian"
     

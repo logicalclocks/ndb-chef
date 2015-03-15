@@ -1,0 +1,225 @@
+#! /bin/sh -e
+
+# grub-mkconfig helper script.
+# Copyright (C) 2006,2007,2008,2009,2010  Free Software Foundation, Inc.
+#
+# GRUB is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# GRUB is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
+
+##############################################################################
+# this is Kent Reed's attempt to create 07_rtai from 10_linux 2011/04/07
+# V0.1
+# 
+# produces grub2 boot menu entries for rtai kernels appending "isolcpus=1" 
+# after $GRUB_CMDLINE_LINUX_DEFAULT (whose value is set in /etc/default/grub)
+# NOTE1: an unmodified 10_linux will later create more grub entries for the 
+#        same kernels using only $GRUB_CMDLINE_LINUX_DEFAULT 
+# NOTE2: deep in grub2 is a list of allowable user-defined keys so 
+#        I couldn't simply define a new GRUB_CMDLINE_RTAI_DEFAULT 
+#        in /etc/default/grub---SIGH!
+# NOTE3: following this comment block, changes to 10_linux are preceded
+#        by lines beginning #KAR: 
+# NOTE4: since grub scripts aren't true shell scripts, I made no attempt
+#        to break new ground. I just copied and modified existing code
+# NOTE5: does it make sense to add isolcpus=1 to recovery mode?
+#
+# Edit by John A. Stewart 2014/08/13 - add "pae" kernel searching for 12.04
+# and LinuxCNC 2.6.x
+#
+# Edit by Marty Vona 2014/09/20 - add quad core, nohlt, and idle=poll opts;
+# don't emit "recordfail" which seems to be deprecated
+##############################################################################
+
+prefix=/usr
+exec_prefix=${prefix}
+bindir=${exec_prefix}/bin
+libdir=${exec_prefix}/lib
+. ${libdir}/grub/grub-mkconfig_lib
+
+#KAR: define new local strings for convenience
+#     if you want to change the rtai-kernel boot parameters, here's an easy
+#     place to do it. 
+#
+#MAV: uncomment isolcpus=1 for dual core, isolcpus=1,2,3 for quad
+#     these both assume hyperthreading is already disabled in bios
+#
+#     optionally uncomment nohlt and idle=poll lines to experiment with those
+#     note: try idle=poll first as nohlt may cause increased power usage
+#
+RTAI_OPTS="isolcpus=1,2,3,4,5,6,7"
+#RTAI_OPTS="isolcpus=1"
+#RTAI_OPTS="isolcpus=1,2,3"
+#RTAI_OPTS="nohlt ${RTAI_OPTS}"
+#RTAI_OPTS="idle=poll ${RTAI_OPTS}"
+GRUB_CMDLINE_LINUX_RTAI="${GRUB_CMDLINE_LINUX_DEFAULT} ${RTAI_OPTS}"
+
+export TEXTDOMAIN=grub
+export TEXTDOMAINDIR=@LOCALEDIR@
+
+CLASS="--class gnu-linux --class gnu --class os"
+
+if [ "x${GRUB_DISTRIBUTOR}" = "x" ] ; then
+  OS=GNU/Linux
+else
+  OS="${GRUB_DISTRIBUTOR}"
+  CLASS="--class $(echo ${GRUB_DISTRIBUTOR} | tr '[A-Z]' '[a-z]' | cut -d' ' -f1) ${CLASS}"
+fi
+
+# loop-AES arranges things so that /dev/loop/X can be our root device, but
+# the initrds that Linux uses don't like that.
+case ${GRUB_DEVICE} in
+  /dev/loop/*|/dev/loop[0-9])
+    GRUB_DEVICE=`losetup ${GRUB_DEVICE} | sed -e "s/^[^(]*(\([^)]\+\)).*/\1/"`
+    # We can't cope with devices loop-mounted from files here.
+    case ${GRUB_DEVICE} in
+      /dev/*) ;;
+      *) exit 0 ;;
+    esac
+  ;;
+esac
+
+if [ "x${GRUB_DEVICE_UUID}" = "x" ] || [ "x${GRUB_DISABLE_LINUX_UUID}" = "xtrue" ] \
+    || ! test -e "/dev/disk/by-uuid/${GRUB_DEVICE_UUID}" \
+    || [ "`grub-probe -t abstraction --device ${GRUB_DEVICE} | sed -e 's,.*\(lvm\).*,\1,'`" = "lvm"  ] ; then
+  LINUX_ROOT_DEVICE=${GRUB_DEVICE}
+else
+  LINUX_ROOT_DEVICE=UUID=${GRUB_DEVICE_UUID}
+fi
+
+# add crashkernel option if we have the required tools
+if [ -x "/usr/bin/makedumpfile" ] && [ -x "/sbin/kexec" ]; then
+    GRUB_CMDLINE_EXTRA="$GRUB_CMDLINE_EXTRA crashkernel=384M-2G:64M,2G-:128M"
+fi
+
+linux_entry ()
+{
+  os="$1"
+  version="$2"
+  recovery="$3"
+  args="$4"
+  if ${recovery} ; then
+    title="$(gettext_quoted "%s, with Linux %s (recovery mode)")"
+  else
+#KAR: augment title to make sensible grub2 boot menu entry
+    title="$(gettext_quoted "%s, with Linux %s (${RTAI_OPTS})")"
+  fi
+  printf "menuentry '${title}' ${CLASS} {\n" "${os}" "${version}"
+#  cat << EOF
+#	recordfail
+#EOF
+  save_default_entry | sed -e "s/^/\t/"
+
+  if [ "x$GRUB_GFXPAYLOAD_LINUX" != x ]; then
+	  cat << EOF
+	set gfxpayload=$GRUB_GFXPAYLOAD_LINUX
+EOF
+  fi
+
+  if [ -z "${prepare_boot_cache}" ]; then
+    prepare_boot_cache="$(prepare_grub_to_access_device ${GRUB_DEVICE_BOOT} | sed -e "s/^/\t/")"
+  fi
+  printf '%s\n' "${prepare_boot_cache}"
+  if [ "x$5" != "xquiet" ]; then
+    cat << EOF
+	echo	'$(printf "$(gettext_quoted "Loading Linux %s ...")" ${version})'
+EOF
+  fi
+  cat << EOF
+	linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} ro ${args}
+EOF
+  if [ "x$5" != "xquiet" ]; then
+    cat << EOF
+	echo	'$(gettext_quoted "Loading initial ramdisk ...")'
+EOF
+  fi
+  if test -n "${initrd}" ; then
+    cat << EOF
+	initrd	${rel_dirname}/${initrd}
+EOF
+  fi
+  cat << EOF
+}
+EOF
+}
+
+blacklisted_kernel() {
+  local r=""
+  case "${1}" in
+    *-ec2) r="linux-ec2";; # LP: #671097
+  esac
+  [ -n "${r}" ] && { echo "Skipping linux image [$r]: ${1}" >&2; return 0; }
+  return 1;
+}
+
+#KAR: add new function to test if kernel name ends in -rtai
+#JAS: add pae kernels to list.
+
+rtai_kernel() {
+  local r=""
+  case "${1}" in
+    *-rtai) r="true";;
+    *-rtai-686-pae)r="true";;
+  esac
+  [ -n "${r}" ] && { return 0; }
+  return 1;
+}
+
+#KAR: add rtai-kernel test in determination of suitable kernels
+list=`for i in /boot/vmlinu[xz]-* /vmlinu[xz]-* ; do
+        if grub_file_is_not_garbage "$i" &&
+           ! blacklisted_kernel "$i" &&
+           rtai_kernel "$i" ; then
+          echo -n "$i ";
+        fi
+      done`
+prepare_boot_cache=
+
+while [ "x$list" != "x" ] ; do
+  linux=`version_find_latest $list`
+#KAR: modify message
+  echo "Found rtai linux image: $linux" >&2
+  basename=`basename $linux`
+  dirname=`dirname $linux`
+  rel_dirname=`make_system_path_relative_to_its_root $dirname`
+  version=`echo $basename | sed -e "s,^[^0-9]*-,,g"`
+  alt_version=`echo $version | sed -e "s,\.old$,,g"`
+  linux_root_device_thisversion="${LINUX_ROOT_DEVICE}"
+
+  initrd=
+  for i in "initrd.img-${version}" "initrd-${version}.img" \
+	   "initrd-${version}" "initrd.img-${alt_version}" \
+	   "initrd-${alt_version}.img" "initrd-${alt_version}"; do
+    if test -e "${dirname}/${i}" ; then
+      initrd="$i"
+      break
+    fi
+  done
+  if test -n "${initrd}" ; then
+#KAR: modify message
+    echo "Found rtai initrd image: ${dirname}/${initrd}" >&2
+  else
+    # "UUID=" magic is parsed by initrds.  Since there's no initrd, it can't work here.
+    linux_root_device_thisversion=${GRUB_DEVICE}
+  fi
+
+#KAR: change original production to use GRUB_CMDLINE_LINUX_RTAI instead of GRUB_CMDLINE_LINUX_DEFAULT
+  linux_entry "${OS}" "${version}" false \
+      "${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_EXTRA} ${GRUB_CMDLINE_LINUX_RTAI}" \
+      quiet
+  if [ "x${GRUB_DISABLE_LINUX_RECOVERY}" != "xtrue" ]; then
+    linux_entry "${OS}" "${version}" true \
+	"single ${GRUB_CMDLINE_LINUX}"
+  fi
+
+  list=`echo $list | tr ' ' '\n' | grep -vx $linux | tr '\n' ' '`
+done

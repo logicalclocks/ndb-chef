@@ -51,7 +51,7 @@ template "/etc/init.d/#{theService}" do
   variables({
               :ndb_dir => node[:ndb][:base_dir],
               :mysql_dir => node[:mysql][:base_dir],
-              :connect_string => node[:ndb][:connect_string],
+              :connectstring => node[:ndb][:connectstring],
               :node_id => found_id 
             })
   notifies :install_memcached, "ndb_mysql_ndb[#{theResource}]", :immediately

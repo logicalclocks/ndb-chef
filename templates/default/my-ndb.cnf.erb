@@ -71,7 +71,7 @@ log-bin=mysql-bin
 
 [mysql_cluster]
 # set connectstring to ndb management server (used by all executables)
-ndb-connectstring=<%= node[:ndb][:connect_string] %>
+ndb-connectstring=<%= node[:ndb][:connectstring] %>
 ndb-wait-setup=<%= node[:ndb][:wait_startup] %>
 
 [client]

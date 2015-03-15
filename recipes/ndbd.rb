@@ -106,3 +106,59 @@ end
 
 ndb_start "ndbd" do
 end
+
+
+# Here we set interrupts to be handled by only the first CPU
+
+if node[:ndb][:interrupts_isolated_to_single_cpu] == "true" && not File.exists?( "#{node[:mysql][:base_dir]}/.balance_irqs"
+  case node["platform_family"]
+  when "debian"
+    
+    file "/etc/default/irqbalance" do 
+      owner node[:hdfs][:user]
+      action :delete
+    end
+
+    template "/etc/default/irqbalance" do
+      source "irqbalance.ubuntu.erb"
+      owner "root"
+      mode 0644
+    end
+
+  # Need to isolate CPUs from handling interrupts using grub:
+    # http://wiki.linuxcnc.org/cgi-bin/wiki.pl?The_Isolcpus_Boot_Parameter_And_GRUB2
+    # Test using strees:
+    #  apt-get install stress && stress -c 24
+    # Sometimes you may need to disable hyper-threading in bios, restart, then restart and re-enable
+    # hyperthreading and it works
+      template "/etc/grub.d/07_rtai" do
+      source "07_rtai.erb"
+      owner "root"
+      mode 0644
+    end
+
+    execute "set_interrupts_to_first_cpu" do
+      user "root"
+      code <<-EOF
+          service irqbalance stop
+          source /etc/default/irqbalance 
+          irqbalance
+          update-grub
+      touch #{node[:mysql][:base_dir]}/.balance_irqs
+      EOF
+      not_if { ::File.exists?( "#{node[:mysql][:base_dir]}/.balance_irqs" ) }
+    end
+    
+  when "rhel"
+    execute "set_interrupts_to_first_cpu" do
+      user "root"
+      code <<-EOF
+
+      touch #{node[:mysql][:base_dir]}/.balance_irqs
+      EOF
+      not_if { ::File.exists?( "#{node[:mysql][:base_dir]}/.balance_irqs" ) }
+    end
+
+  end
+
+end

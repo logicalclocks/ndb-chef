@@ -9,7 +9,7 @@ if [ "X$USERID" != "X<%= node[:ndb][:user] %>" ]; then
 fi  
  
 
-MGM_CONN=<%= node[:ndb][:connect_string] %>
+MGM_CONN=<%= node[:ndb][:connectstring] %>
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help|-help)

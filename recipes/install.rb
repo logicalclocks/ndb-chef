@@ -127,3 +127,5 @@ template "#{node[:ndb][:scripts_dir]}/util/kill-process.sh" do
   mode 0655
 end
 
+
+

@@ -8,12 +8,12 @@ if [ "X$USERID" != "X<%= node[:ndb][:user] %>" ]; then
    exit -3
 fi  
 
-echo "Testing to see if a cluster is already running on <%= node[:ndb][:connect_string] %> ..." 
-# <%= node[:mysql][:base_dir] %>/bin/ndb_mgm -c <%= node[:ndb][:connect_string] %> -e \"show\"> /dev/null
+echo "Testing to see if a cluster is already running on <%= node[:ndb][:connectstring] %> ..." 
+# <%= node[:mysql][:base_dir] %>/bin/ndb_mgm -c <%= node[:ndb][:connectstring] %> -e \"show\"> /dev/null
 netstat -a | grep " <%= node[:ndb][:mgmd][:port] %>"
 
 if [ $? -eq 0 ] ; then
-    echo "A management server is already running on <%= node[:ndb][:connect_string] %>" 
+    echo "A management server is already running on <%= node[:ndb][:connectstring] %>" 
     exit 2
 fi
 

@@ -11,26 +11,34 @@
    elsif cpus > 8
      cpus = 8
    end
+   cpus = node[:ndb][:MaxNoOfExecutionThreads].empty? ? cpus : node[:ndb][:MaxNoOfExecutionThreads]
 -%>
 MaxNoOfExecutionThreads=<%= cpus  %>
 
-#More flexible than MaxNoOfExecutionThreads
+#More flexible than MaxNoOfExecutionThreads, supports > 8 threads. Decide which service to bind each thread to
 #Threadconfig=main={cpubind=0},ldm={count=8,cpubind=1,2,3,4,13,14,15,16},io={count=4,cpubind=5,6,17,18},rep={cpubind=7},recv={count=2,cpubind=8,19}
 
+# In order to take advantage of the enhanced stability that the use of ThreadConfig offers, it is necessary to insure that CPUs are isolated,
+# and that they not subject to interrupts, or to being scheduled for other tasks by the operating system. 
+# On many Linux systems, you can do this by setting IRQBALANCE_BANNED_CPUS in /etc/sysconfig/irqbalance to 0xFFFFF0, and by using the isolcpus boot option in grub.conf. 
+# For specific information, see your operating system or platform documentation.
+<% ThreadConfig = node[:ndb][:MaxNoOfExecutionThreads].empty? ? "" : "ThreadConfig=" -%>
+<%= ThreadConfig  %><%= node[:ndb][:MaxNoOfExecutionThreads] %>
+
 #The number of copies of the data stored on different nodes in the cluster
-NoOfReplicas=<%= node[:ndb][:num_replicas] %>
+NoOfReplicas=<%= node[:ndb][:NoOfReplicas] %>
 
 #The amount of main memory (RAM) used to store columns and ordered indexes in tables, plus some overhead
 # <% dataMemory = (node['memory']['total'][0..-3].to_i / (1024 * 100)) * ((node[:ndb][:memory].to_i) / 5 ) -%>
 #The amount of main memory (RAM) used to hash indexes in tables, plus some overhead
 
-DataMemory=<%= node[:ndb][:data_memory] %>M
+DataMemory=<%= node[:ndb][:DataMemory] %>M
 
-# Calculate index_memory size, can be overriden by user setting node[:ndb][:index_memory]
-<% index_mem = if node[:ndb][:index_memory].empty?
-                   (node[:ndb][:data_memory] / 4).to_s
+# Calculate IndexMemory size, can be overriden by user setting node[:ndb][:IndexMemory]
+<% index_mem = if node[:ndb][:IndexMemory].empty?
+                   (node[:ndb][:DataMemory].to_i / 4).to_s
                else
-                   node[:ndb][:index_memory]
+                   node[:ndb][:IndexMemory]
                end
 -%>
 IndexMemory=<%= index_mem  %>M
@@ -39,7 +47,7 @@ IndexMemory=<%= index_mem  %>M
 #  NUM_FRAGMENT_LOGFILES=`expr ${DATA_MEMORY} \* 6 / 64`
 # See: http://www.slideshare.net/Severalnines/severalnines-my-sqlclusterpt2013
 #The amount of disk space (NoOfFragmentLogFiles * 64MB) used to store the Redo Log (used for node recovery)
-NoOfFragmentLogFiles=<%= node[:ndb][:data_memory].to_i / 10 %>
+NoOfFragmentLogFiles=<%= node[:ndb][:DataMemory].to_i / 10 %>
 
 #The size of a Redo Log file on disk.
 FragmentLogFileSize=<%= node[:ndb][:FragmentLogFileSize] %>

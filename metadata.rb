@@ -34,35 +34,73 @@ supports 'rhel',   ">= 6.3"
 supports 'centos',   ">= 6.3"
 supports 'debian'
 
+#
+# Required Attributes
+#
+
+attribute "ndb/DataMemory",
+          :display_name => "Data memory",
+          :description => "Data memory for each MySQL Cluster Data Node",
+          :type => 'string',
+          :required => "required",
+          :default => "80"
+
+attribute "ndb/IndexMemory",
+          :display_name => "Index memory",
+          :description => "Index memory for each MySQL Cluster Data Node",
+          :type => 'string',
+          :calculated => true
+
+attribute "memcached/mem_size",
+          :display_name => "Memcached data memory size",
+          :description => "Memcached data memory size",
+          :type => 'string',
+          :required => "required",
+          :default => "80"
+
+#
+# Optional Attributes
+#
+
+attribute "ndb/version",
+          :display_name => "Ndb version",
+          :description =>  "MySQL Cluster Version",
+          :required => "optional",
+          :type => 'string'
+
+
 attribute "ndb/user",
           :display_name => "Ndb username",
           :description => "User that runs ndb database",
-          :type => 'string',
+          :type => 'string', 
+          :required => "optional",         
           :default => 'root'
 
 attribute "ndb/group",
           :display_name => "Ndb groupname",
           :description => "Group that runs ndb database",
           :type => 'string',
+          :required => "optional",          
           :default => 'root'
 
 attribute "mysql/user",
           :display_name => "Mysql username for hop",
           :description => "User that runs hop database",
+          :required => "optional",
           :type => 'string',
           :default => 'mysql'
 
 attribute "mysql/password",
           :display_name => "Mysql password for hop user",
           :description => "Password for hop mysql user",
-          :required => "required",
+          :calculated => true
           :type => 'string'
 
 attribute "mysql/root/password",
           :display_name => "MySQL server root password",
           :description => "Password for the root mysql user",
           :type => 'string',
-          :default => 'randomly generated'
+          :calculated => true
 
 attribute "ndb/enabled",
           :display_name => "NDB enabled",
@@ -74,48 +112,35 @@ attribute "ndb/root_dir",
           :display_name => "Install directory for NDB",
           :description => "Install directory for MySQL Cluster data files",
           :type => 'string',
+          :required => "optional",
           :default => "/var/lib/mysql-cluster"
 
 attribute "mysql/base_dir",
           :display_name => "Install directory for MySQL Binaries",
           :description => "Install directory for MySQL Binaries",
           :type => 'string',
+          :required => "optional",
           :default => "/usr/local"
-
-attribute "ndb/DataMemory",
-          :display_name => "Data memory",
-          :description => "Data memory for each MySQL Cluster Data Node",
-          :type => 'string',
-          :default => "80"
-
-attribute "ndb/IndexMemory",
-          :display_name => "Index memory",
-          :description => "Index memory for each MySQL Cluster Data Node",
-          :type => 'string',
-          :calculated => true
-
-attribute "ndb/NoOfReplicas",
-          :display_name => "Num Replicas",
-          :description => "Num of replicas of the MySQL Cluster Data Nodes",
-          :type => 'string',
-          :default => "2"
 
 attribute "ndb/mgm_server/port",
           :display_name => "Port used by Mgm servers",
           :description => "Port used by Mgm servers in MySQL Cluster",
           :type => 'string',
+          :required => "optional",
           :default => ""
 
-attribute "memcached/mem_size",
-          :display_name => "Memcached data memory size",
-          :description => "Memcached data memory size",
+attribute "ndb/NoOfReplicas",
+          :display_name => "Num Replicas",
+          :description => "Num of replicas of the MySQL Cluster Data Nodes",
           :type => 'string',
-          :default => "80"
+          :required => "optional",
+          :default => "2"
 
 attribute "memcached/options",
           :display_name => "Memcached options",
           :description => "Memcached options",
           :type => 'string',
+          :required => "optional",
           :default => ""
 
 # attribute "btsync/ndb/seeder_secret",
@@ -129,18 +154,6 @@ attribute "memcached/options",
 # :description => "Ndb's random secret (key) generated using the seeder's secret key. 20 chars or more (normally 32 chars)",
 # :type => 'string',
 # :default => "BTHKJKK4PIPIOJZ7GITF2SJ2IYDLSSJVY"
-
-attribute "kagent/enabled",
-          :display_name => "Install kagent",
-          :description =>  "Install kagent",
-          :type => 'string',
-          :default => "false"
-
-attribute "ndb/version",
-          :display_name => "Ndb version",
-          :description =>  "MySQL Cluster Version",
-          :type => 'string'
-
 
 attribute "ndb/FragmentLogFileSize",
           :display_name => "FragmentLogFileSize",
@@ -333,4 +346,11 @@ attribute "ndb/ReceiveBufferMemory",
           :description => "ReceiveBufferMemory",
           :type => 'string',
           :default =>  "2M"
+
+attribute "kagent/enabled",
+          :display_name => "Install kagent",
+          :description =>  "Install kagent",
+          :type => 'string',
+          :required => "optional",
+          :default => "false"
 

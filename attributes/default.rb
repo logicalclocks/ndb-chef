@@ -28,7 +28,7 @@ default[:ndb][:connectstring]                       = ""
 default[:ndb][:DataMemory]                          = "80"
 # Calculate IndexMemory size by default, can be overriden by user.
 default[:ndb][:IndexMemory]                         = ""
-default[:ndb][:NoOfReplicas]                        = 2
+default[:ndb][:NoOfReplicas]                        = "1"
 default[:ndb][:FragmentLogFileSize]                 = "64M"
 default[:ndb][:MaxNoOfAttributes]                   = "60000"
 default[:ndb][:MaxNoOfTables]                       = "2024"

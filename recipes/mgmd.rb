@@ -89,3 +89,19 @@ end
 
 ndb_start "ndb_mgmd" do
 end
+
+package "pexpect"
+end
+
+bash "restart-#{new_resource.name}" do
+ user node[:ndb][:user]
+  code <<-EOF
+     expect -c 'ssh-keygen -t rsa -f #{node[:ndb][:user]}/.ssh/id_rsa
+     expect "Enter passphrase (empty for no passphrase): "
+     send "\r"
+     expect "Enter same passphrase again: "
+     send "\r"
+     expect eof'
+  EOF
+ not_if { ::File.exists?( "#{node[:ndb][:user]}/.ssh/id_rsa" ) }
+end

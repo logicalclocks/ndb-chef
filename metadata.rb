@@ -93,7 +93,7 @@ attribute "mysql/user",
 attribute "mysql/password",
           :display_name => "Mysql password for hop user",
           :description => "Password for hop mysql user",
-          :calculated => true
+          :calculated => true,
           :type => 'string'
 
 attribute "mysql/root/password",

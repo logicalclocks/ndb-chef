@@ -90,18 +90,30 @@ end
 ndb_start "ndb_mgmd" do
 end
 
-package "pexpect"
+#
+# Put public key of this mgmd-host in .ssh/authorized_keys of all ndb_mgdt nodes
+#
+package "expect" do
 end
 
-bash "restart-#{new_resource.name}" do
+homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
+
+
+template "#{Chef::Config[:file_cache_path]}/expect-ssh-keygen.sh" do
+  source "expect-ssh-keygen.sh.erb"
+  owner node[:ndb][:user]
+  group node[:ndb][:user]
+  mode 0755
+  variables({
+              :homedir => homedir
+            })
+end
+
+Chef::Log.info "Home dir is #{homedir}. Generating ssh keys..."
+bash "generate-ssh-keypair-mgmserver" do
  user node[:ndb][:user]
   code <<-EOF
-     expect -c 'ssh-keygen -t rsa -f #{node[:ndb][:user]}/.ssh/id_rsa
-     expect "Enter passphrase (empty for no passphrase): "
-     send "\r"
-     expect "Enter same passphrase again: "
-     send "\r"
-     expect eof'
+      #{Chef::Config[:file_cache_path]}/expect-ssh-keygen.sh
   EOF
- not_if { ::File.exists?( "#{node[:ndb][:user]}/.ssh/id_rsa" ) }
+ not_if { ::File.exists?( "#{homedir}/.ssh/id_rsa" ) }
 end

@@ -1,0 +1,10 @@
+#!/usr/bin/expect -f
+set timeout 20
+spawn ssh-keygen -t rsa
+expect "Enter file in which to save the key (<%= @homedir %>/.ssh/id_rsa):"
+send "\r"
+expect "passphrase):"
+send "\r"
+expect "again:"
+send "\r"
+expect eof

@@ -162,3 +162,20 @@ if (node[:ndb][:interrupts_isolated_to_single_cpu] == "true") && (not ::File.exi
   end
 
 end
+
+homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
+
+
+# Add the mgmd hosts' public key, so that they can start/stop the ndbd on this node
+# using passwordless ssh.
+# Dont append if the public key is already in the authorized_keys
+#
+bash "append_mgmd_publickey_to_authorized_keys" do    
+   user node[:ndb][:user]
+   group node[:ndb][:group]
+   code <<-EOF
+      echo "#{node[:ndb][:mgmd][:public_key]}" >> #{homedir}/.ssh/authorized_keys 
+   EOF
+   not_if "grep -q #{node[:ndb][:mgmd][:public_key]} #{homedir}/.ssh/authorized_keys"
+end
+

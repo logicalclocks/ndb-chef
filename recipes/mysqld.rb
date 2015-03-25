@@ -58,7 +58,7 @@ for script in node[:mysql][:scripts]
     source "#{script}.erb"
     owner node[:ndb][:user]
     group node[:ndb][:group]
-    mode 0774
+    mode 0775
     variables({
                 :node_id => found_id
               })

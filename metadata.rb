@@ -62,11 +62,11 @@ attribute "memcached/mem_size",
 # Optional Attributes
 #
 
-attribute "ndb/version",
-          :display_name => "Ndb version",
-          :description =>  "MySQL Cluster Version",
-          :required => "optional",
-          :type => 'string'
+#attribute "ndb/version",
+#          :display_name => "Ndb version",
+#          :description =>  "MySQL Cluster Version",
+#          :required => "optional",
+#          :type => 'string'
 
 
 attribute "ndb/user",

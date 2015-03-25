@@ -25,9 +25,9 @@ fi
 MYSQL_SOCKET=`<%= node[:ndb][:scripts_dir] %>/get-mysql-socket.sh`
 echo "Using socket: $MYSQL_SOCKET"
  if [ "$EXECUTE_SQL" = "-e" ] ; then
-     <%= node[:mysql][:base_dir] %>/bin/mysql --defaults-file=$MYSQL_CONF  $DB $EXECUTE_SQL "$@"
+     <%= node[:mysql][:base_dir] %>/bin/mysql --user=root --defaults-file=$MYSQL_CONF  $DB $EXECUTE_SQL "$@"
  else
   # Case 3
-    <%= node[:mysql][:base_dir] %>/bin/mysql --defaults-file=$MYSQL_CONF $DB  $@
+    <%= node[:mysql][:base_dir] %>/bin/mysql --user=root --defaults-file=$MYSQL_CONF $DB  $@
  fi
 exit $?

@@ -176,7 +176,7 @@ bash "add_mgmd_public_key" do
       cat #{node[:ndb][:mgmd][:public_key]} >> #{homedir}/.ssh/authorized_keys
       touch #{homedir}/.ssh/.mgmd_key_authorized
   EOF
- not_if { ::File.exists?( "#{homedir}/.ssh/.mgmd_key_authorized" || "#{node[:ndb][:mgmd][:public_key]}".eql? "" ) }
+ not_if { ::File.exists?( "#{homedir}/.ssh/.mgmd_key_authorized" || "#{node[:ndb][:mgmd][:public_key]}".empty? ) }
 end
 
 

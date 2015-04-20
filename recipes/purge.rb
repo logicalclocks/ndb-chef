@@ -17,13 +17,11 @@ end
 
 # Remove all services
 daemons = %w{ndb_mgmd ndbd mysqld memcached}
-
 daemons.each { |d| 
 file "/etc/init.d/#{d}" do
   action :delete
   ignore_failure :true
 end
-
 }
 
 # Remove the MySQL binaries and MySQL Cluster data directories

@@ -165,9 +165,13 @@ end
 
 homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
 
+# Add the mgmd hosts' public key, so that they can start/stop the ndbd on this node
+# using passwordless ssh.
+# Dont append if the public key is already in the authorized_keys or is empty
 bash "add_mgmd_public_key" do
  user node[:ndb][:user]
-  code <<-EOF
+ group node[:ndb][:group]
+ code <<-EOF
       mkdir #{homedir}/.ssh
       cat #{node[:ndb][:mgmd][:public_key]} >> #{homedir}/.ssh/authorized_keys
       touch #{homedir}/.ssh/.mgmd_key_authorized

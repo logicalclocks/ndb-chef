@@ -46,3 +46,9 @@ link node[:mysql][:base_dir] do
   action :delete
   ignore_failure :true
 end
+
+directory Chef::Config[:file_cache_path] do
+  recursive true
+  action :delete
+  ignore_failure :true
+end

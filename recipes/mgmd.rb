@@ -90,59 +90,47 @@ end
 ndb_start "ndb_mgmd" do
 end
 
+homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
+Chef::Log.info "Home dir is #{homedir}. Generating ssh keys..."
 #
 # Put public key of this mgmd-host in .ssh/authorized_keys of all ndb_mgdt nodes
 #
-package "expect" do
-end
+# package "expect" do
+# end
+# template "#{Chef::Config[:file_cache_path]}/expect-ssh-keygen.sh" do
+#   source "expect-ssh-keygen.sh.erb"
+#   owner node[:ndb][:user]
+#   group node[:ndb][:user]
+#   mode 0755
+#   variables({ :homedir => homedir })
+# end
+# bash "generate-ssh-keypair-mgmserver" do
+#  user node[:ndb][:user]
+#   code <<-EOF
+#       #{Chef::Config[:file_cache_path]}/expect-ssh-keygen.sh
+#   EOF
+#  not_if { ::File.exists?( "#{homedir}/.ssh/id_rsa" ) }
+# end
 
-homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
-
-template "#{Chef::Config[:file_cache_path]}/expect-ssh-keygen.sh" do
-  source "expect-ssh-keygen.sh.erb"
-  owner node[:ndb][:user]
-  group node[:ndb][:user]
-  mode 0755
-  variables({
-              :homedir => homedir
-            })
-end
-
-Chef::Log.info "Home dir is #{homedir}. Generating ssh keys..."
-bash "generate-ssh-keypair-mgmserver" do
+bash "generate-ssh-keypair-for-mgmd" do
  user node[:ndb][:user]
   code <<-EOF
-#      #{Chef::Config[:file_cache_path]}/expect-ssh-keygen.sh
-      ssh-keygen -b 2048 -t rsa -q -N ""
+     ssh-keygen -b 2048 -f #{homedir}/.ssh/id_rsa -t rsa -q -N ''
   EOF
  not_if { ::File.exists?( "#{homedir}/.ssh/id_rsa" ) }
 end
 
 
-openssh_pubkey = ""
-ruby_block "Check if CURBID Web Manager needs installation" do
-  block do
-
-    if File.exists?("#{homedir}/.ssh/id_rsa.pub")
-      # Read the CWM version from file.
-      f = File.open("#{homedir}/.ssh/id_rsa.pub")
-
-      f.each do |line|
-         openssh_pubkey += line
-      end
-
-      f.close
-    end
-  end
+# IO.read() reads the contents of the entire file in, and then closes the file.
+#node.default[:ndb][:mgmd][:public_key] = "#{contents}"
+ndb_mgmd_publickey "#{homedir}" do
 end
 
-kagent_param "/tmp" do
-  executing_cookbook "ndb"
-  executing_recipe "mgmd"
-  cookbook "ndb"
-  recipe "mgmd"
-  param "public_key"
-  value "#{openssh_pubkey}"
+template "#{homedir}/.ssh/config" do
+  source "ssh_config.erb"
+  owner node[:ndb][:user]
+  group node[:ndb][:user]
+  mode 0664
 end
 
 

@@ -162,3 +162,17 @@ if (node[:ndb][:interrupts_isolated_to_single_cpu] == "true") && (not ::File.exi
   end
 
 end
+
+homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
+
+bash "add_mgmd_public_key" do
+ user node[:ndb][:user]
+  code <<-EOF
+      mkdir #{homedir}/.ssh
+      cat #{node[:ndb][:mgmd][:public_key]} >> #{homedir}/.ssh/authorized_keys
+      touch #{homedir}/.ssh/.mgmd_key_authorized
+  EOF
+ not_if { ::File.exists?( "#{homedir}/.ssh/.mgmd_key_authorized" || "#{node[:ndb][:mgmd][:public_key]}".eql? "" ) }
+end
+
+

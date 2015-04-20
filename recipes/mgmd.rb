@@ -98,7 +98,6 @@ end
 
 homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
 
-
 template "#{Chef::Config[:file_cache_path]}/expect-ssh-keygen.sh" do
   source "expect-ssh-keygen.sh.erb"
   owner node[:ndb][:user]
@@ -113,7 +112,37 @@ Chef::Log.info "Home dir is #{homedir}. Generating ssh keys..."
 bash "generate-ssh-keypair-mgmserver" do
  user node[:ndb][:user]
   code <<-EOF
-      #{Chef::Config[:file_cache_path]}/expect-ssh-keygen.sh
+#      #{Chef::Config[:file_cache_path]}/expect-ssh-keygen.sh
+      ssh-keygen -b 2048 -t rsa -q -N ""
   EOF
  not_if { ::File.exists?( "#{homedir}/.ssh/id_rsa" ) }
 end
+
+
+openssh_pubkey = ""
+ruby_block "Check if CURBID Web Manager needs installation" do
+  block do
+
+    if File.exists?("#{homedir}/.ssh/id_rsa.pub")
+      # Read the CWM version from file.
+      f = File.open("#{homedir}/.ssh/id_rsa.pub")
+
+      f.each do |line|
+         openssh_pubkey += line
+      end
+
+      f.close
+    end
+  end
+end
+
+kagent_param "/tmp" do
+  executing_cookbook "ndb"
+  executing_recipe "mgmd"
+  cookbook "ndb"
+  recipe "mgmd"
+  param "public_key"
+  value "#{openssh_pubkey}"
+end
+
+

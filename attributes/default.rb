@@ -3,7 +3,7 @@ include_attribute "btsync"
 
 version="7"
 majorVersion="4"
-minorVersion="4"
+minorVersion="6"
 
 versionStr                                          = "#{version}.#{majorVersion}.#{minorVersion}"
 default[:ndb][:enabled]                             = "true"

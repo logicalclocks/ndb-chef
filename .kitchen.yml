@@ -31,6 +31,7 @@ suites:
       - recipe[ndb::memcached]
     attributes:
          ndb:
+            DataMemory: "111"
             mgmd:
                private_ips: ["10.0.2.15"]
             ndbd:

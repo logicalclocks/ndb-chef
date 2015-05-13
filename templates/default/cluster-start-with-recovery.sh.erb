@@ -3,6 +3,7 @@
 SKIP_NDBDS=0
 SKIP_MYSQLDS=0
 SKIP_USER_CHECK=0
+TIME_WAIT=<%= node[:ndb][:wait_startup] %>
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -15,12 +16,16 @@ while [ $# -gt 0 ]; do
     -f|--force)
               SKIP_USER_CHECK=1
 	      ;;
+    -t|--time-wait-for-start)
+	      shift
+              TIME_WAIT=$1
+	      ;;
     -sc)
               echo "Deleting old configurations from /<%= node[:ndb][:root_dir] %>/mgmd/"
               rm -rf ../<%= node[:ndb][:root_dir] %>/mgmd/*
 	      ;;
     --skip-ndbds)
-n              SKIP_NDBDS=1
+              SKIP_NDBDS=1
 	      ;;
     --skip-mysqlds)
               SKIP_MYSQLDS=1
@@ -173,7 +178,7 @@ echo ""
 if [ $SKIP_NDBDS -eq 0 ] ; then
     echo "Starting a Data Node on host: <%= ndbd %> "
     echo "For username: <%= node[:ndb][:user]%> "
-  ssh <%= node[:ndb][:user]%>@<%= ndbd %> <%= node[:ndb][:scripts_dir] %>/start-noinit-ndbd.sh
+  ssh <%= node[:ndb][:user]%>@<%= ndbd %> <%= node[:ndb][:scripts_dir] %>/ndbd-start.sh
 
   if [ $? -ne 0 ] ; then
     echo "Problem starting a Data Node on host <%= ndbd %>."
@@ -188,10 +193,10 @@ fi
 
 
 echo "Waiting for the cluster to be ready by calling:"
-echo "ndb_waiter -c <%= node[:ndb][:connectstring] %> --timeout=300"
+echo "ndb_waiter -c <%= node[:ndb][:connectstring] %> --timeout=$TIME_WAIT"
 echo "This can take a few minutes..."
 
-<%= node[:mysql][:base_dir] %>/bin/ndb_waiter -c <%= node[:ndb][:connectstring] %> --timeout=<%= node[:ndb][:wait_startup] %> 2>&1 > /dev/null
+<%= node[:mysql][:base_dir] %>/bin/ndb_waiter -c <%= node[:ndb][:connectstring] %> --timeout=$TIME_WAIT 2>&1 > /dev/null
 
 if [ $? -ne 0 ] ; then
     echo "Error when waiting on the cluster to be ready."
@@ -199,10 +204,10 @@ if [ $? -ne 0 ] ; then
     exit 3
 fi
 
-<%= node[:ndb][:base_dir] %>/scripts/util/mysql-server-start.sh $SKIP_MYSQLDS
+<%= node[:ndb][:base_dir] %>/scripts/mysql-server-start.sh $SKIP_MYSQLDS
 
 sleep 1
 
-<%= node[:ndb][:root_dir] %>/scripts/mgm-client.sh -e show
+<%= node[:ndb][:base_dir] %>/scripts/mgm-client.sh -e show
 
 exit 0

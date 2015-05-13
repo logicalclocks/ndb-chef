@@ -93,7 +93,7 @@ default[:ndb][:num_ndb_slots_per_client]            = 1
 # If the mysqld or memcached starts and the MySQL Cluster isn't running, it will not connect and will
 # need to be restarted to connect to the cluster.
 # Time in seconds
-default[:ndb][:wait_startup]       = 300
+default[:ndb][:wait_startup]       = 500
 
 # Base directory for MySQL binaries
 default[:mysql][:root_dir]         = "/usr/local"

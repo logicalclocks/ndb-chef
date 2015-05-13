@@ -7,14 +7,15 @@ driver:
     cpus: 2
     natdnshostresolver1: "on"
     natdnsproxy1: "on"
+    nictype1: "virtio"
 
 provisioner:
   name: chef_solo
 
 platforms:
 #  - name: ubuntu-12.04
-#  - name: ubuntu-14.04
-  - name: centos-6.5
+  - name: ubuntu-14.04
+#  - name: centos-6.5
 
 suites:
   - name: default
@@ -31,6 +32,7 @@ suites:
       - recipe[ndb::memcached]
     attributes:
          ndb:
+            DataMemory: "111"
             mgmd:
                private_ips: ["10.0.2.15"]
             ndbd:

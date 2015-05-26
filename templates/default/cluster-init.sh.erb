@@ -235,7 +235,7 @@ fi
 
 <%= node[:ndb][:base_dir] %>/scripts/mysql-server-start.sh $SKIP_MYSQLDS
 
-sleep 1
+sleep 3
 
 <%= node[:ndb][:base_dir] %>/scripts/mgm-client.sh -e show
 

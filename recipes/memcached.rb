@@ -1,7 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
 require File.expand_path(File.dirname(__FILE__) + '/find_mysqld')
-libpath = File.expand_path '../../../kagent/libraries', __FILE__
-require File.join(libpath, 'inifile')
 
 ndb_connectstring()
 #generate_etc_hosts()

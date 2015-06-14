@@ -130,5 +130,3 @@ template "#{homedir}/.ssh/config" do
   group node[:ndb][:user]
   mode 0664
 end
-
-

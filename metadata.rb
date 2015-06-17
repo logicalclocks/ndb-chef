@@ -309,3 +309,8 @@ attribute "kagent/enabled",
           :required => "optional",
           :default => "false"
 
+
+
+attribute "ndb/NoOfFragmentLogParts",
+          :description =>  "One per ldm thread. Valid values: 4, 8, 16",
+          :type => 'string'

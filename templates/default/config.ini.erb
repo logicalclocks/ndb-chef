@@ -3,7 +3,7 @@
 # For overview:
 # http://docs.oracle.com/cd/E17952_01/refman-5.5-en/mysql-cluster-ndb-innodb-engines.html
 
-[NDBD DEFAULT]
+[NDBD DEFAULT] 
 #Used by ndbmdmt to determine the number of LQH threads
 <% cpus = (node[:cpu][:total] / 2) + 1 -%>
 <% if cpus < 2
@@ -15,7 +15,8 @@
 -%>
 MaxNoOfExecutionThreads=<%= cpus  %>
 
-#More flexible than MaxNoOfExecutionThreads, supports > 8 threads. Decide which service to bind each thread to
+#More flexible than MaxNoOfExecutionThreads, supports > 8 threads. Decide which service to bind each thread to.
+#Increase NoOfFragmentLogParts to 8 or 16, if you have 8 or 16 ldm threads.
 #Threadconfig=main={cpubind=0},ldm={count=8,cpubind=1,2,3,4,13,14,15,16},io={count=4,cpubind=5,6,17,18},rep={cpubind=7},recv={count=2,cpubind=8,19}
 
 # In order to take advantage of the enhanced stability that the use of ThreadConfig offers, it is necessary to insure that CPUs are isolated,
@@ -24,6 +25,9 @@ MaxNoOfExecutionThreads=<%= cpus  %>
 # For specific information, see your operating system or platform documentation.
 <% ThreadConfig = node[:ndb][:MaxNoOfExecutionThreads].empty? ? "" : "ThreadConfig=" -%>
 <%= ThreadConfig  %><%= node[:ndb][:MaxNoOfExecutionThreads] %>
+
+# Valid values: 4, 8, 16, 32. For 8 ldm threads, increase to 8. For 16 ldm threads, increase to 16.
+NoOfFragmentLogParts=<%= node[:ndb][:NoOfFragmentLogParts] %>
 
 #The number of copies of the data stored on different nodes in the cluster
 NoOfReplicas=<%= node[:ndb][:NoOfReplicas] %>

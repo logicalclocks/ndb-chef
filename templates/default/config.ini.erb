@@ -45,7 +45,6 @@ NoOfReplicas=<%= node[:ndb][:NoOfReplicas] %>
 DataMemory=<%= node[:ndb][:DataMemory] %>M
 
 # Calculate IndexMemory size, can be overriden by user setting node[:ndb][:IndexMemory]
-#<% index_mem = if node[:ndb][:IndexMemory].empty?#  NUM_FRAGMENT_LOGFILES=`expr ${DATA_MEMORY} \* 6 / 64`
 <% index_mem = if node[:ndb][:IndexMemory].empty?
                    (node[:ndb][:DataMemory].to_i / 4).to_s
                else

@@ -316,3 +316,7 @@ attribute "ndb/NoOfFragmentLogParts",
 attribute "ndb/bind_cpus",
           :description =>  "Isolate interrupts from cpus, turn off balance_irqs",
           :type => 'string'
+
+attribute "ndb/TcpBind_INADDR_ANY",
+          :description =>  "Set to TRUE so that any IP addr can be used on any node. Default is FALSE.",
+          :type => 'string'

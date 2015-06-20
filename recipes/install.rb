@@ -81,6 +81,28 @@ remote_file cached_package_filename do
   action :create
 end
 
+if node[:ndb][:bind_cpus].eql? "true"
+  directory "/etc/sysconfig" do
+    owner "root"
+    group "root"
+    mode "755"
+    action :create
+  end
+
+  file "/etc/sysconfig/irqbalance" do
+    owner "root"
+    action :delete
+  end
+
+
+  template "/etc/sysconfig/irqbalance" do
+    source "irqbalance.ubuntu.erb"
+    owner "root"
+    group "root"
+    mode 0655
+  end
+end
+
 Chef::Log.info "Unzipping mysql cluster binaries into:  #{base_package_filename}"
 Chef::Log.info "Moving mysql cluster binaries to:  #{node[:mysql][:version_dir]}"
 bash "unpack_mysql_cluster" do
@@ -98,6 +120,7 @@ fi
 # TODO: If binding threads to CPU, run the following:
 # echo '0' > /proc/sys/vm/swappiness
 # echo 'vm.swappiness=0' >> /etc/sysctl.conf
+
 chown -R #{node[:mysql][:run_as_user]} #{node[:mysql][:version_dir]}
 EOF
   not_if { ::File.exists?( "#{node[:mysql][:version_dir]}/bin/ndbd" ) }

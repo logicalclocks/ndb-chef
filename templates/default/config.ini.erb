@@ -8,8 +8,14 @@
 <% cpus = (node[:cpu][:total] / 2) + 1 -%>
 <% if cpus < 2
      cpus = 2
-   elsif cpus > 8
+   elsif cpus > 7
      cpus = 8
+   elsif cpus > 15
+     cpus = 16
+   elsif cpus > 23
+     cpus = 24
+   elsif cpus > 31
+     cpus = 32
    end
    cpus = node[:ndb][:MaxNoOfExecutionThreads].empty? ? cpus : node[:ndb][:MaxNoOfExecutionThreads]
 -%>
@@ -19,8 +25,8 @@ MaxNoOfExecutionThreads=<%= cpus  %>
 #Increase NoOfFragmentLogParts to 8 or 16, if you have 8 or 16 ldm threads.
 #Threadconfig=main={cpubind=0},ldm={count=8,cpubind=1,2,3,4,13,14,15,16},io={count=4,cpubind=5,6,17,18},rep={cpubind=7},recv={count=2,cpubind=8,19}
 
-# In order to take advantage of the enhanced stability that the use of ThreadConfig offers, it is necessary to insure that CPUs are isolated,
-# and that they not subject to interrupts, or to being scheduled for other tasks by the operating system. 
+# In order to take advantage of the enhanced stability that the use of ThreadConfig offers, it is necessary to ensure that CPUs are isolated,
+# and that they are not subject to interrupts, or to being scheduled for other tasks by the operating system. 
 # On many Linux systems, you can do this by setting IRQBALANCE_BANNED_CPUS in /etc/sysconfig/irqbalance to 0xFFFFF0, and by using the isolcpus boot option in grub.conf. 
 # For specific information, see your operating system or platform documentation.
 <% ThreadConfig = node[:ndb][:MaxNoOfExecutionThreads].empty? ? "" : "ThreadConfig=" -%>
@@ -39,16 +45,7 @@ NoOfReplicas=<%= node[:ndb][:NoOfReplicas] %>
 DataMemory=<%= node[:ndb][:DataMemory] %>M
 
 # Calculate IndexMemory size, can be overriden by user setting node[:ndb][:IndexMemory]
-<% index_mem = if node[:ndb][:IndexMemory].empty?
-                   (node[:ndb][:DataMemory].to_i / 4).to_s
-               else
-                   node[:ndb][:IndexMemory]
-               end
--%>
-IndexMemory=<%= index_mem  %>M
-
-#   REDO_LOG_SIZE=`expr ${NUM_FRAGMENT_LOGFILES} \* 64`
-#  NUM_FRAGMENT_LOGFILES=`expr ${DATA_MEMORY} \* 6 / 64`
+<% index_mem = if node[:ndb][:IndexMemory].empty?#  NUM_FRAGMENT_LOGFILES=`expr ${DATA_MEMORY} \* 6 / 64`
 # See: http://www.slideshare.net/Severalnines/severalnines-my-sqlclusterpt2013
 #The amount of disk space (NoOfFragmentLogFiles * 64MB) used to store the Redo Log (used for node recovery)
 NoOfFragmentLogFiles=<%= node[:ndb][:DataMemory].to_i / 10 %>

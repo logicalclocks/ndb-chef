@@ -309,8 +309,10 @@ attribute "kagent/enabled",
           :required => "optional",
           :default => "false"
 
-
-
 attribute "ndb/NoOfFragmentLogParts",
           :description =>  "One per ldm thread. Valid values: 4, 8, 16",
+          :type => 'string'
+
+attribute "ndb/bind_cpus",
+          :description =>  "Isolate interrupts from cpus, turn off balance_irqs",
           :type => 'string'

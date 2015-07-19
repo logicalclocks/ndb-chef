@@ -56,7 +56,7 @@ directory node[:mysql][:version_dir] do
 end
 
 directory node[:ndb][:shared_folder] do
-  owner node[:mysql][:user]
+  owner node[:mysql][:run_as_user]
   group node[:ndb][:user]
   mode "755"
   action :create

@@ -88,8 +88,6 @@ end
 ndb_start "ndb_mgmd" do
 end
 
-homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
-Chef::Log.info "Home dir is #{homedir}. Generating ssh keys..."
 #
 # Put public key of this mgmd-host in .ssh/authorized_keys of all ndb_mgdt nodes
 #
@@ -109,6 +107,9 @@ Chef::Log.info "Home dir is #{homedir}. Generating ssh keys..."
 #   EOF
 #  not_if { ::File.exists?( "#{homedir}/.ssh/id_rsa" ) }
 # end
+
+homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
+Chef::Log.info "Home dir is #{homedir}. Generating ssh keys..."
 
 bash "generate-ssh-keypair-for-mgmd" do
  user node[:ndb][:user]

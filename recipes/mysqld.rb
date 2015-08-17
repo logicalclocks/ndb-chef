@@ -109,20 +109,20 @@ bash 'mysql_install_db' do
 end
 
 ndb_mysql_basic "install" do
-   action :nothing
+  action :nothing
 end
 
 grants_path = "#{Chef::Config[:file_cache_path]}/grants.sql"
-  template grants_path do
-    source File.basename(grants_path) + ".erb"
-    owner "root" 
-    mode "0600"
-    action :create
-    variables({
-                :my_ip => my_ip
-              })
-    notifies :install_grants, "ndb_mysql_basic[install]", :immediately
-  end
+template grants_path do
+  source File.basename(grants_path) + ".erb"
+  owner "root" 
+  mode "0600"
+  action :create
+  variables({
+              :my_ip => my_ip
+            })
+  notifies :install_grants, "ndb_mysql_basic[install]", :immediately
+end
 
 
 if node[:ndb][:enabled] == "true"

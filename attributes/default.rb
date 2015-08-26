@@ -3,7 +3,7 @@ include_attribute "btsync"
 
 version="7"
 majorVersion="4"
-minorVersion="4"
+minorVersion="7"
 
 versionStr                                          = "#{version}.#{majorVersion}.#{minorVersion}"
 default[:ndb][:enabled]                             = "true"
@@ -38,7 +38,7 @@ default[:ndb][:MaxNoOfAttributes]                   = "60000"
 default[:ndb][:MaxNoOfTables]                       = "2024"
 default[:ndb][:MaxNoOfOrderedIndexes]               = "256"
 default[:ndb][:MaxNoOfUniqueHashIndexes]            = "128"
-default[:ndb][:MaxDMLOperationsPerTransaction]      = "128"
+default[:ndb][:MaxDMLOperationsPerTransaction]      = "4294967295"
 default[:ndb][:TransactionBufferMemory]             = "1M"
 default[:ndb][:MaxParallelScansPerFragment]         = "256"
 default[:ndb][:MaxDiskWriteSpeed]                   = "20M"
@@ -65,6 +65,10 @@ default[:ndb][:DefaultHashMapSize]                  = "3840"
 default[:ndb][:ODirect]                             = "0"
 default[:ndb][:SendBufferMemory]                    = "2M"
 default[:ndb][:ReceiveBufferMemory]                 = "2M"
+default[:ndb][:MaxNoOfConcurrentIndexOperations]    = "40000"
+default[:ndb][:MaxNoOfConcurrentOperations]         = "20000"
+default[:ndb][:MaxNoOfFiredTriggers]                = "10000"
+
 
 # Up to 8 execution threads supported
 default[:ndb][:MaxNoOfExecutionThreads]             = ""

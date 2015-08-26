@@ -121,7 +121,6 @@ end
 
 
 # IO.read() reads the contents of the entire file in, and then closes the file.
-#node.default[:ndb][:mgmd][:public_key] = "#{contents}"
 ndb_mgmd_publickey "#{homedir}" do
 end
 

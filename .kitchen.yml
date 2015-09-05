@@ -30,6 +30,7 @@ suites:
       - recipe[ndb::ndbd]
       - recipe[ndb::mysqld]
       - recipe[ndb::memcached]
+      - recipe[ndb::bench]
     attributes:
          ndb:
             DataMemory: "111"

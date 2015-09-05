@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# You have to build mysql-cluster from source. Do this by executing:
+# cd $ROOT
+# cmake .  -DWITH_NDB_TEST=ON -LH
+# make 
+# cd storage/ndb
+# make
+# It often fails on building java code. Just re-run make after killing the shell.
+# 
+if [ $# -ne 2 ] ; then
+echo "Usage: $0  number_threads exec_time"
+exit 1
+fi 
+export NDB_CONNECTSTRING="<%= @mgmd_ip %>:1186"
+/var/lib/mysql-cluster/ndb/scripts/flexAsynch -t $2 -warmup_time 2000 -execution_time $3 -cooldown_time 1000 

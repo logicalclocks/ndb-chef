@@ -1,10 +1,12 @@
-bash "install_flexasync" do
-    user "root"
-    code <<-EOF
-    cd #{node[:ndb][:scripts_dir]}
-    wget http://snurran.sics.se/hops/flexAsync .
-EOF
+
+remote_file "#{node[:ndb][:scripts_dir]}/flexAsync" do
+  owner node[:ndb][:user]
+  group node[:ndb][:user]
+  source "http://snurran.sics.se/hops/flexAsync"
+  mode 0755
+  action :create
 end
+
 
 
 

@@ -139,7 +139,7 @@ end
    user "root"
    mode 0755
    source "set_path.sh.erb"
- end
+   end
 
 
 
@@ -152,3 +152,16 @@ end
 
 
 
+if node[:ndb][:aws_enhanced_networking] == "true" do
+     case node['platform']
+     when 'debian', 'ubuntu'
+       ndb_ixgbevf "enhanced_ec2_networking" do
+         action :install_ubuntu
+       end
+     when 'redhat', 'centos', 'fedora'
+       ndb_ixgbevf "enhanced_ec2_networking" do
+         action :install_redhat
+       end
+     end
+
+   end

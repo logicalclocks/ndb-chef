@@ -320,3 +320,7 @@ attribute "ndb/bind_cpus",
 attribute "ndb/TcpBind_INADDR_ANY",
           :description =>  "Set to TRUE so that any IP addr can be used on any node. Default is FALSE.",
           :type => 'string'
+
+attribute "ndb/aws_enhanced_networking",
+          :description =>  "Set to true if you want the ixgbevf module to be installed that is needed for AWS enhanced networking.",
+          :type => 'string'

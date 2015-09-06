@@ -2,7 +2,7 @@ include_attribute "kagent"
 include_attribute "btsync"
 
 version="7"
-majorVersion="4"
+nmajorVersion="4"
 minorVersion="7"
 
 versionStr                                          = "#{version}.#{majorVersion}.#{minorVersion}"
@@ -171,3 +171,4 @@ default[:ndb][:ndbapi][:addrs]           = ['']
 #default[:ndb][:sysbench_url]             = "http://downloads.mysql.com/source/sysbench-0.4.12.5.tar.gz"
 
 default[:ndb][:mgmd][:public_key]        = ""
+default[:ndb][:aws_enhanced_networking]  = "false"

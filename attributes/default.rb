@@ -2,7 +2,7 @@ include_attribute "kagent"
 include_attribute "btsync"
 
 version="7"
-nmajorVersion="4"
+majorVersion="4"
 minorVersion="7"
 
 versionStr                                          = "#{version}.#{majorVersion}.#{minorVersion}"

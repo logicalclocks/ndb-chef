@@ -152,7 +152,7 @@ end
 
 
 
-if node[:ndb][:aws_enhanced_networking] == "true" do
+if "#{node[:ndb][:aws_enhanced_networking]} == "true" 
      case node['platform']
      when 'debian', 'ubuntu'
        ndb_ixgbevf "enhanced_ec2_networking" do

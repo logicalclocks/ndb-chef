@@ -4,11 +4,10 @@ dependencies:
       - ndb::mgmd
   - recipe: ndb::mysqld
     global:  
-      - ndb::mgmd
       - ndb::ndbd
   - recipe: ndb::memcached
     global:  
-      - ndb::mgmd
-      - ndb::ndbd
       - ndb::mysqld
-
+  - recipe: ndb::bench
+    global:  
+      - ndb::mysqld

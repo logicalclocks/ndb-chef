@@ -148,6 +148,3 @@ end
 ndb_start "mysqld" do
 end
 
-ndb_mgmd_publickey "#{homedir}" do
-  action :get
-end

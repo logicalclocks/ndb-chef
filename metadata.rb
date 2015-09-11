@@ -324,3 +324,7 @@ attribute "ndb/TcpBind_INADDR_ANY",
 attribute "ndb/aws_enhanced_networking",
           :description =>  "Set to true if you want the ixgbevf module to be installed that is needed for AWS enhanced networking.",
           :type => 'string'
+
+attribute "ndb/ThreadConfig",
+          :description => "Decide which threads bind to which cores: Threadconfig=main={cpubind=0},ldm={count=8,cpubind=1,2,3,4,13,14,15,16},io={count=4,cpubind=5,6,17,18},rep={cpubind=7},recv={count=2,cpubind=8,19}k",
+          :type => 'string',

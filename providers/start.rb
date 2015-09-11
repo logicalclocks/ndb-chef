@@ -10,3 +10,14 @@ action :start_if_not_running do
   end
 
 end
+
+action :flex do
+
+  bash "flex-experiment" do
+    user "root"
+    code <<-EOH
+        #{node[:ndb][:scripts_dir]}/flexAsyncRun.sh
+    EOH
+  end
+  
+end

@@ -147,3 +147,4 @@ end
 
 ndb_start "mysqld" do
 end
+

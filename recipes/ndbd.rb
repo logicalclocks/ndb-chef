@@ -129,7 +129,7 @@ if (node[:ndb][:interrupts_isolated_to_single_cpu] == "true") && (not ::File.exi
     #  apt-get install stress && stress -c 24
     # Sometimes you may need to disable hyper-threading in bios, restart, then restart and re-enable
     # hyperthreading and it works
-      template "/etc/grub.d/07_rtai" do
+    template "/etc/grub.d/07_rtai" do
       source "07_rtai.erb"
       owner "root"
       mode 0644

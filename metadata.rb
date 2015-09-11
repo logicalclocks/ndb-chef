@@ -324,3 +324,7 @@ attribute "ndb/TcpBind_INADDR_ANY",
 attribute "ndb/aws_enhanced_networking",
           :description =>  "Set to true if you want the ixgbevf module to be installed that is needed for AWS enhanced networking.",
           :type => 'string'
+
+attribute "ndb/interrupts_isolated_to_single_cpu",
+          :description =>  "Set to true if you want to setup your linux kernal to handle interrupts on a single CPU.",
+          :type => 'string'

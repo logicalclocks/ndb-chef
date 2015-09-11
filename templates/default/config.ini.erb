@@ -5,21 +5,6 @@
 
 [NDBD DEFAULT] 
 #Used by ndbmdmt to determine the number of LQH threads
-# <% cpus = (node[:cpu][:total] / 2) + 1 -%>
-# <% if cpus < 2
-#      cpus = 2
-#    elsif cpus > 7
-#      cpus = 8
-#    elsif cpus > 15
-#      cpus = 16
-#    elsif cpus > 23
-#      cpus = 24
-#    elsif cpus > 31
-#      cpus = 32
-#    end
-#    cpus = node[:ndb][:MaxNoOfExecutionThreads].empty? ? cpus : node[:ndb][:MaxNoOfExecutionThreads]
-# -%>
-# MaxNoOfExecutionThreads=<%= cpus  %>
 
 #More flexible than MaxNoOfExecutionThreads, supports > 8 threads. Decide which service to bind each thread to.
 #Increase NoOfFragmentLogParts to 8 or 16, if you have 8 or 16 ldm threads.
@@ -29,10 +14,30 @@
 # and that they are not subject to interrupts, or to being scheduled for other tasks by the operating system. 
 # On many Linux systems, you can do this by setting IRQBALANCE_BANNED_CPUS in /etc/sysconfig/irqbalance to 0xFFFFF0, and by using the isolcpus boot option in grub.conf. 
 # For specific information, see your operating system or platform documentation.
-<% ThreadConfig = node[:ndb][:ThreadConfig].empty? ? "MaxNoOfExecutionThreads=#{node[:ndb][:MaxNoOfExecutionThreads]}" : "ThreadConfig=#{node[:ndb][:ThreadConfig]}" -%>
+<% cpus = (node[:cpu][:total] / 2) + 1 -%>
+<% if cpus < 2
+     cpus = 2
+   elsif cpus > 7
+     cpus = 8
+   elsif cpus > 15
+     cpus = 16
+   elsif cpus > 23
+     cpus = 24
+   elsif cpus > 31
+     cpus = 32
+   end
+   cpus = node[:ndb][:MaxNoOfExecutionThreads].empty? ? cpus : node[:ndb][:MaxNoOfExecutionThreads]
+-%>
 
-<%= ThreadConfig  %>
-#<%= node[:ndb][:MaxNoOfExecutionThreads] %>
+<% threads = if node[:ndb][:ThreadConfig].empty?
+                   "MaxNoOfExecutionThreads = " + cpus.to_s
+               else
+                   "ThreadConfig = #{node[:ndb][:ThreadConfig]}"
+               end
+-%>
+<%= threads  %>
+
+
 
 # Valid values: 4, 8, 16, 32. For 8 ldm threads, increase to 8. For 16 ldm threads, increase to 16.
 NoOfFragmentLogParts=<%= node[:ndb][:NoOfFragmentLogParts] %>
@@ -83,6 +88,8 @@ MaxDMLOperationsPerTransaction=<%= node[:ndb][:MaxDMLOperationsPerTransaction] %
 MaxNoOfConcurrentIndexOperations=<%= node[:ndb][:MaxNoOfConcurrentIndexOperations] %>
 
 MaxNoOfConcurrentOperations=<%= node[:ndb][:MaxNoOfConcurrentOperations] %>
+
+MaxNoOfConcurrentScans=<%= node[:ndb][:MaxNoOfConcurrentScans] %>
 
 TransactionBufferMemory=<%= node[:ndb][:TransactionBufferMemory] %>
 

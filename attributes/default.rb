@@ -66,9 +66,9 @@ default[:ndb][:ODirect]                             = "0"
 default[:ndb][:SendBufferMemory]                    = "2M"
 default[:ndb][:ReceiveBufferMemory]                 = "2M"
 default[:ndb][:MaxNoOfConcurrentIndexOperations]    = "40000"
-default[:ndb][:MaxNoOfConcurrentOperations]         = "20000"
+default[:ndb][:MaxNoOfConcurrentOperations]         = "50000"
 default[:ndb][:MaxNoOfFiredTriggers]                = "10000"
-
+default[:ndb][:MaxNoOfConcurrentScans]              = "500"
 
 # Up to 8 execution threads supported
 default[:ndb][:MaxNoOfExecutionThreads]             = "2"

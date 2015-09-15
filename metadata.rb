@@ -310,7 +310,7 @@ attribute "kagent/enabled",
           :default => "false"
 
 attribute "ndb/NoOfFragmentLogParts",
-          :description =>  "One per ldm thread. Valid values: 4, 8, 16",
+          :description =>  "One per ldm thread. Valid values: 4, 8, 16. Should match the number of CPUs in ThreadConfig's ldm threads.",
           :type => 'string'
 
 attribute "ndb/bind_cpus",

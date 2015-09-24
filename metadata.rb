@@ -332,3 +332,7 @@ attribute "ndb/interrupts_isolated_to_single_cpu",
 attribute "ndb/ThreadConfig",
           :description => "Decide which threads bind to which cores: Threadconfig=main={cpubind=0},ldm={count=8,cpubind=1,2,3,4,13,14,15,16},io={count=4,cpubind=5,6,17,18},rep={cpubind=7},recv={count=2,cpubind=8,19}k",
           :type => 'string'
+
+attribute "ndb/root_dir",
+          :description =>  "Isolate interrupts from cpus, turn off balance_irqs",
+          :type => 'string'

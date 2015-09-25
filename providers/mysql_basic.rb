@@ -14,7 +14,7 @@ end
 
 grants_path = "#{Chef::Config[:file_cache_path]}/grants.sql"
 
-exec="#{node[:ndb][scripts_dir]}/mysql-client.sh"
+exec= node[:ndb][:scripts_dir] + "/mysql-client.sh"
 bash 'run_grants' do
     user node[:ndb][:user]
     code <<-EOF

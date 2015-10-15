@@ -66,7 +66,7 @@ default[:ndb][:ODirect]                             = "0"
 default[:ndb][:SendBufferMemory]                    = "2M"
 default[:ndb][:ReceiveBufferMemory]                 = "2M"
 default[:ndb][:MaxNoOfConcurrentIndexOperations]    = "80000"
-default[:ndb][:MaxNoOfConcurrentOperations]         = "100000"
+default[:ndb][:MaxNoOfConcurrentOperations]         = "500000"
 default[:ndb][:MaxNoOfFiredTriggers]                = "10000"
 default[:ndb][:MaxNoOfConcurrentScans]              = "500"
 

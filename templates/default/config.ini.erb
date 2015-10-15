@@ -161,13 +161,18 @@ DefaultHashMapSize=<%= node[:ndb][:DefaultHashMapSize] %>
 # Needs root privileges
 ODirect=<%= node[:ndb][:ODirect] %>
 
+TotalSendBufferMemory=<%= node[:ndb][:TotalSendBufferMemory] %>
+ReservedSendBufferMemory=<%= node[:ndb][:ReservedSendBufferMemory] %>
+
 [MYSQLD DEFAULT]
 
 [NDB_MGMD DEFAULT]
 
 [TCP DEFAULT]
-SendBufferMemory=<%= node[:ndb][:SendBufferMemory] %>
-ReceiveBufferMemory=<%= node[:ndb][:ReceiveBufferMemory]%>
+OverloadLimit=<%= node[:ndb][:OverloadLimit]%>
+# These params have been superceded by TotalSendBufferMemory
+#SendBufferMemory=<%= node[:ndb][:SendBufferMemory] %>
+#ReceiveBufferMemory=<%= node[:ndb][:ReceiveBufferMemory]%>
 
 
 #

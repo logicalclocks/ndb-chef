@@ -41,54 +41,40 @@ supports 'debian'
 attribute "ndb/DataMemory",
           :description => "Data memory for each MySQL Cluster Data Node",
           :type => 'string',
-          :required => "required",
-          :default => "80"
+          :required => "required"
 
 attribute "ndb/IndexMemory",
           :description => "Index memory for each MySQL Cluster Data Node",
-          :type => 'string',
-          :calculated => true
+          :type => 'string'
 
 attribute "memcached/mem_size",
           :description => "Memcached data memory size",
-          :type => 'string',
+          :type => 'string'
+
+attribute "ndb/version",
+          :description =>  "MySQL Cluster Version",
           :required => "required",
-          :default => "80"
-
-#
-# Optional Attributes
-#
-
-#attribute "ndb/version",
-#          :display_name => "Ndb version",
-#          :description =>  "MySQL Cluster Version",
-#          :required => "optional",
-#          :type => 'string'
-
+          :type => 'string'
 
 attribute "ndb/user",
           :description => "User that runs ndb database",
           :type => 'string', 
-          :required => "optional",         
-          :default => 'root'
+          :required => "optional"
 
 attribute "ndb/group",
           :description => "Group that runs ndb database",
           :type => 'string',
-          :required => "optional",          
-          :default => 'root'
+          :required => "optional"
 
-# attribute "mysql/user",
-#           :description => "User that runs mysql server",
-#           :required => "optional",
-#           :type => 'string',
-#           :default => 'hops'
+attribute "mysql/user",
+          :description => "User that runs mysql server",
+          :required => "required",
+          :type => 'string'
 
-# attribute "mysql/password",
-#           :display_name => "Mysql password for hop user",
-#           :description => "Password for hop mysql user",
-#           :calculated => true,
-#           :type => 'string'
+attribute "mysql/password",
+          :display_name => "Mysql password for hop user",
+          :description => "Password for hop mysql user",
+          :calculated => true
 
 # attribute "mysql/root/password",
 #           :display_name => "MySQL server root password",
@@ -98,38 +84,32 @@ attribute "ndb/group",
 
 attribute "ndb/enabled",
           :description => "Set to true if using MySQL Cluster, false for standalone MySQL Server",
-          :type => 'string',
-          :default => "true"
+          :type => 'string'
 
 attribute "ndb/root_dir",
           :description => "Install directory for MySQL Cluster data files",
           :type => 'string',
-          :required => "optional",
-          :default => "/var/lib/mysql-cluster"
+          :required => "optional"
 
 attribute "mysql/base_dir",
           :description => "Install directory for MySQL Binaries",
           :type => 'string',
-          :required => "optional",
-          :default => "/usr/local"
+          :required => "optional"
 
 attribute "ndb/mgm_server/port",
           :description => "Port used by Mgm servers in MySQL Cluster",
           :type => 'string',
-          :required => "optional",
-          :default => "1186"
+          :required => "optional"
 
 attribute "ndb/NoOfReplicas",
           :description => "Num of replicas of the MySQL Cluster Data Nodes",
           :type => 'string',
-          :required => "optional",
-          :default => "1"
+          :required => "optional"
 
 attribute "memcached/options",
           :description => "Memcached options",
           :type => 'string',
-          :required => "optional",
-          :default => ""
+          :required => "optional"
 
 # attribute "btsync/ndb/seeder_secret",
 # :display_name => "Ndb seeder's random secret key.",
@@ -145,169 +125,140 @@ attribute "memcached/options",
 
 attribute "ndb/FragmentLogFileSize",
           :description => "FragmentLogFileSize",
-          :type => 'string',
-          :default =>  "64M"
+          :type => 'string'
 
 attribute "ndb/MaxNoOfAttributes",
           :description => "MaxNoOfAttributes",
-          :type => 'string',
-          :default =>  "60000"
+          :type => 'string'
 
 attribute "ndb/MaxNoOfTables",
           :description => "MaxNoOfTables",
-          :type => 'string',
-          :default =>  "2024"
+          :type => 'string'
 
 attribute "ndb/MaxNoOfOrderedIndexes",
           :description => "MaxNoOfOrderedIndexes",
-          :type => 'string',
-          :default =>  "256"
+          :type => 'string'
 
 attribute "ndb/MaxNoOfUniqueHashIndexes",
           :description => "MaxNoOfUniqueHashIndexes",
-          :type => 'string',
-          :default =>  "128"
+          :type => 'string'
 
 attribute "ndb/MaxDMLOperationsPerTransaction",
           :description => "MaxDMLOperationsPerTransaction",
-          :type => 'string',
-          :default =>  "128"
+          :type => 'string'
 
 attribute "ndb/TransactionBufferMemory",
           :description => "TransactionBufferMemory",
-          :type => 'string',
-          :default =>  "1M"
+          :type => 'string'
 
 attribute "ndb/MaxParallelScansPerFragment",
           :description => "MaxParallelScansPerFragment",
-          :type => 'string',
-          :default =>  "256"
+          :type => 'string'
 
 attribute "ndb/MaxDiskWriteSpeed",
           :description => "MaxDiskWriteSpeed",
-          :type => 'string',
-          :default =>  "20M"
+          :type => 'string'
 
 attribute "ndb/MaxDiskWriteSpeedOtherNodeRestart",
           :description => "MaxDiskWriteSpeedOtherNodeRestart",
-          :type => 'string',
-          :default =>  "50M"
+          :type => 'string'
 
 attribute "ndb/MaxDiskWriteSpeedOwnRestart",
           :description => "MaxDiskWriteSpeedOwnRestart",
-          :type => 'string',
-          :default =>  "200M"
+          :type => 'string'
 
 attribute "ndb/MinDiskWriteSpeed",
           :description => "MinDiskWriteSpeed",
-          :type => 'string',
-          :default =>  "5M"
+          :type => 'string'
 
 attribute "ndb/DiskSyncSize",
           :description => "DiskSyncSize",
-          :type => 'string',
-          :default =>  "4M"
+          :type => 'string'
 
 attribute "ndb/RedoBuffer",
           :description => "RedoBuffer",
-          :type => 'string',
-          :default =>  "32M"
+          :type => 'string'
 
 attribute "ndb/LongMessageBuffer",
           :description => "LongMessageBuffer",
-          :type => 'string',
-          :default =>  "64M"
+          :type => 'string'
 
 attribute "ndb/TransactionInactiveTimeout",
           :description => "TransactionInactiveTimeout",
-          :type => 'string',
-          :default =>  "10000"
+          :type => 'string'
 
 attribute "ndb/TransactionDeadlockDetectionTimeout",
           :description => "TransactionDeadlockDetectionTimeout",
-          :type => 'string',
-          :default =>  "10000"
+          :type => 'string'
 
 attribute "ndb/LockPagesInMainMemory",
           :description => "LockPagesInMainMemory",
-          :type => 'string',
-          :default =>  "1"
+          :type => 'string'
 
 attribute "ndb/RealTimeScheduler",
           :description => "RealTimeScheduler",
-          :type => 'string',
-          :default =>  "0"
+          :type => 'string'
 
 attribute "ndb/SchedulerSpinTimer",
           :description => "SchedulerSpinTimer",
-          :type => 'string',
-          :default =>  "0"
+          :type => 'string'
 
 attribute "ndb/BuildIndexThreads",
           :description => "BuildIndexThreads",
-          :type => 'string',
-          :default =>  "10"
+          :type => 'string'
 
 attribute "ndb/CompressedLCP",
           :description => "CompressedLCP",
-          :type => 'string',
-          :default =>  "0"
+          :type => 'string'
 
 attribute "ndb/CompressedBackup",
           :description => "CompressedBackup",
-          :type => 'string',
-          :default =>  "1"
+          :type => 'string'
 
 attribute "ndb/BackupMaxWriteSize",
           :description => "BackupMaxWriteSize",
-          :type => 'string',
-          :default =>  "1M"
+          :type => 'string'
 
 attribute "ndb/BackupLogBufferSize",
           :description => "BackupLogBufferSize",
-          :type => 'string',
-          :default =>  "4M"
+          :type => 'string'
 
 attribute "ndb/BackupDataBufferSize",
           :description => "BackupDataBufferSize",
-          :type => 'string',
-          :default =>  "16M"
+          :type => 'string'
 
 attribute "ndb/BackupMemory",
           :description => "BackupMemory",
-          :type => 'string',
-          :default =>  "20M"
+          :type => 'string'
 
 attribute "ndb/MaxAllocate",
           :description => "MaxAllocate",
-          :type => 'string',
-          :default =>  "32M"
+          :type => 'string'
 
 attribute "ndb/DefaultHashMapSize",
           :description => "DefaultHashMapSize",
-          :type => 'string',
-          :default =>  "3840"
+          :type => 'string'
 
 attribute "ndb/ODirect",
           :description => "ODirect",
-          :type => 'string',
-          :default =>  "0"
+          :type => 'string'
 
-attribute "ndb/SendBufferMemory",
-          :description => "SendBufferMemory",
-          :type => 'string',
-          :default =>  "2M"
+attribute "ndb/TotalSendBufferMemory",
+          :description => "TotalSendBufferMemory in MBs",
+          :type => 'string'
 
-attribute "ndb/ReceiveBufferMemory",
-          :description => "ReceiveBufferMemory",
-          :type => 'string',
-          :default =>  "2M"
+attribute "ndb/ReservedSendBufferMemory",
+          :description => "ReservedSendBufferMemory in MBs - for exclusive NDBD<->NDBD connections, not API<->NDBDs.",
+          :type => 'string'
+
+attribute "ndb/OverloadLimit",
+          :description => "Overload for Send/Recv TCP Buffers in MBs",
+          :type => 'string'
 
 attribute "kagent/enabled",
           :description =>  "Install kagent",
           :type => 'string',
-          :required => "optional",
-          :default => "false"
+          :required => "optional"
 
 attribute "ndb/NoOfFragmentLogParts",
           :description =>  "One per ldm thread. Valid values: 4, 8, 16. Should match the number of CPUs in ThreadConfig's ldm threads.",

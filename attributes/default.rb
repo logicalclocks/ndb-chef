@@ -9,8 +9,8 @@ versionStr                                          = "#{version}.#{majorVersion
 default[:ndb][:enabled]                             = "true"
 default[:kagent][:enabled]                          = "false"
 default[:ndb][:version]                             = versionStr
-# default[:ndb][:package_url]                         = "http://dev.mysql.com/get/Downloads/MySQL-Cluster-#{version}.#{majorVersion}/mysql-cluster-gpl-#{versionStr}-linux-glibc2.5-x86_64.tar.gz"
-default[:ndb][:package_url]                         = node[:download_url] + "/mysql-cluster-gpl-#{versionStr}-linux-glibc2.5-x86_64.tar.gz"
+default[:ndb][:package_url]                         = "http://dev.mysql.com/get/Downloads/MySQL-Cluster-#{version}.#{majorVersion}/mysql-cluster-gpl-#{versionStr}-linux-glibc2.5-x86_64.tar.gz"
+#default[:ndb][:package_url]                         = node[:download_url] + "/mysql-cluster-gpl-#{versionStr}-linux-glibc2.5-x86_64.tar.gz"
 # checksum is not a security check - used to improve the speed of downloads by skipping if matched
 # checksum calculated using: shasum -a 256 /var/www/hops/...tgz | cut -c-12
 # checksum calculated using: sha256sum /var/www/hops/...tgz | cut -c-12
@@ -63,8 +63,9 @@ default[:ndb][:BackupMemory]                        = "20M"
 default[:ndb][:MaxAllocate]                         = "32M"
 default[:ndb][:DefaultHashMapSize]                  = "3840"
 default[:ndb][:ODirect]                             = "0"
-default[:ndb][:SendBufferMemory]                    = "2M"
-default[:ndb][:ReceiveBufferMemory]                 = "2M"
+default[:ndb][:TotalSendBufferMemory]               = "32M"
+default[:ndb][:OverloadLimit]                       = "16M"
+default[:ndb][:ReservedSendBufferMemory]            = "1M"
 default[:ndb][:MaxNoOfConcurrentIndexOperations]    = "80000"
 default[:ndb][:MaxNoOfConcurrentOperations]         = "500000"
 default[:ndb][:MaxNoOfFiredTriggers]                = "10000"

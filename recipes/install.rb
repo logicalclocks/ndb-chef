@@ -135,12 +135,11 @@ link node[:mysql][:base_dir] do
 end
 
 
- template "/etc/profile.d/mysql_bin_path.sh" do
-   user "root"
-   mode 0755
-   source "set_path.sh.erb"
-   end
-
+template "/etc/profile.d/mysql_bin_path.sh" do
+  user "root"
+  mode 0755
+  source "set_path.sh.erb"
+end
 
 
 template "#{node[:ndb][:scripts_dir]}/util/kill-process.sh" do
@@ -164,4 +163,4 @@ if "#{node[:ndb][:aws_enhanced_networking]}" == "true"
        end
      end
 
-   end
+end

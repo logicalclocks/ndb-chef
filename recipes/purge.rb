@@ -50,3 +50,28 @@ directory Chef::Config[:file_cache_path] do
   action :delete
   ignore_failure :true
 end
+
+homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
+bash 'delete_marker_files' do
+user "root"
+ignore_failure :true
+code <<-EOF
+ rm -f #{Chef::Config[:file_cache_path]}/.ndb_downloaded
+ rm -f /etc/profile.d/mysql_bin_path.sh
+ rm -f /etc/default/irqbalance
+ rm -f /etc/grub.d/07_rtai
+ rm -rf #{homedir}/.ssh/config
+EOF
+end
+
+
+package "libaio remove" do
+  case node[:platform]
+  when 'redhat', 'centos'
+    package_name 'libaio1'
+  when 'ubuntu', 'debian'
+    package_name 'libaio'
+  end
+ ignore_failure :true
+ action :purge
+end

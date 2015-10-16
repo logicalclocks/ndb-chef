@@ -1,8 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
 
 ndb_connectstring()
-#generate_etc_hosts()
-
 
 Chef::Log.info "Hostname is: #{node[:hostname]}"
 Chef::Log.info "IP address is: #{node[:ipaddress]}"
@@ -18,7 +16,6 @@ end
 my_ip = my_private_ip()
 
 found_id = -1
-#hostId=""
 id = 1
 for ndbd in node[:ndb][:ndbd][:private_ips]
   if my_ip.eql? ndbd 
@@ -32,9 +29,6 @@ Chef::Log.info "ID IS: #{id}"
 if found_id == -1
   raise "Ndbd: Could not find matching IP address in list of data nodes."
 end
-
-#hostId="ndbd#{found_id}" 
-#generate_hosts(hostId, my_ip)
 
 directory "#{node[:ndb][:data_dir]}/#{found_id}" do
   owner node[:ndb][:user]
@@ -163,20 +157,7 @@ end
 
 homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
 
-# Add the mgmd hosts' public key, so that they can start/stop the ndbd on this node
-# using passwordless ssh.
-# Dont append if the public key is already in the authorized_keys or is empty
-# bash "add_mgmd_public_key" do
-#  user node[:ndb][:user]
-#  group node[:ndb][:group]
-#  code <<-EOF
-#       mkdir #{homedir}/.ssh
-#       echo "#{node[:ndb][:mgmd][:public_key]}" >> #{homedir}/.ssh/authorized_keys
-#       touch #{homedir}/.ssh/.mgmd_key_authorized
-#   EOF
-#  not_if { ::File.exists?( "#{homedir}/.ssh/.mgmd_key_authorized" || "#{node[:ndb][:mgmd][:public_key]}".empty? ) }
-# end
-
+# Add the mgmd hosts' public key, so that it can start/stop the ndbd on this node using passwordless ssh.
 ndb_mgmd_publickey "#{homedir}" do
   action :get
 end

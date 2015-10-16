@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
 
 ndb_connectstring()
-#generate_etc_hosts()
 
 directory node[:ndb][:mgm_dir] do
   owner node[:ndb][:user]
@@ -25,10 +24,6 @@ Chef::Log.info "Found ID IS: #{found_id}"
 if found_id == -1
   raise "Could not find matching IP address #{my_ip} in the list of mgmd nodes: " + node[:ndb][:mgmd][:private_ips].join(",")
 end
-
-#hostId="mgmd#{found_id}" 
-#generate_hosts(hostId, my_ip)
-
 
 for script in node[:mgm][:scripts] do
   template "#{node[:ndb][:scripts_dir]}/#{script}" do
@@ -88,26 +83,8 @@ end
 ndb_start "ndb_mgmd" do
 end
 
-#
-# Put public key of this mgmd-host in .ssh/authorized_keys of all ndb_mgdt nodes
-#
-# package "expect" do
-# end
-# template "#{Chef::Config[:file_cache_path]}/expect-ssh-keygen.sh" do
-#   source "expect-ssh-keygen.sh.erb"
-#   owner node[:ndb][:user]
-#   group node[:ndb][:user]
-#   mode 0755
-#   variables({ :homedir => homedir })
-# end
-# bash "generate-ssh-keypair-mgmserver" do
-#  user node[:ndb][:user]
-#   code <<-EOF
-#       #{Chef::Config[:file_cache_path]}/expect-ssh-keygen.sh
-#   EOF
-#  not_if { ::File.exists?( "#{homedir}/.ssh/id_rsa" ) }
-# end
 
+# Put public key of this mgmd-host in .ssh/authorized_keys of all ndbd and mysqld nodes
 homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
 Chef::Log.info "Home dir is #{homedir}. Generating ssh keys..."
 

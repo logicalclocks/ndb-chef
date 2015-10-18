@@ -1,27 +1,21 @@
-# Stop all the services
-
-bash 'kill_running_services' do
-user "root"
-ignore_failure :true
-code <<-EOF
- service stop ndb_mgmd
- service stop ndbmtd
- service stop mysqld
- service stop memcached
- killall -9 ndb_mgmd
- killall -9 ndbmtd
- killall -9 mysqld
- killall -9 memcached
-EOF
-end
-
-# Remove all services
+# Stop all the service and remove all services
+# TODO - should rename 'ndbd' as 'ndbmtd'. pkill wont work here fo it
 daemons = %w{ndb_mgmd ndbd mysqld memcached}
 daemons.each { |d| 
-file "/etc/init.d/#{d}" do
-  action :delete
-  ignore_failure :true
-end
+
+  bash 'kill_running_service_#{d}' do
+    user "root"
+    ignore_failure :true
+    code <<-EOF
+      service stop #{d}
+      pkill -9 #{d}
+    EOF
+  end
+
+  file "/etc/init.d/#{d}" do
+    action :delete
+    ignore_failure :true
+  end
 }
 
 # Remove the MySQL binaries and MySQL Cluster data directories

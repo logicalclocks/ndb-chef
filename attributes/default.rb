@@ -14,8 +14,8 @@ default[:ndb][:version]                             = versionStr
 
 
 # http://cdn.mysql.com/Downloads/MySQL-Cluster-7.4/mysql-cluster-gpl-7.4.8-linux-glibc2.5-x86_64.tar.gz
-default[:ndb][:package_url]                         = "http://cdn.mysql.com/Downloads/MySQL-Cluster-7.4/mysql-cluster-gpl-#{versionStr}-linux-glibc2.5-x86_64.tar.gz
-#default[:ndb][:package_url]                         = node[:download_url] + "/mysql-cluster-gpl-#{versionStr}-linux-glibc2.5-x86_64.tar.gz"
+#default[:ndb][:package_url]                         = "http://cdn.mysql.com/Downloads/MySQL-Cluster-7.4/mysql-cluster-gpl-#{versionStr}-linux-glibc2.5-x86_64.tar.gz"
+default[:ndb][:package_url]                         = node[:download_url] + "/mysql-cluster-gpl-#{versionStr}-linux-glibc2.5-x86_64.tar.gz"
 # checksum is not a security check - used to improve the speed of downloads by skipping if matched
 # checksum calculated using: shasum -a 256 /var/www/hops/...tgz | cut -c-12
 # checksum calculated using: sha256sum /var/www/hops/...tgz | cut -c-12

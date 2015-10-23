@@ -52,19 +52,16 @@ attribute "memcached/mem_size",
           :type => 'string'
 
 attribute "ndb/version",
-          :description =>  "MySQL Cluster Version",
-          :required => "required",
+          :description =>  "MySQL Cluster Version"
           :type => 'string'
 
 attribute "ndb/user",
           :description => "User that runs ndb database",
-          :type => 'string', 
-          :required => "optional"
+          :type => 'string'
 
 attribute "ndb/group",
           :description => "Group that runs ndb database",
-          :type => 'string',
-          :required => "optional"
+          :type => 'string'
 
 attribute "mysql/user",
           :description => "User that runs mysql server",
@@ -82,34 +79,29 @@ attribute "mysql/password",
 #           :type => 'string',
 #           :calculated => true
 
-attribute "ndb/enabled",
-          :description => "Set to true if using MySQL Cluster, false for standalone MySQL Server",
-          :type => 'string'
+#attribute "ndb/enabled",
+#          :description => "Set to true if using MySQL Cluster, false for standalone MySQL Server",
+#          :type => 'string'
 
 attribute "ndb/root_dir",
           :description => "Install directory for MySQL Cluster data files",
-          :type => 'string',
-          :required => "optional"
+          :type => 'string'
 
 attribute "mysql/base_dir",
           :description => "Install directory for MySQL Binaries",
-          :type => 'string',
-          :required => "optional"
+          :type => 'string'
 
 attribute "ndb/mgm_server/port",
           :description => "Port used by Mgm servers in MySQL Cluster",
-          :type => 'string',
-          :required => "optional"
+          :type => 'string'
 
 attribute "ndb/NoOfReplicas",
           :description => "Num of replicas of the MySQL Cluster Data Nodes",
-          :type => 'string',
-          :required => "optional"
+          :type => 'string'
 
-attribute "memcached/options",
-          :description => "Memcached options",
-          :type => 'string',
-          :required => "optional"
+#attribute "memcached/options",
+#          :description => "Memcached options",
+#          :type => 'string'
 
 # attribute "btsync/ndb/seeder_secret",
 # :display_name => "Ndb seeder's random secret key.",

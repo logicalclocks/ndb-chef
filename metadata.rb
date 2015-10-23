@@ -52,7 +52,7 @@ attribute "memcached/mem_size",
           :type => 'string'
 
 attribute "ndb/version",
-          :description =>  "MySQL Cluster Version"
+          :description =>  "MySQL Cluster Version",
           :type => 'string'
 
 attribute "ndb/user",
@@ -69,9 +69,10 @@ attribute "mysql/user",
           :type => 'string'
 
 attribute "mysql/password",
-          :display_name => "Mysql password for hop user",
           :description => "Password for hop mysql user",
-          :calculated => true
+          :required => "required",
+          :type => 'string'
+#          :calculated => true
 
 # attribute "mysql/root/password",
 #           :display_name => "MySQL server root password",

@@ -15,6 +15,16 @@ user node[:mysql][:run_as_user] do
   shell "/bin/bash"
 end
 
+directory node[:ndb][:dir] do
+  owner node[:ndb][:user]
+  group node[:ndb][:group]
+  mode "755"
+  action :create
+  recursive true
+  not_if { File.directory?("#{node[:ndb][:dir]}") }
+end
+
+
 
 directory node[:ndb][:version_dir] do
   owner node[:ndb][:user]

@@ -33,6 +33,7 @@ suites:
       - recipe[ndb::bench]
     attributes:
          ndb:
+            dir: "/tmp"
             DataMemory: "111"
             mgmd:
                private_ips: ["10.0.2.15"]

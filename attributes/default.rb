@@ -90,7 +90,8 @@ default[:mysql][:scripts]          = %w{ get-mysql-socket.sh get-mysql-port.sh m
 default[:memcached][:scripts]      = %w{ memcached-start.sh memcached-stop.sh memcached-restart.sh }
 
 
-default[:ndb][:root_dir]           = "/var/lib/mysql-cluster"
+default[:ndb][:dir]                = "/var/lib"
+default[:ndb][:root_dir]           = "#{node[:ndb][:dir]}/mysql-cluster"
 default[:ndb][:log_dir]            = "#{node[:ndb][:root_dir]}/log"
 default[:ndb][:data_dir]           = "#{node[:ndb][:root_dir]}/ndb_data"
 default[:ndb][:version_dir]        = "#{node[:ndb][:root_dir]}/ndb-#{versionStr}"
@@ -110,7 +111,7 @@ default[:ndb][:num_ndb_slots_per_client]            = 1
 default[:ndb][:wait_startup]       = 500
 
 # Base directory for MySQL binaries
-default[:mysql][:root_dir]         = "/usr/local"
+default[:mysql][:dir]              = "/usr/local"
 # Symbolic link to the current versioned mysql directory
 default[:mysql][:base_dir]         = "#{node[:mysql][:root_dir]}/mysql"
 # Concrete directory with mysql binaries for a specific mysql version

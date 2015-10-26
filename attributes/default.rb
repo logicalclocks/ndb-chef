@@ -113,7 +113,7 @@ default[:ndb][:wait_startup]       = 500
 # Base directory for MySQL binaries
 default[:mysql][:dir]              = "/usr/local"
 # Symbolic link to the current versioned mysql directory
-default[:mysql][:base_dir]         = "#{node[:mysql][:root_dir]}/mysql"
+default[:mysql][:base_dir]         = "#{node[:mysql][:dir]}/mysql"
 # Concrete directory with mysql binaries for a specific mysql version
 default[:mysql][:version_dir]      = "#{node[:mysql][:base_dir]}-" + versionStr
 

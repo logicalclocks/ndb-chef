@@ -276,3 +276,7 @@ attribute "ndb/ThreadConfig",
 attribute "ndb/dir",
           :description =>  "Directory in which to install mysql-cluster",
           :type => 'string'
+
+attribute "ndb/shared_folder",
+          :description =>  "Directory in which to download mysql-cluster",
+          :type => 'string'

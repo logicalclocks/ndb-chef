@@ -88,22 +88,35 @@ end
 homedir = node[:ndb][:user].eql?("root") ? "/root" : "/home/#{node[:ndb][:user]}"
 Chef::Log.info "Home dir is #{homedir}. Generating ssh keys..."
 
-bash "generate-ssh-keypair-for-mgmd" do
- user node[:ndb][:user]
-  code <<-EOF
-     ssh-keygen -b 2048 -f #{homedir}/.ssh/id_rsa -t rsa -q -N ''
-  EOF
- not_if { ::File.exists?( "#{homedir}/.ssh/id_rsa" ) }
-end
+# bash "generate-ssh-keypair-for-mgmd" do
+#  user node[:ndb][:user]
+#   code <<-EOF
+#      ssh-keygen -b 2048 -f #{homedir}/.ssh/id_rsa -t rsa -q -N ''
+#   EOF
+#  not_if { ::File.exists?( "#{homedir}/.ssh/id_rsa" ) }
+# end
 
 
-# IO.read() reads the contents of the entire file in, and then closes the file.
-ndb_mgmd_publickey "#{homedir}" do
-end
+# # IO.read() reads the contents of the entire file in, and then closes the file.
+# ndb_mgmd_publickey "#{homedir}" do
+# end
+# template "#{homedir}/.ssh/config" do
+#   source "ssh_config.erb"
+#   owner node[:ndb][:user]
+#   group node[:ndb][:user]
+#   mode 0664
+# end
 
-template "#{homedir}/.ssh/config" do
-  source "ssh_config.erb"
-  owner node[:ndb][:user]
-  group node[:ndb][:user]
-  mode 0664
-end
+kagent_keys "#{homedir}" do
+  cb_user node[:ndb][:user]
+  cb_group node[:ndb][:group]
+  action :generate  
+end  
+
+kagent_keys "#{homedir}" do
+  cb_user node[:ndb][:user]
+  cb_group node[:ndb][:group]
+  cb_name "ndb"
+  cb_recipe "mgmd"  
+  action :return_publickey
+end  

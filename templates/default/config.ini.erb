@@ -32,7 +32,7 @@
 <% threads = if node[:ndb][:ThreadConfig].empty?
                    "MaxNoOfExecutionThreads = " + cpus.to_s
                else
-                   "ThreadConfig = <%= node[:ndb][:ThreadConfig] %>"
+                   "ThreadConfig = #{node[:ndb][:ThreadConfig]}"
                end
 -%>
 <%= threads  %>

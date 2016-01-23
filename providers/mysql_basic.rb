@@ -43,7 +43,7 @@ end
 bash 'wait_mysqld_started' do
     user node[:ndb][:user]
     code <<-EOF
-
+    set -e || set -o pipefail
     service mysqld restart
     sleep 5
     if [ `#{node[:mysql][:base_dir]}/bin/mysqladmin -u root -S #{node[:ndb][:mysql_socket]} status` -ne 0 ] ; then

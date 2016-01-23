@@ -3,6 +3,11 @@ require File.expand_path(File.dirname(__FILE__) + '/find_mysqld')
 
 ndb_connectstring()
 
+#scripts/mysql_install_db requires perl 
+  package "perl" do
+    action :install
+  end
+
 case node[:platform_family]
 when "debian"
 
@@ -28,12 +33,12 @@ when "rhel"
   package "libaio" do
     action :install
   end
-end
-
-#scripts/mysql_install_db requires perl to be installed
-  package "perl" do
+#scripts/mysql_install_db requires perl-Data-Dumper
+  package "perl-Data-Dumper" do
     action :install
   end
+ 
+end
 
 directory node[:ndb][:mysql_server_dir] do
   owner node[:mysql][:run_as_user]

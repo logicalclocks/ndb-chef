@@ -55,6 +55,7 @@ code <<-EOF
  rm -f /etc/default/irqbalance
  rm -f /etc/grub.d/07_rtai
  rm -rf #{homedir}/.ssh/config
+ rm -rf #{homedir}/.ssh/.ndb_*
 EOF
 end
 

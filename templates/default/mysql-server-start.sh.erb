@@ -16,16 +16,12 @@ fi
 
 export MYSQL_HOME=<%= node[:ndb][:root_dir] %>
 
-<% command = if node[:ndb][:use_systemd] == "true"
-                   "<%= #{node[:mysql][:base_dir]} %>/bin/mysqld --defaults-file=<%= #{node[:ndb][:root_dir]} %>/my.cnf > <%= #{node[:ndb][:log_dir]} %>/mysql_<%= @node_id %>_out.log  2>&1 < /dev/null &"
-               else
-                   "su <%= #{node[:mysql][:run_as_user]} %> -c \"<%= #{node[:mysql][:base_dir]} %>/bin/mysqld --defaults-file=<%= #{node[:ndb][:root_dir]} %>/my.cnf > <%= #{node[:ndb][:log_dir]} %>/mysql_<%= @node_id %>_out.log  2>&1 < /dev/null &\""
-               end
--%>
-<%= command  %>
 
+<% if #{node[:ndb][:use_systemd]} == "true" then -%>
+  <%= node[:mysql][:base_dir] %>/bin/mysqld --defaults-file=<%= node[:ndb][:root_dir] %>/my.cnf > <%= node[:ndb][:log_dir] %>/mysql_<%= @node_id %>_out.log  2>&1 < /dev/null &
+<% else -%>
+  su <%= node[:mysql][:run_as_user] %> -c "<%= node[:mysql][:base_dir] %>/bin/mysqld --defaults-file=<%= node[:ndb][:root_dir] %>/my.cnf > <%= node[:ndb][:log_dir] %>/mysql_<%= @node_id %>_out.log  2>&1 < /dev/null &"
+<% end -%>
 
-
-echo "Mysql Server started."
 exit $?
 

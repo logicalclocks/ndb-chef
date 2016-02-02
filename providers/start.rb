@@ -1,4 +1,6 @@
 action :start_if_not_running do
+
+
   bash "start-if-not-running-#{new_resource.name}" do
     user "root"
     code <<-EOH

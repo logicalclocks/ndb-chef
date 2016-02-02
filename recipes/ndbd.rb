@@ -49,6 +49,15 @@ for script in node[:ndb][:scripts]
   end
 end 
 
+# ndb_ndbd "ndbd" do
+#  action :init
+# end
+
+# ndb_start "ndbd" do
+#  action :stop
+# end
+
+
 service_name = "ndbmtd"
 
 service "#{service_name}" do
@@ -86,8 +95,8 @@ template systemd_script do
     mode 0754
     cookbook 'ndb'
     variables({ :node_id => found_id })
-    notifies :restart, "service[#{service_name}]", :delayed
     notifies :enable, "service[#{service_name}]"
+    notifies :restart, "service[#{service_name}]", :immediately
 end
 
 
@@ -122,9 +131,6 @@ if node[:kagent][:enabled] == "true"
     pid_file "#{node[:ndb][:log_dir]}/ndb_#{found_id}.pid"
   end
 
-end
-
-ndb_start "ndbd" do
 end
 
 

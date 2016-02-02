@@ -20,7 +20,18 @@ fi
 echo "Starting the memcached server...."
 # See full list of configuration options for memcached engine here:
 # http://dev.mysql.com/doc/ndbapi/en/ndbmemcache-configuration.html
-su <%= node[:mysql][:run_as_user] %> -c "<%= node[:mysql][:base_dir] %>/bin/memcached -d -P $PID_FILE -u <%= node[:ndb][:user]  %> -E <%= node[:mysql][:base_dir] %>/lib/ndb_engine.so -e \"connectstring=<%= node[:ndb][:connectstring]  %>;m=<%= node[:memcached][:mem_size] %><%= node[:memcached][:options]  %>\" > <%= node[:ndb][:log_dir] %>/memcached_<%= @node_id %>.out.log  2>&1 < /dev/null &"
+
+
+<% command = if node[:ndb][:use_systemd] == "true"
+"<%= node[:mysql][:base_dir] %>/bin/memcached -d -P $PID_FILE -u <%= node[:ndb][:user]  %> -E <%= node[:mysql][:base_dir] %>/lib/ndb_engine.so -e \"connectstring=<%= node[:ndb][:connectstring]  %>;m=<%= node[:memcached][:mem_size] %><%= node[:memcached][:options]  %>\" > <%= node[:ndb][:log_dir] %>/memcached_<%= @node_id %>.out.log  2>&1 < /dev/null &"
+               else
+"su <%= node[:mysql][:run_as_user] %> -c \"<%= node[:mysql][:base_dir] %>/bin/memcached -d -P $PID_FILE -u <%= node[:ndb][:user]  %> -E <%= node[:mysql][:base_dir] %>/lib/ndb_engine.so -e \"connectstring=<%= node[:ndb][:connectstring]  %>;m=<%= node[:memcached][:mem_size] %><%= node[:memcached][:options]  %>\" > <%= node[:ndb][:log_dir] %>/memcached_<%= @node_id %>.out.log  2>&1 < /dev/null &\""
+               end
+-%>
+<%= command  %>
+
+
+
 RES=$?
 if [ $RES -ne 0 ] ; then
  echo "Problem starting memcached, returned $RES."

@@ -35,19 +35,44 @@ for script in node[:mgm][:scripts] do
   end
 end 
 
-service "ndb_mgmd" do
+service_name = "ndb_mgmd"
+
+service "#{service_name}" do
   supports :restart => true, :stop => true, :start => true, :status => true
   action :nothing
 end
 
-template "/etc/init.d/ndb_mgmd" do
-  source "ndb_mgmd.erb"
+template "/etc/init.d/#{service_name}" do
+  only_if { node[:ndb][:use_systemd] != "true" }
+  source "#{service_name}.erb"
   owner node[:ndb][:user]
   group node[:ndb][:user]
   mode 0754
   variables({ :node_id => found_id })
-  notifies :enable, "service[ndb_mgmd]"
+  notifies :enable, "service[#{service_name}]"
 end
+
+
+case node[:platform_family]
+  when "debian"
+systemd_script = "/lib/systemd/system/#{service_name}.service"
+  when "rhel"
+systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
+end
+
+template systemd_script do
+  only_if { node[:ndb][:use_systemd] == "true" }
+    source "#{service_name}.service.erb"
+    owner node[:ndb][:user]
+    group node[:ndb][:user]
+    mode 0754
+    cookbook 'ndb'
+    variables({ :node_id => found_id })
+    notifies :enable, "service[#{service_name}]"
+end
+
+
+
 
 # Need to call get_ndbapi_addrs to set them before instantiating config.ini
 get_ndbapi_addrs()

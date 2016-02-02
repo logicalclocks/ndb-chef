@@ -20,5 +20,5 @@ describe command("/tmp/mysql-cluster/ndb/scripts/mysql-client.sh test -e \"show 
 end
 
 describe command("grep -Fxvf /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys") do
-  its (:stdout) { should match // }
+  its(:exit_status) { should eq 0 }
 end

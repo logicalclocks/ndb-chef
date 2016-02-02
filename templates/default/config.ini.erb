@@ -150,7 +150,6 @@ CompressedBackup=<%= node[:ndb][:CompressedBackup] %>
 BackupMaxWriteSize= <%= node[:ndb][:BackupMaxWriteSize] %>
 BackupLogBufferSize= <%= node[:ndb][:BackupLogBufferSize] %>
 BackupDataBufferSize= <%= node[:ndb][:BackupDataBufferSize] %>  
-BackupMemory        = <%= node[:ndb][:BackupMemory] %>  
 
 #The maximum size of the memory unit to use when allocating memory for tables
 MaxAllocate=<%= node[:ndb][:MaxAllocate] %>
@@ -162,7 +161,7 @@ DefaultHashMapSize=<%= node[:ndb][:DefaultHashMapSize] %>
 ODirect=<%= node[:ndb][:ODirect] %>
 
 TotalSendBufferMemory=<%= node[:ndb][:TotalSendBufferMemory] %>
-ReservedSendBufferMemory=<%= node[:ndb][:ReservedSendBufferMemory] %>
+
 
 [MYSQLD DEFAULT]
 

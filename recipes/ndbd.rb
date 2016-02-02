@@ -49,23 +49,47 @@ for script in node[:ndb][:scripts]
   end
 end 
 
-service "ndbd" do
+service_name = "ndbmtd"
+
+service "#{service_name}" do
   supports :restart => true, :stop => true, :start => true, :status => true
   action :nothing
 end
 
-template "/etc/init.d/ndbd" do
+template "/etc/init.d/#{service_name}" do
+  only_if { node[:ndb][:use_systemd] != "true" }
   source "ndbd.erb"
   owner node[:ndb][:user]
   group node[:ndb][:group]
   mode 0754
   variables({ :node_id => found_id })
-  notifies :enable, "service[ndbd]"
-  notifies :restart,"service[ndbd]", :immediately
+  notifies :enable, "service[#{service_name}]"
+  notifies :restart,"service[#{service_name}]", :immediately
 end
 
+case node[:platform_family]
+  when "debian"
+systemd_script = "/lib/systemd/system/#{service_name}.service"
+  when "rhel"
+systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
+end
+
+template systemd_script do
+    only_if { node[:ndb][:use_systemd] == "true" }
+    source "#{service_name}.service.erb"
+    owner node[:ndb][:user]
+    group node[:ndb][:group]
+    mode 0754
+    cookbook 'ndb'
+    variables({ :node_id => found_id })
+    notifies :restart, "service[#{service_name}]", :delayed
+    notifies :enable, "service[#{service_name}]"
+end
+
+
+
 if node[:kagent][:enabled] == "true"
-  Chef::Log.info "Trying to infer the ndbd ID by examining the local IP. If it matches the config.ini file, then we have our node."
+  Chef::Log.info "Trying to infer the #{service_name} ID by examining the local IP. If it matches the config.ini file, then we have our node."
 
   found_id = -1
   id = 1

@@ -216,10 +216,6 @@ attribute "ndb/BackupDataBufferSize",
           :description => "BackupDataBufferSize",
           :type => 'string'
 
-attribute "ndb/BackupMemory",
-          :description => "BackupMemory",
-          :type => 'string'
-
 attribute "ndb/MaxAllocate",
           :description => "MaxAllocate",
           :type => 'string'
@@ -234,10 +230,6 @@ attribute "ndb/ODirect",
 
 attribute "ndb/TotalSendBufferMemory",
           :description => "TotalSendBufferMemory in MBs",
-          :type => 'string'
-
-attribute "ndb/ReservedSendBufferMemory",
-          :description => "ReservedSendBufferMemory in MBs - for exclusive NDBD<->NDBD connections, not API<->NDBDs.",
           :type => 'string'
 
 attribute "ndb/OverloadLimit",
@@ -279,4 +271,8 @@ attribute "ndb/dir",
 
 attribute "ndb/shared_folder",
           :description =>  "Directory in which to download mysql-cluster",
+          :type => 'string'
+
+attribute "ndb/use_systemd",
+          :description =>  "Use systemd scripts (instead of system-v). Default is 'false'.",
           :type => 'string'

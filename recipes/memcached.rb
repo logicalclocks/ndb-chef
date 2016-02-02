@@ -7,9 +7,9 @@ ndb_connectstring()
 Chef::Log.info "Memcached for NDB"
 
 theResource="memcached-installer"
-theService="memcached"
+service_name="memcached"
 
-service theService do
+service service_name do
   supports :restart => true, :stop => true, :start => true, :status => true
   action :nothing
 end
@@ -41,8 +41,10 @@ ndb_mysql_basic "mysqld_started" do
   action :wait_until_started
 end
 
-template "/etc/init.d/#{theService}" do
-  source "#{theService}.erb"
+
+template "/etc/init.d/#{service_name}" do
+  only_if { node[:ndb][:use_systemd] != "true" }
+  source "#{service_name}.erb"
   owner node[:ndb][:user]
   group node[:ndb][:user]
   mode 0755
@@ -53,10 +55,34 @@ template "/etc/init.d/#{theService}" do
               :node_id => found_id 
             })
   notifies :install_memcached, "ndb_mysql_ndb[#{theResource}]", :immediately
-  notifies :enable, "service[#{theService}]"
-  notifies :restart, "service[#{theService}]"
+  notifies :enable, "service[#{service_name}]"
+  notifies :restart, "service[#{service_name}]"
 end
 
+case node[:platform_family]
+  when "debian"
+systemd_script = "/lib/systemd/system/#{service_name}.service"
+  when "rhel"
+systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
+end
+
+template systemd_script do
+    only_if { node[:ndb][:use_systemd] == "true" }
+    source "#{service_name}.service.erb"
+    owner node[:ndb][:user]
+    group node[:ndb][:user]
+    mode 0755
+    cookbook 'ndb'
+    variables({
+              :ndb_dir => node[:ndb][:base_dir],
+              :mysql_dir => node[:mysql][:base_dir],
+              :connectstring => node[:ndb][:connectstring],
+              :node_id => found_id 
+            })
+    notifies :install_memcached, "ndb_mysql_ndb[#{theResource}]", :immediately
+    notifies :enable, "service[#{service_name}]"
+    notifies :restart, "service[#{service_name}]"
+end
 
 
 if node[:kagent][:enabled] == "true"

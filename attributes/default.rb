@@ -3,7 +3,7 @@ include_attribute "btsync"
 
 version="7"
 majorVersion="4"
-minorVersion="7"
+minorVersion="9"
 
 versionStr                                          = "#{version}.#{majorVersion}.#{minorVersion}"
 default[:ndb][:enabled]                             = "true"
@@ -64,13 +64,11 @@ default[:ndb][:CompressedBackup]                    = "1"
 default[:ndb][:BackupMaxWriteSize]                  = "1M"
 default[:ndb][:BackupLogBufferSize]                 = "4M"
 default[:ndb][:BackupDataBufferSize]                = "16M" 
-default[:ndb][:BackupMemory]                        = "20M"
 default[:ndb][:MaxAllocate]                         = "32M"
 default[:ndb][:DefaultHashMapSize]                  = "3840"
 default[:ndb][:ODirect]                             = "0"
 default[:ndb][:TotalSendBufferMemory]               = "32M"
 default[:ndb][:OverloadLimit]                       = "16M"
-default[:ndb][:ReservedSendBufferMemory]            = "1M"
 default[:ndb][:MaxNoOfConcurrentIndexOperations]    = "80000"
 default[:ndb][:MaxNoOfConcurrentOperations]         = "500000"
 default[:ndb][:MaxNoOfFiredTriggers]                = "10000"
@@ -179,3 +177,5 @@ default[:ndb][:ndbapi][:addrs]           = ['']
 
 default[:ndb][:mgmd][:public_key]        = ""
 default[:ndb][:aws_enhanced_networking]  = "false"
+
+default[:ndb][:use_systemd]              = "false"

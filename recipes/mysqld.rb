@@ -69,8 +69,14 @@ for script in node[:mysql][:scripts]
 end 
 
 pid_file="#{node[:ndb][:log_dir]}/mysql_#{found_id}.pid"
-template "/etc/init.d/mysqld" do
-  source "mysqld.erb"
+
+
+service_name = "mysqld"
+
+
+template "/etc/init.d/#{service_name}" do
+  only_if { node[:ndb][:use_systemd] != "true" }
+  source "#{service_name}.erb"
   owner node[:mysql][:run_as_user]
   group node[:ndb][:user]
   mode 0755
@@ -80,7 +86,25 @@ template "/etc/init.d/mysqld" do
             })
 end
 
-service "mysqld" do
+case node[:platform_family]
+  when "debian"
+systemd_script = "/lib/systemd/system/#{service_name}.service"
+  when "rhel"
+systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
+end
+
+template systemd_script do
+    only_if { node[:ndb][:use_systemd] == "true" }
+    source "#{service_name}.service.erb"
+    owner node[:mysql][:run_as_user]
+    group node[:ndb][:user]
+    mode 0755
+    cookbook 'ndb'
+    variables({ :node_id => found_id })
+end
+
+
+service "#{service_name}" do
   supports :restart => true, :stop => true, :start => true, :status => true
   action :nothing
 end
@@ -95,11 +119,10 @@ template "mysql.cnf" do
               :mysql_id => found_id,
               :my_ip => my_ip
             })
-  notifies :enable, "service[mysqld]"
+  notifies :enable, "service[#{service_name}]"
 end
 
 bash 'mysql_install_db' do
-#  user node[:mysql][:run_as_user]
   user "root"
   code <<-EOF
     export MYSQL_HOME=#{node[:ndb][:root_dir]}

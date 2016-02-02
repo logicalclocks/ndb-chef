@@ -1,0 +1,15 @@
+[Unit]
+Description = NDB Memcached Server (memcached)
+After = syslog.target network.target remote-fs.target
+
+[Service]
+User = <%= node.ndb.user %>
+PIDFile = <%= "#{node[:ndb][:log_dir]}" %>/memcached_<%= @node_id %>.pid
+ExecStart = <%= "#{node[:ndb][:scripts_dir]}/memcached-start.sh" %>
+ExecStop = <%= "#{node[:ndb][:base_dir]}/scripts/mgm-server-stop.sh"  %>
+ExecReload = <%= "#{node[:ndb][:base_dir]}/scripts/mgm-server-restart.sh"  %>
+
+Type = forking
+
+[Install]
+WantedBy = multi-user.target

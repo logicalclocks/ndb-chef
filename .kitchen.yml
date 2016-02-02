@@ -50,7 +50,7 @@ suites:
             public_ips: ["10.0.2.15"]
             mysql_port: 3399
             mysql_socket: /tmp/mysql-alt.sock
-            use_systemd: true
+            use_systemd: "true"
          kagent:
             private_ips: ["10.0.2.15"]
             public_ips: ["10.0.2.15"]

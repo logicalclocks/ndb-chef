@@ -10,6 +10,10 @@ theResource="memcached-installer"
 service_name="memcached"
 
 service service_name do
+  case node[:ndb][:use_systemd]
+    when "true"
+    provider Chef::Provider::Service::Systemd
+  end
   supports :restart => true, :stop => true, :start => true, :status => true
   action :nothing
 end

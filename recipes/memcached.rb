@@ -1,6 +1,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
 require File.expand_path(File.dirname(__FILE__) + '/find_mysqld')
 
+
+case node.platform
+when "ubuntu"
+ if node.platform_version.to_f <= 14.04
+   node.override.ndb.systemd = "false"
+ end
+end
+
 ndb_connectstring()
 #generate_etc_hosts()
 
@@ -10,10 +18,12 @@ theResource="memcached-installer"
 service_name="memcached"
 
 service service_name do
-  case node[:ndb][:use_systemd]
-    when "true"
-    provider Chef::Provider::Service::Systemd
-  end
+case node[:ndb][:systemd]
+  when "true"
+  provider Chef::Provider::Service::Systemd
+  else
+  provider Chef::Provider::Service::Init::Debian
+end
   supports :restart => true, :stop => true, :start => true, :status => true
   action :nothing
 end
@@ -47,7 +57,7 @@ end
 
 
 template "/etc/init.d/#{service_name}" do
-  only_if { node[:ndb][:use_systemd] != "true" }
+  only_if { node[:ndb][:systemd] != "true" }
   source "#{service_name}.erb"
   owner node[:ndb][:user]
   group node[:ndb][:user]
@@ -71,7 +81,7 @@ systemd_script = "/usr/lib/systemd/system/#{service_name}.service"
 end
 
 template systemd_script do
-    only_if { node[:ndb][:use_systemd] == "true" }
+    only_if { node[:ndb][:systemd] == "true" }
     source "#{service_name}.service.erb"
     owner node[:ndb][:user]
     group node[:ndb][:user]

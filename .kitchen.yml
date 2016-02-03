@@ -13,8 +13,7 @@ provisioner:
   name: chef_solo
 
 platforms:
-#  - name: ubuntu-12.04
-#  - name: ubuntu-14.04
+  - name: ubuntu-14.04
   - name: centos-7.0
   - name: ubuntu-15.04
 
@@ -50,7 +49,6 @@ suites:
             public_ips: ["10.0.2.15"]
             mysql_port: 3399
             mysql_socket: /tmp/mysql-alt.sock
-            use_systemd: "true"
          kagent:
             private_ips: ["10.0.2.15"]
             public_ips: ["10.0.2.15"]

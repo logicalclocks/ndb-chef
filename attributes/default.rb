@@ -178,4 +178,4 @@ default[:ndb][:ndbapi][:addrs]           = ['']
 default[:ndb][:mgmd][:public_key]        = ""
 default[:ndb][:aws_enhanced_networking]  = "false"
 
-default[:ndb][:use_systemd]              = "false"
+default[:ndb][:systemd]              = node[:systemd]

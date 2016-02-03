@@ -273,6 +273,6 @@ attribute "ndb/shared_folder",
           :description =>  "Directory in which to download mysql-cluster",
           :type => 'string'
 
-attribute "ndb/use_systemd",
-          :description =>  "Use systemd scripts (instead of system-v). Default is 'false'.",
+attribute "ndb/systemd",
+          :description =>  "Use systemd scripts (instead of system-v). Default is 'true'.",
           :type => 'string'

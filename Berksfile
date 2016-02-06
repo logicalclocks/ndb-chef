@@ -5,4 +5,3 @@ metadata
 
 cookbook 'kagent', github: 'karamelchef/kagent-chef'
 cookbook 'btsync', github: "hopshadoop/btsync-chef"
-

@@ -10,7 +10,6 @@ when "ubuntu"
 end
 
 ndb_connectstring()
-#generate_etc_hosts()
 
 Chef::Log.info "Memcached for NDB"
 

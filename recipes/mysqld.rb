@@ -61,8 +61,6 @@ my_ip = my_private_ip()
 found_id=-1
 
 found_id=find_mysql_id(my_ip)
-#hostId="ndbapi#{found_id}" 
-#generate_hosts(hostId, my_ip)
 
 for script in node[:mysql][:scripts]
   template "#{node[:ndb][:scripts_dir]}/#{script}" do

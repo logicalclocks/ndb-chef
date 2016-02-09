@@ -15,8 +15,8 @@ describe service('memcached') do
   it { should be_running   }
 end 
 
-describe command("/tmp/mysql-cluster/ndb/scripts/mysql-client.sh test -e \"show databases\"") do
-  its (:stdout) { should match /test/ }
+describe command("/tmp/mysql-cluster/ndb/scripts/mysql-client.sh -e \"show databases\"") do
+  its (:stdout) { should match /mysql/ }
 end
 
 describe command("grep -Fxvf /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys") do

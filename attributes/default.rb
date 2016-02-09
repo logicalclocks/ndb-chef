@@ -1,11 +1,11 @@
 include_attribute "kagent"
 include_attribute "btsync"
 
-version="7"
-majorVersion="4"
-minorVersion="7"
+default.ndb.version="7"
+default.ndb.majorVersion="4"
+default.ndb.minorVersion="7"
 
-versionStr                                          = "#{version}.#{majorVersion}.#{minorVersion}"
+versionStr                                          = "#{node.ndb.version}.#{node.ndb.majorVersion}.#{node.ndb.minorVersion}"
 default[:ndb][:enabled]                             = "true"
 default[:kagent][:enabled]                          = "false"
 default[:ndb][:version]                             = versionStr
@@ -57,8 +57,6 @@ default[:ndb][:TransactionInactiveTimeout]          = "5000"
 default[:ndb][:TransactionDeadlockDetectionTimeout] = "5000"
 default[:ndb][:LockPagesInMainMemory]               = "1"
 default[:ndb][:RealTimeScheduler]                   = "0"
-default[:ndb][:SchedulerSpinTimer]                  = "0"
-default[:ndb][:BuildIndexThreads]                   = "10"
 default[:ndb][:CompressedLCP]                       = "0"
 default[:ndb][:CompressedBackup]                    = "1"
 default[:ndb][:BackupMaxWriteSize]                  = "1M"
@@ -73,6 +71,16 @@ default[:ndb][:MaxNoOfConcurrentIndexOperations]    = "80000"
 default[:ndb][:MaxNoOfConcurrentOperations]         = "500000"
 default[:ndb][:MaxNoOfFiredTriggers]                = "10000"
 default[:ndb][:MaxNoOfConcurrentScans]              = "500"
+
+#Optimize for throughput: 0 (range 0..10)
+default.ndb.SchedulerResponsiveness                 = 0
+default.ndb.SchedulerSpinTimer                      = 0
+default.ndb.SchedulerExecutionTimer                 = 75
+
+default.ndb.BuildIndexThreads                       = 8
+default.ndb.TwoPassInitialNodeRestartCopy           = "true"
+default.ndb.Numa                                    = 1
+
 
 # Up to 8 execution threads supported
 default[:ndb][:MaxNoOfExecutionThreads]             = "2"

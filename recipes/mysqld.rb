@@ -134,9 +134,28 @@ template "mysql.cnf" do
   notifies :enable, "service[#{service_name}]"
 end
 
-bash 'mysql_install_db' do
-  user "root"
-  code <<-EOF
+
+if "#{node.ndb.version}.#{node.ndb.majorVersion}".to_f >= 7.5
+    bash 'mysql_install_db_7_5' do
+    user "root"
+    code <<-EOF
+    set -e
+    export MYSQL_HOME=#{node[:ndb][:root_dir]}
+    # --force causes mysql_install_db to run even if DNS does not work. In that case, grant table entries that normally use host names will use IP addresses.
+    cd #{node[:mysql][:base_dir]}
+    ./bin/mysql_install_db --insecure --user=#{node[:mysql][:run_as_user]} --basedir=#{node[:mysql][:base_dir]} --datadir=#{node[:ndb][:mysql_server_dir]} 
+    touch #{node[:ndb][:mysql_server_dir]}/.installed
+    # sanity check to set ownership of files to 'mysql' user
+    chown -R #{node[:mysql][:run_as_user]} #{node[:ndb][:mysql_server_dir]}
+    EOF
+  not_if { ::File.exists?( "#{node[:ndb][:mysql_server_dir]}/.installed" ) }
+  end
+
+else
+  bash 'mysql_install_db_7_4' do
+    user "root"
+    code <<-EOF
+    set -e
     export MYSQL_HOME=#{node[:ndb][:root_dir]}
     # --force causes mysql_install_db to run even if DNS does not work. In that case, grant table entries that normally use host names will use IP addresses.
     cd #{node[:mysql][:base_dir]}
@@ -146,6 +165,7 @@ bash 'mysql_install_db' do
     chown -R #{node[:mysql][:run_as_user]} #{node[:ndb][:mysql_server_dir]}
     EOF
   not_if { ::File.exists?( "#{node[:ndb][:mysql_server_dir]}/.installed" ) }
+  end
 end
 
 ndb_mysql_basic "install" do

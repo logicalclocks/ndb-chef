@@ -33,7 +33,7 @@ suites:
       - recipe[ndb::bench]
     attributes:
          mysql:
-            run_as_user: mysql
+            run_as_user: root
          ndb:
             dir: "/tmp"
             DataMemory: "111"

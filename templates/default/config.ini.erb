@@ -132,17 +132,6 @@ LockPagesInMainMemory=<%= node[:ndb][:LockPagesInMainMemory] %>
 # of NDBCLUSTER threads to get higher throughput.
 RealTimeScheduler=<%= node[:ndb][:RealTimeScheduler] %>
 
-# This parameter specifies the time in microseconds for threads to be executed in the scheduler before sleeping.
-# Default = 0. Higher value to optimize latency over throughput.
-SchedulerSpinTimer=<%= node[:ndb][:SchedulerSpinTimer] %>
-
-# Specifies the time in microseconds for threads to be executed in the scheduler before being sent. 
-# Default is 50. Higher values give higher throughput at cost of increased latency.
-# SchedulerExecutionTimer=100
-
-# Number of threads to create when rebuilding indexes during a system or node start
-BuildIndexThreads=<%= node[:ndb][:BuildIndexThreads] %>
-
 # Savings of up to 50% over noncompressed LCPs and backups
 CompressedLCP=<%= node[:ndb][:CompressedLCP] %>
 CompressedBackup=<%= node[:ndb][:CompressedBackup] %>
@@ -161,6 +150,23 @@ DefaultHashMapSize=<%= node[:ndb][:DefaultHashMapSize] %>
 ODirect=<%= node[:ndb][:ODirect] %>
 
 TotalSendBufferMemory=<%= node[:ndb][:TotalSendBufferMemory] %>
+
+
+# This parameter specifies the time in microseconds for threads to be executed in the scheduler before sleeping.
+# Default = 0. Higher value to optimize latency over throughput.
+SchedulerSpinTimer=<%= node.ndb.SchedulerSpinTimer %> 
+
+# Specifies the time in microseconds for threads to be executed in the scheduler before being sent. 
+# Default is 50. Higher values give higher throughput at cost of increased latency.
+SchedulerExecutionTimer=<%= node.ndb.SchedulerExecutionTimer %>            
+
+TwoPassInitialNodeRestartCopy=<%= node.ndb.TwoPassInitialNodeRestartCopy %>
+# Number of threads to create when rebuilding indexes during a system or node start
+BuildIndexThreads=<%= node[:ndb][:BuildIndexThreads] %>
+
+SchedulerResponsiveness=<%= node.ndb.SchedulerResponsiveness %>
+
+Numa=<%= node.ndb.Numa %>
 
 
 [MYSQLD DEFAULT]

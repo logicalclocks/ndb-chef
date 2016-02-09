@@ -276,3 +276,7 @@ attribute "ndb/shared_folder",
 attribute "ndb/systemd",
           :description =>  "Use systemd scripts (instead of system-v). Default is 'true'.",
           :type => 'string'
+
+attribute "mysql/run_as_user",
+          :description =>  "Run mysqld as this user",
+          :type => 'string'

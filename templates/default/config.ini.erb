@@ -164,7 +164,8 @@ TwoPassInitialNodeRestartCopy=<%= node.ndb.TwoPassInitialNodeRestartCopy %>
 # Number of threads to create when rebuilding indexes during a system or node start
 BuildIndexThreads=<%= node[:ndb][:BuildIndexThreads] %>
 
-SchedulerResponsiveness=<%= node.ndb.SchedulerResponsiveness %>
+# Disable for 7.5.+
+#SchedulerResponsiveness=<%= node.ndb.SchedulerResponsiveness %>
 
 Numa=<%= node.ndb.Numa %>
 

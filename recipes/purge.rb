@@ -60,6 +60,9 @@ bash 'delete_marker_files' do
 user "root"
 ignore_failure true
 code <<-EOF
+ rm -f /etc/my.cnf
+ rm -rf /etc/my.cnf.d
+ rm -rf /etc/mysql
  rm -f #{Chef::Config[:file_cache_path]}/.ndb_downloaded
  rm -f /etc/profile.d/mysql_bin_path.sh
  rm -f /etc/default/irqbalance

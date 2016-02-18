@@ -72,17 +72,10 @@ attribute "mysql/password",
           :description => "Password for hop mysql user",
           :required => "required",
           :type => 'string'
-#          :calculated => true
 
-# attribute "mysql/root/password",
-#           :display_name => "MySQL server root password",
-#           :description => "Password for the root mysql user",
-#           :type => 'string',
-#           :calculated => true
-
-#attribute "ndb/enabled",
-#          :description => "Set to true if using MySQL Cluster, false for standalone MySQL Server",
-#          :type => 'string'
+#
+# Optional Parameters/Attributes
+#
 
 attribute "mysql/dir",
           :description => "Directory in which to install MySQL Binaries",
@@ -95,22 +88,6 @@ attribute "ndb/mgm_server/port",
 attribute "ndb/NoOfReplicas",
           :description => "Num of replicas of the MySQL Cluster Data Nodes",
           :type => 'string'
-
-#attribute "memcached/options",
-#          :description => "Memcached options",
-#          :type => 'string'
-
-# attribute "btsync/ndb/seeder_secret",
-# :display_name => "Ndb seeder's random secret key.",
-# :description => "20 chars or more (normally 32 chars)",
-# :type => 'string',
-# :default => "AY27AAZKTKO3GONE6PBCZZRA6MKGRKBX2"
-
-# attribute "btsync/ndb/leecher_secret",
-# :display_name => "Ndb leecher's secret key.",
-# :description => "Ndb's random secret (key) generated using the seeder's secret key. 20 chars or more (normally 32 chars)",
-# :type => 'string',
-# :default => "BTHKJKK4PIPIOJZ7GITF2SJ2IYDLSSJVY"
 
 attribute "ndb/FragmentLogFileSize",
           :description => "FragmentLogFileSize",
@@ -288,3 +265,17 @@ attribute "ndb/systemd",
 attribute "mysql/run_as_user",
           :description =>  "Run mysqld as this user",
           :type => 'string'
+
+
+# attribute "btsync/ndb/seeder_secret",
+# :display_name => "Ndb seeder's random secret key.",
+# :description => "20 chars or more (normally 32 chars)",
+# :type => 'string',
+# :default => "AY27AAZKTKO3GONE6PBCZZRA6MKGRKBX2"
+
+# attribute "btsync/ndb/leecher_secret",
+# :display_name => "Ndb leecher's secret key.",
+# :description => "Ndb's random secret (key) generated using the seeder's secret key. 20 chars or more (normally 32 chars)",
+# :type => 'string',
+# :default => "BTHKJKK4PIPIOJZ7GITF2SJ2IYDLSSJVY"
+

@@ -71,6 +71,7 @@ default[:ndb][:MaxNoOfConcurrentIndexOperations]    = "80000"
 default[:ndb][:MaxNoOfConcurrentOperations]         = "500000"
 default[:ndb][:MaxNoOfFiredTriggers]                = "10000"
 default[:ndb][:MaxNoOfConcurrentScans]              = "500"
+default[:ndb][:MaxNoOfConcurrentTransactions]       = "50000"
 
 #Optimize for throughput: 0 (range 0..10)
 default.ndb.SchedulerResponsiveness                 = 0

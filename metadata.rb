@@ -266,6 +266,10 @@ attribute "mysql/run_as_user",
           :description =>  "Run mysqld as this user",
           :type => 'string'
 
+attribute "ndb/MaxNoOfConcurrentTransactions",
+          :description =>  "Maximum number of concurrent transactions (higher consumes more memory)",
+          :type => 'string'
+
 
 # attribute "btsync/ndb/seeder_secret",
 # :display_name => "Ndb seeder's random secret key.",

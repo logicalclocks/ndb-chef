@@ -11,10 +11,12 @@ end
 
 ndb_connectstring()
 
+if "#{node.ndb.version}.#{node.ndb.majorVersion}".to_f < 7.5
 #scripts/mysql_install_db requires perl 
   package "perl" do
     action :install
   end
+end
 
 case node[:platform_family]
 when "debian"
@@ -41,9 +43,11 @@ when "rhel"
   package "libaio" do
     action :install
   end
-#scripts/mysql_install_db requires perl-Data-Dumper
-  package "perl-Data-Dumper" do
-    action :install
+  if "#{node.ndb.version}.#{node.ndb.majorVersion}".to_f < 7.5  
+    #scripts/mysql_install_db requires perl-Data-Dumper
+    package "perl-Data-Dumper" do
+      action :install
+    end
   end
  
 end
@@ -206,5 +210,6 @@ if node[:ndb][:enabled] == "true"
 end
 
 ndb_start "mysqld" do
+  action :start_if_not_running
 end
 

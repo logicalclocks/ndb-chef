@@ -22,7 +22,8 @@ bash 'run_grants' do
      #{exec} -e "source #{grants_path}"
     EOF
     new_resource.updated_by_last_action(true)
-    not_if "#{node[:mysql][:base_dir]}/bin/mysql -u root #{node[:mysql][:root][:password].empty? ? '' : '-p' }#{node[:mysql][:root][:password]} -S #{node[:ndb][:mysql_socket]} -e \"SELECT user FROM mysql.user WHERE host LIKE '\%';\"  | grep #{node[:mysql][:user]}"
+#    not_if "#{node[:mysql][:base_dir]}/bin/mysql -u root #{node[:mysql][:root][:password].empty? ? '' : '-p' }#{node[:mysql][:root][:password]} -S #{node[:ndb][:mysql_socket]} -e \"SELECT user FROM mysql.user WHERE user=\"#{node[:mysql][:user]}\""
+    not_if "#{node[:mysql][:base_dir]}/bin/mysql -u #{node[:mysql][:user]} -p#{node[:mysql][:mysql][:password]} -h localhost -e \"SELECT user FROM mysql.user WHERE host LIKE '\%';\""
   end
 end
 

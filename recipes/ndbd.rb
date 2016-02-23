@@ -205,3 +205,16 @@ kagent_keys "#{homedir}" do
   action :get_publickey
 end  
 
+
+case node[:ndb][:systemd]
+when "true"
+  ndb_start "start-ndbd-systemd" do
+    action :start_if_not_running_systemd
+  end 
+else
+  ndb_start "start-ndbd-sysv" do
+    action :start_if_not_running
+  end 
+end
+
+

@@ -13,9 +13,9 @@ provisioner:
   name: chef_solo
 
 platforms:
-  - name: ubuntu-14.04
+#  - name: ubuntu-14.04
   - name: centos-7.0
-  - name: ubuntu-15.04
+#  - name: ubuntu-15.04
 
 suites:
   - name: default
@@ -30,7 +30,7 @@ suites:
       - recipe[ndb::ndbd]
       - recipe[ndb::mysqld]
       - recipe[ndb::memcached]
-      - recipe[ndb::bench]
+#      - recipe[ndb::bench]
     attributes:
          mysql:
             run_as_user: mysql

@@ -13,6 +13,23 @@ action :start_if_not_running do
 
 end
 
+
+action :start_if_not_running_systemd do
+
+
+  bash "start-if-not-running-#{new_resource.name}" do
+    user "root"
+    code <<-EOH
+     set -e
+     if [ `systemctl status #{new_resource.name}` -ne 0 ] ; then
+         systemctl start #{new_resource.name}
+     fi 
+    EOH
+  end
+
+end
+
+
 action :flex do
 
   bash "flex-experiment" do

@@ -158,14 +158,10 @@ default.memcached.options                       = ";role=ndb-caching;usec_rtt=25
 #
 # BitTorrent settings for copying NDB binaries
 #
-default.btsync.ndb.lan_search_port              = 3837
-default.btsync.ndb.port            = 44445
-default.btsync.ndb.seed_secret     = ""
-default.btsync.ndb.leecher_secret  = ""
-default.btsync.ndb.device_name     = ""
-# default.btsync.ndb.seeder_ip     = "#{default.kagent.dashboard_ip}"
+# default btsync ndb seeder_ip     = "default kagent dashboard_ip "
 default.btsync.ndb.leechers        = ['10.0.2.15']
-default.ndb.shared_folder            = "#{node.btsync.shared_folder}/ndb"
+#default.ndb.shared_folder            = "#{node.btsync.shared_folder}/ndb"
+default.ndb.shared_folder            = "/tmp/ndb"
 
 # IP addresses of the mgm-server, ndbds must be overridden by role/recipe caller.
 default.ndb.public_ips               = [''] 

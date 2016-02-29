@@ -9,7 +9,6 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "0.1"
 
 depends           "kagent"
-#depends           "btsync"
 
 recipe            "ndb::install", "Installs MySQL Cluster binaries"
 
@@ -22,8 +21,6 @@ recipe            "ndb::mgmd-purge", "Removes a MySQL Cluster management server 
 recipe            "ndb::ndbd-purge", "Removes a MySQL Cluster data node (ndbd)"
 recipe            "ndb::mysqld-purge", "Removes a MySQL Server connected to the MySQL Cluster (mysqld)"
 recipe            "ndb::memcached-purge", "Removes a memcached Server connected to the MySQL Cluster (memcached)"
-
-recipe            "ndb::btsync", "Installs MySQL Cluster binaries with BitTorrent (btsync)"
 
 recipe            "ndb::purge", "Removes all data and all binaries related to a MySQL Cluster installation"
 

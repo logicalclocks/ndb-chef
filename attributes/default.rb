@@ -1,5 +1,4 @@
 include_attribute "kagent"
-#include_attribute "btsync"
 
 default.ndb.version="7"
 default.ndb.majorVersion="4"

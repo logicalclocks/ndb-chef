@@ -35,7 +35,7 @@ action :flex do
   bash "flex-experiment" do
     user "root"
     code <<-EOH
-        #{node[:ndb][:scripts_dir]}/flexAsyncRun.sh
+        #{node.ndb.scripts_dir}/flexAsyncRun.sh
     EOH
   end
   

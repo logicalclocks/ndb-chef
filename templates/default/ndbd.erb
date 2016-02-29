@@ -14,10 +14,10 @@
 ### END INIT INFO
 
 # Variables
-INIT_PROG=<%= "#{node[:ndb][:base_dir]}/scripts/ndbd-init.sh" %>
-START_PROG=<%= "#{node[:ndb][:base_dir]}/scripts/ndbd-start.sh" %>
-STOP_PROG=<%= "#{node[:ndb][:base_dir]}/scripts/ndbd-stop.sh" %>
-RESTART_PROG=<%= "#{node[:ndb][:base_dir]}/scripts/ndbd-restart.sh" %>
+INIT_PROG=<%= "#{node.ndb.base_dir}/scripts/ndbd-init.sh" %>
+START_PROG=<%= "#{node.ndb.base_dir}/scripts/ndbd-start.sh" %>
+STOP_PROG=<%= "#{node.ndb.base_dir}/scripts/ndbd-stop.sh" %>
+RESTART_PROG=<%= "#{node.ndb.base_dir}/scripts/ndbd-restart.sh" %>
 
 RETVAL=0
 
@@ -47,7 +47,7 @@ restart() {
 
 status() {  
   ID=<%= @node_id %>
-  PID_FILE=<%= "#{node[:ndb][:log_dir]}/ndb_${ID}.pid" %> 
+  PID_FILE=<%= "#{node.ndb.log_dir}/ndb_${ID}.pid" %> 
   if [ -f $PID_FILE ] ; then
      PID=`cat $PID_FILE`
      kill -0 $PID

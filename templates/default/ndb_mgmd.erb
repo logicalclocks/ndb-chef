@@ -15,9 +15,9 @@
 
 # Variables
 
-START_PROG=<%= "#{node[:ndb][:base_dir]}/scripts/mgm-server-start.sh"  %>
-STOP_PROG=<%= "#{node[:ndb][:base_dir]}/scripts/mgm-server-stop.sh"  %>
-RESTART_PROG=<%= "#{node[:ndb][:base_dir]}/scripts/mgm-server-restart.sh"  %>
+START_PROG=<%= "#{node.ndb.base_dir}/scripts/mgm-server-start.sh"  %>
+STOP_PROG=<%= "#{node.ndb.base_dir}/scripts/mgm-server-stop.sh"  %>
+RESTART_PROG=<%= "#{node.ndb.base_dir}/scripts/mgm-server-restart.sh"  %>
 
 RETVAL=0
 
@@ -30,7 +30,7 @@ start() {
 stop() {
   $STOP_PROG
 
-  PID_FILE="<%= node[:ndb][:log_dir] %>/ndb_<%= node[:mgm][:id] %>.pid" 
+  PID_FILE="<%= node.ndb.log_dir %>/ndb_<%= node.mgm.id %>.pid" 
   PROCESS_ID=`cat $PID_FILE`
   echo "Shutting down"
   kill $PROCESS_ID
@@ -56,7 +56,7 @@ restart() {
 
 status() {  
   ID=<%= @node_id %>
-  PID_FILE=<%= "#{node[:ndb][:log_dir]}/ndb_${ID}.pid" %> 
+  PID_FILE=<%= "#{node.ndb.log_dir}/ndb_${ID}.pid" %> 
   if [ -f $PID_FILE ] ; then
      PID=`cat $PID_FILE`
      kill -0 $PID

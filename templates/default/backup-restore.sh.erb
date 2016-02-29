@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BACKUP_DIR="<%= node[:ndb][:base_dir] %>/backup/"
+BACKUP_DIR="<%= node.ndb.base_dir %>/backup/"
 BACKUP_ID=$1
 case $1 in
     "-h"|"--help"|"-help")
@@ -16,7 +16,7 @@ case $1 in
 esac 
 
 # ndb_restore [-c connectstring] -n node_id [-m] -b backup_id -r --backup_path=/path/to/backup/files
-echo "Restoring backup at: node[:ndb][:connectstring]"
-<%= node[:mysql][:base_dir] %>/bin/ndb_restore -c <%= node[:ndb][:connectstring] %> -n <%= @node_id %> -b $1 --backup_path=$BACKUP_DIR
+echo "Restoring backup at: node.ndb.connectstring]"
+<%= node.mysql.base_dir %>/bin/ndb_restore -c <%= node.ndb.connectstring %> -n <%= @node_id %> -b $1 --backup_path=$BACKUP_DIR
 exit $?
 

@@ -81,6 +81,10 @@ attribute "mysql/dir",
           :description => "Directory in which to install MySQL Binaries",
           :type => 'string'
 
+attribute "mysql/replication_enabled",
+          :description => "Enable replication for the mysql server",
+          :type => 'string'
+
 attribute "ndb/mgm_server/port",
           :description => "Port used by Mgm servers in MySQL Cluster",
           :type => 'string'

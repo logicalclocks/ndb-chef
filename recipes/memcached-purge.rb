@@ -12,8 +12,8 @@ end
 
 # TODO - is there no memcached directory to delete?
 
-for script in node[:memcached][:scripts] do
-  file "#{node[:ndb][:scripts_dir]}/#{script}" do
+for script in node.memcached.scripts do
+  file "#{node.ndb.scripts_dir}/#{script}" do
     action :delete
   end
 end 

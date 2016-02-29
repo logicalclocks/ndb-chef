@@ -1,7 +1,7 @@
 #!/bin/sh 
 
 
-MGM_CONN=<%= node[:ndb][:connectstring] %>
+MGM_CONN=<%= node.ndb.connectstring %>
 SKIP_MYSQLDS=0
 
 while [ $# -gt 0 ]; do
@@ -27,6 +27,6 @@ while [ $# -gt 0 ]; do
   shift       
 done
 
-<%= node[:ndb][:scripts_dir] %>/mysql-server-stop.sh
-<%= node[:ndb][:scripts_dir] %>/memcached-stop.sh
-<%= node[:mysql][:base_dir] %>/bin/ndb_mgm -c $MGM_CONN -e "shutdown"
+<%= node.ndb.scripts_dir %>/mysql-server-stop.sh
+<%= node.ndb.scripts_dir %>/memcached-stop.sh
+<%= node.mysql.base_dir %>/bin/ndb_mgm -c $MGM_CONN -e "shutdown"

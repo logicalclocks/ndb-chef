@@ -9,7 +9,7 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "0.1"
 
 depends           "kagent"
-depends           "btsync"
+#depends           "btsync"
 
 recipe            "ndb::install", "Installs MySQL Cluster binaries"
 

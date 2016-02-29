@@ -13,8 +13,8 @@ Platform
 
 
 Tested on:
-* Ubuntu 10.04-12.04
-* centos 6.5
+* Ubuntu 12.04-14.04
+* centos 7.0+
 
 
 Usage

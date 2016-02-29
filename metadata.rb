@@ -6,7 +6,7 @@ license          "GPL 3.0"
 description      "Installs/Configures NDB (MySQL Cluster)"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 
-version          "1.0"
+version          "0.1"
 
 depends           "kagent"
 depends           "btsync"
@@ -30,9 +30,8 @@ recipe            "ndb::purge", "Removes all data and all binaries related to a 
 
 
 supports 'ubuntu', ">= 12.04"
-supports 'rhel',   ">= 6.3"
-supports 'centos',   ">= 6.3"
-supports 'debian'
+supports 'rhel',   ">= 7.0"
+supports 'centos', ">= 7.0"
 
 #
 # Required Attributes

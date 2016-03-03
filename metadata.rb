@@ -1,7 +1,7 @@
 name             "ndb"
 maintainer       "Jim Dowling"
 maintainer_email "jdowling@kth.se"
-license          "GPL 3.0"
+license          "GPL 2.0"
 
 description      "Installs/Configures NDB (MySQL Cluster)"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))

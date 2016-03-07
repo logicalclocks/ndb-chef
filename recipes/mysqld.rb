@@ -9,6 +9,11 @@ when "ubuntu"
  end
 end
 
+if node.ndb.systemd == false
+   node.override.ndb.systemd = "false"
+end  
+
+
 ndb_connectstring()
 
 if "#{node.ndb.version}.#{node.ndb.majorVersion}".to_f < 7.5
@@ -83,46 +88,51 @@ pid_file="#{node.ndb.log_dir}/mysql_#{found_id}.pid"
 
 service_name = "mysqld"
 
+if node.ndb.systemd != "true" 
 
-template "/etc/init.d/#{service_name}" do
-  only_if { node.ndb.systemd != "true" }
-  source "#{service_name}.erb"
-  owner node.mysql.run_as_user
-  group node.ndb.user
-  mode 0755
-  variables({
-              :pid_file => pid_file,
-              :node_id => found_id
-            })
-end
+  template "/etc/init.d/#{service_name}" do
+    source "#{service_name}.erb"
+    owner node.mysql.run_as_user
+    group node.ndb.user
+    mode 0755
+    variables({
+                :pid_file => pid_file,
+                :node_id => found_id
+              })
+  end
 
-case node.platform_family
+  service "#{service_name}" do
+    provider Chef::Provider::Service::Init::Debian
+    supports :restart => true, :stop => true, :start => true, :status => true
+    action :nothing
+  end
+
+
+else # sytemd is true
+
+  case node.platform_family
   when "debian"
-systemd_script = "/lib/systemd/system/#{service_name}.service"
+    systemd_script = "/lib/systemd/system/#{service_name}.service"
   when "rhel"
-systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
-end
+    systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
+  end
 
-template systemd_script do
-    only_if { node.ndb.systemd == "true" }
+  template systemd_script do
     source "#{service_name}.service.erb"
     owner node.mysql.run_as_user
     group node.ndb.user
     mode 0755
     cookbook 'ndb'
     variables({ :node_id => found_id })
-end
-
-
-service "#{service_name}" do
-  case node.ndb.systemd
-    when "true"
-      provider Chef::Provider::Service::Systemd
-    else
-      provider Chef::Provider::Service::Init::Debian
   end
-  supports :restart => true, :stop => true, :start => true, :status => true
-  action :nothing
+
+
+  service "#{service_name}" do
+    provider Chef::Provider::Service::Systemd
+    supports :restart => true, :stop => true, :start => true, :status => true
+    action :nothing
+  end
+
 end
 
 template "mysql.cnf" do

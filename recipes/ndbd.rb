@@ -8,6 +8,10 @@ when "ubuntu"
  end
 end
 
+if node.ndb.systemd == false
+   node.override.ndb.systemd = "false"
+end  
+
 ndb_connectstring()
 
 Chef::Log.info "Hostname is: #{node.hostname}"
@@ -60,19 +64,15 @@ end
 
 service_name = "ndbmtd"
 
+if node.ndb.systemd != "true" 
+
 service "#{service_name}" do
-  case node.ndb.systemd
-    when "true"
-    provider Chef::Provider::Service::Systemd
-    else
-    provider Chef::Provider::Service::Init::Debian
-  end
+  provider Chef::Provider::Service::Init::Debian
   supports :restart => true, :stop => true, :start => true, :status => true
   action :nothing
 end
 
 template "/etc/init.d/#{service_name}" do
-  only_if { node.ndb.systemd != "true" }
   source "ndbd.erb"
   owner node.ndb.user
   group node.ndb.group
@@ -80,6 +80,13 @@ template "/etc/init.d/#{service_name}" do
   variables({ :node_id => found_id })
   notifies :enable, "service[#{service_name}]"
   notifies :restart,"service[#{service_name}]", :immediately
+end
+
+else # systemd is true
+service "#{service_name}" do
+  provider Chef::Provider::Service::Systemd
+  supports :restart => true, :stop => true, :start => true, :status => true
+  action :nothing
 end
 
 case node.platform_family
@@ -101,7 +108,7 @@ template systemd_script do
     notifies :restart, "service[#{service_name}]", :immediately
 end
 
-
+end
 
 if node.kagent.enabled == "true"
   Chef::Log.info "Trying to infer the #{service_name} ID by examining the local IP. If it matches the config.ini file, then we have our node."

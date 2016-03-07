@@ -8,6 +8,11 @@ when "ubuntu"
  end
 end
 
+if node.ndb.systemd == false
+   node.override.ndb.systemd = "false"
+end  
+
+
 ndb_connectstring()
 
 directory node.ndb.mgm_dir do
@@ -57,7 +62,7 @@ service "#{service_name}" do
 end
 
 template "/etc/init.d/#{service_name}" do
-  only_if { node.ndb.systemd != "true" }
+  not_if { node.ndb.systemd == "true" }
   source "#{service_name}.erb"
   owner node.ndb.user
   group node.ndb.user
@@ -69,13 +74,13 @@ end
 
 case node.platform_family
   when "debian"
-systemd_script = "/lib/systemd/system/#{service_name}.service"
+systemdn_script = "/lib/systemd/system/#{service_name}.service"
   when "rhel"
 systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
 end
 
-template systemd_script do
-  only_if { node.ndb.systemd == "true" }
+if node.ndb.systemd == "true" 
+  template systemd_script do
     source "#{service_name}.service.erb"
     owner node.ndb.user
     group node.ndb.user
@@ -83,6 +88,7 @@ template systemd_script do
     cookbook 'ndb'
     variables({ :node_id => found_id })
     notifies :enable, "service[#{service_name}]"
+  end
 end
 
 

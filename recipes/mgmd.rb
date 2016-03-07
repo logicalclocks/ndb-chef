@@ -50,36 +50,38 @@ end
 
 service_name = "ndb_mgmd"
 
-service "#{service_name}" do
-  case node.ndb.systemd
-    when "true"
-    provider Chef::Provider::Service::Systemd
-    else
+
+if node.ndb.systemd != "true"
+
+
+  service "#{service_name}" do
     provider Chef::Provider::Service::Init::Debian
+    supports :restart => true, :stop => true, :start => true, :status => true
+    action :nothing
   end
-  supports :restart => true, :stop => true, :start => true, :status => true
-  action :nothing
-end
 
-template "/etc/init.d/#{service_name}" do
-  not_if { node.ndb.systemd == "true" }
-  source "#{service_name}.erb"
-  owner node.ndb.user
-  group node.ndb.user
-  mode 0754
-  variables({ :node_id => found_id })
-  notifies :enable, "service[#{service_name}]"
-end
+  template "/etc/init.d/#{service_name}" do
+    source "#{service_name}.erb"
+    owner node.ndb.user
+    group node.ndb.user
+    mode 0754
+    variables({ :node_id => found_id })
+    notifies :enable, "service[#{service_name}]"
+  end
 
-
-case node.platform_family
+else # systemd == true
+  service "#{service_name}" do
+    provider Chef::Provider::Service::Systemd
+    supports :restart => true, :stop => true, :start => true, :status => true
+    action :nothing
+  end
+  case node.platform_family
   when "debian"
-systemdn_script = "/lib/systemd/system/#{service_name}.service"
+    systemd_script = "/lib/systemd/system/#{service_name}.service"
   when "rhel"
-systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
-end
+    systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
+  end
 
-if node.ndb.systemd == "true" 
   template systemd_script do
     source "#{service_name}.service.erb"
     owner node.ndb.user

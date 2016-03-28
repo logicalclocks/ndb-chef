@@ -94,7 +94,6 @@ MaxNoOfConcurrentScans=<%= node.ndb.MaxNoOfConcurrentScans %>
 
 MaxNoOfConcurrentTransactions=<%= node.ndb.MaxNoOfConcurrentTransactions %>
 
-
 TransactionBufferMemory=<%= node.ndb.TransactionBufferMemory %>
 
 MaxParallelScansPerFragment=<%= node.ndb.MaxParallelScansPerFragment %>
@@ -153,8 +152,8 @@ DefaultHashMapSize=<%= node.ndb.DefaultHashMapSize %>
 # Needs root privileges
 ODirect=<%= node.ndb.ODirect %>
 
+# total amount of memory (in bytes) to be allocated by each node for which it is set for use among all configured transporters for all types of nodes (NDB, API, etc)
 TotalSendBufferMemory=<%= node.ndb.TotalSendBufferMemory %>
-
 
 # This parameter specifies the time in microseconds for threads to be executed in the scheduler before sleeping.
 # Default = 0. Higher value to optimize latency over throughput.

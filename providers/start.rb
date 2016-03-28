@@ -29,6 +29,20 @@ action :start_if_not_running_systemd do
 
 end
 
+action :systemd_reload do
+
+
+  bash "systemd-reload-#{new_resource.name}" do
+    user "root"
+    code <<-EOH
+     set -e
+     systemctl reload-daemon
+    EOH
+  end
+
+end
+
+
 
 action :flex do
 

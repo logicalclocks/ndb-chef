@@ -108,6 +108,10 @@ else #systemd
     notifies :restart, "service[#{service_name}]"
   end
 
+  ndb_systemd "reload_ndbd" do
+    action :systemd_reload
+  end
+
 end
 
 if node.kagent.enabled == "true"

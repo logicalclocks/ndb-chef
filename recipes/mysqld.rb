@@ -133,6 +133,10 @@ else # sytemd is true
     action :nothing
   end
 
+  ndb_systemd "reload_ndbd" do
+    action :systemd_reload
+  end
+
 end
 
 template "mysql.cnf" do

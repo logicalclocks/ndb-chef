@@ -108,7 +108,7 @@ template systemd_script do
     notifies :restart, "service[#{service_name}]", :immediately
 end
 
-ndb_systemd "reload_ndbd" do
+ndb_start "reload_ndbd" do
   action :systemd_reload
 end
 

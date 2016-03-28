@@ -133,7 +133,7 @@ else # sytemd is true
     action :nothing
   end
 
-  ndb_systemd "reload_ndbd" do
+  ndb_start "reload_ndbd" do
     action :systemd_reload
   end
 

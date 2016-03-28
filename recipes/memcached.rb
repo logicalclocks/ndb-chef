@@ -108,7 +108,7 @@ else #systemd
     notifies :restart, "service[#{service_name}]"
   end
 
-  ndb_systemd "reload_ndbd" do
+  ndb_start "reload_ndbd" do
     action :systemd_reload
   end
 

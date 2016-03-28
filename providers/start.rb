@@ -36,7 +36,7 @@ action :systemd_reload do
     user "root"
     code <<-EOH
      set -e
-     systemctl reload-daemon
+     systemctl daemon-reload
     EOH
   end
 

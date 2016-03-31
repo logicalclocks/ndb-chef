@@ -1,7 +1,7 @@
 --- 
 driver_config: 
-  box: centos-7.0
-  box_url: http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.0_chef-provisionerless.box
+  box: XXXX
+  box_url: YYYY
 driver_plugin: vagrant
 platforms: 
   - 

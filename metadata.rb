@@ -81,6 +81,10 @@ attribute "mysql/replication_enabled",
           :description => "Enable replication for the mysql server",
           :type => 'string'
 
+attribute "ndb/wait_startup",
+          :description => "Max amount of time a MySQL server should wait for the ndb nodes to be up",
+          :type => 'string'
+
 attribute "ndb/mgm_server/port",
           :description => "Port used by Mgm servers in MySQL Cluster",
           :type => 'string'

@@ -92,7 +92,7 @@ else # systemd == true
     notifies :enable, "service[#{service_name}]"
   end
 
-  ndb_start "reload_ndbd" do
+  ndb_start "reload_mgmd" do
     action :systemd_reload
   end
 

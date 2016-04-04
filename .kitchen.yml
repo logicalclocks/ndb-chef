@@ -1,7 +1,7 @@
 --- 
 driver_config: 
   box: centos-7.0
-  box_url: http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.0_chef-provisionerless.box
+  box_url: 
 driver_plugin: vagrant
 platforms: 
   - 
@@ -12,7 +12,7 @@ platforms:
         - "192.168.0.2"
     driver_config: 
       customize: 
-        memory: 1024
+        memory: 2048
       network: 
         - 
           - private_network
@@ -27,8 +27,6 @@ platforms:
   - 
     attributes: 
       private_ips: 
-        - "192.168.0.3"
-      public_ips: 
         - "192.168.0.3"
     driver_config: 
       customize: 
@@ -51,12 +49,12 @@ suites:
       mysql: 
         run_as_user: mysql
       ndb: 
-        DataMemory: "111"
+        DataMemory: "66"
         NoOfReplicas: 2
         dir: /tmp
         memcached: 
           private_ips: 
-            - "192.168.0.2"
+            - "192.168.0.3"
         mgmd: 
           private_ips: 
             - "192.168.0.2"
@@ -64,7 +62,7 @@ suites:
         mysql_socket: /tmp/mysql-alt.sock
         mysqld: 
           private_ips: 
-            - "192.168.0.2"
+            - "192.168.0.3"
         ndbd: 
           private_ips: 
             - "192.168.0.2"

@@ -66,8 +66,6 @@ directory node.ndb.mysql_server_dir do
 end
 
 my_ip = my_private_ip()
-#hostId=""
-found_id=-1
 
 found_id=find_mysql_id(my_ip)
 
@@ -133,7 +131,7 @@ else # sytemd is true
     action :nothing
   end
 
-  ndb_start "reload_ndbd" do
+  ndb_start "reload_mysqld" do
     action :systemd_reload
   end
 
@@ -206,7 +204,7 @@ end
 if node.ndb.enabled == "true"
 
   ndb_mysql_ndb "install" do
-    action [:install_distributed_privileges, :install_memcached]
+   action [:install_distributed_privileges, :install_memcached]
   end
 
   if node.kagent.enabled == "true"

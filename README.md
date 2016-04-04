@@ -27,7 +27,7 @@ bundle install
 bundle exec foodcritic .
 
 3. run kitchen to test recipes
-kitchen test
+./kitchen.sh
 
 ###Chef-solo usage
 On a node that provides both a Management Server and a MySQL Server, use both the mgmd and mysqld recipes:

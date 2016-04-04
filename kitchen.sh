@@ -1,9 +1,11 @@
 #!/bin/bash
 
+rm -f Berksfile.lock
+
+
 set -eo pipefail 
 
 skip_converge=0
-
 
 regex="test_src/services_spec.rb.(.+)"
 boxes="test_src/box_(.+)"

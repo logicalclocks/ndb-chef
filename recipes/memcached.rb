@@ -105,11 +105,11 @@ else #systemd
               })
     notifies :install_memcached, "ndb_mysql_ndb[#{theResource}]", :immediately
     notifies :enable, "service[#{service_name}]"
-    notifies :restart, "service[#{service_name}]"
   end
 
   ndb_start "reload_memcached" do
     action :systemd_reload
+    notifies :restart, "service[#{service_name}]"
   end
 
 end

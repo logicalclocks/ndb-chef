@@ -2,16 +2,16 @@
 
 rm -f Berksfile.lock
 
-
 set -eo pipefail 
 
 skip_converge=0
+
 
 regex="test_src/services_spec.rb.(.+)"
 boxes="test_src/box_(.+)"
 
 
-for box in `ls test_src/box_*`
+for box in `ls test_src/box_* | grep -v *[#~]`
 do
    cp .kitchen.yml.old .kitchen.yml
     if [[ $box =~ $boxes ]] ; then
@@ -48,9 +48,10 @@ do
 
 
     if [ $skip_converge -eq 0 ] ; then
-	for f in `ls test_src/services_spec.rb.*`
+	for f in `ls test_src/services_spec.rb.* | grep -v *[#~]`
 	do
-	    if [[ $f =~ $regex ]] ; then
+           last_char="${f: -1}"
+	    if [[ $f =~ $regex && "$last_char" != "~" && "$last_char" != "#" ]] ; then
 		name="${BASH_REMATCH[1]}"
 		echo "Converging default-${name}"
 		kitchen converge default-${name}
@@ -60,7 +61,7 @@ do
 
     rm -f test/integration/default/serverspec/localhost/services_spec.rb
 
-    for f in `ls test_src/services_spec.rb.*`
+    for f in `ls test_src/services_spec.rb.* | grep -v *[#~]`
     do
 	if [[ $f =~ $regex ]] ; then
             name="${BASH_REMATCH[1]}"

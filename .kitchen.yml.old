@@ -1,6 +1,6 @@
 --- 
 driver_config: 
-  box: centos-7.0
+  box: XXXX
   box_url: 
 driver_plugin: vagrant
 platforms: 

@@ -68,10 +68,10 @@ default.ndb.TotalSendBufferMemory               = "4M"
 default.ndb.OverloadLimit                       = "0"
 # set to several MBs to protect the cluster against misbehaving API nodes that use excess send memory and thus cause failures in communications internally in the NDB kernel.
 default.ndb.MaxNoOfConcurrentScans              = "500"
-default.ndb.MaxNoOfConcurrentIndexOperations    = "8000"
-default.ndb.MaxNoOfConcurrentOperations         = "10000"
+default.ndb.MaxNoOfConcurrentIndexOperations    = "15000"
+default.ndb.MaxNoOfConcurrentOperations         = "100000"
 default.ndb.MaxNoOfFiredTriggers                = "4000"
-default.ndb.MaxNoOfConcurrentTransactions       = "4096"
+default.ndb.MaxNoOfConcurrentTransactions       = "8096"
 default.ndb.MaxNoOfAttributes                   = "5000"
 
 #Optimize for throughput: 0 (range 0..10)
@@ -116,7 +116,7 @@ default.ndb.num_ndb_slots_per_client            = 1
 # If the mysqld or memcached starts and the MySQL Cluster isn't running, it will not connect and will
 # need to be restarted to connect to the cluster.
 # Time in seconds
-default.ndb.wait_startup                        = 500
+default.ndb.wait_startup                        = 3600
 
 # Base directory for MySQL binaries
 default.mysql.dir                               = "/usr/local"

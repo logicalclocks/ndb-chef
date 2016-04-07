@@ -22,13 +22,14 @@ do
        v=$(head -1 test_src/box_${b} |  perl -pe 'chomp')
        # escape the url
        echo $v
-
        v=$(echo $v | sed 's/\./\\\./g')
        v=$(echo $v | sed 's/\_/\\\_/g')
        v=$(echo $v | sed 's/\:/\\\:/g')
        v=$(echo $v | sed 's/\//\\\//g')
+       echo $v
        perl -pi -e "s/YYYY/${v}/" .kitchen.yml
        echo "replaced text..."
+       exit 1
     fi
 
  if [ $# -gt 0 ] ; then

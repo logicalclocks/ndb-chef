@@ -1,7 +1,7 @@
 --- 
 driver_config: 
   box: XXXX
-  box_url: 
+  box_url: YYYY
 driver_plugin: vagrant
 platforms: 
   - 

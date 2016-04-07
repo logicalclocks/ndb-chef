@@ -29,7 +29,6 @@ do
        echo $v
        perl -pi -e "s/YYYY/${v}/" .kitchen.yml
        echo "replaced text..."
-       exit 1
     fi
 
  if [ $# -gt 0 ] ; then

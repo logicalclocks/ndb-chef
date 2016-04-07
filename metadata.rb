@@ -2,11 +2,11 @@ name             "ndb"
 maintainer       "Jim Dowling"
 maintainer_email "jdowling@kth.se"
 license          "GPL 2.0"
-
 description      "Installs/Configures NDB (MySQL Cluster)"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-
 version          "0.2.0"
+source_url       "https://github.com/hopshadoop/ndb-chef"
+
 
 depends           "kagent"
 

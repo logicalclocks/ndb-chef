@@ -78,7 +78,7 @@ Chef::Log.info "Downloading mysql cluster binaries from #{package_url}"
 base_package_filename =  File.basename(node.ndb.package_url)
 Chef::Log.info "Into file #{base_package_filename}"
 base_package_dirname =  File.basename(base_package_filename, ".tar.gz")
-ndb_package_dirname = "/tmp/binary/#{base_package_dirname}"
+ndb_package_dirname = "/tmp/#{base_package_dirname}"
 cached_package_filename = "#{node.ndb.shared_folder}/#{base_package_filename}"
 
 Chef::Log.info "You should find mysql cluster binaries it in:  #{cached_package_filename}"
@@ -118,9 +118,9 @@ Chef::Log.info "Moving mysql cluster binaries to:  #{node.mysql.version_dir}"
 bash "unpack_mysql_cluster" do
     user "root"
     code <<-EOF
-touch /tmp/binary/.ndb_downloaded
+touch /tmp/.ndb_downloaded
 
-tar -xzf #{cached_package_filename} -C /tmp/binary
+tar -xzf #{cached_package_filename} -C /tmp
 mv #{ndb_package_dirname}/* #{node.mysql.version_dir}
 if [ -L #{node.mysql.base_dir}  ; then
  rm -rf #{node.mysql.base_dir}

@@ -1,8 +1,8 @@
 include_attribute "kagent"
 
 default.ndb.version                             ="7"
-default.ndb.majorVersion                        ="4"
-default.ndb.minorVersion                        ="11"
+default.ndb.majorVersion                        ="5"
+default.ndb.minorVersion                        ="3"
 
 versionStr                                      = "#{node.ndb.version}.#{node.ndb.majorVersion}.#{node.ndb.minorVersion}"
 default.ndb.enabled                             = "true"

@@ -22,7 +22,7 @@ bash 'run_grants' do
      #{exec} -e "source #{grants_path}"
     EOF
     new_resource.updated_by_last_action(true)
-    not_if "#{node.mysql.base_dir}/bin/mysql -u root -S #{node.ndb.mysql_socket} -e \"SELECT user FROM mysql.user WHERE user=\"#{node.mysql.user}\""
+    not_if "#{node.mysql.base_dir}/bin/mysql -u root --skip-password -S #{node.ndb.mysql_socket} -e \"SELECT user FROM mysql.user WHERE user=\"#{node.mysql.user}\""
 #    not_if "#{node.mysql.base_dir}/bin/mysql -u root #{node.mysql.root.password.empty? ? '' : '-p' }#{node.mysql.root.password} -S #{node.ndb.mysql_socket} -e \"SELECT user FROM mysql.user WHERE user=\"#{node.mysql.user}\""
 #    not_if "#{node.mysql.base_dir}/bin/mysql -u #{node.mysql.user} -p#{node.mysql.password} -h localhost -e \"SELECT user FROM mysql.user WHERE host LIKE '\%';\""
   end
@@ -74,7 +74,10 @@ bash 'wait_mysqld_started' do
 
        export MYSQL_HOME=#{node.ndb.root_dir}
        cd #{node.mysql.base_dir}
-       ./scripts/mysql_install_db --user=#{node.mysql.run_as_user} --basedir=#{node.mysql.base_dir} --defaults-file=#{node.ndb.root_dir}/my.cnf --force
+#       ./scripts/mysql_install_db --user=#{node.mysql.run_as_user} --basedir=#{node.mysql.base_dir} --defaults-file=#{node.ndb.root_dir}/my.cnf --force
+       ./bin/mysqld --defaults-file=#{node.ndb.root_dir}/my.cnf --initialize-insecure --user=#{node.mysql.run_as_user} --basedir=#{node.mysql.base_dir}
+#--basedir=#{node.mysql.base_dir} --datadir=#{node.mysql.data_dir}
+
        service mysqld start
        sleep new_resource.wait_time
     fi

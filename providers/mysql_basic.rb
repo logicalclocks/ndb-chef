@@ -74,9 +74,7 @@ bash 'wait_mysqld_started' do
 
        export MYSQL_HOME=#{node.ndb.root_dir}
        cd #{node.mysql.base_dir}
-#       ./scripts/mysql_install_db --user=#{node.mysql.run_as_user} --basedir=#{node.mysql.base_dir} --defaults-file=#{node.ndb.root_dir}/my.cnf --force
        ./bin/mysqld --defaults-file=#{node.ndb.root_dir}/my.cnf --initialize-insecure --user=#{node.mysql.run_as_user} --basedir=#{node.mysql.base_dir}
-#--basedir=#{node.mysql.base_dir} --datadir=#{node.mysql.data_dir}
 
        service mysqld start
        sleep new_resource.wait_time

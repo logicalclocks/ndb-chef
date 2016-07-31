@@ -121,7 +121,9 @@ else # sytemd is true
     group node.ndb.user
     mode 0755
     cookbook 'ndb'
-    variables({ :node_id => found_id })
+    variables({ :node_id => found_id,
+                :pid_file => pid_file
+              })
   end
 
 

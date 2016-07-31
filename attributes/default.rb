@@ -128,7 +128,7 @@ default.mysql.jdbc_url                          = ""
 default.mysql.replication_enabled               = "false"
 
 # Username that the mysqld is run as.
-default.mysql.run_as_user                       = "root"
+default.mysql.run_as_user                       = "mysql"
 
 # This is the username/password for any mysql server (mysqld) started.
 # It is required by mysql clients to use the mysql server.

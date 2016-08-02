@@ -6,7 +6,6 @@ default.ndb.minorVersion                        ="3"
 
 versionStr                                      = "#{node.ndb.version}.#{node.ndb.majorVersion}.#{node.ndb.minorVersion}"
 default.ndb.enabled                             = "true"
-default.kagent.enabled                          = "false"
 default.ndb.version                             = versionStr
 
 # http://cdn.mysql.com/Downloads/MySQL-Cluster-7.4/mysql-cluster-gpl-7.4.8-linux-glibc2.5-x86_64.tar.gz

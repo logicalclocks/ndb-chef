@@ -1,12 +1,11 @@
 include_attribute "kagent"
 
 default.ndb.version                             ="7"
-default.ndb.majorVersion                        ="4"
-default.ndb.minorVersion                        ="11"
+default.ndb.majorVersion                        ="5"
+default.ndb.minorVersion                        ="3"
 
 versionStr                                      = "#{node.ndb.version}.#{node.ndb.majorVersion}.#{node.ndb.minorVersion}"
 default.ndb.enabled                             = "true"
-default.kagent.enabled                          = "false"
 default.ndb.version                             = versionStr
 
 # http://cdn.mysql.com/Downloads/MySQL-Cluster-7.4/mysql-cluster-gpl-7.4.8-linux-glibc2.5-x86_64.tar.gz
@@ -128,7 +127,7 @@ default.mysql.jdbc_url                          = ""
 default.mysql.replication_enabled               = "false"
 
 # Username that the mysqld is run as.
-default.mysql.run_as_user                       = "root"
+default.mysql.run_as_user                       = "mysql"
 
 # This is the username/password for any mysql server (mysqld) started.
 # It is required by mysql clients to use the mysql server.

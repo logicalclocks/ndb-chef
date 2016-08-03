@@ -1,18 +1,21 @@
 
 group node.ndb.group do
   action :create
+  not_if "getent group #{node.ndb.group}"
 end
 
 user node.ndb.user do
   action :create
   system true
   shell "/bin/bash"
+  not_if "getent passwd #{node.ndb.user}"
 end
 
 user node.mysql.run_as_user do
   action :create
   system true
   shell "/bin/bash"
+  not_if "getent passwd #{node.mysql.run_as_user}"
 end
 
 directory node.ndb.dir do

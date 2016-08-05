@@ -116,7 +116,7 @@ template "#{node.ndb.root_dir}/config.ini" do
 end
 
 
-  if node.kagent.enabled == "true"
+# if node.kagent.enabled == "true"
    mgm_id = found_id + (node.mgm.id-1)
 
     kagent_config "mgmserver" do
@@ -130,7 +130,7 @@ end
       command_user "root"
       command_script "#{node.ndb.scripts_dir}/mgm-client.sh"
     end
-  end
+#  end
 
 ndb_start "ndb_mgmd" do
 end

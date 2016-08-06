@@ -114,7 +114,7 @@ end
 
 end
 
-#if node.kagent.enabled == "true"
+if node.kagent.enabled == "true"
   Chef::Log.info "Trying to infer the #{service_name} ID by examining the local IP. If it matches the config.ini file, then we have our node."
 
   found_id = -1
@@ -135,8 +135,8 @@ end
     Chef::Log.fatal "Could not find matching IP address is list of data nodes."
   end
 
-  kagent_config "ndb#{found_id}" do
-    service "NDB"
+  kagent_config service_name do
+    service "NDB" # #{found_id}
     start_script "#{node.ndb.scripts_dir}/ndbd-start.sh"
     stop_script "#{node.ndb.scripts_dir}/ndbd-stop.sh"
     init_script "#{node.ndb.scripts_dir}/ndbd-init.sh"
@@ -144,7 +144,7 @@ end
     pid_file "#{node.ndb.log_dir}/ndb_#{found_id}.pid"
   end
 
-#end
+end
 
 
 # Here we set interrupts to be handled by only the first CPU

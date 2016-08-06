@@ -208,8 +208,8 @@ if node.ndb.enabled == "true"
   end
 
 #  if node.kagent.enabled == "true"
-    kagent_config "mysqld#{found_id}" do
-      service "NDB"
+    kagent_config "mysqld" do
+      service "NDB" # #{found_id}
       start_script "#{node.ndb.scripts_dir}/mysql-server-start.sh"
       stop_script  "#{node.ndb.scripts_dir}/mysql-server-stop.sh"
       log_file "#{node.ndb.log_dir}/mysql_#{found_id}_out.log"

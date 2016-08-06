@@ -121,7 +121,9 @@ else # sytemd is true
     group node.ndb.user
     mode 0755
     cookbook 'ndb'
-    variables({ :node_id => found_id })
+    variables({ :node_id => found_id,
+                :pid_file => pid_file
+              })
   end
 
 
@@ -159,7 +161,7 @@ if "#{node.ndb.version}.#{node.ndb.majorVersion}".to_f >= 7.5
     export MYSQL_HOME=#{node.ndb.root_dir}
     # --force causes mysql_install_db to run even if DNS does not work. In that case, grant table entries that normally use host names will use IP addresses.
     cd #{node.mysql.base_dir}
-    ./bin/mysql_install_db --insecure --user=#{node.mysql.run_as_user} --basedir=#{node.mysql.base_dir} --datadir=#{node.ndb.mysql_server_dir} 
+    ./bin/mysqld --defaults-file=#{node.ndb.root_dir}/my.cnf --initialize-insecure --explicit_defaults_for_timestamp
     touch #{node.ndb.mysql_server_dir}/.installed
     # sanity check to set ownership of files to 'mysql' user
     chown -R #{node.mysql.run_as_user} #{node.ndb.mysql_server_dir}

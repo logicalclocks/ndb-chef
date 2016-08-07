@@ -118,7 +118,7 @@ end
 
 if node.kagent.enabled == "true"
 
-    kagent_config "ndb_mgmd" do
+    kagent_config service_name do
       service "NDB"
       start_script "#{node.ndb.scripts_dir}/mgm-server-start.sh"
       stop_script  "#{node.ndb.scripts_dir}/mgm-server-stop.sh"

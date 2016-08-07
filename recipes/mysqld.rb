@@ -209,8 +209,8 @@ if node.ndb.enabled == "true"
    action [:install_distributed_privileges, :install_memcached]
   end
 
-#  if node.kagent.enabled == "true"
-    kagent_config "mysqld" do
+  if node.kagent.enabled == "true"
+    kagent_config service_name do
       service "NDB" # #{found_id}
       start_script "#{node.ndb.scripts_dir}/mysql-server-start.sh"
       stop_script  "#{node.ndb.scripts_dir}/mysql-server-stop.sh"
@@ -220,7 +220,7 @@ if node.ndb.enabled == "true"
       command_user node.ndb.user 
       command_script "#{node.ndb.scripts_dir}/mysql-client.sh"
     end
-#  end
+  end
 end
 
 ndb_start "mysqld" do

@@ -62,8 +62,8 @@ if node.ndb.systemd != "true"
 
   template "/etc/init.d/#{service_name}" do
     source "#{service_name}.erb"
-    owner node.ndb.user
-    group node.ndb.user
+    owner "root"
+    group "root"
     mode 0754
     variables({ :node_id => found_id })
     notifies :enable, "service[#{service_name}]"
@@ -84,8 +84,8 @@ else # systemd == true
 
   template systemd_script do
     source "#{service_name}.service.erb"
-    owner node.ndb.user
-    group node.ndb.user
+    owner "root"
+    group "root"
     mode 0754
     cookbook 'ndb'
     variables({ :node_id => found_id })

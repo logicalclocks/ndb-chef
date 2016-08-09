@@ -74,8 +74,8 @@ end
 
 template "/etc/init.d/#{service_name}" do
   source "ndbd.erb"
-  owner node.ndb.user
-  group node.ndb.group
+  owner "root"
+  group "root"
   mode 0754
   variables({ :node_id => found_id })
   notifies :enable, "service[#{service_name}]"

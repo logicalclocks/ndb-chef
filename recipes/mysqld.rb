@@ -90,8 +90,8 @@ if node.ndb.systemd != "true"
 
   template "/etc/init.d/#{service_name}" do
     source "#{service_name}.erb"
-    owner node.mysql.run_as_user
-    group node.ndb.user
+    owner "root"
+    group "root"
     mode 0755
     variables({
                 :pid_file => pid_file,
@@ -117,8 +117,8 @@ else # sytemd is true
 
   template systemd_script do
     source "#{service_name}.service.erb"
-    owner node.mysql.run_as_user
-    group node.ndb.user
+    owner "root"
+    group "root"
     mode 0755
     cookbook 'ndb'
     variables({ :node_id => found_id,

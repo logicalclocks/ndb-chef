@@ -34,11 +34,11 @@ supports 'centos', ">= 7.0"
 # Required Attributes
 #
 
-attribte "ndb/package_url",
+attribute "ndb/package_url",
           :description => "Download URL for MySQL Cluster binaries",
           :type => 'string'
 
-attribte "ndb/MaxNoOfExecutionThreads",
+attribute "ndb/MaxNoOfExecutionThreads",
           :description => "Number of execution threads for MySQL Cluster",
           :type => 'string'
 

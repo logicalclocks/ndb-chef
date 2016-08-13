@@ -38,6 +38,10 @@ attribte "ndb/package_url",
           :description => "Download URL for MySQL Cluster binaries",
           :type => 'string'
 
+attribte "ndb/MaxNoOfExecutionThreads",
+          :description => "Number of execution threads for MySQL Cluster",
+          :type => 'string'
+
 attribute "ndb/DataMemory",
           :description => "Data memory for each MySQL Cluster Data Node",
           :type => 'string',

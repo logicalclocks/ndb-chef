@@ -34,6 +34,10 @@ supports 'centos', ">= 7.0"
 # Required Attributes
 #
 
+attribte "ndb/package_url",
+          :description => "Download URL for MySQL Cluster binaries",
+          :type => 'string'
+
 attribute "ndb/DataMemory",
           :description => "Data memory for each MySQL Cluster Data Node",
           :type => 'string',

@@ -180,3 +180,5 @@ default.ndb.mgmd.public_key        = ""
 default.ndb.aws_enhanced_networking  = "false"
 
 default.ndb.systemd              = node.systemd
+
+node.kagent.enabled                 = "false"

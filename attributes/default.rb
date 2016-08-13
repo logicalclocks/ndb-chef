@@ -181,4 +181,4 @@ default.ndb.aws_enhanced_networking  = "false"
 
 default.ndb.systemd              = node.systemd
 
-node.kagent.enabled                 = "false"
+node.default.kagent.enabled          = "false"

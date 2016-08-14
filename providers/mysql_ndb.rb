@@ -41,15 +41,26 @@ if node.ndb.enabled == "true"
     action :wait_until_started
   end
 
+  memcd = "#{node.ndb.version_dir}/.memcached_tables"
   memcached_sql = "#{node.mysql.version_dir}/share/memcache-api/ndb_memcache_metadata.sql"
   #  http://dev.mysql.com/doc/ndbapi/en/ndbmemcache-overview.html
   bash 'install_memcached_tables' do
     user node.ndb.user
     code <<-EOF
+#     set -e
+     # Check if the tables have already been installed. TODO: not working in 7.5.x yet.
+#     SQL="SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='ndbmemcache'"
+#     echo $SQL
+#     RES=$(#{node.ndb.scripts_dir}/mysql-client.sh -e $SQL)
+#     echo $RES
+#     if [ `echo $RES | grep ndbmemcache` -eq 0 ] ; then
+#        exit 1
+#     fi
      #{node.ndb.scripts_dir}/mysql-client.sh < #{memcached_sql}
-    EOF
+     touch #{memcd}
+   EOF
+   not_if { ::File.exists?( "#{memcd}" ) }
     new_resource.updated_by_last_action(true)
-    not_if "#{node.ndb.scripts_dir}/mysql-client.sh -e \"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='ndbmemcache';\" | grep ndbmemcache"
   end
 
 end

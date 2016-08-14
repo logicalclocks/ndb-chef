@@ -41,9 +41,9 @@ end
 for script in node.mgm.scripts do
   template "#{node.ndb.scripts_dir}/#{script}" do
     source "#{script}.erb"
-    owner "root"
-    group "root"
-    mode 0655
+    owner node.ndb.user
+    group node.ndb.group
+    mode 0751
     variables({ :node_id => found_id })
   end
 end 

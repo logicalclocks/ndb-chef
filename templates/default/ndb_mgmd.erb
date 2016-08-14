@@ -15,20 +15,20 @@
 
 # Variables
 
-START_PROG=<%= "#{node.ndb.base_dir}/scripts/mgm-server-start.sh"  %>
-STOP_PROG=<%= "#{node.ndb.base_dir}/scripts/mgm-server-stop.sh"  %>
-RESTART_PROG=<%= "#{node.ndb.base_dir}/scripts/mgm-server-restart.sh"  %>
+START_PROG="<%= node.ndb.base_dir %>/scripts/mgm-server-start.sh" 
+STOP_PROG="<%= node.ndb.base_dir %>/scripts/mgm-server-stop.sh"
+RESTART_PROG="<%= node.ndb.base_dir %>/scripts/mgm-server-restart.sh"
 
-RETVAL=0
+EXEC_WITH_USER="su <%= node.ndb.user %> -c"
 
 start() {
   echo "Executing: $START_PROG"
-  $START_PROG
+  $EXEC_WITH_USER $START_PROG
   return $?
 }
 
 stop() {
-  $STOP_PROG
+  $EXEC_WITH_USER $STOP_PROG
 
   PID_FILE="<%= node.ndb.log_dir %>/ndb_<%= node.mgm.id %>.pid" 
   PROCESS_ID=`cat $PID_FILE`
@@ -50,7 +50,7 @@ stop() {
 
 restart() {
   echo "Executing: $RESTART_PROG"
-  $RESTART_PROG
+  $EXEC_WITH_USER $RESTART_PROG
   return $?
 }
 
@@ -102,4 +102,4 @@ case "$1" in
   esac
 
 
-exit $RETVAL
+exit $?

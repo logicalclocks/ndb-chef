@@ -34,10 +34,6 @@ supports 'centos', ">= 7.0"
 # Required Attributes
 #
 
-attribute "ndb/wait_startup",
-          :description => "Time to wait until the NDBDs (data nodes) have started before MySQL servers start.",
-          :type => 'string'
-
 attribute "ndb/package_url",
           :description => "Download URL for MySQL Cluster binaries",
           :type => 'string'
@@ -276,10 +272,6 @@ attribute "ndb/shared_folder",
 
 attribute "ndb/systemd",
           :description =>  "Use systemd scripts (instead of system-v). Default is 'true'.",
-          :type => 'string'
-
-attribute "mysql/run_as_user",
-          :description =>  "Run mysqld as this user",
           :type => 'string'
 
 attribute "ndb/MaxNoOfConcurrentTransactions",

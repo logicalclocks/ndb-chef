@@ -19,34 +19,32 @@ STOP_PROG=<%= "#{node.ndb.scripts_dir}/mysql-server-stop.sh" %>
 RESTART_PROG=<%= "#{node.ndb.scripts_dir}/mysql-server-restart.sh" %>
 PIDFILE=<%= @pid_file %>
 
-RETVAL=0
-
-#EXEC_WITH_USER="su <%= node.mysql.run_as_user %> -c"
+EXEC_WITH_USER="su <%= node.ndb.user %> -c"
 
 init() {
   echo "Executing: $INIT_PROG"
- # $EXEC_WITH_USER "$INIT_PROG"
- $INIT_PROG
+ $EXEC_WITH_USER "$INIT_PROG"
+# $INIT_PROG
   return $?
 }
 
 
 start() {
   echo "Executing: $START_PROG"
-  $START_PROG
+ $EXEC_WITH_USER $START_PROG
   return $?
 }
 
 stop() {
   echo "Executing: $STOP_PROG"
-  $STOP_PROG
+ $EXEC_WITH_USER $STOP_PROG
   return $?
 }
 
 
 restart() {
   echo "Executing: $RESTART_PROG"
-  $RESTART_PROG
+ $EXEC_WITH_USER $RESTART_PROG
   return $?
 }
 
@@ -56,13 +54,13 @@ status() {
 
 	if test -n "$PID" && kill -0 $PID 2> /dev/null; then
 		echo "mysqld ($PID) is running."
-		exit 0
+		return 0
 	else
 		PID=$( pidof mysqld ) || true
 
 		if test -n "$PID"; then
 			echo "mysqld ($PID) is running."
-			exit 0
+			return 0
 		else
 			echo "mysqld is stopped."
 		fi
@@ -99,5 +97,4 @@ case "$1" in
     exit 1
   esac
 
-
-exit $RETVAL
+exit $?

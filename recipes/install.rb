@@ -1,22 +1,34 @@
 
-group node.ndb.group do
-  action :create
-  not_if "getent group #{node.ndb.group}"
-end
+#group node.ndb.group do
+#  action :create
+#  not_if "getent group #{node.ndb.group}"
+#end
 
 user node.ndb.user do
+  supports :manage_home => true
+  home "/home/#{node.ndb.user}"
   action :create
   system true
   shell "/bin/bash"
   not_if "getent passwd #{node.ndb.user}"
 end
 
-user node.mysql.run_as_user do
-  action :create
-  system true
-  shell "/bin/bash"
-  not_if "getent passwd #{node.mysql.run_as_user}"
+# user node.ndb.user do
+#   supports :manage_home => true
+#   home "/home/#{node.ndb.user}"
+#   action :create
+#   system true
+#   shell "/bin/bash"
+#   not_if "getent passwd #{node.ndb.user}"
+# end
+
+group node.ndb.group do
+  action :modify
+#  members ["#{node.ndb.user}", "#{node.ndb.user}" ]
+  members ["#{node.ndb.user}"]
+  append true
 end
+
 
 directory node.ndb.dir do
   owner node.ndb.user
@@ -45,7 +57,7 @@ link node.ndb.base_dir do
 end
 
 directory "#{node.ndb.scripts_dir}/util" do
-  owner node.mysql.run_as_user
+  owner node.ndb.user
   group node.ndb.user
   mode "755"
   action :create
@@ -53,7 +65,7 @@ directory "#{node.ndb.scripts_dir}/util" do
 end
 
 directory node.ndb.log_dir do
-  owner node.mysql.run_as_user
+  owner node.ndb.user
   group node.ndb.user
   mode "755"
   action :create
@@ -61,7 +73,7 @@ directory node.ndb.log_dir do
 end
 
 directory node.mysql.version_dir do
-  owner node.mysql.run_as_user
+  owner node.ndb.user
   group node.ndb.user
   mode "755"
   action :create
@@ -69,7 +81,7 @@ directory node.mysql.version_dir do
 end
 
 directory node.ndb.shared_folder do
-  owner node.mysql.run_as_user
+  owner node.ndb.user
   group node.ndb.user
   mode "755"
   action :create
@@ -134,7 +146,7 @@ fi
 # echo '0' > /proc/sys/vm/swappiness
 # echo 'vm.swappiness=0' >> /etc/sysctl.conf
 
-chown -R #{node.mysql.run_as_user} #{node.mysql.version_dir}
+chown -R #{node.ndb.user}:#{node.ndb.group} #{node.mysql.version_dir}
 EOF
   not_if { ::File.exists?( "#{node.mysql.version_dir}/bin/ndbd" ) }
 end
@@ -142,7 +154,7 @@ end
 
 
 link node.mysql.base_dir do
-  owner node.mysql.run_as_user
+  owner node.ndb.user
   group node.ndb.group
   to node.mysql.version_dir
 end

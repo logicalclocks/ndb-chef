@@ -3,7 +3,7 @@ Description = Mysql Server
 After = syslog.target network.target remote-fs.target
 
 [Service]
-User = <%= node.mysql.run_as_user %>
+User = <%= node.ndb.user %>
 PIDFile = <%= @pid_file %>
 ExecStart = <%= node.ndb.scripts_dir %>/mysql-server-start.sh
 ExecStop = <%= node.ndb.scripts_dir %>/mysql-server-stop.sh

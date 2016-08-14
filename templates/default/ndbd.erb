@@ -14,40 +14,38 @@
 ### END INIT INFO
 
 # Variables
-INIT_PROG=<%= "#{node.ndb.base_dir}/scripts/ndbd-init.sh" %>
-START_PROG=<%= "#{node.ndb.base_dir}/scripts/ndbd-start.sh" %>
-STOP_PROG=<%= "#{node.ndb.base_dir}/scripts/ndbd-stop.sh" %>
-RESTART_PROG=<%= "#{node.ndb.base_dir}/scripts/ndbd-restart.sh" %>
+INIT_PROG="<%= node.ndb.base_dir %>/scripts/ndbd-init.sh"
+START_PROG="<%= node.ndb.base_dir %>/scripts/ndbd-start.sh"
+STOP_PROG="<%= node.ndb.base_dir  %>/scripts/ndbd-stop.sh"
+RESTART_PROG="<%= node.ndb.base_dir %>/scripts/ndbd-restart.sh"
 
-RETVAL=0
+EXEC_WITH_USER="su <%= node.ndb.user %> -c"
+
 
 init() {
   echo "Executing : $INIT_PROG"
-  $INIT_PROG
-  return $?
+  $EXEC_WITH_USER $INIT_PROG
 }
 
 start() {
   echo "Executing : $START_PROG"
-  $START_PROG
-  return $?
+  $EXEC_WITH_USER $START_PROG
 }
 
 stop() {
   echo "Executing : $STOP_PROG"
-  $STOP_PROG
-  return $?
+  $EXEC_WITH_USER $STOP_PROG
 }
 
 restart() {
   echo "Executing : $RESTART_PROG"
-  $RESTART_PROG
-  return $?
+  $EXEC_WITH_USER $RESTART_PROG
 }
 
 status() {  
   ID=<%= @node_id %>
   PID_FILE=<%= "#{node.ndb.log_dir}/ndb_${ID}.pid" %> 
+  res = 0
   if [ -f $PID_FILE ] ; then
      PID=`cat $PID_FILE`
      kill -0 $PID
@@ -61,7 +59,6 @@ status() {
    echo "ndbd is not running"
   fi
   return $res
-
 }
 
 # user-supplied parameter to stop/start/restart process.
@@ -96,4 +93,4 @@ case "$1" in
   esac
 
 
-exit $RETVAL
+exit $?

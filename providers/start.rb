@@ -47,7 +47,7 @@ end
 action :flex do
 
   bash "flex-experiment" do
-    user "root"
+    user node.ndb.user
     code <<-EOH
         #{node.ndb.scripts_dir}/flexAsyncRun.sh
     EOH

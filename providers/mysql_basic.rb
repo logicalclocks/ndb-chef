@@ -6,7 +6,7 @@ ndb_waiter "wait_ndb_started" do
 end
 
 ndb_mysql_basic "mysqld_start_grants" do
-  wait_time 10
+  wait_time 20
   remove_mycnf 1
   action :wait_until_started
 end
@@ -18,11 +18,16 @@ exec= node.ndb.scripts_dir + "/mysql-client.sh"
 bash 'run_grants' do
     user node.ndb.user
     code <<-EOF
+     set -e
      export MYSQL_HOME=#{node.ndb.root_dir}
+     #{node.mysql.base_dir}/bin/mysql -u root --skip-password -S #{node.ndb.mysql_socket} -e "SELECT user FROM mysql.user WHERE user=\"#{node.mysql.user}\""
+     if [ $? != 0 ] ; then
+        exit 1
+     fi
      #{exec} -e "source #{grants_path}"
     EOF
     new_resource.updated_by_last_action(true)
-    not_if "#{node.mysql.base_dir}/bin/mysql -u root --skip-password -S #{node.ndb.mysql_socket} -e \"SELECT user FROM mysql.user WHERE user=\"#{node.mysql.user}\""
+#    not_if 
 #    not_if "#{node.mysql.base_dir}/bin/mysql -u root #{node.mysql.root.password.empty? ? '--skip-password' : '-p' }#{node.mysql.root.password} -S #{node.ndb.mysql_socket} -e \"SELECT user FROM mysql.user WHERE user=\"#{node.mysql.user}\""
 #    not_if "#{node.mysql.base_dir}/bin/mysql -u #{node.mysql.user} -p#{node.mysql.password} -h localhost -e \"SELECT user FROM mysql.user WHERE host LIKE '\%';\""
   end
@@ -33,17 +38,15 @@ action :wait_until_started do
 # mysql_install_db makes a copy of the my.cnf file in /etc/mysql. Remove it.
 # FC021 for the next line's new_resource.name attribute
 bash "remove_mycnf_#{new_resource.name}" do
-    user node.ndb.user
+    user "root"
     code <<-EOF
-     if [ -f /etc/mysql/my.cnf ] ; then
-         rm /etc/mysql/my.cnf  
-     fi
+      rm -f /etc/mysql/my.cnf  
     EOF
     only_if { new_resource.remove_mycnf == 1 }
 end
 
 bash 'wait_mysqld_started' do
-    user node.ndb.user
+    user "root"
     code <<-EOF
     set -e || set -o pipefail
     service mysqld restart
@@ -74,7 +77,7 @@ bash 'wait_mysqld_started' do
 
        export MYSQL_HOME=#{node.ndb.root_dir}
        cd #{node.mysql.base_dir}
-       ./bin/mysqld --defaults-file=#{node.ndb.root_dir}/my.cnf --initialize-insecure --explicit_defaults_for_timestamp
+       su #{node.ndb.user} -c "./bin/mysqld --defaults-file=#{node.ndb.root_dir}/my.cnf --initialize-insecure --explicit_defaults_for_timestamp"
 
        service mysqld start
        sleep new_resource.wait_time

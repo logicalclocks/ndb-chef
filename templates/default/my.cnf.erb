@@ -6,7 +6,7 @@
 default-character-set = utf8
 
 [mysqld]
-user           = <%= node.mysql.run_as_user %>
+user           = <%= node.ndb.user %>
 basedir         = <%= node.mysql.base_dir %>
 datadir         = <%= node.ndb.mysql_server_dir %>
 port            = <%= node.ndb.mysql_port %>

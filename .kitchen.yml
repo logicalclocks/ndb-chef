@@ -1,72 +1,57 @@
---- 
-driver_config: 
-  box: ubuntu-14.04
-  box_url: http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-14.04_chef-provisionerless.box
-driver_plugin: vagrant
-platforms: 
-  - 
-    attributes: 
-      private_ips: 
-        - "192.168.0.2"
-      public_ips: 
-        - "192.168.0.2"
-    driver_config: 
-      customize: 
-        memory: 2048
-      network: 
-        - 
-          - private_network
-          - 
-            ip: "192.168.0.2"
-    name: mgm
-    run_list: 
-      - "recipe[kagent::install]"
-      - "recipe[ndb::install]"
-      - "recipe[ndb::mgmd]"
-      - "recipe[ndb::ndbd]"
-  - 
-    attributes: 
-      private_ips: 
-        - "192.168.0.3"
-    driver_config: 
-      customize: 
-        memory: 2048
-      network: 
-        - 
-          - private_network
-          - 
-            ip: "192.168.0.3"
-    name: ndbd
-    run_list: 
-      - "recipe[kagent::install]"
-      - "recipe[ndb::install]"
-      - "recipe[ndb::ndbd]"
-      - "recipe[ndb::mysqld]"
-      - "recipe[ndb::memcached]"
-suites: 
-  - 
-    attributes: 
-      mysql: 
-        run_as_user: mysql
-      ndb: 
-        DataMemory: "66"
-        NoOfReplicas: 2
-        dir: /tmp
-        memcached: 
-          private_ips: 
-            - "192.168.0.3"
-        mgmd: 
-          private_ips: 
-            - "192.168.0.2"
-        mysql_port: 3399
-        mysql_socket: /tmp/mysql-alt.sock
-        mysqld: 
-          private_ips: 
-            - "192.168.0.3"
-        ndbd: 
-          private_ips: 
-            - "192.168.0.2"
-            - "192.168.0.3"
-      vagrant: "true"
-    name: default
-    run_list: ~
+---
+driver:
+  name: vagrant
+  customize:
+    memory: 2048
+    cpuexecutioncap: 90
+    cpus: 2
+    natdnshostresolver1: "on"
+    natdnsproxy1: "on"
+    nictype1: "virtio"
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-14.04
+#  - name: centos-7.0
+#  - name: ubuntu-15.04
+
+suites:
+  - name: default
+
+suites:
+  - name: default
+    run_list:
+      - recipe[kagent::install]
+      - recipe[ndb::install]
+      - recipe[ndb::mgmd]
+      - recipe[ndb::ndbd]
+      - recipe[ndb::mysqld]
+      - recipe[ndb::memcached]
+      - recipe[ndb::bench]
+    attributes:
+         ndb:
+            user: mysql
+            group: mysql
+            dir: "/tmp"
+            DataMemory: "111"
+            mgmd:
+               private_ips: ["10.0.2.15"]
+            ndbd:
+               private_ips: ["10.0.2.15"]
+            mysqld:
+               private_ips: ["10.0.2.15"]
+            memcached:
+               private_ips: ["10.0.2.15"]
+            private_ips: ["10.0.2.15"]
+            public_ips: ["10.0.2.15"]
+            mysql_port: 3399
+            mysql_socket: /tmp/mysql-alt.sock
+         kagent:
+            enabled: "false"
+            private_ips: ["10.0.2.15"]
+            public_ips: ["10.0.2.15"]
+         private_ips: ["10.0.2.15"]
+         public_ips: ["10.0.2.15"]
+         vagrant: "true"

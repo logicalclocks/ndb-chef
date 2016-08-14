@@ -58,7 +58,7 @@ when "rhel"
 end
 
 directory node.ndb.mysql_server_dir do
-  owner node.mysql.run_as_user
+  owner node.ndb.user
   group node.ndb.group
   mode "0755"
   action :create
@@ -74,7 +74,7 @@ for script in node.mysql.scripts
     source "#{script}.erb"
     owner node.ndb.user
     group node.ndb.group
-    mode 0775
+    mode 0751
     variables({
                 :node_id => found_id
               })
@@ -140,7 +140,7 @@ else # sytemd is true
 end
 
 template "mysql.cnf" do
-  owner node.mysql.run_as_user
+  owner node.ndb.user
   group node.ndb.group
   path "#{node.ndb.root_dir}/my.cnf"
   source "my-ndb.cnf.erb"
@@ -164,7 +164,7 @@ if "#{node.ndb.version}.#{node.ndb.majorVersion}".to_f >= 7.5
     ./bin/mysqld --defaults-file=#{node.ndb.root_dir}/my.cnf --initialize-insecure --explicit_defaults_for_timestamp
     touch #{node.ndb.mysql_server_dir}/.installed
     # sanity check to set ownership of files to 'mysql' user
-    chown -R #{node.mysql.run_as_user} #{node.ndb.mysql_server_dir}
+    chown -R #{node.ndb.user}:#{node.ndb.group} #{node.ndb.mysql_server_dir}
     EOF
   not_if { ::File.exists?( "#{node.ndb.mysql_server_dir}/.installed" ) }
   end
@@ -177,10 +177,10 @@ else
     export MYSQL_HOME=#{node.ndb.root_dir}
     # --force causes mysql_install_db to run even if DNS does not work. In that case, grant table entries that normally use host names will use IP addresses.
     cd #{node.mysql.base_dir}
-    ./scripts/mysql_install_db --user=#{node.mysql.run_as_user} --basedir=#{node.mysql.base_dir} --defaults-file=#{node.ndb.root_dir}/my.cnf --force 
+    ./scripts/mysql_install_db --user=#{node.ndb.user} --basedir=#{node.mysql.base_dir} --defaults-file=#{node.ndb.root_dir}/my.cnf --force 
     touch #{node.ndb.mysql_server_dir}/.installed
     # sanity check to set ownership of files to 'mysql' user
-    chown -R #{node.mysql.run_as_user} #{node.ndb.mysql_server_dir}
+    chown -R #{node.ndb.user} #{node.ndb.mysql_server_dir}
     EOF
   not_if { ::File.exists?( "#{node.ndb.mysql_server_dir}/.installed" ) }
   end
@@ -193,7 +193,7 @@ end
 grants_path = "#{Chef::Config.file_cache_path}/grants.sql"
 template grants_path do
   source File.basename(grants_path) + ".erb"
-  owner "root" 
+  owner node.ndb.user
   mode "0600"
   action :create
   variables({

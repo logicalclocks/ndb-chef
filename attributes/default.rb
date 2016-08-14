@@ -23,8 +23,8 @@ default.ndb.ndbd.port                           = 10000
 default.ndb.ip                                  = "10.0.2.15"
 
 default.ndb.loglevel                            = "notice"
-default.ndb.user                                = "root"
-default.ndb.group                               = "root"
+default.ndb.user                                = "mysql"
+default.ndb.group                               = "mysql"
 default.ndb.connectstring                       = ""
 
 default.ndb.DataMemory                          = "50"
@@ -126,9 +126,6 @@ default.mysql.jdbc_url                          = ""
 # MySQL Server Master-Slave replication binary log is enabled.
 default.mysql.replication_enabled               = "false"
 
-# Username that the mysqld is run as.
-default.mysql.run_as_user                       = "mysql"
-
 # This is the username/password for any mysql server (mysqld) started.
 # It is required by mysql clients to use the mysql server.
 default.mysql.user                              = "kthfs"
@@ -157,7 +154,7 @@ default.memcached.options                       = ";role=ndb-caching;usec_rtt=25
 #
 # default btsync ndb seeder_ip     = "default kagent dashboard_ip "
 default.btsync.ndb.leechers        = ['10.0.2.15']
-default.ndb.shared_folder            = "/tmp/ndb"
+default.ndb.shared_folder            = "/tmp/ndb-shared"
 
 # IP addresses of the mgm-server, ndbds must be overridden by role/recipe caller.
 default.ndb.public_ips               = [''] 

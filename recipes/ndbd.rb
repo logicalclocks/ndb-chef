@@ -56,7 +56,7 @@ for script in node.ndb.scripts
     source "#{script}.erb"
     owner node.ndb.user
     group node.ndb.group
-    mode 0655
+    mode 0751
     variables({ :node_id => found_id })
   end
 end 

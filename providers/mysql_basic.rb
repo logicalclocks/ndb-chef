@@ -20,14 +20,13 @@ bash 'run_grants' do
     code <<-EOF
      set -e
      export MYSQL_HOME=#{node.ndb.root_dir}
-     #{node.mysql.base_dir}/bin/mysql -u root --skip-password -S #{node.ndb.mysql_socket} -e "SELECT user FROM mysql.user WHERE user=\"#{node.mysql.user}\""
-     if [ $? != 0 ] ; then
-        exit 1
-     fi
+#     if [ $? != 0 ] ; then
+#        exit 1
+#     fi
      #{exec} -e "source #{grants_path}"
     EOF
     new_resource.updated_by_last_action(true)
-#    not_if 
+    not_if "#{node.mysql.base_dir}/bin/mysql -u root --skip-password -S #{node.ndb.mysql_socket} -e \"SELECT user FROM mysql.user WHERE user=\"#{node.mysql.user}\"\"", :user => "#{node.ndb.user}"
 #    not_if "#{node.mysql.base_dir}/bin/mysql -u root #{node.mysql.root.password.empty? ? '--skip-password' : '-p' }#{node.mysql.root.password} -S #{node.ndb.mysql_socket} -e \"SELECT user FROM mysql.user WHERE user=\"#{node.mysql.user}\""
 #    not_if "#{node.mysql.base_dir}/bin/mysql -u #{node.mysql.user} -p#{node.mysql.password} -h localhost -e \"SELECT user FROM mysql.user WHERE host LIKE '\%';\""
   end
@@ -87,7 +86,7 @@ bash 'wait_mysqld_started' do
          exit 1
     fi
     EOF
-    not_if "#{node.mysql.base_dir}/bin/mysqladmin -u root -S #{node.ndb.mysql_socket} status"
+    not_if "#{node.mysql.base_dir}/bin/mysqladmin -u root -S #{node.ndb.mysql_socket} status", :user => "#{node.ndb.user}"
   end
 
   Chef::Log.info "MySQL Server has started."

@@ -25,7 +25,7 @@ if node.ndb.enabled == "true"
 #     #{node.ndb.scripts_dir}/mysql-client.sh -e "SELECT CONCAT('Conversion ', IF(mysql.mysql_cluster_privileges_are_distributed(), 'succeeded', 'failed'), '.') AS Result;" | grep "Conversion succeeded" 
     EOF
     new_resource.updated_by_last_action(true)
-    not_if "#{node.ndb.scripts_dir}/mysql-client.sh -e \"SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME LIKE 'mysql_cluster%';\"  | grep mysql_cluster"
+    not_if "#{node.ndb.scripts_dir}/mysql-client.sh -e \"SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME LIKE 'mysql_cluster%'\"  | grep mysql_cluster", :user => "#{node.ndb.user}"
   end
 
 end
@@ -59,7 +59,8 @@ if node.ndb.enabled == "true"
      #{node.ndb.scripts_dir}/mysql-client.sh < #{memcached_sql}
      touch #{memcd}
    EOF
-   not_if { ::File.exists?( "#{memcd}" ) }
+#   not_if { ::File.exists?( "#{memcd}, , :user => #{node.ndb.user}" ) }
+   not_if "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='ndbmemcache' | grep ndbmemcache", :user => "#{node.ndb.user}"
     new_resource.updated_by_last_action(true)
   end
 

@@ -18,7 +18,6 @@ START_PROG=<%= "#{node.ndb.scripts_dir}/mysql-server-start.sh" %>
 STOP_PROG=<%= "#{node.ndb.scripts_dir}/mysql-server-stop.sh" %>
 RESTART_PROG=<%= "#{node.ndb.scripts_dir}/mysql-server-restart.sh" %>
 PIDFILE=<%= @pid_file %>
-
 EXEC_WITH_USER="su <%= node.ndb.user %> -c"
 
 init() {

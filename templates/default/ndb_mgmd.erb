@@ -18,8 +18,9 @@
 START_PROG="<%= node.ndb.base_dir %>/scripts/mgm-server-start.sh" 
 STOP_PROG="<%= node.ndb.base_dir %>/scripts/mgm-server-stop.sh"
 RESTART_PROG="<%= node.ndb.base_dir %>/scripts/mgm-server-restart.sh"
-
 EXEC_WITH_USER="su <%= node.ndb.user %> -c"
+ID=<%= @node_id %>
+PID_FILE=<%= "#{node.ndb.log_dir}/ndb_${ID}.pid" %> 
 
 start() {
   echo "Executing: $START_PROG"
@@ -29,8 +30,6 @@ start() {
 
 stop() {
   $EXEC_WITH_USER $STOP_PROG
-
-  PID_FILE="<%= node.ndb.log_dir %>/ndb_<%= node.mgm.id %>.pid" 
   PROCESS_ID=`cat $PID_FILE`
   echo "Shutting down"
   kill $PROCESS_ID
@@ -54,15 +53,12 @@ restart() {
   return $?
 }
 
-status() {  
-  ID=<%= @node_id %>
-  PID_FILE=<%= "#{node.ndb.log_dir}/ndb_${ID}.pid" %> 
+status() { 
+  res=1 
   if [ -f $PID_FILE ] ; then
      PID=`cat $PID_FILE`
      kill -0 $PID
      res=$?
-  else 
-     res=1
   fi
   if [ $res -eq 0 ] ; then
     echo "ndb_mgmd($PID) is running"

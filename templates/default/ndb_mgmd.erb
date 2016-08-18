@@ -29,7 +29,7 @@ start() {
 }
 
 stop() {
-  $EXEC_WITH_USER $STOP_PROG
+  $STOP_PROG
   PROCESS_ID=`cat $PID_FILE`
   echo "Shutting down"
   kill $PROCESS_ID

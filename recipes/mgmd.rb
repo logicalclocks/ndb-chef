@@ -1,4 +1,4 @@
-equire File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
+require File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
 
 
 case node.platform

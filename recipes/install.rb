@@ -39,8 +39,6 @@ directory node.ndb.dir do
   not_if { File.directory?("#{node.ndb.dir}") }
 end
 
-
-
 directory node.ndb.version_dir do
   owner node.ndb.user
   group node.ndb.group

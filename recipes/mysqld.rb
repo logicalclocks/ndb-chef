@@ -212,13 +212,10 @@ if node.ndb.enabled == "true"
   if node.kagent.enabled == "true"
     kagent_config service_name do
       service "NDB" # #{found_id}
-      start_script "#{node.ndb.scripts_dir}/mysql-server-start.sh"
-      stop_script  "#{node.ndb.scripts_dir}/mysql-server-stop.sh"
       log_file "#{node.ndb.log_dir}/mysql_#{found_id}_out.log"
-      pid_file "#{node.ndb.log_dir}/mysql_#{found_id}.pid"
-      command "mysql"
-      command_user node.ndb.user 
-      command_script "#{node.ndb.scripts_dir}/mysql-client.sh"
+#      command "mysql"
+#      command_user node.ndb.user 
+#      command_script "#{node.ndb.scripts_dir}/mysql-client.sh"
     end
   end
 end

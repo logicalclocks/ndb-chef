@@ -120,14 +120,12 @@ if node.kagent.enabled == "true"
 
     kagent_config service_name do
       service "NDB"
-      start_script "#{node.ndb.scripts_dir}/mgm-server-start.sh"
-      stop_script  "#{node.ndb.scripts_dir}/mgm-server-stop.sh"
       log_file "#{node.ndb.log_dir}/ndb_#{found_id}_out.log"
       pid_file "#{node.ndb.log_dir}/ndb_#{found_id}.pid"
       config_file "#{node.ndb.root_dir}/config.ini"
-      command "ndb_mgm"
-      command_user "root"
-      command_script "#{node.ndb.scripts_dir}/mgm-client.sh"
+#      command "ndb_mgm"
+#      command_user "root"
+#      command_script "#{node.ndb.scripts_dir}/mgm-client.sh"
     end
 end
 

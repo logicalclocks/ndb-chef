@@ -118,10 +118,7 @@ if node.kagent.enabled == "true"
 
   kagent_config "memcached" do
    service "NDB"
-   start_script "#{node.ndb.scripts_dir}/memcached-start.sh"
-   stop_script  "#{node.ndb.scripts_dir}/memcached-stop.sh"
    log_file "#{node.ndb.log_dir}/memcached_#{found_id}.out.log"
-   pid_file "#{node.ndb.log_dir}/memcached_#{found_id}.pid"
  end
 
 end

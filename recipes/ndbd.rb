@@ -137,11 +137,7 @@ if node.kagent.enabled == "true"
 
   kagent_config service_name do
     service "NDB" # #{found_id}
-    start_script "#{node.ndb.scripts_dir}/ndbd-start.sh"
-    stop_script "#{node.ndb.scripts_dir}/ndbd-stop.sh"
-    init_script "#{node.ndb.scripts_dir}/ndbd-init.sh"
     log_file "#{node.ndb.log_dir}/ndb_#{found_id}_out.log"
-    pid_file "#{node.ndb.log_dir}/ndb_#{found_id}.pid"
   end
 
 end

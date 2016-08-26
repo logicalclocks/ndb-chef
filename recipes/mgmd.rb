@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
+equire File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
 
 
 case node.platform
@@ -121,7 +121,6 @@ if node.kagent.enabled == "true"
     kagent_config service_name do
       service "NDB"
       log_file "#{node.ndb.log_dir}/ndb_#{found_id}_out.log"
-      pid_file "#{node.ndb.log_dir}/ndb_#{found_id}.pid"
       config_file "#{node.ndb.root_dir}/config.ini"
 #      command "ndb_mgm"
 #      command_user "root"

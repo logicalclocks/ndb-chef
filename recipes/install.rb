@@ -8,23 +8,12 @@ user node.ndb.user do
   supports :manage_home => true
   home "/home/#{node.ndb.user}"
   action :create
-  system true
   shell "/bin/bash"
   not_if "getent passwd #{node.ndb.user}"
 end
 
-# user node.ndb.user do
-#   supports :manage_home => true
-#   home "/home/#{node.ndb.user}"
-#   action :create
-#   system true
-#   shell "/bin/bash"
-#   not_if "getent passwd #{node.ndb.user}"
-# end
-
 group node.ndb.group do
   action :modify
-#  members ["#{node.ndb.user}", "#{node.ndb.user}" ]
   members ["#{node.ndb.user}"]
   append true
 end

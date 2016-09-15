@@ -5,10 +5,10 @@
 #end
 
 user node.ndb.user do
-  supports :manage_home => true
   home "/home/#{node.ndb.user}"
   action :create
   shell "/bin/bash"
+  manage_home true
   not_if "getent passwd #{node.ndb.user}"
 end
 

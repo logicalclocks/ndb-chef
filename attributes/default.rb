@@ -153,29 +153,29 @@ default.memcached.options                       = ";role=ndb-caching;usec_rtt=25
 # BitTorrent settings for copying NDB binaries
 #
 # default btsync ndb seeder_ip     = "default kagent dashboard_ip "
-default.btsync.ndb.leechers        = ['10.0.2.15']
-default.ndb.shared_folder            = "/tmp/ndb-shared"
+default.btsync.ndb.leechers                     = ['10.0.2.15']
+default.ndb.shared_folder                       = "/tmp/ndb-shared"
 
 # IP addresses of the mgm-server, ndbds must be overridden by role/recipe caller.
-default.ndb.public_ips               = [''] 
-default.ndb.private_ips              = [''] 
-default.ndb.mgmd.public_ips        = [''] 
-default.ndb.mgmd.private_ips       = [''] 
-default.ndb.ndbd.public_ips        = ['']
-default.ndb.ndbd.private_ips       = ['']
-default.ndb.mysqld.public_ips      = ['']
-default.ndb.mysqld.private_ips     = ['']
-default.ndb.memcached.public_ips   = ['']
-default.ndb.memcached.private_ips  = ['']
+default.ndb.public_ips                          = [''] 
+default.ndb.private_ips                         = [''] 
+default.ndb.mgmd.public_ips                     = [''] 
+default.ndb.mgmd.private_ips                    = [''] 
+default.ndb.ndbd.public_ips                     = ['']
+default.ndb.ndbd.private_ips                    = ['']
+default.ndb.mysqld.public_ips                   = ['']
+default.ndb.mysqld.private_ips                  = ['']
+default.ndb.memcached.public_ips                = ['']
+default.ndb.memcached.private_ips               = ['']
 
-default.ndb.ndbapi.addrs           = ['']
+default.ndb.ndbapi.addrs                        = ['']
 
 #default.ndb.dbt2_url                 = "http://downloads.mysql.com/source/dbt2-0.37.50.3.tar.gz"
 #default.ndb.sysbench_url             = "http://downloads.mysql.com/source/sysbench-0.4.12.5.tar.gz"
 
-default.ndb.mgmd.public_key        = ""
-default.ndb.aws_enhanced_networking  = "false"
+default.ndb.mgmd.public_key                     = ""
+default.ndb.aws_enhanced_networking             = "false"
 
-default.ndb.systemd              = node.systemd
+default.ndb.systemd                             = node.systemd
 
-node.default.kagent.enabled          = "false"
+node.default.kagent.enabled                     = "false"

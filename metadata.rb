@@ -9,6 +9,7 @@ source_url       "https://github.com/hopshadoop/ndb-chef"
 
 
 depends           "kagent"
+depends           "ulimit"
 
 recipe            "ndb::install", "Installs MySQL Cluster binaries"
 

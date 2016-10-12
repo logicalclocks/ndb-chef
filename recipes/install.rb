@@ -176,3 +176,32 @@ if "#{node.ndb.aws_enhanced_networking}" == "true"
      end
 
 end
+
+
+#
+# Nice values are -20..20. Higher values get less CPU (they are 'nicer').
+#
+
+ulimit_domain node.ndb.user do
+  rule do
+    item :priority
+    type :hard
+    value -19
+  end
+  rule do
+    item :priority
+    type :soft
+    value -19
+  end
+  rule do
+    item :nice
+    type :hard
+    value -19
+  end
+  rule do
+    item :nice
+    type :soft
+    value -19
+  end
+end
+

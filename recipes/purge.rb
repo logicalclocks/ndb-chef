@@ -1,3 +1,10 @@
+
+include_recipe "mgmd-purge.rb"
+include_recipe "ndbd-purge.rb"
+include_recipe "mysqld-purge.rb"
+include_recipe "memcached-purge.rb"
+
+
 # Stop all the service and remove all services
 # TODO - should rename 'ndbd' as 'ndbmtd'. pkill wont work here fo it
 daemons = %w{ndb_mgmd ndbdmtd mysqld memcached}
@@ -83,3 +90,4 @@ package "libaio remove" do
  ignore_failure true
  action :purge
 end
+

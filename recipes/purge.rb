@@ -1,10 +1,4 @@
 
-include_recipe "mgmd-purge.rb"
-include_recipe "ndbd-purge.rb"
-include_recipe "mysqld-purge.rb"
-include_recipe "memcached-purge.rb"
-
-
 # Stop all the service and remove all services
 # TODO - should rename 'ndbd' as 'ndbmtd'. pkill wont work here fo it
 daemons = %w{ndb_mgmd ndbdmtd mysqld memcached}
@@ -35,12 +29,19 @@ daemons.each { |d|
   end
 }
 
+directory node.ndb.mysql_server_dir do
+  recursive true
+  action :delete
+  ignore_failure true
+end
+
 # Remove the MySQL binaries and MySQL Cluster data directories
 directory node.ndb.root_dir do
   recursive true
   action :delete
   ignore_failure true
 end
+
 
 # TODO - don't know if wildcards are supported for deleting files/directories
 #directory "#{node.mysql.base_dir}*" do

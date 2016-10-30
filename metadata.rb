@@ -25,8 +25,6 @@ recipe            "ndb::memcached-purge", "Removes a memcached Server connected 
 
 recipe            "ndb::purge", "Removes all data and all binaries related to a MySQL Cluster installation"
 
-recipe            "ndb::localhost", "Installs mgmd, ndbd, mysqld on the current host"
-
 
 supports 'ubuntu', ">= 12.04"
 supports 'rhel',   ">= 7.0"

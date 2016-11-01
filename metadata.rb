@@ -113,6 +113,10 @@ attribute "ndb/MaxNoOfConcurrentIndexOperations",
           :description => "Increase for higher throughput at the cost of more memory",
           :type => 'string'
 
+attribute "ndb/MaxNoOfConcurrentScans",
+          :description => "Increase for higher throughput at the cost of more memory",
+          :type => 'string'
+
 attribute "ndb/MaxNoOfConcurrentOperations",
           :description => "Increase for higher throughput at the cost of more memory",
           :type => 'string'

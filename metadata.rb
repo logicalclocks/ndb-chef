@@ -283,6 +283,10 @@ attribute "ndb/MaxNoOfConcurrentTransactions",
           :type => 'string'
 
 
+attribute "ndb/mgmd/private_ips",
+          :description =>  "Ips for ndb_mgmds",
+          :type => 'string'
+
 # attribute "btsync/ndb/seeder_secret",
 # :display_name => "Ndb seeder's random secret key.",
 # :description => "20 chars or more (normally 32 chars)",

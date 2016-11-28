@@ -20,9 +20,9 @@ if node.ndb.enabled == "true"
     code <<-EOF
       #{node.ndb.scripts_dir}/mysql-client.sh < #{distusers}
      # Test that it works
-#     #{node.ndb.scripts_dir}/mysql-client.sh -e "CALL mysql.mysql_cluster_move_privileges();" 
+     #{node.ndb.scripts_dir}/mysql-client.sh -e "CALL mysql.mysql_cluster_move_privileges();" 
      echo "Verifying successful conversion of tables.."
-#     #{node.ndb.scripts_dir}/mysql-client.sh -e "SELECT CONCAT('Conversion ', IF(mysql.mysql_cluster_privileges_are_distributed(), 'succeeded', 'failed'), '.') AS Result;" | grep "Conversion succeeded" 
+     #{node.ndb.scripts_dir}/mysql-client.sh -e "SELECT CONCAT('Conversion ', IF(mysql.mysql_cluster_privileges_are_distributed(), 'succeeded', 'failed'), '.') AS Result;" | grep "Conversion succeeded" 
     EOF
     new_resource.updated_by_last_action(true)
     not_if "#{node.ndb.scripts_dir}/mysql-client.sh -e \"SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME LIKE 'mysql_cluster%'\"  | grep mysql_cluster", :user => "#{node.ndb.user}"

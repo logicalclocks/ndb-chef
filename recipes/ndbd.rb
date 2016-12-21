@@ -78,7 +78,9 @@ template "/etc/init.d/#{service_name}" do
   group "root"
   mode 0754
   variables({ :node_id => found_id })
-  notifies :enable, "service[#{service_name}]"
+if node.services.enabled == "true"
+    notifies :enable, resources(:service => service_name)
+end
   notifies :restart,"service[#{service_name}]", :immediately
 end
 
@@ -104,7 +106,9 @@ template systemd_script do
     mode 0754
     cookbook 'ndb'
     variables({ :node_id => found_id })
-    notifies :enable, "service[#{service_name}]"
+if node.services.enabled == "true"
+    notifies :enable, resources(:service => service_name)
+end
     notifies :restart, "service[#{service_name}]", :immediately
 end
 

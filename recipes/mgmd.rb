@@ -66,7 +66,9 @@ if node.ndb.systemd != "true"
     group "root"
     mode 0754
     variables({ :node_id => found_id })
-    notifies :enable, "service[#{service_name}]"
+if node.services.enabled == "true"
+    notifies :enable, resources(:service => service_name)
+end
   end
 
 else # systemd == true
@@ -89,7 +91,9 @@ else # systemd == true
     mode 0754
     cookbook 'ndb'
     variables({ :node_id => found_id })
-    notifies :enable, "service[#{service_name}]"
+if node.services.enabled == "true"
+    notifies :enable, resources(:service => service_name)
+end
   end
 
   ndb_start "reload_mgmd" do

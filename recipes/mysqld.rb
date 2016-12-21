@@ -149,7 +149,9 @@ template "mysql.cnf" do
               :mysql_id => found_id,
               :my_ip => my_ip
             })
-  notifies :enable, "service[#{service_name}]"
+if node.services.enabled == "true"
+    notifies :enable, resources(:service => service_name)
+end
 end
 
 

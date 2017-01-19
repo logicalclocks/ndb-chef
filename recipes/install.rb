@@ -59,6 +59,14 @@ directory node.ndb.log_dir do
   recursive true
 end
 
+directory node.ndb.BackupDataDir do
+  owner node.ndb.user
+  group node.ndb.user
+  mode "750"
+  action :create
+end
+
+
 directory node.mysql.version_dir do
   owner node.ndb.user
   group node.ndb.user

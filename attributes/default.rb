@@ -100,6 +100,8 @@ default.ndb.data_dir                            = "#{node.ndb.root_dir}/ndb_data
 default.ndb.version_dir                         = "#{node.ndb.root_dir}/ndb-#{versionStr}"
 default.ndb.base_dir                            = "#{node.ndb.root_dir}/ndb"
 
+default.ndb.BackupDataDir                       = "#{node.ndb.root_dir}/ndb/backups"
+
 default.ndb.scripts_dir                         = "#{node.ndb.root_dir}/ndb/scripts"
 default.ndb.mgm_dir                             = "#{node.ndb.root_dir}/mgmd"
 

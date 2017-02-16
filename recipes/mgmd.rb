@@ -34,14 +34,44 @@ for mgm in node.ndb.mgmd.private_ips
   id += 1
 end 
 Chef::Log.info "Found ID IS: #{found_id}"
+Chef::Log.info "Backup with cron is: #{node.ndb.cron_backup}"
+
 if found_id == -1
   raise "Could not find matching IP address #{my_ip} in the list of mgmd nodes: " + node.ndb.mgmd.private_ips.join(",")
 end
+
+#
+# Install cron backup job on the node with the first ndb_mgmd
+#
+if found_id == node.mgm.id && "#{node.ndb.cron_backup}" == "true"
+
+  weekday = '*'
+  if node.ndb.backup_frequency == "weekly"
+    weekday = '1'
+  end
+  hour = "#{node.ndb.backup_time}".match(":").pre_match
+  minute = "#{node.ndb.backup_time}".match(":").post_match
+
+  cron 'ndb_backup' do
+    action :create
+    minute minute
+    hour hour
+    weekday weekday
+    user node.ndb.user
+    command %W{
+    #{node.ndb.scripts_dir}/backup-start.sh
+  }.join(' ')
+  end
+  
+  
+end
+
 
 for script in node.mgm.scripts do
   template "#{node.ndb.scripts_dir}/#{script}" do
     source "#{script}.erb"
     owner node.ndb.user
+
     group node.ndb.group
     mode 0751
     variables({ :node_id => found_id })

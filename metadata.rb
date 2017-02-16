@@ -274,6 +274,19 @@ attribute "ndb/dir",
           :description =>  "Directory in which to install mysql-cluster",
           :type => 'string'
 
+attribute "ndb/cron_backup",
+          :description =>  "Default is 'false'. To turn on, set to 'true'",
+          :type => 'string'
+
+attribute "ndb/backup_frequency",
+          :description =>  "Options are 'daily', 'weekly'. Default is 'daily'",
+          :type => 'string'
+
+attribute "ndb/backup_time",
+          :description =>  "Time in 24-hour clock of when to make the regular backup. Default: 03:00 (in the morning)",
+          :type => 'string'
+
+
 attribute "ndb/shared_folder",
           :description =>  "Directory in which to download mysql-cluster",
           :type => 'string'

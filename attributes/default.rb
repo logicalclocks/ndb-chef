@@ -177,6 +177,10 @@ default.ndb.ndbapi.addrs                        = ['']
 default.ndb.mgmd.public_key                     = ""
 default.ndb.aws_enhanced_networking             = "false"
 
+default.ndb.cron_backup                         = "false"
+default.ndb.backup_frequency                    = "daily" # 'daily', 'weekly',
+default.ndb.backup_time                         = "03:00" 
+
 default.ndb.systemd                             = node.systemd
 
 node.default.kagent.enabled                     = "false"

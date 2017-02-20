@@ -124,6 +124,8 @@ default.mysql.version_dir                       = "#{node.mysql.base_dir}-" + ve
 
 default.mysql.jdbc_url                          = ""
 
+default.mysql.localhost                         = "false"
+
 # MySQL Server Master-Slave replication binary log is enabled.
 default.mysql.replication_enabled               = "false"
 

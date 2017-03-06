@@ -1,11 +1,12 @@
 
-#group node.ndb.group do
-#  action :create
-#  not_if "getent group #{node.ndb.group}"
-#end
+group node.ndb.group do
+ action :create
+ not_if "getent group #{node.ndb.group}"
+end
 
 user node.ndb.user do
   home "/home/#{node.ndb.user}"
+  gid node.ndb.group
   action :create
   shell "/bin/bash"
   manage_home true

@@ -24,7 +24,6 @@ directory node.ndb.dir do
   group node.ndb.group
   mode "755"
   action :create
-  recursive true
   not_if { File.directory?("#{node.ndb.dir}") }
 end
 
@@ -33,7 +32,6 @@ directory node.ndb.version_dir do
   group node.ndb.group
   mode "755"
   action :create
-  recursive true
 end
 
 
@@ -48,7 +46,6 @@ directory "#{node.ndb.scripts_dir}/util" do
   group node.ndb.user
   mode "755"
   action :create
-  recursive true
 end
 
 directory node.ndb.log_dir do
@@ -56,7 +53,6 @@ directory node.ndb.log_dir do
   group node.ndb.user
   mode "755"
   action :create
-  recursive true
 end
 
 directory node.ndb.BackupDataDir do
@@ -72,7 +68,6 @@ directory node.mysql.version_dir do
   group node.ndb.user
   mode "755"
   action :create
-  recursive true
 end
 
 directory node.ndb.shared_folder do
@@ -80,12 +75,11 @@ directory node.ndb.shared_folder do
   group node.ndb.user
   mode "755"
   action :create
-  recursive true
 end
 
-package_url = node.ndb.package_url
-Chef::Log.info "Downloading mysql cluster binaries from #{package_url}"
-base_package_filename =  File.basename(node.ndb.package_url)
+url = node.ndb.url
+Chef::Log.info "Downloading mysql cluster binaries from #{url}"
+base_package_filename =  File.basename(node.ndb.url)
 Chef::Log.info "Into file #{base_package_filename}"
 base_package_dirname =  File.basename(base_package_filename, ".tar.gz")
 ndb_package_dirname = "/tmp/#{base_package_dirname}"
@@ -96,7 +90,7 @@ Chef::Log.info "You should find mysql cluster binaries it in:  #{cached_package_
 # TODO - HTTP Proxy settings
 remote_file cached_package_filename do
 #  checksum node.ndb.checksum
-  source package_url
+  source url
   mode 0755
   action :create
 end

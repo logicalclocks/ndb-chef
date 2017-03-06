@@ -34,7 +34,7 @@ supports 'centos', ">= 7.0"
 # Required Attributes
 #
 
-attribute "ndb/package_url",
+attribute "ndb/url",
           :description => "Download URL for MySQL Cluster binaries",
           :type => 'string'
 
@@ -80,10 +80,6 @@ attribute "mysql/password",
           :description => "Password for hop mysql user",
           :required => "required",
           :type => 'string'
-
-#
-# Optional Parameters/Attributes
-#
 
 attribute "mysql/dir",
           :description => "Directory in which to install MySQL Binaries",

@@ -19,7 +19,6 @@ directory node.ndb.mgm_dir do
   owner node.ndb.user
   group node.ndb.user
   mode "755"
-  recursive true
 end
 
 found_id=-1

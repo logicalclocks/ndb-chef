@@ -62,7 +62,6 @@ directory node.ndb.mysql_server_dir do
   group node.ndb.group
   mode "0755"
   action :create
-  recursive true  
 end
 
 my_ip = my_private_ip()

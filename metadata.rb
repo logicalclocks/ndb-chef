@@ -85,6 +85,10 @@ attribute "mysql/dir",
           :description => "Directory in which to install MySQL Binaries",
           :type => 'string'
 
+attribute "mysql/localhost",
+          :description => "MySQL server binds to localhost (not a public/private network interface)",
+          :type => 'string'
+
 attribute "mysql/replication_enabled",
           :description => "Enable replication for the mysql server",
           :type => 'string'

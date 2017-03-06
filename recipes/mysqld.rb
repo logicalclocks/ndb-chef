@@ -138,6 +138,11 @@ else # sytemd is true
 
 end
 
+mysql_ip = my_ip
+if node.mysql.localhost == "true"
+  mysql_ip = "localhost"
+end
+
 template "mysql.cnf" do
   owner node.ndb.user
   group node.ndb.group
@@ -146,7 +151,7 @@ template "mysql.cnf" do
   mode "0644"
   variables({
               :mysql_id => found_id,
-              :my_ip => my_ip
+              :my_ip => mysql_ip
             })
 if node.services.enabled == "true"
     notifies :enable, resources(:service => service_name)

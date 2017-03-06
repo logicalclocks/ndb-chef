@@ -34,6 +34,7 @@ done
 echo "Initializing Data Node <%= @node_id %>."
 echo ""
 
-su <%= node.ndb.user %> -c "<%= node.mysql.base_dir %>/bin/ndbmtd -c $MGM_CONN --initial --ndb-nodeid=<%= @node_id %>"
+#su <%= node.ndb.user %> -c "<%= node.mysql.base_dir %>/bin/ndbmtd -c $MGM_CONN --initial --ndb-nodeid=<%= @node_id %>"
+<%= node.mysql.base_dir %>/bin/ndbmtd -c $MGM_CONN --initial --ndb-nodeid=<%= @node_id %>
 RES=`echo $?`
 exit 

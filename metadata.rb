@@ -304,6 +304,18 @@ attribute "ndb/mgmd/private_ips",
           :description =>  "Ips for ndb_mgmds",
           :type => 'array'
 
+attribute "ndb/mysqld/private_ips",
+          :description =>  "Ips for mysql servers",
+          :type => 'array'
+
+attribute "ndb/ndbd/private_ips",
+          :description =>  "Ips for ndb data nodes",
+          :type => 'array'
+
+attribute "install/dir",
+          :description => "Set to a base directory under which we will install.",
+          :type => "string"
+
 # attribute "btsync/ndb/seeder_secret",
 # :display_name => "Ndb seeder's random secret key.",
 # :description => "20 chars or more (normally 32 chars)",

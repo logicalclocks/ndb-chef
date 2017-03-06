@@ -92,7 +92,7 @@ default.mysql.scripts          = %w{ get-mysql-socket.sh get-mysql-port.sh mysql
 default.memcached.scripts      = %w{ memcached-start.sh memcached-stop.sh memcached-restart.sh }
 
 
-default.ndb.dir                                 = node.install.dir.empty? ? node.install.dir : "/var/lib"
+default.ndb.dir                                 = node.install.dir.empty? ? "/var/lib" : node.install.dir
 default.ndb.root_dir                            = "#{node.ndb.dir}/mysql-cluster"
 default.ndb.log_dir                             = "#{node.ndb.root_dir}/log"
 default.ndb.data_dir                            = "#{node.ndb.root_dir}/ndb_data"

@@ -49,6 +49,13 @@ link node.ndb.base_dir do
   to node.ndb.version_dir
 end
 
+directory node.ndb.scripts_dir do
+  owner node.ndb.user
+  group node.ndb.user
+  mode "750"
+  action :create
+end
+
 directory "#{node.ndb.scripts_dir}/util" do
   owner node.ndb.user
   group node.ndb.user

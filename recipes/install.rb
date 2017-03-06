@@ -33,7 +33,6 @@ directory node.ndb.root_dir do
   group node.ndb.group
   mode "750"
   action :create
-  not_if { File.directory?("#{node.ndb.dir}") }
 end
 
 directory node.ndb.version_dir do

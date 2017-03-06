@@ -22,7 +22,6 @@ directory node.ndb.data_dir do
   group node.ndb.group
   mode "755"
   action :create
-  recursive true
 end
 
 my_ip = my_private_ip()
@@ -47,7 +46,6 @@ directory "#{node.ndb.data_dir}/#{found_id}" do
   group node.ndb.group
   mode "755"
   action :create
-  recursive true
 end
 
 

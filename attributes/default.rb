@@ -115,7 +115,7 @@ default.ndb.num_ndb_slots_per_client            = 1
 default.ndb.wait_startup                        = "3600"
 
 # Base directory for MySQL binaries
-default.mysql.dir                               = "/usr/local"
+default.mysql.dir                               = node.install.dir.empty? ? "/usr/local" : node.install.dir
 # Symbolic link to the current versioned mysql directory
 default.mysql.base_dir                          = "#{node.mysql.dir}/mysql"
 # Concrete directory with mysql binaries for a specific mysql version

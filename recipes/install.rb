@@ -81,7 +81,7 @@ end
 directory node.mysql.version_dir do
   owner node.ndb.user
   group node.ndb.user
-  mode "750"
+  mode "755"
   action :create
 end
 

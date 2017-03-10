@@ -31,14 +31,14 @@ end
 directory node.ndb.root_dir do
   owner node.ndb.user
   group node.ndb.group
-  mode "750"
+  mode "755"
   action :create
 end
 
 directory node.ndb.version_dir do
   owner node.ndb.user
   group node.ndb.group
-  mode "750"
+  mode "755"
   action :create
 end
 
@@ -52,14 +52,14 @@ end
 directory node.ndb.scripts_dir do
   owner node.ndb.user
   group node.ndb.user
-  mode "750"
+  mode "755"
   action :create
 end
 
 directory "#{node.ndb.scripts_dir}/util" do
   owner node.ndb.user
   group node.ndb.user
-  mode "750"
+  mode "755"
   action :create
 end
 
@@ -81,14 +81,14 @@ end
 directory node.mysql.version_dir do
   owner node.ndb.user
   group node.ndb.user
-  mode "750"
+  mode "755"
   action :create
 end
 
 directory node.ndb.shared_folder do
   owner node.ndb.user
   group node.ndb.user
-  mode "750"
+  mode "755"
   action :create
 end
 

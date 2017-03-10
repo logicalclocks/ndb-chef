@@ -316,6 +316,10 @@ attribute "install/dir",
           :description => "Set to a base directory under which we will install.",
           :type => "string"
 
+attribute "install/user",
+          :description => "User to install the services as",
+          :type => "string"
+
 # attribute "btsync/ndb/seeder_secret",
 # :display_name => "Ndb seeder's random secret key.",
 # :description => "20 chars or more (normally 32 chars)",

@@ -141,9 +141,9 @@ touch /tmp/.ndb_downloaded
 
 tar -xzf #{cached_package_filename} -C /tmp
 mv #{ndb_package_dirname}/* #{node.mysql.version_dir}
-if [ -L #{node.mysql.base_dir}  ; then
- rm -rf #{node.mysql.base_dir}
-fi
+# if [ -L #{node.mysql.base_dir}  ; then
+#  rm -rf #{node.mysql.base_dir}
+# fi
 
 # http://www.slideshare.net/Severalnines/severalnines-my-sqlclusterpt2013
 # TODO: If binding threads to CPU, run the following:
@@ -154,7 +154,6 @@ chown -R #{node.ndb.user}:#{node.ndb.group} #{node.mysql.version_dir}
 EOF
   not_if { ::File.exists?( "#{node.mysql.version_dir}/bin/ndbd" ) }
 end
-
 
 
 link node.mysql.base_dir do

@@ -65,15 +65,16 @@ if found_id == node.mgm.id && "#{node.ndb.cron_backup}" == "true"
   
 end
 
-
+datanodes= node.ndb.ndbd.private_ips.join(" ")
 for script in node.mgm.scripts do
   template "#{node.ndb.scripts_dir}/#{script}" do
     source "#{script}.erb"
     owner node.ndb.user
-
     group node.ndb.group
     mode 0751
-    variables({ :node_id => found_id })
+    variables({ :node_id => found_id,
+        :datanodes => datanodes,
+    })
   end
 end 
 

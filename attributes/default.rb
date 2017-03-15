@@ -61,7 +61,7 @@ default.ndb.TotalSendBufferMemory               = "4M"
 # 0, in which case the effective overload limit is calculated as SendBufferMemory * 0.8 for a given connection. 
 default.ndb.OverloadLimit                       = "0"
 # set to several MBs to protect the cluster against misbehaving API nodes that use excess send memory and thus cause failures in communications internally in the NDB kernel.
-default.ndb.MaxNoOfConcurrentScans              = "1000"
+default.ndb.MaxNoOfConcurrentScans              = "500"
 default.ndb.MaxNoOfConcurrentIndexOperations    = "30000"
 default.ndb.MaxNoOfConcurrentOperations         = "200000"
 default.ndb.MaxNoOfFiredTriggers                = "4000"

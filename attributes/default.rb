@@ -156,7 +156,6 @@ default.memcached.options                       = ";role=ndb-caching;usec_rtt=25
 #
 # default btsync ndb seeder_ip     = "default kagent dashboard_ip "
 default.btsync.ndb.leechers                     = ['10.0.2.15']
-default.ndb.shared_folder                       = "/tmp/ndb-shared"
 
 # IP addresses of the mgm-server, ndbds must be overridden by role/recipe caller.
 default.ndb.public_ips                          = [''] 

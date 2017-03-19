@@ -96,7 +96,7 @@ end
 
 package_url = node.ndb.package_url
 base_package_filename =  File.basename(node.ndb.package_url)
-cached_package_filename = "#{node.ndb.shared_folder}/#{base_package_filename}"
+cached_package_filename = "#{Chef::Config[:file_cache_path]}/#{base_package_filename}"
 
 
 file cached_package_filename do

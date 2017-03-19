@@ -85,20 +85,13 @@ directory node.mysql.version_dir do
   action :create
 end
 
-directory node.ndb.shared_folder do
-  owner node.ndb.user
-  group node.ndb.user
-  mode "755"
-  action :create
-end
-
 url = node.ndb.url
 Chef::Log.info "Downloading mysql cluster binaries from #{url}"
 base_package_filename =  File.basename(node.ndb.url)
 Chef::Log.info "Into file #{base_package_filename}"
 base_package_dirname =  File.basename(base_package_filename, ".tar.gz")
-ndb_package_dirname = "/tmp/#{base_package_dirname}"
-cached_package_filename = "#{node.ndb.shared_folder}/#{base_package_filename}"
+ndb_package_dirname = "#{Chef::Config[:file_cache_path]}/#{base_package_dirname}"
+cached_package_filename = "#{Chef::Config[:file_cache_path]}/#{base_package_filename}"
 
 Chef::Log.info "You should find mysql cluster binaries it in:  #{cached_package_filename}"
 

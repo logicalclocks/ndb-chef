@@ -287,10 +287,6 @@ attribute "ndb/backup_time",
           :type => 'string'
 
 
-attribute "ndb/shared_folder",
-          :description =>  "Directory in which to download mysql-cluster",
-          :type => 'string'
-
 attribute "ndb/systemd",
           :description =>  "Use systemd scripts (instead of system-v). Default is 'true'.",
           :type => 'string'

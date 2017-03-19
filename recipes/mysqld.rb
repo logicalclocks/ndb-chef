@@ -224,6 +224,17 @@ if node.ndb.enabled == "true"
 #      command_script "#{node.ndb.scripts_dir}/mysql-client.sh"
     end
   end
+
+  homedir = node.ndb.user.eql?("root") ? "/root" : "/home/#{node.ndb.user}"
+  kagent_keys "#{homedir}" do
+    cb_user "#{node.ndb.user}"
+    cb_group "#{node.ndb.group}"
+    cb_name "ndb"
+    cb_recipe "mgmd"
+    action :get_publickey
+  end  
+
+
 end
 
 ndb_start "mysqld" do

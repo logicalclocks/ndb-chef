@@ -204,7 +204,28 @@ if [ $? -ne 0 ] ; then
     exit 3
 fi
 
-<%= node.ndb.base_dir %>/scripts/mysql-server-start.sh $SKIP_MYSQLDS
+
+<% id = node.mysql.id -%>
+<% for mysqld in node.ndb.mysqld.private_ips -%>
+
+if [ $SKIP_MYSQLDS -eq 0 ] ; then
+    echo "Starting a MySQL Server on host: <%= mysqld %> "
+    echo "For username: <%= node.ndb.user %> "
+  ssh <%= node.ndb.user %>@<%= mysqld %> "<%= node.ndb.scripts_dir %>/mysql-server-start.sh $SKIP_MYSQLDS"
+
+  if [ $? -ne 0 ] ; then
+    echo "Problem starting a MySQL Server Node on host <%= mysqld %>."
+    echo "Please read the logs on host <%= mysqld %> in:"
+    echo "<%= node.ndb.log_dir %>/mysql_<%= @id %>_out.log"
+  fi
+else
+  echo "Skipping starting mysqld-<%= id %> at <%= mysqld %>"
+fi
+<% id += 1 -%>
+<% end -%>
+
+
+# <%= node.ndb.base_dir %>/scripts/mysql-server-start.sh $SKIP_MYSQLDS
 
 sleep 3
 

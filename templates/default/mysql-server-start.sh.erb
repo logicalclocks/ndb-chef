@@ -1,7 +1,7 @@
 #!/bin/sh 
 
 if [ "$1" = "--force" ] ; then
-    killall -9 mysqld
+    pkill -9 mysqld
 fi
 
 echo "Testing if a mysql server is already running on this host..."

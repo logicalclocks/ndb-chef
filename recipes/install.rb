@@ -130,13 +130,9 @@ Chef::Log.info "Moving mysql cluster binaries to:  #{node.mysql.version_dir}"
 bash "unpack_mysql_cluster" do
     user "root"
     code <<-EOF
-touch /tmp/.ndb_downloaded
-
-tar -xzf #{cached_package_filename} -C /tmp
+set -e
+tar -xzf #{cached_package_filename}
 mv #{ndb_package_dirname}/* #{node.mysql.version_dir}
-# if [ -L #{node.mysql.base_dir}  ; then
-#  rm -rf #{node.mysql.base_dir}
-# fi
 
 # http://www.slideshare.net/Severalnines/severalnines-my-sqlclusterpt2013
 # TODO: If binding threads to CPU, run the following:

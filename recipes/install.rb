@@ -131,6 +131,7 @@ bash "unpack_mysql_cluster" do
     user "root"
     code <<-EOF
 set -e
+cd #{Chef::Config[:file_cache_path]}
 tar -xzf #{cached_package_filename}
 mv #{ndb_package_dirname}/* #{node.mysql.version_dir}
 

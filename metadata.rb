@@ -4,12 +4,14 @@ maintainer_email "jdowling@kth.se"
 license          "GPL 2.0"
 description      "Installs/Configures NDB (MySQL Cluster)"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "0.2.1"
+version          "0.3.0"
 source_url       "https://github.com/hopshadoop/ndb-chef"
 
 
 depends           "kagent"
 depends           "ulimit"
+
+depends           "karamel"
 
 recipe            "ndb::install", "Installs MySQL Cluster binaries"
 
@@ -24,9 +26,9 @@ recipe            "ndb::mysqld-purge", "Removes a MySQL Server connected to the 
 recipe            "ndb::memcached-purge", "Removes a memcached Server connected to the MySQL Cluster (memcached)"
 
 recipe            "ndb::purge", "Removes all data and all binaries related to a MySQL Cluster installation"
+recipe            "ndb::_test", "A unit-test used for testing this cookbook"
 
-
-supports 'ubuntu', ">= 12.04"
+supports 'ubuntu', ">= 14.04"
 supports 'rhel',   ">= 7.0"
 supports 'centos', ">= 7.0"
 

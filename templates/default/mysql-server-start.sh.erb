@@ -1,8 +1,20 @@
 #!/bin/sh 
 
-if [ "$1" = "--force" ] ; then
+if [ "$1" = "-h" ] ; then
+    echo "usage: $0 [-f|--skip-grant-tables]"
+    exit 1
+fi
+
+if [ "$1" = "-f" ] ; then
     pkill -9 mysqld
 fi
+
+SKIP_GRANTS=
+if [ "$1" = "--skip-grant-tables" ] ; then
+  SKIP_GRANTS="--skip-grant-tables"
+fi
+
+
 
 echo "Testing if a mysql server is already running on this host..."
 
@@ -20,9 +32,9 @@ export MYSQL_HOME=<%= node.ndb.root_dir %>
 
 
 <% if #{node.ndb.use_systemd} == "true" then -%>
-  <%= node.mysql.base_dir %>/bin/mysqld --defaults-file=<%= node.ndb.root_dir %>/my.cnf > <%= node.ndb.log_dir %>/mysql_<%= @node_id %>_out.log  2>&1 < /dev/null &
+  <%= node.mysql.base_dir %>/bin/mysqld --defaults-file=<%= node.ndb.root_dir %>/my.cnf $SKIP_GRANTS > <%= node.ndb.log_dir %>/mysql_<%= @node_id %>_out.log  2>&1 < /dev/null &
 <% else -%>
-  su <%= node.ndb.user %> -c "<%= node.mysql.base_dir %>/bin/mysqld --defaults-file=<%= node.ndb.root_dir %>/my.cnf > <%= node.ndb.log_dir %>/mysql_<%= @node_id %>_out.log  2>&1 < /dev/null &"
+  su <%= node.ndb.user %> -c "<%= node.mysql.base_dir %>/bin/mysqld --defaults-file=<%= node.ndb.root_dir %>/my.cnf $SKIP_GRANTS > <%= node.ndb.log_dir %>/mysql_<%= @node_id %>_out.log  2>&1 < /dev/null &"
 <% end -%>
 
 exit $?

@@ -21,7 +21,7 @@ cd #{node.ndb.scripts_dir}
 ./mgm-server-stop.sh
 ./cluster-init.sh -f
 ./backup-restore.sh 1
-./mysql-server-start.sh
+./mysql-server-start.sh --skip-grant-tables
 ./mysql-client.sh hops -e "select * from t1" | grep '1'
 EOF
 not_if "#{node.ndb.scripts_dir}/mysql-client.sh hops -e 'show tables' | grep t1"

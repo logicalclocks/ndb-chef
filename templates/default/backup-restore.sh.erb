@@ -31,7 +31,7 @@ datanodes=( <%= @datanodes %> )
 # https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster-programs-ndb-restore.html
 # Need '--rebuild-indexes' as we have unique indexes in hopsworks/hops
 # 'datanodes' should start at nodeid=1 and progress up to nodeid=N.
-# --restore-privilege-tables for the first datanode
+# --restore-privilege-tables for the first datanode and create the schemas on the first node (-m switch)
 # https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster-privilege-distribution.html
 res=0
 j=1
@@ -39,7 +39,7 @@ for i in "${datanodes[@]}"
 do	 
   echo "Restoring backup at: $i"
   if [ $j == 1 ] ; then
-    ssh $i "<%= node.mysql.base_dir %>/bin/ndb_restore -c <%= node.ndb.connectstring %> -n $j -b ${BACKUP_ID} --backup_path=${BACKUP_DIR}-${BACKUP_ID} --rebuild-indexes --restore-privilege-tables"
+    ssh $i "<%= node.mysql.base_dir %>/bin/ndb_restore -c <%= node.ndb.connectstring %> -m -n $j -b ${BACKUP_ID} --backup_path=${BACKUP_DIR}-${BACKUP_ID} --rebuild-indexes --restore-privilege-tables"
   else
     ssh $i "<%= node.mysql.base_dir %>/bin/ndb_restore -c <%= node.ndb.connectstring %> -n $j -b ${BACKUP_ID} --backup_path=${BACKUP_DIR}-${BACKUP_ID} --rebuild-indexes"
   fi

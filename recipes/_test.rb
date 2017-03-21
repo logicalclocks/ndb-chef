@@ -13,12 +13,11 @@ set -e
 cd #{node.ndb.scripts_dir}
 ./mgm-client.sh -e show
 ./mysql-client.sh -e "create database if not exists hops"
-./mysql-client.sh hops -e "create table t1 (id int); "
-./mysql-client.sh hops -e "insert into table t1 values (1);"
+./mysql-client.sh hops -e "create table t1 (id int) "
+./mysql-client.sh hops -e "insert into t1 values (1)"
 ./mysql-client.sh hops -e "select * from t1" | grep '1'
 ./backup-start.sh
 ./cluster-shutdown.sh
-./mgm-server-stop.sh
 ./cluster-init.sh -f
 ./backup-restore.sh 1
 ./mysql-server-start.sh --skip-grant-tables

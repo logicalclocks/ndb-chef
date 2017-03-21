@@ -1,15 +1,16 @@
 #!/bin/sh 
 
 SKIP_GRANTS=
-if [ "$1" == "-f" ] ; then
-    pkill -9 mysqld
-elif [ "$1" == "--skip-grant-tables" ] ; then
-  SKIP_GRANTS="--skip-grant-tables"
-else
-    echo "usage: $0 [-f|--skip-grant-tables]"
-    exit 2
+if [ $# -gt 0 ] ; then
+    if [ "$1" = "-f" ] ; then
+	pkill -9 mysqld
+    elif [ "$1" = "--skip-grant-tables" ] ; then
+	SKIP_GRANTS="--skip-grant-tables"
+    else
+	echo "usage: $0 [-f|--skip-grant-tables]"
+	exit 2
+    fi
 fi
-
 
 
 echo "Testing if a mysql server is already running on this host..."

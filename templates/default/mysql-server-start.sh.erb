@@ -1,17 +1,13 @@
 #!/bin/sh 
 
-if [ "$1" = "-h" ] ; then
-    echo "usage: $0 [-f|--skip-grant-tables]"
-    exit 1
-fi
-
-if [ "$1" = "-f" ] ; then
-    pkill -9 mysqld
-fi
-
 SKIP_GRANTS=
-if [ "$1" = "--skip-grant-tables" ] ; then
+if [ "$1" == "-f" ] ; then
+    pkill -9 mysqld
+elif [ "$1" == "--skip-grant-tables" ] ; then
   SKIP_GRANTS="--skip-grant-tables"
+else
+    echo "usage: $0 [-f|--skip-grant-tables]"
+    exit 2
 fi
 
 

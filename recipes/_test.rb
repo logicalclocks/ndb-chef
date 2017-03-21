@@ -20,6 +20,7 @@ cd #{node.ndb.scripts_dir}
 ./cluster-shutdown.sh
 ./mgm-server-stop.sh
 ./cluster-init.sh -f
+./backup-restore.sh 1
 ./mysql-server-start.sh
 ./mysql-client.sh hops -e "select * from t1" | grep '1'
 EOF

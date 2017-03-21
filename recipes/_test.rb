@@ -12,7 +12,7 @@ bash "backup_restore_test" do
 set -e
 cd #{node.ndb.scripts_dir}
 ./mgm-client.sh -e show
-./mysql-client.sh -e "create database hops"
+./mysql-client.sh -e "create database if not exists hops"
 ./mysql-client.sh hops -e "create table t1 (id int); "
 ./mysql-client.sh hops -e "insert into table t1 values (1);"
 ./mysql-client.sh hops -e "select * from t1" | grep '1'
@@ -22,6 +22,6 @@ cd #{node.ndb.scripts_dir}
 ./cluster-init.sh -f
 ./mysql-server-start.sh
 ./mysql-client.sh hops -e "select * from t1" | grep '1'
-
 EOF
+not_if "#{node.ndb.scripts_dir}/mysql-client.sh hops -e 'show tables' | grep t1"
 end

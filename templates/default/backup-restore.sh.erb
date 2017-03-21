@@ -30,12 +30,18 @@ datanodes=( <%= @datanodes %> )
 # Read this documentation first:
 # https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster-programs-ndb-restore.html
 # Need '--rebuild-indexes' as we have unique indexes in hopsworks/hops
-# 'datanodes' should start at nodeid=1 and progress up to nodeid=N
+# 'datanodes' should start at nodeid=1 and progress up to nodeid=N.
+# --restore-privilege-tables for the first datanode
+# https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster-privilege-distribution.html
 j=1
 for i in "${datanodes[@]}" 
 do	 
   echo "Restoring backup at: $i"
-  ssh $i "<%= node.mysql.base_dir %>/bin/ndb_restore -c <%= node.ndb.connectstring %> -n $j -b ${BACKUP_ID} --backup_path=${BACKUP_DIR}-${BACKUP_ID} --rebuild-indexes"
+  if [ $j == 1 ] ; then
+    ssh $i "<%= node.mysql.base_dir %>/bin/ndb_restore -c <%= node.ndb.connectstring %> -n $j -b ${BACKUP_ID} --backup_path=${BACKUP_DIR}-${BACKUP_ID} --rebuild-indexes --restore-privilege-tables"
+  else
+    ssh $i "<%= node.mysql.base_dir %>/bin/ndb_restore -c <%= node.ndb.connectstring %> -n $j -b ${BACKUP_ID} --backup_path=${BACKUP_DIR}-${BACKUP_ID} --rebuild-indexes"
+  fi
   j=`expr $j + 1`
 done
 	 

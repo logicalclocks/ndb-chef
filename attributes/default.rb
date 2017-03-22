@@ -86,7 +86,7 @@ default.ndb.ThreadConfig                        = ""
 
 default.ndb.interrupts_isolated_to_single_cpu   = "false"
 
-default.mgm.scripts            = %w{ backup-start.sh backup-restore.sh enter-singleuser-mode.sh mgm-client.sh mgm-server-start.sh mgm-server-stop.sh mgm-server-restart.sh cluster-shutdown.sh cluster-init.sh cluster-start-with-recovery.sh exit-singleuser-mode.sh }
+default.mgm.scripts            = %w{ backup-start.sh backup-restore.sh backup-remove.sh enter-singleuser-mode.sh mgm-client.sh mgm-server-start.sh mgm-server-stop.sh mgm-server-restart.sh cluster-shutdown.sh cluster-init.sh cluster-start-with-recovery.sh exit-singleuser-mode.sh }
 default.ndb.scripts            = %w{ ndbd-start.sh ndbd-init.sh ndbd-stop.sh ndbd-restart.sh }
 default.mysql.scripts          = %w{ get-mysql-socket.sh get-mysql-port.sh mysql-server-start.sh mysql-server-stop.sh mysql-server-restart.sh mysql-client.sh }
 default.memcached.scripts      = %w{ memcached-start.sh memcached-stop.sh memcached-restart.sh }

@@ -183,4 +183,3 @@ default.ndb.backup_time                         = "03:00"
 
 default.ndb.systemd                             = node.systemd
 
-node.default.kagent.enabled                     = "false"

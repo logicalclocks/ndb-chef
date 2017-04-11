@@ -7,7 +7,4 @@ cookbook 'conda', github: "hopshadoop/conda-chef", branch: "master"
 
 cookbook 'ulimit', '~> 0.4.0'
 
-group :test do
-  cookbook 'karamel', github: "hopshadoop/karamel-chef", branch: "master"
-end
 

@@ -11,8 +11,6 @@ source_url       "https://github.com/hopshadoop/ndb-chef"
 depends           "kagent"
 depends           "ulimit"
 
-depends           "karamel"
-
 recipe            "ndb::install", "Installs MySQL Cluster binaries"
 
 recipe            "ndb::mgmd", "Installs a MySQL Cluster management server (ndb_mgmd)"

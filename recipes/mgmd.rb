@@ -107,7 +107,7 @@ else # systemd == true
     supports :restart => true, :stop => true, :start => true, :status => true
     action :nothing
   end
-  case node.platform_family
+  case node["platform_family"]
   when "debian"
     systemd_script = "/lib/systemd/system/#{service_name}.service"
   when "rhel"
@@ -150,12 +150,13 @@ template "#{node.ndb.root_dir}/config.ini" do
 end
 
 
-if node.kagent.enabled == "true"
+if node["kagent"]["enabled"] == "true"
 
     kagent_config service_name do
       service "NDB"
       log_file "#{node.ndb.log_dir}/ndb_#{found_id}_out.log"
       config_file "#{node.ndb.root_dir}/config.ini"
+      action :add
 #      command "ndb_mgm"
 #      command_user "root"
 #      command_script "#{node.ndb.scripts_dir}/mgm-client.sh"

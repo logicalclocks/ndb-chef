@@ -89,7 +89,7 @@ service "#{service_name}" do
   action :nothing
 end
 
-case node.platform_family
+case node["platform_family"]
   when "debian"
 systemd_script = "/lib/systemd/system/#{service_name}.service"
   when "rhel"
@@ -140,6 +140,7 @@ if node.kagent.enabled == "true"
   kagent_config service_name do
     service "NDB" # #{found_id}
     log_file "#{node.ndb.log_dir}/ndb_#{found_id}_out.log"
+    action :add
   end
 
 end

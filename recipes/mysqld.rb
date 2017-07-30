@@ -23,7 +23,7 @@ if "#{node.ndb.version}.#{node.ndb.majorVersion}".to_f < 7.5
   end
 end
 
-case node.platform_family
+case node["platform_family"]
 when "debian"
 
   libaio1="libaio1_0.3.109-2ubuntu1_amd64.deb"
@@ -107,7 +107,7 @@ if node.ndb.systemd != "true"
 
 else # sytemd is true
 
-  case node.platform_family
+  case node["platform_family"]
   when "debian"
     systemd_script = "/lib/systemd/system/#{service_name}.service"
   when "rhel"
@@ -219,9 +219,7 @@ if node.ndb.enabled == "true"
     kagent_config service_name do
       service "NDB" # #{found_id}
       log_file "#{node.ndb.log_dir}/mysql_#{found_id}_out.log"
-#      command "mysql"
-#      command_user node.ndb.user 
-#      command_script "#{node.ndb.scripts_dir}/mysql-client.sh"
+      action :add
     end
   end
 

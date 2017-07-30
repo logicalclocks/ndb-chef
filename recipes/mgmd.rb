@@ -156,6 +156,7 @@ if node["kagent"]["enabled"] == "true"
       service "NDB"
       log_file "#{node.ndb.log_dir}/ndb_#{found_id}_out.log"
       config_file "#{node.ndb.root_dir}/config.ini"
+      restart_agent false
       action :add
 #      command "ndb_mgm"
 #      command_user "root"

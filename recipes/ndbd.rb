@@ -140,6 +140,7 @@ if node.kagent.enabled == "true"
   kagent_config service_name do
     service "NDB" # #{found_id}
     log_file "#{node.ndb.log_dir}/ndb_#{found_id}_out.log"
+    restart_agent false    
     action :add
   end
 

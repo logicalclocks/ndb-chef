@@ -8,7 +8,7 @@ versionStr                                      = "#{node.ndb.version}.#{node.nd
 default.ndb.enabled                             = "true"
 default.ndb.version                             = versionStr
 
-default.ndb.url                                 = node.download_url + "/mysql-cluster-gpl-#{versionStr}-linux-glibc2.5-x86_64.tar.gz"
+default.ndb.url                                 = node.download_url + "/mysql-cluster-gpl-#{versionStr}-linux-glibc2.12-x86_64.tar.gz"
 # checksum is not a security check - used to improve the speed of downloads by skipping if matched
 # checksum calculated using: shasum -a 256 /var/www/hops/...tgz | cut -c-12
 # checksum calculated using: sha256sum /var/www/hops/...tgz | cut -c-12

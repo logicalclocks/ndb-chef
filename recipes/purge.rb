@@ -27,6 +27,15 @@ daemons.each { |d|
     action :delete
     ignore_failure true
   end
+  file "/etc/systemd/system/#{d}.service" do
+    action :delete
+    ignore_failure true
+  end
+  directory "/etc/systemd/system/#{d}.service.d" do
+    recursive true
+    action :delete
+    ignore_failure true
+  end
 }
 
 directory node.ndb.mysql_server_dir do
@@ -94,8 +103,7 @@ end
 
 
 
-package_url = node.ndb.package_url
-base_package_filename =  File.basename(node.ndb.package_url)
+base_package_filename = "mysql-cluster-gpl-#{node['ndb']['versionStr']}-linux-glibc#{node['ndb']['glib_version']}-x86_64.tar.gz"
 cached_package_filename = "#{Chef::Config[:file_cache_path]}/#{base_package_filename}"
 
 

@@ -1,14 +1,14 @@
 include_attribute "kagent"
 
-default.ndb.version                             ="7"
+version                                         ="7"
 default.ndb.majorVersion                        ="5"
 default.ndb.minorVersion                        ="6"
 
-default.ndb.versionStr                          = "#{node.ndb.version}.#{node.ndb.majorVersion}.#{node.ndb.minorVersion}"
+default.ndb.version                             = "#{version}.#{node.ndb.majorVersion}.#{node.ndb.minorVersion}"
 default.ndb.enabled                             = "true"
 default.ndb.glib_version                        = "2.5"
 
-default.ndb.url                                 = node.download_url + "/mysql-cluster-gpl-#{node['ndb']['versionStr']}-linux-glibc#{node['ndb']['glib_version']}-x86_64.tar.gz"
+default.ndb.url                                 = node.download_url + "/mysql-cluster-gpl-#{node['ndb']['version']}-linux-glibc#{node['ndb']['glib_version']}-x86_64.tar.gz"
 # checksum is not a security check - used to improve the speed of downloads by skipping if matched
 # checksum calculated using: shasum -a 256 /var/www/hops/...tgz | cut -c-12
 # checksum calculated using: sha256sum /var/www/hops/...tgz | cut -c-12
@@ -97,7 +97,7 @@ default.ndb.dir                                 = node.install.dir.empty? ? "/va
 default.ndb.root_dir                            = "#{node.ndb.dir}/mysql-cluster"
 default.ndb.log_dir                             = "#{node.ndb.root_dir}/log"
 default.ndb.data_dir                            = "#{node.ndb.root_dir}/ndb_data"
-default.ndb.version_dir                         = "#{node.ndb.root_dir}/ndb-#{node['ndb']['versionStr']}"
+default.ndb.version_dir                         = "#{node.ndb.root_dir}/ndb-#{node['ndb']['version']}"
 default.ndb.base_dir                            = "#{node.ndb.root_dir}/ndb"
 
 default.ndb.BackupDataDir                       = "#{node.ndb.root_dir}/ndb/backups"
@@ -120,7 +120,7 @@ default.mysql.dir                               = node.install.dir.empty? ? "/us
 # Symbolic link to the current versioned mysql directory
 default.mysql.base_dir                          = "#{node.mysql.dir}/mysql"
 # Concrete directory with mysql binaries for a specific mysql version
-default.mysql.version_dir                       = "#{node.mysql.base_dir}-#{node['ndb']['versionStr']}"
+default.mysql.version_dir                       = "#{node.mysql.base_dir}-#{node['ndb']['version']}"
 
 default.mysql.jdbc_url                          = ""
 

@@ -1,7 +1,7 @@
 
 # Stop all the service and remove all services
 # TODO - should rename 'ndbd' as 'ndbmtd'. pkill wont work here fo it
-daemons = %w{ndb_mgmd ndbdmtd mysqld memcached}
+daemons = %w{ndb_mgmd ndbmtd mysqld memcached}
 daemons.each { |d| 
 
   bash 'kill_running_service_#{d}' do
@@ -37,6 +37,16 @@ daemons.each { |d|
     ignore_failure true
   end
 }
+
+  bash 'systemd_reset_failed' do
+    user "root"
+    ignore_failure true
+    code <<-EOF
+      systemctl reset-failed
+      systemctl daemon-reload
+    EOF
+  end
+
 
 directory node.ndb.mysql_server_dir do
   recursive true

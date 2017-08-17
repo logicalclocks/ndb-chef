@@ -42,8 +42,8 @@ daemons.each { |d|
     user "root"
     ignore_failure true
     code <<-EOF
-      systemctl reset-failed
       systemctl daemon-reload
+      systemctl reset-failed
     EOF
   end
 

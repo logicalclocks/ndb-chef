@@ -126,7 +126,7 @@ if node.services.enabled == "true"
 end
   end
 
-  ndb_start "reload_mgmd" do
+  kagent_config "#{service_name}" do
     action :systemd_reload
   end
 

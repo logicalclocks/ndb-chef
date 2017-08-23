@@ -132,10 +132,11 @@ else # sytemd is true
     action :nothing
   end
 
-  ndb_start "reload_mysqld" do
+  kagent_config "#{service_name}" do
     action :systemd_reload
   end
 
+  
 end
 
 mysql_ip = my_ip

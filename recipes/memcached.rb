@@ -107,11 +107,9 @@ else #systemd
     notifies :enable, "service[#{service_name}]"
   end
 
-  ndb_start "reload_memcached" do
+  kagent_config "#{service_name}" do
     action :systemd_reload
-    notifies :restart, "service[#{service_name}]"
   end
-
 end
 
 if node.kagent.enabled == "true"

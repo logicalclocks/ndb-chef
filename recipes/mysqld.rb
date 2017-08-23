@@ -132,7 +132,7 @@ else # sytemd is true
     action :nothing
   end
 
-  kagent_config "#{service_name}" do
+  ndb_start "mysqld" do
     action :systemd_reload
   end
 
@@ -243,4 +243,3 @@ end
 ndb_start "mysqld" do
   action :start_if_not_running
 end
-

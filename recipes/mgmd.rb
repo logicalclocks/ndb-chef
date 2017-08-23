@@ -126,10 +126,6 @@ if node.services.enabled == "true"
 end
   end
 
-  kagent_config "#{service_name}" do
-    action :systemd_reload
-  end
-
 end
 
 
@@ -146,9 +142,8 @@ template "#{node.ndb.root_dir}/config.ini" do
   variables({
               :num_client_slots => node.ndb.num_ndb_slots_per_client.to_i
             })
-  notifies :restart, "service[ndb_mgmd]", :immediately
+#  notifies :restart, "service[ndb_mgmd]", :immediately
 end
-
 
 if node["kagent"]["enabled"] == "true"
 
@@ -164,9 +159,15 @@ if node["kagent"]["enabled"] == "true"
     end
 end
 
-ndb_start "ndb_mgmd" do
+if node.ndb.systemd == "true"
+  kagent_config "#{service_name}" do
+    action :systemd_reload
+  end
+else
+  ndb_start "ndb_mgmd" do
+    action :start_if_not_running
+  end
 end
-
 
 # Put public key of this mgmd-host in .ssh/authorized_keys of all ndbd and mysqld nodes
 homedir = node.ndb.user.eql?("root") ? "/root" : "/home/#{node.ndb.user}"

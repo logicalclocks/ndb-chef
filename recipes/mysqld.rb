@@ -205,8 +205,11 @@ template grants_path do
   variables({
               :my_ip => my_ip
             })
-  notifies :install_grants, "ndb_mysql_basic[install]", :immediately
 end
+
+ndb_mysql_basic "create_users_grants" do
+  action :install_grants
+end  
 
 
 if node.ndb.enabled == "true"

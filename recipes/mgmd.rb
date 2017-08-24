@@ -17,7 +17,7 @@ ndb_connectstring()
 
 directory node.ndb.mgm_dir do
   owner node.ndb.user
-  group node.ndb.user
+  group node.ndb.group
   mode "755"
 end
 
@@ -137,7 +137,7 @@ get_ndbapi_addrs()
 template "#{node.ndb.root_dir}/config.ini" do
   source "config.ini.erb"
   owner node.ndb.user
-  group node.ndb.user
+  group node.ndb.group
   mode 0644
   variables({
               :num_client_slots => node.ndb.num_ndb_slots_per_client.to_i

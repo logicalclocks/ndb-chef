@@ -51,28 +51,28 @@ end
 
 directory node.ndb.scripts_dir do
   owner node.ndb.user
-  group node.ndb.user
+  group node.ndb.group
   mode "755"
   action :create
 end
 
 directory "#{node.ndb.scripts_dir}/util" do
   owner node.ndb.user
-  group node.ndb.user
+  group node.ndb.group
   mode "755"
   action :create
 end
 
 directory node.ndb.log_dir do
   owner node.ndb.user
-  group node.ndb.user
+  group node.ndb.group
   mode "750"
   action :create
 end
 
 directory node.ndb.BackupDataDir do
   owner node.ndb.user
-  group node.ndb.user
+  group node.ndb.group
   mode "750"
   action :create
 end
@@ -80,7 +80,7 @@ end
 
 directory node.mysql.version_dir do
   owner node.ndb.user
-  group node.ndb.user
+  group node.ndb.group
   mode "755"
   action :create
 end
@@ -163,7 +163,7 @@ end
 template "#{node.ndb.scripts_dir}/util/kill-process.sh" do
   source "kill-process.sh.erb"
   owner node.ndb.user
-  group node.ndb.user
+  group node.ndb.group
   mode 0750
 end
 

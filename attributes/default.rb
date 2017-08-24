@@ -21,8 +21,7 @@ default.ndb.ndbd.port                           = 10000
 default.ndb.ip                                  = "10.0.2.15"
 
 default.ndb.loglevel                            = "notice"
-#default.ndb.user                                = node.ndb.user.empty? ? (node.install.user.empty? ? "mysql" : node.install.user) : node.ndb.user
-default.ndb.user                                = node['ndb'].attribute?('user') ? node['ndb']['user'] : (node['install']['user'].nil? ? "mysql" : node['install']['user'])
+default.ndb.user = node['ndb'].attribute?('user') ? node['ndb']['user'] : (node['install']['user'].nil? ? "mysql" : node['install']['user'])
 default.ndb.group                               = node.install.user.empty? ? "mysql" : node.install.user
 default.ndb.connectstring                       = ""
 

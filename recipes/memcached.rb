@@ -63,7 +63,7 @@ if node.ndb.systemd != "true"
   template "/etc/init.d/#{service_name}" do
     source "#{service_name}.erb"
     owner node.ndb.user
-    group node.ndb.user
+    group node.ndb.group
     mode 0755
     variables({
                 :ndb_dir => node.ndb.base_dir,
@@ -94,7 +94,7 @@ else #systemd
   template systemd_script do
     source "#{service_name}.service.erb"
     owner node.ndb.user
-    group node.ndb.user
+    group node.ndb.group
     mode 0755
     cookbook 'ndb'
     variables({

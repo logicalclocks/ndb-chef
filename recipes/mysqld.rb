@@ -210,7 +210,14 @@ end
 
 ndb_mysql_basic "create_users_grants" do
   action :install_grants
-end  
+end
+
+# Dont leave the username/passwords to mysql lying around in file in the cache
+file "#{Chef::Config.file_cache_path}/grants.sql" do
+  owner "root"
+  action :delete
+end
+
 
 
 if node.ndb.enabled == "true"

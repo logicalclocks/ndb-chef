@@ -52,14 +52,14 @@ end
 directory node.ndb.scripts_dir do
   owner node.ndb.user
   group node.ndb.group
-  mode "750"
+  mode "755"
   action :create
 end
 
 directory "#{node.ndb.scripts_dir}/util" do
   owner node.ndb.user
   group node.ndb.group
-  mode "750"
+  mode "755"
   action :create
 end
 
@@ -81,7 +81,7 @@ end
 directory node.mysql.version_dir do
   owner node.ndb.user
   group node.ndb.group
-  mode "750"
+  mode "755"
   action :create
 end
 

@@ -3,11 +3,11 @@ Description = NDB Mgmt Server (ndb_mgmd)
 After = syslog.target network.target remote-fs.target
 
 [Service]
-User = <%= node.ndb.user %>
-PIDFile = <%= "#{node.ndb.log_dir}" %>/ndb_<%= @node_id %>.pid
-ExecStart = <%= "#{node.ndb.base_dir}/scripts/mgm-server-start.sh"  %>
-ExecStop = <%= "#{node.ndb.base_dir}/scripts/mgm-server-stop.sh"  %>
-ExecReload = <%= "#{node.ndb.base_dir}/scripts/mgm-server-restart.sh"  %>
+User = <%= node['ndb']['user'] %>
+PIDFile = <%= "#{node['ndb']['log_dir']}" %>/ndb_<%= @node_id %>.pid
+ExecStart = <%= "#{node['ndb']['base_dir']}/scripts/mgm-server-start.sh"  %>
+ExecStop = <%= "#{node['ndb']['base_dir']}/scripts/mgm-server-stop.sh"  %>
+ExecReload = <%= "#{node['ndb']['base_dir']}/scripts/mgm-server-restart.sh"  %>
 
 Type = forking
 

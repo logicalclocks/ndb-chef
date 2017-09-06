@@ -10,6 +10,6 @@ if [ $# -gt 0 ] ;then
 fi
 
 ID=<%= @node_id %>
-PID_FILE=<%= node.ndb.log_dir %>/memcached_$ID.pid
-<%= node.ndb.scripts_dir %>/util/kill-process.sh memcached $PID_FILE 0 $FORCE
+PID_FILE=<%= node['ndb']['log_dir'] %>/memcached_$ID.pid
+<%= node['ndb']['scripts_dir'] %>/util/kill-process.sh memcached $PID_FILE 0 $FORCE
 exit $?

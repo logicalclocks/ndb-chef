@@ -3,11 +3,11 @@ Description = Mysql Server
 After = syslog.target network.target remote-fs.target
 
 [Service]
-User = <%= node.ndb.user %>
+User = <%= node['ndb']['user'] %>
 PIDFile = <%= @pid_file %>
-ExecStart = <%= node.ndb.scripts_dir %>/mysql-server-start.sh
-ExecStop = <%= node.ndb.scripts_dir %>/mysql-server-stop.sh
-ExecReload = <%= node.ndb.scripts_dir %>/mysql-server-restart.sh
+ExecStart = <%= node['ndb']['scripts_dir'] %>/mysql-server-start.sh
+ExecStop = <%= node['ndb']['scripts_dir'] %>/mysql-server-stop.sh
+ExecReload = <%= node['ndb']['scripts_dir'] %>/mysql-server-restart.sh
 
 Type = forking
 

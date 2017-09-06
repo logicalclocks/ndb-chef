@@ -5,13 +5,13 @@
 default-character-set = utf8
 
 [mysqld]
-user           = <%= node.ndb.user %>
-basedir         = <%= node.mysql.base_dir %>
-datadir         = <%= node.ndb.mysql_server_dir %>
-port            = <%= node.ndb.mysql_port %>
-socket          = <%= node.ndb.mysql_socket %>
+user           = <%= node['ndb']['user'] %>
+basedir         = <%= node['mysql']['base_dir'] %>
+datadir         = <%= node['ndb']['mysql_server_dir'] %>
+port            = <%= node['ndb']['mysql_port'] %>
+socket          = <%= node['ndb']['mysql_socket'] %>
 bind-address    = <%= @my_ip %>
-pid-file        = <%= node.ndb.log_dir %>/mysql_<%= @mysql_id %>.pid
+pid-file        = <%= node['ndb']['log_dir'] %>/mysql_<%= @mysql_id %>.pid
 tmpdir          = /tmp
 
 
@@ -42,7 +42,7 @@ optimizer_switch=engine_condition_pushdown=on
 ndb-join-pushdown=1
 
 # use the cluster connection pool to reduce cluster connection setup time
-ndb-cluster-connection-pool=<%= node.ndb.num_ndb_slots_per_client %>
+ndb-cluster-connection-pool=<%= node['ndb']['num_ndb_slots_per_client'] %>
 
 # Log more data at MySQL Server about ndb
 ndb-extra-logging=0
@@ -58,7 +58,7 @@ ndb-batch-size=24M
 #################################################
 
 # replication settings go here
-<% if node.mysql.replication_enabled == "true" -%>
+<% if node['mysql']['replication_enabled'] == "true" -%>
 server-id=@server_id
 log-bin=mysql-bin
 <% end -%>
@@ -70,9 +70,9 @@ log-bin=mysql-bin
 
 [mysql_cluster]
 # set connectstring to ndb management server (used by all executables)
-ndb-connectstring=<%= node.ndb.connectstring %>
-# ndb-wait-setup=<%= node.ndb.wait_startup %>
+ndb-connectstring=<%= node['ndb']['connectstring'] %>
+# ndb-wait-setup=<%= node['ndb']['wait_startup'] %>
 
 [client]
 default-character-set = utf8
-socket                = <%= node.ndb.mysql_socket %>
+socket                = <%= node['ndb']['mysql_socket'] %>

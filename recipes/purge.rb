@@ -48,14 +48,14 @@ daemons.each { |d|
   end
 
 
-directory node.ndb.mysql_server_dir do
+directory node['ndb']['mysql_server_dir'] do
   recursive true
   action :delete
   ignore_failure true
 end
 
 # Remove the MySQL binaries and MySQL Cluster data directories
-directory node.ndb.root_dir do
+directory node['ndb']['root_dir'] do
   recursive true
   action :delete
   ignore_failure true
@@ -63,15 +63,15 @@ end
 
 
 # TODO - don't know if wildcards are supported for deleting files/directories
-#directory "#{node.mysql.base_dir}*" do
+#directory "#{node['mysql']['base_dir']}*" do
 
-directory node.mysql.version_dir do
+directory node['mysql']['version_dir'] do
   recursive true
   action :delete
   ignore_failure true
 end
 
-link node.mysql.base_dir do
+link node['mysql']['base_dir'] do
   action :delete
   ignore_failure true
 end
@@ -82,7 +82,7 @@ directory Chef::Config.file_cache_path do
   ignore_failure true
 end
 
-homedir = node.ndb.user.eql?("root") ? "/root" : "/home/#{node.ndb.user}"
+homedir = node['ndb']['user'].eql?("root") ? "/root" : "/home/#{node['ndb']['user']}"
 bash 'delete_marker_files' do
 user "root"
 ignore_failure true
@@ -101,7 +101,7 @@ end
 
 
 package "libaio remove" do
-  case node.platform
+  case node['platform']
   when 'redhat', 'centos'
     package_name 'libaio1'
   when 'ubuntu', 'debian'
@@ -114,7 +114,7 @@ end
 
 
 base_package_filename = "mysql-cluster-gpl-#{node['ndb']['versionStr']}-linux-glibc#{node['ndb']['glib_version']}-x86_64.tar.gz"
-cached_package_filename = "#{Chef::Config[:file_cache_path]}/#{base_package_filename}"
+cached_package_filename = "#{Chef::Config['file_cache_path']}/#{base_package_filename}"
 
 
 file cached_package_filename do

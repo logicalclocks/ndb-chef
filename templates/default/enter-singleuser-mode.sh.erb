@@ -29,6 +29,6 @@ if [ $# -ne 1 ] || [ $1 -lt 1 ] || [ $1 -gt 255 ] ; then
     exit 1
 fi
 
-<%= node.mysql.base_dir %>/bin/ndb_mgm -c <%= node.ndb.connectstring %> -e "ENTER SINGLE USER MODE $1"
+<%= node['mysql']['base_dir'] %>/bin/ndb_mgm -c <%= node['ndb']['connectstring'] %> -e "ENTER SINGLE USER MODE $1"
 exit $?
 

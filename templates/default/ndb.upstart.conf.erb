@@ -1,11 +1,11 @@
 #!upstart
 description "MySQL Cluster"
 
-env USER=<%= node.ndb.user %>
+env USER=<%= node['ndb']['user'] %>
 
 start on startup
 stop on shutdown
 
 respawn
 
-exec sudo -u $USER sh -c "#{node.ndb.base_dir}/scripts/start-noinit-ndbd.sh"
+exec sudo -u $USER sh -c "#{node['ndb']['base_dir']}/scripts/start-noinit-ndbd.sh"

@@ -2,15 +2,15 @@ require File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
 require File.expand_path(File.dirname(__FILE__) + '/find_mysqld')
 
 
-case node.platform
+case node['platform']
 when "ubuntu"
- if node.platform_version.to_f <= 14.04
-   node.override.ndb.systemd = "false"
+ if node['platform_version'].to_f <= 14.04
+   node.override['ndb']['systemd'] = "false"
  end
 end
 
-if node.ndb.systemd == false
-   node.override.ndb.systemd = "false"
+if node['ndb']['systemd'] == false
+   node.override['ndb']['systemd'] = "false"
 end  
 
 
@@ -33,11 +33,11 @@ found_id=find_memcached_id(my_ip)
 #hostId="ndbapi#{found_id}" 
 #generate_hosts(hostId, my_ip)
 
-for script in node.memcached.scripts
-  template "#{node.ndb.scripts_dir}/#{script}" do
+for script in node['memcached']['scripts']
+  template "#{node['ndb']['scripts_dir']}/#{script}" do
     source "#{script}.erb"
-    owner node.ndb.user
-    group node.ndb.group
+    owner node['ndb']['user']
+    group node['ndb']['group']
     mode 0775
     variables({
                 :node_id => found_id
@@ -51,7 +51,7 @@ ndb_mysql_basic "mysqld_started" do
 end
 
 
-if node.ndb.systemd != "true" 
+if node['ndb']['systemd'] != "true" 
 
   service service_name do
     provider Chef::Provider::Service::Init::Debian
@@ -62,13 +62,13 @@ if node.ndb.systemd != "true"
 
   template "/etc/init.d/#{service_name}" do
     source "#{service_name}.erb"
-    owner node.ndb.user
-    group node.ndb.group
+    owner node['ndb']['user']
+    group node['ndb']['group']
     mode 0755
     variables({
-                :ndb_dir => node.ndb.base_dir,
-                :mysql_dir => node.mysql.base_dir,
-                :connectstring => node.ndb.connectstring,
+                :ndb_dir => node['ndb']['base_dir'],
+                :mysql_dir => node['mysql']['base_dir'],
+                :connectstring => node['ndb']['connectstring'],
                 :node_id => found_id 
               })
     notifies :install_memcached, "ndb_mysql_ndb[#{theResource}]", :immediately
@@ -84,7 +84,7 @@ else #systemd
     action :nothing
   end
 
-  case node.platform_family
+  case node['platform_family']
   when "debian"
     systemd_script = "/lib/systemd/system/#{service_name}.service"
   when "rhel"
@@ -93,14 +93,14 @@ else #systemd
 
   template systemd_script do
     source "#{service_name}.service.erb"
-    owner node.ndb.user
-    group node.ndb.group
+    owner node['ndb']['user']
+    group node['ndb']['group']
     mode 0755
     cookbook 'ndb'
     variables({
-                :ndb_dir => node.ndb.base_dir,
-                :mysql_dir => node.mysql.base_dir,
-                :connectstring => node.ndb.connectstring,
+                :ndb_dir => node['ndb']['base_dir'],
+                :mysql_dir => node['mysql']['base_dir'],
+                :connectstring => node['ndb']['connectstring'],
                 :node_id => found_id 
               })
     notifies :install_memcached, "ndb_mysql_ndb[#{theResource}]", :immediately
@@ -112,11 +112,11 @@ else #systemd
   end
 end
 
-if node.kagent.enabled == "true"
+if node['kagent']['enabled'] == "true"
 
   kagent_config "memcached" do
    service "NDB"
-   log_file "#{node.ndb.log_dir}/memcached_#{found_id}.out.log"
+   log_file "#{node['ndb']['log_dir']}/memcached_#{found_id}.out.log"
  end
 
 end

@@ -1,7 +1,7 @@
 #!/bin/sh
 
-<%= node.ndb.scripts_dir %>/mgm-server-stop.sh
+<%= node['ndb']['scripts_dir'] %>/mgm-server-stop.sh
 
-<%= node.ndb.scripts_dir %>/mgm-server-start.sh
+<%= node['ndb']['scripts_dir'] %>/mgm-server-start.sh
 
 exit $?

@@ -1,6 +1,6 @@
 #!/bin/sh 
 
-MYSQL_PORT=`grep ^port <%= node.ndb.root_dir %>/my.cnf | sed -e 's/port.*= //' | tail -n 1`
+MYSQL_PORT=`grep ^port <%= node['ndb']['root_dir'] %>/my.cnf | sed -e 's/port.*= //' | tail -n 1`
 
 echo "$MYSQL_PORT"
 o

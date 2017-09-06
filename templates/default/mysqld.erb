@@ -14,11 +14,11 @@
 ### END INIT INFO
 
 # Variables
-START_PROG=<%= "#{node.ndb.scripts_dir}/mysql-server-start.sh" %>
-STOP_PROG=<%= "#{node.ndb.scripts_dir}/mysql-server-stop.sh" %>
-RESTART_PROG=<%= "#{node.ndb.scripts_dir}/mysql-server-restart.sh" %>
+START_PROG=<%= "#{node['ndb']['scripts_dir']}/mysql-server-start.sh" %>
+STOP_PROG=<%= "#{node['ndb']['scripts_dir']}/mysql-server-stop.sh" %>
+RESTART_PROG=<%= "#{node['ndb']['scripts_dir']}/mysql-server-restart.sh" %>
 PIDFILE=<%= @pid_file %>
-EXEC_WITH_USER="su <%= node.ndb.user %> -c"
+EXEC_WITH_USER="su <%= node['ndb']['user'] %> -c"
 
 init() {
   echo "Executing: $INIT_PROG"

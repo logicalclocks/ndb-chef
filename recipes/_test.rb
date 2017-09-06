@@ -7,10 +7,10 @@
 #
 
 bash "backup_restore_test" do
-    user node.ndb.user
+    user node['ndb']['user']
     code <<-EOF
 set -e
-cd #{node.ndb.scripts_dir}
+cd #{node['ndb']['scripts_dir']}
 ./mgm-client.sh -e show
 ./mysql-client.sh -e "create database if not exists hops"
 ./mysql-client.sh hops -e "create table t1 (id int) "
@@ -23,5 +23,5 @@ cd #{node.ndb.scripts_dir}
 ./mysql-server-start.sh --skip-grant-tables
 ./mysql-client.sh hops -e "select * from t1" | grep '1'
 EOF
-not_if "#{node.ndb.scripts_dir}/mysql-client.sh hops -e 'show tables' | grep t1"
+not_if "#{node['ndb']['scripts_dir']}/mysql-client.sh hops -e 'show tables' | grep t1"
 end

@@ -168,12 +168,14 @@ if "#{node.ndb.version}.#{node.ndb.majorVersion}".to_f >= 7.5
     export MYSQL_HOME=#{node.ndb.root_dir}
     # --force causes mysql_install_db to run even if DNS does not work. In that case, grant table entries that normally use host names will use IP addresses.
     cd #{node.mysql.base_dir}
+    rm -rf #{node.ndb.mysql_server_dir}
     ./bin/mysqld --defaults-file=#{node.ndb.root_dir}/my.cnf --initialize-insecure --explicit_defaults_for_timestamp
     touch #{node.ndb.mysql_server_dir}/.installed
     # sanity check to set ownership of files to 'mysql' user
     chown -R #{node.ndb.user}:#{node.ndb.group} #{node.ndb.mysql_server_dir}
     EOF
-  not_if { ::File.exists?( "#{node.ndb.mysql_server_dir}/.installed" ) }
+    #  not_if { ::File.exists?( "#{node.ndb.mysql_server_dir}/.installed" ) }
+    not_if "#{node.mysql.base_dir}/bin/mysql -u root --skip-password -S #{node.ndb.mysql_socket} -e \"show databases\" | grep mysql "    
   end
 
 else
@@ -191,10 +193,6 @@ else
     EOF
   not_if { ::File.exists?( "#{node.ndb.mysql_server_dir}/.installed" ) }
   end
-end
-
-ndb_mysql_basic "install" do
-  action :nothing
 end
 
 grants_path = "#{Chef::Config.file_cache_path}/grants.sql"

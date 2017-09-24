@@ -14,43 +14,43 @@
 ### END INIT INFO
 
 # Variables
-START_PROG=<%= "#{node.ndb.scripts_dir}/memcached-start.sh" %>
-STOP_PROG=<%= "#{node.ndb.scripts_dir}/memcached-stop.sh" %>
-RESTART_PROG=<%= "#{node.ndb.scripts_dir}/memcached-restart.sh" %>
+START_PROG=<%= "#{node['ndb']['scripts_dir']}/memcached-start.sh" %>
+STOP_PROG=<%= "#{node['ndb']['scripts_dir']}/memcached-stop.sh" %>
+RESTART_PROG=<%= "#{node['ndb']['scripts_dir']}/memcached-restart.sh" %>
 
 
 RETVAL=0
 
-EXEC_WITH_USER="su <%= node.ndb.user %> -c"
+EXEC_WITH_USER="su <%= node['ndb']['user'] %> -c"
 
 init() {
-  echo "Executing as '<%= node.ndb.user %>': $INIT_PROG"
+  echo "Executing as '<%= node['ndb']['user'] %>': $INIT_PROG"
   $EXEC_WITH_USER "$INIT_PROG"
   return $?
 }
 
 
 start() {
-  echo "Executing as '<%= node.ndb.user %>': $START_PROG"
+  echo "Executing as '<%= node['ndb']['user'] %>': $START_PROG"
   $EXEC_WITH_USER "$START_PROG"
   return $?
 }
 
 stop() {
-  echo "Executing as '<%= node.ndb.user %>': $STOP_PROG"
+  echo "Executing as '<%= node['ndb']['user'] %>': $STOP_PROG"
   $EXEC_WITH_USER "$STOP_PROG"
   return $?
 }
 
 restart() {
-  echo "Executing as '<%= node.ndb.user %>': $RESTART_PROG"
+  echo "Executing as '<%= node['ndb']['user'] %>': $RESTART_PROG"
   $EXEC_WITH_USER "$RESTART_PROG"
   return $?
 }
 
 status() {  
   ID=<%= @node_id %>
-  PID_FILE=<%= "#{node.ndb.log_dir}" %>/memcached_$ID.pid
+  PID_FILE=<%= "#{node['ndb']['log_dir']}" %>/memcached_$ID.pid
   if [ -f $PID_FILE ] ; then
      PID=`cat $PID_FILE`
      kill -0 $PID

@@ -6,13 +6,13 @@
 default-character-set = utf8
 
 [mysqld]
-user           = <%= node.ndb.user %>
-basedir         = <%= node.mysql.base_dir %>
-datadir         = <%= node.ndb.mysql_server_dir %>
-port            = <%= node.ndb.mysql_port %>
-socket          = <%= node.ndb.mysql_socket %>
-bind-address    = <%= node.ndb.mysql_ip %>
-pid-file        = <%= node.ndb.log_dir %>/mysql_<%= @mysql_id %>.pid
+user           = <%= node['ndb']['user'] %>
+basedir         = <%= node['mysql']['base_dir'] %>
+datadir         = <%= node['ndb']['mysql_server_dir'] %>
+port            = <%= node['ndb']['mysql_port'] %>
+socket          = <%= node['ndb']['mysql_socket'] %>
+bind-address    = <%= node['ndb']['mysql_ip'] %>
+pid-file        = <%= node['ndb']['log_dir'] %>/mysql_<%= @mysql_id %>.pid
 tmpdir          = /tmp
 
 
@@ -23,4 +23,4 @@ character-set-server = utf8
 
 [client]
 default-character-set = utf8
-socket                = <%= node.ndb.mysql_socket %>
+socket                = <%= node['ndb']['mysql_socket'] %>

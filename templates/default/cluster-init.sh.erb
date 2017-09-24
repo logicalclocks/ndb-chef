@@ -3,14 +3,14 @@
 SKIP_NDBDS=0
 SKIP_MYSQLDS=0
 SKIP_USER_CHECK=0
-TIME_WAIT=<%= node.ndb.wait_startup %>
+TIME_WAIT=<%= node['ndb']['wait_startup'] %>
 
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help|-help)
               echo "usage: <prog> [--skip-ndbds (do not start data nodes)] [--skip-mysqlds (do not start mysql servers)] [-sc (delete old configurations)] [-f skip user check]"
 	      echo ""
-	      echo "connectstring is set to <%= node.ndb.connectstring %>"
+	      echo "connectstring is set to <%= node['ndb']['connectstring'] %>"
 	      exit 0 
 	      ;;
     -f|--force)
@@ -21,8 +21,8 @@ while [ $# -gt 0 ]; do
               TIME_WAIT=$1
 	      ;;
     -sc)
-              echo "Deleting old configurations from /<%= node.ndb.root_dir %>/mgmd/"
-              rm -rf ../<%= node.ndb.root_dir %>/mgmd/*
+              echo "Deleting old configurations from /<%= node['ndb']['root_dir'] %>/mgmd/"
+              rm -rf ../<%= node['ndb']['root_dir'] %>/mgmd/*
 	      ;;
     --skip-ndbds)
               SKIP_NDBDS=1
@@ -39,13 +39,13 @@ done
 
 
   echo "" 
-  echo "Testing to see if a cluster is already running on host '<%= node.ndb.connectstring %>' ..." 
+  echo "Testing to see if a cluster is already running on host '<%= node['ndb']['connectstring'] %>' ..." 
   echo "" 
-  <%= node.mysql.base_dir %>/bin/ndb_mgm -c <%= node.ndb.connectstring %> -t 2 -e show 1> /dev/null
+  <%= node['mysql']['base_dir'] %>/bin/ndb_mgm -c <%= node['ndb']['connectstring'] %> -t 2 -e show 1> /dev/null
 
   if [ $? -eq 0 ] ; then
       echo ""      
-      echo "A management server is already running on <%= node.ndb.connectstring %>" 
+      echo "A management server is already running on <%= node['ndb']['connectstring'] %>" 
       echo "" 	
       exit 2
   fi
@@ -111,13 +111,13 @@ fi
 echo "Cluster Startup may take a few minutes."  
 
 
-echo "Truncating the cluster log file: <%= node.ndb.log_dir %>/cluster.log"
-rm <%= node.ndb.log_dir %>/cluster.log 
+echo "Truncating the cluster log file: <%= node['ndb']['log_dir'] %>/cluster.log"
+rm <%= node['ndb']['log_dir'] %>/cluster.log 
 
 echo "Starting the Management Server ....."
 
-if [ -e <%= node.ndb.log_dir %>/cluster.log ] ; then
-    SIZE_CL=`cat <%= node.ndb.log_dir %>/cluster.log | wc -l`
+if [ -e <%= node['ndb']['log_dir'] %>/cluster.log ] ; then
+    SIZE_CL=`cat <%= node['ndb']['log_dir'] %>/cluster.log | wc -l`
 else
     SIZE_CL=0
 fi
@@ -125,13 +125,13 @@ fi
 #remove memory of old configurations
 #echo If you want to remove warnings for incompatible configuration changes, run rm -rf ../$NDB_DIR/$MGM_DATADIR/*
 
-<%= node.mysql.base_dir %>/bin/ndb_mgmd -f <%= node.ndb.root_dir %>/config.ini  --configdir=<%= node.ndb.root_dir %>/mgmd --reload   
+<%= node['mysql']['base_dir'] %>/bin/ndb_mgmd -f <%= node['ndb']['root_dir'] %>/config.ini  --configdir=<%= node['ndb']['root_dir'] %>/mgmd --reload   
 
 if [ $? -ne 0 ] ; then
   echo "Problem starting the Management Server."
   echo "Please read the logs in:"
-  echo "<%= node.ndb.log_dir %>."
-  echo "<%= node.ndb.root_dir %>/mgmd_1"
+  echo "<%= node['ndb']['log_dir'] %>."
+  echo "<%= node['ndb']['root_dir'] %>/mgmd_1"
   exit 1
 fi
 
@@ -144,8 +144,8 @@ MGMD_TIMEOUT=200
 MGMD_COUNT=0
 while [ $MGMD_STARTED -eq 0 ] ; do
 
-  if [ -e <%= node.ndb.log_dir %>/cluster.log ] ; then
-    UPDATED_SIZE_CL=`cat <%= node.ndb.log_dir %>/cluster.log | wc -l`
+  if [ -e <%= node['ndb']['log_dir'] %>/cluster.log ] ; then
+    UPDATED_SIZE_CL=`cat <%= node['ndb']['log_dir'] %>/cluster.log | wc -l`
   else
     UPDATED_SIZE_CL=0
   fi
@@ -176,7 +176,7 @@ done
    echo "Please check for errors in your configuration file or report a bug."
    echo ""
    echo "You now need to kill the ndb_mgmd process."
-   echo "To find the proceses-id of ndb_mgmd: 'ps -ef | grep ndb_mgmd | grep <%= node.ndb.user %>' "
+   echo "To find the proceses-id of ndb_mgmd: 'ps -ef | grep ndb_mgmd | grep <%= node['ndb']['user'] %>' "
    echo "To kill the process: kill -9 [process-id]"
    exit 2
   fi
@@ -185,17 +185,17 @@ done
 sleep 1
 
 <% id = 1 -%>
-<% for ndbd in node.ndb.ndbd.private_ips -%>
+<% for ndbd in node['ndb']['ndbd']['private_ips'] -%>
 echo ""
 if [ $SKIP_NDBDS -eq 0 ] ; then
     echo "Starting a Data Node on host: <%= ndbd %> "
-    echo "For username: <%= node.ndb.user %> "
-  ssh <%= node.ndb.user %>@<%= ndbd %> <%= node.ndb.scripts_dir %>/ndbd-init.sh
+    echo "For username: <%= node['ndb']['user'] %> "
+  ssh <%= node['ndb']['user'] %>@<%= ndbd %> <%= node['ndb']['scripts_dir'] %>/ndbd-init.sh
 
   if [ $? -ne 0 ] ; then
     echo "Problem starting a Data Node on host <%= ndbd %>."
     echo "Please read the logs on host <%= ndbd %> in:"
-    echo "<%= node.ndb.log_dir %>"
+    echo "<%= node['ndb']['log_dir'] %>"
   fi
 else
   echo "Skipping starting ndbd-<%= id %> at <%= ndbd %>"
@@ -205,10 +205,10 @@ fi
 
 
 echo "Waiting for the cluster to be ready by calling:"
-echo "ndb_waiter -c <%= node.ndb.connectstring %> --timeout=$TIME_WAIT"
+echo "ndb_waiter -c <%= node['ndb']['connectstring'] %> --timeout=$TIME_WAIT"
 echo "This can take a few minutes..."
 
-<%= node.mysql.base_dir %>/bin/ndb_waiter -c <%= node.ndb.connectstring %> --timeout=$TIME_WAIT 2>&1 > /dev/null
+<%= node['mysql']['base_dir'] %>/bin/ndb_waiter -c <%= node['ndb']['connectstring'] %> --timeout=$TIME_WAIT 2>&1 > /dev/null
 
 if [ $? -ne 0 ] ; then
     echo "Error when waiting on the cluster to be ready."
@@ -216,18 +216,18 @@ if [ $? -ne 0 ] ; then
     exit 3
 fi
 
-<% id = node.mysql.id -%>
-<% for mysqld in node.ndb.mysqld.private_ips -%>
+<% id = node['mysql']['id'] -%>
+<% for mysqld in node['ndb']['mysqld']['private_ips'] -%>
 
 if [ $SKIP_MYSQLDS -eq 0 ] ; then
     echo "Starting a MySQL Server on host: <%= mysqld %> "
-    echo "For username: <%= node.ndb.user %> "
-  ssh <%= node.ndb.user %>@<%= mysqld %> "<%= node.ndb.scripts_dir %>/mysql-server-start.sh --force"
+    echo "For username: <%= node['ndb']['user'] %> "
+  ssh <%= node['ndb']['user'] %>@<%= mysqld %> "<%= node['ndb']['scripts_dir'] %>/mysql-server-start.sh --force"
 
   if [ $? -ne 0 ] ; then
     echo "Problem starting a MySQL Server Node on host <%= mysqld %>."
     echo "Please read the logs on host <%= mysqld %> in:"
-    echo "<%= node.ndb.log_dir %>/mysql_<%= @id %>_out.log"
+    echo "<%= node['ndb']['log_dir'] %>/mysql_<%= @id %>_out.log"
   fi
 else
   echo "Skipping starting mysqld-<%= id %> at <%= mysqld %>"
@@ -238,6 +238,6 @@ fi
 
 sleep 3
 
-<%= node.ndb.base_dir %>/scripts/mgm-client.sh -e show
+<%= node['ndb']['base_dir'] %>/scripts/mgm-client.sh -e show
 
 exit 0

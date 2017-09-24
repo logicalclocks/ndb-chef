@@ -9,6 +9,6 @@
 # It often fails on building java code. Just re-run make after killing the shell.
 # 
 export NDB_CONNECTSTRING=<%= @mgmd_ip %>:1186
-export LD_LIBRARY_PATH=<%= node.mysql.base_dir %>/lib
+export LD_LIBRARY_PATH=<%= node['mysql']['base_dir'] %>/lib
 
-<%= node.ndb.scripts_dir %>/flexAsync -t 5000 -warmup_time 2000 -execution_time 30000 -cooldown_time 1000  > /tmp/ndb__experiment.out
+<%= node['ndb']['scripts_dir'] %>/flexAsync -t 5000 -warmup_time 2000 -execution_time 30000 -cooldown_time 1000  > /tmp/ndb__experiment.out

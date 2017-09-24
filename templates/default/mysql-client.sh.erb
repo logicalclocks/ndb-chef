@@ -2,7 +2,7 @@
 
 EXECUTE_SQL=""
 DB=
-MYSQL_CONF=<%= node.ndb.root_dir %>/my.cnf
+MYSQL_CONF=<%= node['ndb']['root_dir'] %>/my.cnf
 # Either a 'db' will be passed as an argument, or not:
 # Case 1:
 # mysql -u root -pPasswd mysql -e "show tables"
@@ -22,12 +22,12 @@ if [ $# -gt 1 ] ; then
     shift # remove '-e'
 fi
 
-MYSQL_SOCKET=`<%= node.ndb.scripts_dir %>/get-mysql-socket.sh`
+MYSQL_SOCKET=`<%= node['ndb']['scripts_dir'] %>/get-mysql-socket.sh`
 echo "Using socket: $MYSQL_SOCKET"
  if [ "$EXECUTE_SQL" = "-e" ] ; then
-     <%= node.mysql.base_dir %>/bin/mysql --defaults-file=$MYSQL_CONF -u root  $DB $EXECUTE_SQL "$@"
+     <%= node['mysql']['base_dir'] %>/bin/mysql --defaults-file=$MYSQL_CONF -u root  $DB $EXECUTE_SQL "$@"
  else
   # Case 3
-    <%= node.mysql.base_dir %>/bin/mysql --defaults-file=$MYSQL_CONF -u root $DB  $@
+    <%= node['mysql']['base_dir'] %>/bin/mysql --defaults-file=$MYSQL_CONF -u root $DB  $@
  fi
 exit $?

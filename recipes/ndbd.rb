@@ -1,25 +1,25 @@
 require File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
 
 
-case node.platform
+case node['platform']
 when "ubuntu"
- if node.platform_version.to_f <= 14.04
-   node.override.ndb.systemd = "false"
+ if node['platform_version'].to_f <= 14.04
+   node.override['ndb']['systemd'] = "false"
  end
 end
 
-if node.ndb.systemd == false
-   node.override.ndb.systemd = "false"
+if node['ndb']['systemd'] == false
+   node.override['ndb']['systemd'] = "false"
 end  
 
 ndb_connectstring()
 
-Chef::Log.info "Hostname is: #{node.hostname}"
-Chef::Log.info "IP address is: #{node.ipaddress}"
+Chef::Log.info "Hostname is: #{node['hostname']}"
+Chef::Log.info "IP address is: #{node['ipaddress']}"
 
-directory node.ndb.data_dir do
-  owner node.ndb.user
-  group node.ndb.group
+directory node['ndb']['data_dir'] do
+  owner node['ndb']['user']
+  group node['ndb']['group']
   mode "755"
   action :create
 end
@@ -28,7 +28,7 @@ my_ip = my_private_ip()
 
 found_id = -1
 id = 1
-for ndbd in node.ndb.ndbd.private_ips
+for ndbd in node['ndb']['ndbd']['private_ips']
   if my_ip.eql? ndbd 
     Chef::Log.info "Found matching IP address in the list of data nodes: #{ndbd}. ID= #{id}"
     found_id = id
@@ -41,19 +41,19 @@ if found_id == -1
   raise "Ndbd: Could not find matching IP address in list of data nodes."
 end
 
-directory "#{node.ndb.data_dir}/#{found_id}" do
-  owner node.ndb.user
-  group node.ndb.group
+directory "#{node['ndb']['data_dir']}/#{found_id}" do
+  owner node['ndb']['user']
+  group node['ndb']['group']
   mode "755"
   action :create
 end
 
 
-for script in node.ndb.scripts
-  template "#{node.ndb.scripts_dir}/#{script}" do
+for script in node['ndb']['scripts']
+  template "#{node['ndb']['scripts_dir']}/#{script}" do
     source "#{script}.erb"
-    owner node.ndb.user
-    group node.ndb.group
+    owner node['ndb']['user']
+    group node['ndb']['group']
     mode 0751
     variables({ :node_id => found_id })
   end
@@ -62,7 +62,7 @@ end
 
 service_name = "ndbmtd"
 
-if node.ndb.systemd != "true" 
+if node['ndb']['systemd'] != "true" 
 
 service "#{service_name}" do
   provider Chef::Provider::Service::Init::Debian
@@ -76,7 +76,7 @@ template "/etc/init.d/#{service_name}" do
   group "root"
   mode 0754
   variables({ :node_id => found_id })
-if node.services.enabled == "true"
+if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name)
 end
   notifies :restart,"service[#{service_name}]", :immediately
@@ -89,7 +89,7 @@ service "#{service_name}" do
   action :nothing
 end
 
-case node["platform_family"]
+case node['platform_family']
   when "debian"
 systemd_script = "/lib/systemd/system/#{service_name}.service"
   when "rhel"
@@ -97,14 +97,14 @@ systemd_script = "/usr/lib/systemd/system/#{service_name}.service"
 end
 
 template systemd_script do
-    only_if { node.ndb.systemd == "true" }
+    only_if { node['ndb']['systemd'] == "true" }
     source "#{service_name}.service.erb"
-    owner node.ndb.user
-    group node.ndb.group
+    owner node['ndb']['user']
+    group node['ndb']['group']
     mode 0754
     cookbook 'ndb'
     variables({ :node_id => found_id })
-if node.services.enabled == "true"
+if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name)
 end
 #    notifies :restart, "service[#{service_name}]", :immediately
@@ -119,14 +119,14 @@ end
 
 end
 
-if node.kagent.enabled == "true"
+if node['kagent']['enabled'] == "true"
   Chef::Log.info "Trying to infer the #{service_name} ID by examining the local IP. If it matches the config.ini file, then we have our node."
 
   found_id = -1
   id = 1
   my_ip = my_private_ip()
 
-  for ndbd in node.ndb.ndbd.private_ips
+  for ndbd in node['ndb']['ndbd']['private_ips']
     if my_ip.eql? ndbd
       Chef::Log.info "Found matching IP address in the list of data nodes: #{ndbd} . ID= #{id}"
       found_id = id
@@ -142,7 +142,7 @@ if node.kagent.enabled == "true"
 
   kagent_config service_name do
     service "NDB" # #{found_id}
-    log_file "#{node.ndb.log_dir}/ndb_#{found_id}_out.log"
+    log_file "#{node['ndb']['log_dir']}/ndb_#{found_id}_out.log"
     restart_agent false    
     action :add
   end
@@ -152,12 +152,12 @@ end
 
 # Here we set interrupts to be handled by only the first CPU
 
-if (node.ndb.interrupts_isolated_to_single_cpu == "true") && (not ::File.exists?( "#{node.mysql.base_dir}/.balance_irqs"))
- case node["platform_family"]
+if (node['ndb']['interrupts_isolated_to_single_cpu'] == "true") && (not ::File.exists?( "#{node['mysql']['base_dir']}/.balance_irqs"))
+ case node['platform_family']
   when "debian"
     
     file "/etc/default/irqbalance" do 
-      owner node.hdfs.user
+      owner node['hdfs']['user']
       action :delete
     end
 
@@ -186,9 +186,9 @@ if (node.ndb.interrupts_isolated_to_single_cpu == "true") && (not ::File.exists?
           source /etc/default/irqbalance 
           irqbalance
           update-grub
-      touch #{node.mysql.base_dir}/.balance_irqs
+      touch #{node['mysql']['base_dir']}/.balance_irqs
       EOF
-      not_if { ::File.exists?( "#{node.mysql.base_dir}/.balance_irqs" ) }
+      not_if { ::File.exists?( "#{node['mysql']['base_dir']}/.balance_irqs" ) }
     end
     
   when "rhel"
@@ -196,28 +196,28 @@ if (node.ndb.interrupts_isolated_to_single_cpu == "true") && (not ::File.exists?
       user "root"
       code <<-EOF
 
-      touch #{node.mysql.base_dir}/.balance_irqs
+      touch #{node['mysql']['base_dir']}/.balance_irqs
       EOF
-      not_if { ::File.exists?( "#{node.mysql.base_dir}/.balance_irqs" ) }
+      not_if { ::File.exists?( "#{node['mysql']['base_dir']}/.balance_irqs" ) }
     end
 
   end
 
 end
 
-homedir = node.ndb.user.eql?("root") ? "/root" : "/home/#{node.ndb.user}"
+homedir = node['ndb']['user'].eql?("root") ? "/root" : "/home/#{node['ndb']['user']}"
 
 # Add the mgmd hosts' public key, so that it can start/stop the ndbd on this node using passwordless ssh.
 kagent_keys "#{homedir}" do
-  cb_user "#{node.ndb.user}"
-  cb_group "#{node.ndb.group}"
+  cb_user "#{node['ndb']['user']}"
+  cb_group "#{node['ndb']['group']}"
   cb_name "ndb"
   cb_recipe "mgmd"  
   action :get_publickey
 end  
 
 
-case node.ndb.systemd
+case node['ndb']['systemd']
 when "true"
   ndb_start "start-ndbd-systemd" do
     action :start_if_not_running_systemd

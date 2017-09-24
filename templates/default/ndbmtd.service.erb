@@ -3,11 +3,11 @@ Description = NDB Multi-threaded DataNode (ndbmtd)
 After = syslog.target network.target remote-fs.target
 
 [Service]
-User = <%= node.ndb.user %>
-PIDFile = <%= "#{node.ndb.log_dir}" %>/ndb_<%= @node_id %>.pid
-ExecStart = <%= "#{node.ndb.base_dir}/scripts/ndbd-start.sh" %> 
-ExecStop = <%= "#{node.ndb.base_dir}/scripts/ndbd-stop.sh" %> 
-ExecReload = <%= "#{node.ndb.base_dir}/scripts/ndbd-restart.sh" %>
+User = <%= node['ndb']['user'] %>
+PIDFile = <%= "#{node['ndb']['log_dir']}" %>/ndb_<%= @node_id %>.pid
+ExecStart = <%= "#{node['ndb']['base_dir']}/scripts/ndbd-start.sh" %> 
+ExecStop = <%= "#{node['ndb']['base_dir']}/scripts/ndbd-stop.sh" %> 
+ExecReload = <%= "#{node['ndb']['base_dir']}/scripts/ndbd-restart.sh" %>
 
 Type = forking
 

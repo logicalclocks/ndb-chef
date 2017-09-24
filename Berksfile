@@ -5,6 +5,5 @@ metadata
 cookbook 'kagent', github: "hopshadoop/kagent-chef", branch: "master"
 cookbook 'conda', github: "hopshadoop/conda-chef", branch: "master"
 
-cookbook 'ulimit', '~> 0.4.0'
-
+cookbook 'ulimit', github: "siroibaf/chef-ulimit", branch: "master"
 

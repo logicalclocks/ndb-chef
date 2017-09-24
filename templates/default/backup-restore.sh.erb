@@ -13,7 +13,7 @@ if [ $# -ne 1 ] ; then
     help
 fi    
 
-BACKUP_DIR="<%= node.ndb.base_dir %>/backups/BACKUP/BACKUP"
+BACKUP_DIR="<%= node['ndb']['base_dir'] %>/backups/BACKUP/BACKUP"
 BACKUP_ID=$1
 case $1 in
     "-h"|"--help"|"-help")
@@ -39,9 +39,9 @@ for i in "${datanodes[@]}"
 do	 
   echo "Restoring backup at: $i"
   if [ $j == 1 ] ; then
-    ssh $i "<%= node.mysql.base_dir %>/bin/ndb_restore -c <%= node.ndb.connectstring %> -m -n $j -b ${BACKUP_ID} --progress-frequency=5 --backup_path=${BACKUP_DIR}-${BACKUP_ID} --rebuild-indexes --restore-privilege-tables --restore_data --restore_epoch"
+    ssh $i "<%= node['mysql']['base_dir'] %>/bin/ndb_restore -c <%= node['ndb']['connectstring'] %> -m -n $j -b ${BACKUP_ID} --progress-frequency=5 --backup_path=${BACKUP_DIR}-${BACKUP_ID} --rebuild-indexes --restore-privilege-tables --restore_data --restore_epoch"
   else
-    ssh $i "<%= node.mysql.base_dir %>/bin/ndb_restore -c <%= node.ndb.connectstring %> -n $j -b ${BACKUP_ID} --progress-frequency=5 --backup_path=${BACKUP_DIR}-${BACKUP_ID} --rebuild-indexes --restore_data --restore_epoch"
+    ssh $i "<%= node['mysql']['base_dir'] %>/bin/ndb_restore -c <%= node['ndb']['connectstring'] %> -n $j -b ${BACKUP_ID} --progress-frequency=5 --backup_path=${BACKUP_DIR}-${BACKUP_ID} --rebuild-indexes --restore_data --restore_epoch"
   fi
   b=$?
   if [ $res -eq 0 ] ; then

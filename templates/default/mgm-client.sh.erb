@@ -1,6 +1,6 @@
 #!/bin/sh 
 
-MGM_CONN=<%= node.ndb.connectstring %>
+MGM_CONN=<%= node['ndb']['connectstring'] %>
 PARAMS=
 EXEC=
 while [ $# -gt 0 ]; do
@@ -37,5 +37,5 @@ while [ $# -gt 0 ]; do
 done
 
 
-<%= node.mysql.base_dir %>/bin/ndb_mgm -c $MGM_CONN $EXEC $PARAMS
+<%= node['mysql']['base_dir'] %>/bin/ndb_mgm -c $MGM_CONN $EXEC $PARAMS
 exit $?

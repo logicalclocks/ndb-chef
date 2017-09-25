@@ -5,7 +5,7 @@ if [ "$1" = "--force" ] ; then
 fi
 
 echo "Testing if a memcached server is already running...."
-PID_FILE=<%= node.ndb.log_dir %>/memcached_<%= @node_id %>.pid
+PID_FILE=<%= node['ndb']['log_dir'] %>/memcached_<%= @node_id %>.pid
 if [ -f $PID_FILE  ] ; then 
     PID=`cat $PID_FILE`
     (kill -0 $PID) 2> /dev/null
@@ -22,10 +22,10 @@ echo "Starting the memcached server...."
 # http://dev.mysql.com/doc/ndbapi/en/ndbmemcache-configuration.html
 
 
-<% if #{node.ndb.use_systemd} == "true" then -%>
-  <%= node.mysql.base_dir %>/bin/memcached -d -P $PID_FILE -u <%= node.ndb.user %> -E <%= node.mysql.base_dir %>/lib/ndb_engine.so -e \"connectstring=<%= node.ndb.connectstring %>;m=<%= node.memcached.mem_size %><%= node.memcached.options %>\" > <%= node.ndb.log_dir %>/memcached_<%= @node_id %>.out.log  2>&1 < /dev/null &
+<% if #{node['ndb']['use_systemd']} == "true" then -%>
+  <%= node['mysql']['base_dir'] %>/bin/memcached -d -P $PID_FILE -u <%= node['ndb']['user'] %> -E <%= node['mysql']['base_dir'] %>/lib/ndb_engine.so -e \"connectstring=<%= node['ndb']['connectstring'] %>;m=<%= node['memcached']['mem_size'] %><%= node['memcached']['options'] %>\" > <%= node['ndb']['log_dir'] %>/memcached_<%= @node_id %>.out.log  2>&1 < /dev/null &
 <% else -%>
-  su <%= node.ndb.user %> -c "<%= node.mysql.base_dir %>/bin/memcached -d -P $PID_FILE -u <%= node.ndb.user %> -E <%= node.mysql.base_dir %>/lib/ndb_engine.so -e \"connectstring=<%= node.ndb.connectstring %>;m=<%= node.memcached.mem_size %><%= node.memcached.options %>\" > <%= node.ndb.log_dir %>/memcached_<%= @node_id %>.out.log  2>&1 < /dev/null &"
+  su <%= node['ndb']['user'] %> -c "<%= node['mysql']['base_dir'] %>/bin/memcached -d -P $PID_FILE -u <%= node['ndb']['user'] %> -E <%= node['mysql']['base_dir'] %>/lib/ndb_engine.so -e \"connectstring=<%= node['ndb']['connectstring'] %>;m=<%= node['memcached']['mem_size'] %><%= node['memcached']['options'] %>\" > <%= node['ndb']['log_dir'] %>/memcached_<%= @node_id %>.out.log  2>&1 < /dev/null &"
 <% end -%>
 
 RES=$?

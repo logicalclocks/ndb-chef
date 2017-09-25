@@ -1,7 +1,7 @@
 #!/bin/sh 
 
 
-MGM_CONN=<%= node.ndb.connectstring %>
+MGM_CONN=<%= node['ndb']['connectstring'] %>
 SKIP_MYSQLDS=0
 
 while [ $# -gt 0 ]; do
@@ -29,18 +29,18 @@ done
 
 
 
-<% id = node.mysql.id -%>
-<% for mysqld in node.ndb.mysqld.private_ips -%>
+<% id = node['mysql']['id'] -%>
+<% for mysqld in node['ndb']['mysqld']['private_ips'] -%>
 
 if [ $SKIP_MYSQLDS -eq 0 ] ; then
     echo "Stopping a MySQL Server on host: <%= mysqld %> "
-    echo "For username: <%= node.ndb.user %> "
-  ssh <%= node.ndb.user %>@<%= mysqld %> "<%= node.ndb.scripts_dir %>/mysql-server-stop.sh"
+    echo "For username: <%= node['ndb']['user'] %> "
+  ssh <%= node['ndb']['user'] %>@<%= mysqld %> "<%= node['ndb']['scripts_dir'] %>/mysql-server-stop.sh"
 
   if [ $? -ne 0 ] ; then
     echo "Problem stopping a MySQL Server Node on host <%= mysqld %>."
     echo "Please read the logs on host <%= mysqld %> in:"
-    echo "<%= node.ndb.log_dir %>/mysql_<%= @id %>_out.log"
+    echo "<%= node['ndb']['log_dir'] %>/mysql_<%= @id %>_out.log"
   fi
 else
   echo "Skipping stopping mysqld-<%= id %> at <%= mysqld %>"
@@ -48,8 +48,8 @@ fi
 <% id += 1 -%>
 <% end -%>
 
-#if [ -e <%= node.ndb.scripts_dir %>/mysql-server-stop.sh ] ; then
-#    <%= node.ndb.scripts_dir %>/mysql-server-stop.sh
+#if [ -e <%= node['ndb']['scripts_dir'] %>/mysql-server-stop.sh ] ; then
+#    <%= node['ndb']['scripts_dir'] %>/mysql-server-stop.sh
 #fi
 
-<%= node.mysql.base_dir %>/bin/ndb_mgm -c $MGM_CONN -e "shutdown"
+<%= node['mysql']['base_dir'] %>/bin/ndb_mgm -c $MGM_CONN -e "shutdown"

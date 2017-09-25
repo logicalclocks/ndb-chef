@@ -1,15 +1,15 @@
 #!/bin/sh 
 
 USERID=`id | sed -e 's/).*//; s/^.*(//;'`
-if [ "X$USERID" != "X<%= node.ndb.user %>" ]; then
-   echo "You should have started the cluster as user: '<%= node.ndb.user %>'."
+if [ "X$USERID" != "X<%= node['ndb']['user'] %>" ]; then
+   echo "You should have started the cluster as user: '<%= node['ndb']['user'] %>'."
    echo "If you continue, you will change ownership of database files"
-   echo "from '<%= node.ndb.user %>' to '$USERID'."
+   echo "from '<%= node['ndb']['user'] %>' to '$USERID'."
    exit -3
 fi  
 
 
-MGM_CONN=<%= node.ndb.connectstring %>
+MGM_CONN=<%= node['ndb']['connectstring'] %>
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -35,11 +35,11 @@ done
 echo "Starting Data Node <%= @node_id %>."
 # --connect-retries == -1 implies that the ndbd keeps trying forever to connect to the ndb_mgmd
 
-<% if #{node.ndb.use_systemd} == "true" then -%>
-  <%= node.mysql.base_dir %>/bin/ndbmtd -c $MGM_CONN --ndb-nodeid=<%= @node_id %>  --connect-retries=-1 --connect-delay=10
+<% if #{node['ndb']['use_systemd']} == "true" then -%>
+  <%= node['mysql']['base_dir'] %>/bin/ndbmtd -c $MGM_CONN --ndb-nodeid=<%= @node_id %>  --connect-retries=-1 --connect-delay=10
 <% else -%>
-  #su <%= node.ndb.user %> -c "<%= node.mysql.base_dir %>/bin/ndbmtd -c $MGM_CONN --ndb-nodeid=<%= @node_id %>  --connect-retries=-1 --connect-delay=10"
-  <%= node.mysql.base_dir %>/bin/ndbmtd -c $MGM_CONN --ndb-nodeid=<%= @node_id %>  --connect-retries=-1 --connect-delay=10
+  #su <%= node['ndb']['user'] %> -c "<%= node['mysql']['base_dir'] %>/bin/ndbmtd -c $MGM_CONN --ndb-nodeid=<%= @node_id %>  --connect-retries=-1 --connect-delay=10"
+  <%= node['mysql']['base_dir'] %>/bin/ndbmtd -c $MGM_CONN --ndb-nodeid=<%= @node_id %>  --connect-retries=-1 --connect-delay=10
 <% end -%>
 
 RES=`echo $?`

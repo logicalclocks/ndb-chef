@@ -128,12 +128,12 @@
 #         new_resource.path       = ::File.join(prefix_root, "#{new_resource.name}-#{new_resource.version}")
 #         new_resource.home_dir ||= default_home_dir
 #         Chef::Log.debug("path is #{new_resource.path}")
-#         new_resource.release_file     = ::File.join(Chef::Config[:file_cache_path],  "#{new_resource.name}.#{release_ext}")
+#         new_resource.release_file     = ::File.join(Chef::Config['file_cache_path'],  "#{new_resource.name}.#{release_ext}")
 #       end
 
 #       def set_dump_paths
 #         release_ext = parse_file_extension
-#         new_resource.release_file  = ::File.join(Chef::Config[:file_cache_path],  "#{new_resource.name}.#{release_ext}")
+#         new_resource.release_file  = ::File.join(Chef::Config['file_cache_path'],  "#{new_resource.name}.#{release_ext}")
 #       end
 
 #       def parse_file_extension

@@ -3,8 +3,8 @@
 # returns '1' if there is no process running with that pid
 # returns '-1' if the PID file doesn't exist
 
-ID=<%= node.mgm.id %>
-PID_FILE=<%= "#{node.ndb.log_dir}/ndb_${ID}.pid" %> 
+ID=<%= node['mgm']['id'] %>
+PID_FILE=<%= "#{node['ndb']['log_dir']}/ndb_${ID}.pid" %> 
 if [ test ! -s $PID_FILE ] ; then
  echo "PID file not found $PID_FILE"
  exit -1

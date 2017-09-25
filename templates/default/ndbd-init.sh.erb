@@ -1,15 +1,15 @@
 #!/bin/sh 
 
 USERID=`id | sed -e 's/).*//; s/^.*(//;'`
-if [ "X$USERID" != "X<%= node.ndb.user %>" ]; then
-   echo "You should have started the cluster as user: '<%= node.ndb.user %>'."
+if [ "X$USERID" != "X<%= node['ndb']['user'] %>" ]; then
+   echo "You should have started the cluster as user: '<%= node['ndb']['user'] %>'."
    echo "If you continue, you will change ownership of database files"
-   echo "from '<%= node.ndb.user %>' to '$USERID'."
+   echo "from '<%= node['ndb']['user'] %>' to '$USERID'."
    exit -3
 fi  
  
 
-MGM_CONN=<%= node.ndb.connectstring %>
+MGM_CONN=<%= node['ndb']['connectstring'] %>
 while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help|-help)
@@ -34,7 +34,7 @@ done
 echo "Initializing Data Node <%= @node_id %>."
 echo ""
 
-#su <%= node.ndb.user %> -c "<%= node.mysql.base_dir %>/bin/ndbmtd -c $MGM_CONN --initial --ndb-nodeid=<%= @node_id %>"
-<%= node.mysql.base_dir %>/bin/ndbmtd -c $MGM_CONN --initial --ndb-nodeid=<%= @node_id %>
+#su <%= node['ndb']['user'] %> -c "<%= node['mysql']['base_dir'] %>/bin/ndbmtd -c $MGM_CONN --initial --ndb-nodeid=<%= @node_id %>"
+<%= node['mysql']['base_dir'] %>/bin/ndbmtd -c $MGM_CONN --initial --ndb-nodeid=<%= @node_id %>
 RES=`echo $?`
 exit 

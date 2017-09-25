@@ -14,13 +14,13 @@
 ### END INIT INFO
 
 # Variables
-INIT_PROG="<%= node.ndb.base_dir %>/scripts/ndbd-init.sh"
-START_PROG="<%= node.ndb.base_dir %>/scripts/ndbd-start.sh"
-STOP_PROG="<%= node.ndb.base_dir  %>/scripts/ndbd-stop.sh"
-RESTART_PROG="<%= node.ndb.base_dir %>/scripts/ndbd-restart.sh"
-EXEC_WITH_USER="su <%= node.ndb.user %> -c"
+INIT_PROG="<%= node['ndb']['base_dir'] %>/scripts/ndbd-init.sh"
+START_PROG="<%= node['ndb']['base_dir'] %>/scripts/ndbd-start.sh"
+STOP_PROG="<%= node['ndb']['base_dir']  %>/scripts/ndbd-stop.sh"
+RESTART_PROG="<%= node['ndb']['base_dir'] %>/scripts/ndbd-restart.sh"
+EXEC_WITH_USER="su <%= node['ndb']['user'] %> -c"
 ID=<%= @node_id %>
-PID_FILE=<%= "#{node.ndb.log_dir}/ndb_${ID}.pid" %> 
+PID_FILE=<%= "#{node['ndb']['log_dir']}/ndb_${ID}.pid" %> 
 
 
 init() {

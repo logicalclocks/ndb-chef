@@ -316,6 +316,10 @@ attribute "install/user",
           :description => "User to install the services as",
           :type => "string"
 
+attribute "services/enabled",
+          :description => "Default 'false'. Set to 'true' to enable daemon services, so that they are started on a host restart.",
+          :type => "string"
+
 # attribute "btsync/ndb/seeder_secret",
 # :display_name => "Ndb seeder's random secret key.",
 # :description => "20 chars or more (normally 32 chars)",

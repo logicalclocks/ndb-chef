@@ -87,7 +87,7 @@ end
 
 url = node.ndb.url
 Chef::Log.info "Downloading mysql cluster binaries from #{url}"
-base_package_filename =  File.basename(node.ndb.url)
+base_package_filename = File.basename(node['ndb']['url'])
 Chef::Log.info "Into file #{base_package_filename}"
 base_package_dirname =  File.basename(base_package_filename, ".tar.gz")
 ndb_package_dirname = "#{Chef::Config[:file_cache_path]}/#{base_package_dirname}"

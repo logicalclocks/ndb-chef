@@ -13,6 +13,7 @@ if [ $# -gt 0 ] ; then
 fi
 
 
+
 echo "Testing if a mysql server is already running on this host..."
 
 MYSQL_SOCKET=`<%= node['ndb']['base_dir'] %>/scripts/get-mysql-socket.sh`
@@ -22,6 +23,9 @@ if [ $? -eq 0 ] ; then
  echo "A MySQL Server is already running at socket. Not starting another MySQL Server at this socket. Use '--force' to kill existing mysql servers at this node."
  exit 1
 fi
+
+# If there is a stray lock file lying around (and the mysqld is not listening on the socket), remove it.
+rm -f /tmp/mysql.sock.lock 
 
 export MYSQL_HOME=<%= node['ndb']['root_dir'] %>
 

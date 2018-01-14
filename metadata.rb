@@ -4,9 +4,9 @@ maintainer_email "jdowling@kth.se"
 license          "GPL 2.0"
 description      "Installs/Configures NDB (MySQL Cluster)"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "0.3.0"
+version          "0.2.1"
 source_url       "https://github.com/hopshadoop/ndb-chef"
-
+issues_url       "https://github.com/hopshadoop/ndb-chef/issues"
 
 depends           "kagent"
 depends           "ulimit"
@@ -308,12 +308,29 @@ attribute "ndb/ndbd/private_ips",
           :description =>  "Ips for ndb data nodes",
           :type => 'array'
 
+attribute "ndb/MaxNoOfExecutionThreads",
+          :description => "Number of execution threads for MySQL Cluster",
+          :type => 'string'
+
+attribute "ndb/DataMemory",
+          :description => "Data memory for each MySQL Cluster Data Node",
+          :type => 'string',
+          :required => "required"
+
+attribute "ndb/IndexMemory",
+          :description => "Index memory for each MySQL Cluster Data Node",
+          :type => 'string'
+
 attribute "install/dir",
           :description => "Set to a base directory under which we will install.",
           :type => "string"
 
 attribute "install/user",
           :description => "User to install the services as",
+          :type => "string"
+
+attribute "install/upgrade",
+          :description => "User to upgrade the software",
           :type => "string"
 
 attribute "services/enabled",

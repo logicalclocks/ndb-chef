@@ -39,6 +39,35 @@ if found_id == -1
   raise "Could not find matching IP address #{my_ip} in the list of mgmd nodes: " + node['ndb']['mgmd']['private_ips'].join(",")
 end
 
+if !node['ndb']['local_backup_dir'].empty?
+  directory node['ndb']['local_backup_dir'] do
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    mode "700"
+    action :create
+  end
+end
+
+#
+# Just copy the backup rotation script
+#
+cookbook_file "#{node['ndb']['scripts_dir']}/db_backup_rotation.sh" do
+  source "db_backup_rotation.sh"
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode 0700
+end
+
+#
+# Source the native NDB backup script
+#
+template "#{node['ndb']['scripts_dir']}/native_ndb_backup.sh" do
+    source "native_ndb_backup.sh.erb"
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    mode 0500
+end
+
 #
 # Install cron backup job on the node with the first ndb_mgmd
 #
@@ -58,7 +87,7 @@ if found_id == node['mgm']['id'] && "#{node['ndb']['cron_backup']}" == "true"
     weekday weekday
     user node['ndb']['user']
     command %W{
-    #{node['ndb']['scripts_dir']}/backup-start.sh
+    #{node['ndb']['scripts_dir']}/native_ndb_backup.sh
   }.join(' ')
   end
   

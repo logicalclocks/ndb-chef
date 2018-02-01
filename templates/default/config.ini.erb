@@ -143,8 +143,6 @@ BackupMaxWriteSize= <%= node['ndb']['BackupMaxWriteSize'] %>
 BackupLogBufferSize= <%= node['ndb']['BackupLogBufferSize'] %>
 BackupDataBufferSize= <%= node['ndb']['BackupDataBufferSize'] %>  
 
-BackupDataDir=<%= node['ndb']['BackupDataDir'] %>
-
 #The maximum size of the memory unit to use when allocating memory for tables
 MaxAllocate=<%= node['ndb']['MaxAllocate'] %>
 
@@ -207,6 +205,7 @@ HostName=<%= ndbdNode %>
 ServerPort=<%= node['ndb']['ndbd']['port'] %>
 DataDir=<%= node['ndb']['log_dir'] %>
 FileSystemPath=<%= "#{node['ndb']['data_dir']}/#{id}" %>
+BackupDataDir=<%= node['ndb']['BackupDataDir'] %>
 <% id += 1 -%>
 <% end -%>
 

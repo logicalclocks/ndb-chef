@@ -228,4 +228,26 @@ else
   end 
 end
 
+#
+# Source the native NDB backup cleaner script
+#
+template "#{node['ndb']['scripts_dir']}/ndb_backup_cleaner.sh" do
+    source "ndb_backup_cleaner.sh.erb"
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    mode 0500
+end
 
+#
+# Schedule the cleaner
+#
+if node['ndb']['cron_backup'].eql? "true"
+  cron "ndb_backup_cleaner" do
+    action :create
+    minute '0'
+    hour '4'
+    day '*'
+    month '*'
+    only_if do File.exist?("#{node['ndb']['scripts_dir']}/ndb_backup_cleaner.sh") end
+  end
+end

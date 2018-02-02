@@ -100,6 +100,14 @@ default['ndb']['base_dir']                            = "#{node['ndb']['root_dir
 
 default['ndb']['BackupDataDir']                       = "#{node['ndb']['root_dir']}/ndb/backups"
 
+default['ndb']['remote_backup_host']                  = ""
+default['ndb']['remote_backup_user']                  = ""
+default['ndb']['remote_backup_dir']                   = ""
+default['ndb']['local_backup_dir']                    = ""
+## How many n*24 hours are the backup files in NDB Data Nodes going to stay until they are removed
+## NOTE: cron_backup attribute should be set to true
+default['ndb']['ndbd_backup_retention']               = "5"
+
 default['ndb']['scripts_dir']                         = "#{node['ndb']['root_dir']}/ndb/scripts"
 default['ndb']['mgm_dir']                             = "#{node['ndb']['root_dir']}/mgmd"
 

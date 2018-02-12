@@ -1,8 +1,8 @@
 include_attribute "kagent"
 
-version                                         ="7"
+version                                               ="7"
 default['ndb']['majorVersion']                        ="5"
-default['ndb']['minorVersion']                        ="6"
+default['ndb']['minorVersion']                        ="9"
 
 default['ndb']['version']                             = "#{version}.#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}"
 default['ndb']['enabled']                             = "true"
@@ -57,7 +57,7 @@ default['ndb']['BackupDataBufferSize']                = "16M"
 default['ndb']['MaxAllocate']                         = "32M"
 default['ndb']['DefaultHashMapSize']                  = "3840"
 default['ndb']['ODirect']                             = "0"
-default['ndb']['TotalSendBufferMemory']               = "4M"
+default['ndb']['TotalSendBufferMemory']               = "16M"
 # 0, in which case the effective overload limit is calculated as SendBufferMemory * 0.8 for a given connection.
 default['ndb']['OverloadLimit']                       = "0"
 # set to several MBs to protect the cluster against misbehaving API nodes that use excess send memory and thus cause failures in communications internally in the NDB kernel.

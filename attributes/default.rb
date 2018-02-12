@@ -6,7 +6,7 @@ default['ndb']['minorVersion']                        ="9"
 
 default['ndb']['version']                             = "#{version}.#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}"
 default['ndb']['enabled']                             = "true"
-default['ndb']['glib_version']                        = "2.5"
+default['ndb']['glib_version']                        = "2.12"
 
 default['ndb']['url']                                 = node['download_url'] + "/mysql-cluster-gpl-#{node['ndb']['version']}-linux-glibc#{node['ndb']['glib_version']}-x86_64.tar.gz"
 # checksum is not a security check - used to improve the speed of downloads by skipping if matched

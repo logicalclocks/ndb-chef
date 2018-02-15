@@ -82,7 +82,6 @@ end
 
 pid_file="#{node['ndb']['log_dir']}/mysql_#{found_id}.pid"
 
-
 service_name = "mysqld"
 
 if node['ndb']['systemd'] != "true"
@@ -125,7 +124,6 @@ else # sytemd is true
               })
   end
 
-
   service "#{service_name}" do
     provider Chef::Provider::Service::Systemd
     supports :restart => true, :stop => true, :start => true, :status => true
@@ -135,7 +133,6 @@ else # sytemd is true
   ndb_start "mysqld" do
     action :systemd_reload
   end
-
 
 end
 
@@ -150,6 +147,7 @@ template "mysql.cnf" do
   path "#{node['ndb']['root_dir']}/my.cnf"
   source "my-ndb.cnf.erb"
   mode "0644"
+  action :create_if_missing
   variables({
               :mysql_id => found_id,
               :my_ip => mysql_ip
@@ -174,7 +172,6 @@ if "#{node['ndb']['version']}.#{node['ndb']['majorVersion']}".to_f >= 7.5
     # sanity check to set ownership of files to 'mysql' user
     chown -R #{node['ndb']['user']}:#{node['ndb']['group']} #{node['ndb']['mysql_server_dir']}
     EOF
-    #  not_if { ::File.exists?( "#{node.ndb.mysql_server_dir}/.installed" ) }
     not_if "#{node['mysql']['base_dir']}/bin/mysql -u root --skip-password -S #{node['ndb']['mysql_socket']} -e \"show databases\" | grep mysql "
   end
 

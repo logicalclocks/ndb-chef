@@ -104,10 +104,9 @@ template systemd_script do
     mode 0754
     cookbook 'ndb'
     variables({ :node_id => found_id })
-if node['services']['enabled'] == "true"
+  if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name)
-end
-#    notifies :restart, "service[#{service_name}]", :immediately
+  end
 end
 
 #
@@ -115,6 +114,7 @@ end
 #
   kagent_config "#{service_name}" do
     action :systemd_reload
+    not_if "systemctl status ndbmtd"
   end
 
 end
@@ -215,7 +215,6 @@ kagent_keys "#{homedir}" do
   cb_recipe "mgmd"  
   action :get_publickey
 end  
-
 
 case node['ndb']['systemd']
 when "true"

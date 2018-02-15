@@ -104,7 +104,7 @@ default['ndb']['scripts_dir']                         = "#{node['ndb']['root_dir
 default['ndb']['mgm_dir']                             = "#{node['ndb']['root_dir']}/mgmd"
 
 # MySQL Server Parameters
-default['ndb']['mysql_server_dir']                    = "#{node['ndb']['root_dir']}/ndb/mysql"
+default['ndb']['mysql_server_dir']                    = "#{node['ndb']['root_dir']}/mysql"
 default['ndb']['num_ndb_slots_per_client']            = 1
 
 # Max time that the mysqld and memcached will wait for the MySQL Cluster to be up and running.

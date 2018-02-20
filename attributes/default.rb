@@ -1,12 +1,12 @@
 include_attribute "kagent"
 
-version                                         ="7"
+version                                               ="7"
 default['ndb']['majorVersion']                        ="5"
-default['ndb']['minorVersion']                        ="6"
+default['ndb']['minorVersion']                        ="9"
 
 default['ndb']['version']                             = "#{version}.#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}"
 default['ndb']['enabled']                             = "true"
-default['ndb']['glib_version']                        = "2.5"
+default['ndb']['glib_version']                        = "2.12"
 
 default['ndb']['url']                                 = node['download_url'] + "/mysql-cluster-gpl-#{node['ndb']['version']}-linux-glibc#{node['ndb']['glib_version']}-x86_64.tar.gz"
 # checksum is not a security check - used to improve the speed of downloads by skipping if matched
@@ -57,7 +57,7 @@ default['ndb']['BackupDataBufferSize']                = "16M"
 default['ndb']['MaxAllocate']                         = "32M"
 default['ndb']['DefaultHashMapSize']                  = "3840"
 default['ndb']['ODirect']                             = "0"
-default['ndb']['TotalSendBufferMemory']               = "4M"
+default['ndb']['TotalSendBufferMemory']               = "16M"
 # 0, in which case the effective overload limit is calculated as SendBufferMemory * 0.8 for a given connection.
 default['ndb']['OverloadLimit']                       = "0"
 # set to several MBs to protect the cluster against misbehaving API nodes that use excess send memory and thus cause failures in communications internally in the NDB kernel.
@@ -112,7 +112,7 @@ default['ndb']['scripts_dir']                         = "#{node['ndb']['root_dir
 default['ndb']['mgm_dir']                             = "#{node['ndb']['root_dir']}/mgmd"
 
 # MySQL Server Parameters
-default['ndb']['mysql_server_dir']                    = "#{node['ndb']['root_dir']}/ndb/mysql"
+default['ndb']['mysql_server_dir']                    = "#{node['ndb']['root_dir']}/mysql"
 default['ndb']['num_ndb_slots_per_client']            = 1
 
 # Max time that the mysqld and memcached will wait for the MySQL Cluster to be up and running.

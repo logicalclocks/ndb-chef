@@ -82,7 +82,6 @@ end
 
 pid_file="#{node['ndb']['log_dir']}/mysql_#{found_id}.pid"
 
-
 service_name = "mysqld"
 
 if node['ndb']['systemd'] != "true"
@@ -125,7 +124,6 @@ else # sytemd is true
               })
   end
 
-
   service "#{service_name}" do
     provider Chef::Provider::Service::Systemd
     supports :restart => true, :stop => true, :start => true, :status => true
@@ -135,7 +133,6 @@ else # sytemd is true
   ndb_start "mysqld" do
     action :systemd_reload
   end
-
 
 end
 
@@ -150,20 +147,20 @@ template "mysql.cnf" do
   path "#{node['ndb']['root_dir']}/my.cnf"
   source "my-ndb.cnf.erb"
   mode "0644"
+  action :create_if_missing
   variables({
               :mysql_id => found_id,
               :my_ip => mysql_ip
             })
-if node['services']['enabled'] == "true"
+  if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name)
-end
+  end
 end
 
 
-if "#{node['ndb']['version']}.#{node['ndb']['majorVersion']}".to_f >= 7.5
-    bash 'mysql_install_db_7_5' do
-    user "root"
-    code <<-EOF
+bash 'mysql_install_db_7_5' do
+  user "root"
+  code <<-EOF
     set -e
     export MYSQL_HOME=#{node['ndb']['root_dir']}
     # --force causes mysql_install_db to run even if DNS does not work. In that case, grant table entries that normally use host names will use IP addresses.
@@ -174,25 +171,7 @@ if "#{node['ndb']['version']}.#{node['ndb']['majorVersion']}".to_f >= 7.5
     # sanity check to set ownership of files to 'mysql' user
     chown -R #{node['ndb']['user']}:#{node['ndb']['group']} #{node['ndb']['mysql_server_dir']}
     EOF
-    #  not_if { ::File.exists?( "#{node.ndb.mysql_server_dir}/.installed" ) }
-    not_if "#{node['mysql']['base_dir']}/bin/mysql -u root --skip-password -S #{node['ndb']['mysql_socket']} -e \"show databases\" | grep mysql "
-  end
-
-else
-  bash 'mysql_install_db_7_4' do
-    user "root"
-    code <<-EOF
-    set -e
-    export MYSQL_HOME=#{node['ndb']['root_dir']}
-    # --force causes mysql_install_db to run even if DNS does not work. In that case, grant table entries that normally use host names will use IP addresses.
-    cd #{node['mysql']['base_dir']}
-    ./scripts/mysql_install_db --user=#{node['ndb']['user']} --basedir=#{node['mysql']['base_dir']} --defaults-file=#{node['ndb']['root_dir']}/my.cnf --force
-    touch #{node['ndb']['mysql_server_dir']}/.installed
-    # sanity check to set ownership of files to 'mysql' user
-    chown -R #{node['ndb']['user']} #{node['ndb']['mysql_server_dir']}
-    EOF
-  not_if { ::File.exists?( "#{node['ndb']['mysql_server_dir']}/.installed" ) }
-  end
+  not_if "#{node['mysql']['base_dir']}/bin/mysql -u root --skip-password -S #{node['ndb']['mysql_socket']} -e \"show databases\" | grep mysql "
 end
 
 grants_path = "#{Chef::Config.file_cache_path}/grants.sql"
@@ -200,7 +179,7 @@ template grants_path do
   source File.basename(grants_path) + ".erb"
   owner node['ndb']['user']
   mode "0600"
-  action :create
+  action :create_if_missing
   variables({
               :my_ip => my_ip
             })

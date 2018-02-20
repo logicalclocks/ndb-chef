@@ -168,10 +168,10 @@ template "#{node['ndb']['root_dir']}/config.ini" do
   owner node['ndb']['user']
   group node['ndb']['group']
   mode 0644
+  action :create_if_missing
   variables({
               :num_client_slots => node['ndb']['num_ndb_slots_per_client'].to_i
             })
-#  notifies :restart, "service[ndb_mgmd]", :immediately
 end
 
 if node['kagent']['enabled'] == "true"
@@ -182,9 +182,6 @@ if node['kagent']['enabled'] == "true"
       config_file "#{node['ndb']['root_dir']}/config.ini"
       restart_agent false
       action :add
-#      command "ndb_mgm"
-#      command_user "root"
-#      command_script "#{node['ndb']['scripts_dir']}/mgm-client.sh"
     end
 end
 

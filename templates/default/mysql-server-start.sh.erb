@@ -7,10 +7,10 @@ if [ $# -gt 0 ] ; then
 	pkill -9 mysqld
     elif [ "$1" = "--skip-grant-tables" ] ; then
 	SKIP_GRANTS="--skip-grant-tables"
-    elif [ "$1" = "--skip-grant-tables" ] ; then
+    elif [ "$1" = "--skip-ndb-wait" ] ; then
 	SKIP_WAIT=1
     else
-	echo "usage: $0 [-f|--skip-grant-tables]"
+	echo "usage: $0 [-f|--skip-grant-tables|--skip-ndb-wait]"
 	exit 2
     fi
 fi

@@ -2,7 +2,7 @@
 
 SKIP_NDBDS=0
 SKIP_MYSQLDS=0
-SKIP_USER_CHECK=0
+SKIP_USER_CHECK=""
 TIME_WAIT=<%= node['ndb']['wait_startup'] %>
 
 while [ $# -gt 0 ]; do
@@ -14,7 +14,7 @@ while [ $# -gt 0 ]; do
 	      exit 0 
 	      ;;
     -f|--force)
-              SKIP_USER_CHECK=1
+              SKIP_USER_CHECK="-f"
 	      ;;
     -t|--time-wait-for-start)
 	      shift
@@ -211,7 +211,7 @@ fi
 if [ $SKIP_MYSQLDS -eq 0 ] ; then
     echo "Starting a MySQL Server on host: <%= mysqld %> "
     echo "For username: <%= node['ndb']['user'] %> "
-  ssh <%= node['ndb']['user'] %>@<%= mysqld %> "<%= node['ndb']['scripts_dir'] %>/mysql-server-start.sh $SKIP_MYSQLDS"
+  ssh <%= node['ndb']['user'] %>@<%= mysqld %> "<%= node['ndb']['scripts_dir'] %>/mysql-server-start.sh $SKIP_USER_CHECK"
 
   if [ $? -ne 0 ] ; then
     echo "Problem starting a MySQL Server Node on host <%= mysqld %>."

@@ -174,7 +174,7 @@ bash 'mysql_install_db_7_5' do
   not_if "#{node['mysql']['base_dir']}/bin/mysql -u root --skip-password -S #{node['ndb']['mysql_socket']} -e \"show databases\" | grep mysql "
 end
 
-grants_path = "#{Chef::Config.file_cache_path}/grants.sql"
+grants_path = "#{node['ndb']['base_dir']}/grants.sql"
 template grants_path do
   source File.basename(grants_path) + ".erb"
   owner node['ndb']['user']

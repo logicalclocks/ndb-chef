@@ -2,7 +2,7 @@ include_attribute "kagent"
 
 version                                               ="7"
 default['ndb']['majorVersion']                        ="5"
-default['ndb']['minorVersion']                        ="9"
+default['ndb']['minorVersion']                        ="10"
 
 default['ndb']['version']                             = "#{version}.#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}"
 default['ndb']['enabled']                             = "true"
@@ -16,8 +16,8 @@ default['ndb']['checksum']                            = ""
 
 default['ndb']['bind_cpus']                           = "false"
 
-default['ndb']['mgmd']['port']                           = 1186
-default['ndb']['ndbd']['port']                           = 10000
+default['ndb']['mgmd']['port']                        = 1186
+default['ndb']['ndbd']['port']                        = 10000
 default['ndb']['ip']                                  = "10.0.2.15"
 
 default['ndb']['loglevel']                            = "notice"

@@ -12,7 +12,7 @@ action :install_grants do
   end
 
 
-  grants_path = "#{Chef::Config.file_cache_path}/grants.sql"
+  grants_path = "#{node['ndb']['base_dir']}/grants.sql"
 
   exec= node['ndb']['scripts_dir'] + "/mysql-client.sh"
   bash 'run_grants' do

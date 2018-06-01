@@ -1,8 +1,8 @@
 include_attribute "kagent"
 
 version                                               ="7"
-default['ndb']['majorVersion']                        ="5"
-default['ndb']['minorVersion']                        ="10"
+default['ndb']['majorVersion']                        ="6"
+default['ndb']['minorVersion']                        ="6"
 
 default['ndb']['version']                             = "#{version}.#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}"
 default['ndb']['enabled']                             = "true"

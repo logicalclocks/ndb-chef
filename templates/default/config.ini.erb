@@ -154,6 +154,8 @@ ODirect=<%= node['ndb']['ODirect'] %>
 
 # total amount of memory (in bytes) to be allocated by each node for which it is set for use among all configured transporters for all types of nodes (NDB, API, etc)
 TotalSendBufferMemory=<%= node['ndb']['TotalSendBufferMemory'] %>
+# amount of transporter send buffer memory to allocate in addition to any that has been set
+ExtraSendBufferMemory=<%= node['ndb']['ExtraSendBufferMemory'] %>
 
 # This parameter specifies the time in microseconds for threads to be executed in the scheduler before sleeping.
 # Default = 0. Higher value to optimize latency over throughput.
@@ -171,6 +173,18 @@ BuildIndexThreads=<%= node['ndb']['BuildIndexThreads'] %>
 #SchedulerResponsiveness=<%= node['ndb']['SchedulerResponsiveness'] %>
 
 Numa=<%= node['ndb']['Numa'] %>
+
+# On-Disk data column configuration
+DiskPageBufferEntries=<%= node['ndb']['DiskPageBufferEntries'] %>
+DiskPageBufferMemory=<%= node['ndb']['DiskPageBufferMemory'] %>
+# Memory used by disk data for buffers/paging
+SharedGlobalMemory=<%= node['ndb']['SharedGlobalMemory'] %>
+# number of unbound threads used for Disk Data file access
+DiskIOThreadPool=<%= node['ndb']['DiskIOThreadPool'] %>
+# Move this to another drive if you have a high number of ops/sec
+#InitialLogFileGroup=<%= node['ndb']['InitialLogFileGroup'] %>
+# Move this to another drive to store small files in HopsFS
+#InitialTablespacename=<%= node['ndb']['InitialTablespacename'] %>
 
 
 [MYSQLD DEFAULT]
@@ -195,7 +209,7 @@ LogDestination=FILE:filename=<%= node['ndb']['log_dir'] %>/cluster.log,maxsize=1
 ArbitrationRank=<%= rank %>
 <% id += 1 -%>
 <% rank += 1 -%>
-<% end -%>
+<% end -%>			#
 
 <% id = 1 -%>
 <% for ndbdNode in node['ndb']['ndbd']['private_ips'] -%>
@@ -205,6 +219,7 @@ HostName=<%= ndbdNode %>
 ServerPort=<%= node['ndb']['ndbd']['port'] %>
 DataDir=<%= node['ndb']['log_dir'] %>
 FileSystemPath=<%= "#{node['ndb']['data_dir']}/#{id}" %>
+FileSystemPathDD=<%= "#{node['ndb']['diskdata_dir']}/#{id}" %>
 BackupDataDir=<%= node['ndb']['BackupDataDir'] %>
 <% id += 1 -%>
 <% end -%>

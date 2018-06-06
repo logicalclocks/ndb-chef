@@ -77,6 +77,13 @@ directory node['ndb']['BackupDataDir'] do
   action :create
 end
 
+directory node['ndb']['diskdata_dir'] do
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode "750"
+  action :create
+end
+
 
 directory node['mysql']['version_dir'] do
   owner node['ndb']['user']

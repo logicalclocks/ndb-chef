@@ -57,7 +57,17 @@ default['ndb']['BackupDataBufferSize']                = "16M"
 default['ndb']['MaxAllocate']                         = "32M"
 default['ndb']['DefaultHashMapSize']                  = "3840"
 default['ndb']['ODirect']                             = "0"
+default['ndb']['ExtraSendBufferMemory']               = "0"
 default['ndb']['TotalSendBufferMemory']               = "16M"
+default['ndb']['DiskPageBufferEntries']               = "10"
+default['ndb']['DiskPageBufferMemory']                = "64M"
+default['ndb']['SharedGlobalMemory']                  = "128M"
+default['ndb']['DiskIOThreadPool']                    = "2"
+default['ndb']['InitialLogFileGroup=name']            = "LG1; undo_buffer_size=40M; undo1.log:80M;"
+# Move this to another drive to store small files in HopsFS
+default['ndb']['InitialTablespacename']               = "TS1; extent_size=8M; data1.dat:240M;"
+
+
 # 0, in which case the effective overload limit is calculated as SendBufferMemory * 0.8 for a given connection.
 default['ndb']['OverloadLimit']                       = "0"
 # set to several MBs to protect the cluster against misbehaving API nodes that use excess send memory and thus cause failures in communications internally in the NDB kernel.
@@ -98,6 +108,9 @@ default['ndb']['data_dir']                            = "#{node['ndb']['root_dir
 default['ndb']['version_dir']                         = "#{node['ndb']['root_dir']}/ndb-#{node['ndb']['version']}"
 default['ndb']['base_dir']                            = "#{node['ndb']['root_dir']}/ndb"
 
+# NDB Cluster Disk Data data files and undo log files are placed in the diskdata_dir directory
+default['ndb']['diskdata_dir']                        = "#{node['ndb']['root_dir']}/ndb_disk_columns"
+
 default['ndb']['BackupDataDir']                       = "#{node['ndb']['root_dir']}/ndb/backups"
 
 default['ndb']['remote_backup_host']                  = ""
@@ -120,6 +133,7 @@ default['ndb']['num_ndb_slots_per_client']            = 1
 # need to be restarted to connect to the cluster.
 # Time in seconds
 default['ndb']['wait_startup']                        = "10800"
+
 
 # Base directory for MySQL binaries
 default['mysql']['dir']                               = node['install']['dir'].empty? ? "/usr/local" : node['install']['dir']

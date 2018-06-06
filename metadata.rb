@@ -91,6 +91,14 @@ attribute "ndb/ndbd_backup_retention",
           :description => "How many n*24 hours are the backup files in NDB Data Nodes going to stay until they are removed",
           :type => 'string'
 
+attribute "ndb/diskdata_dir",
+          :description => "Directory on the NDBD machines where the on-disk columns will be stored. This should be a SSD or NVRAM disk.",
+          :type => 'string'
+
+attribute "ndb/DiskPageBufferEntries",
+          :description => "Number of page entries (page references) to allocate.",
+          :type => 'string'
+
 attribute "mysql/user",
           :description => "User that runs mysql server",
           :required => "required",

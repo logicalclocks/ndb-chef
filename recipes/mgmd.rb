@@ -212,3 +212,6 @@ kagent_keys "#{homedir}" do
   cb_recipe "mgmd"  
   action :return_publickey
 end  
+
+
+#node['kagent']['upgrade'] - no need to restart the service, it's done already .

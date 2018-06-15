@@ -227,3 +227,9 @@ end
 ndb_start "mysqld" do
   action :start_if_not_running
 end
+
+if node['install']['upgrade'] == "true"
+  kagent_config "#{service_name}" do
+    action :systemd_reload
+  end
+end  

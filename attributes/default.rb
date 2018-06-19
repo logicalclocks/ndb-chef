@@ -179,8 +179,8 @@ default['memcached']['options']                       = ";role=ndb-caching;usec_
 default['btsync']['ndb']['leechers']                     = ['10.0.2.15']
 
 # IP addresses of the mgm-server, ndbds must be overridden by role/recipe caller.
-default['ndb']['public_ips']                          = ['']
-default['ndb']['private_ips']                         = ['']
+default['ndb']['public_ips']                             = ['']
+default['ndb']['private_ips']                            = ['']
 default['ndb']['mgmd']['public_ips']                     = ['']
 default['ndb']['mgmd']['private_ips']                    = ['']
 default['ndb']['ndbd']['public_ips']                     = ['']
@@ -191,6 +191,15 @@ default['ndb']['memcached']['public_ips']                = ['']
 default['ndb']['memcached']['private_ips']               = ['']
 
 default['ndb']['ndbapi']['addrs']                        = ['']
+
+#
+# ndbd entries in the config.ini file.
+# The format should be ["ip1:id1", "ip2:id2", ...]
+# If this attribute is not overriden, the ndbd instances will be ordered by
+# ip_address, and the id '1' will be given to the first nbdd, '2' to the next ndbd, etc.
+#
+default['ndb']['ndbd']['ips_ids']                        = ['']
+default['ndb']['mysqld']['ips_ids']                      = ['']
 
 #default.ndb.dbt2_url                 = "http://downloads.mysql.com/source/dbt2-0.37.50.3.tar.gz"
 #default.ndb.sysbench_url             = "http://downloads.mysql.com/source/sysbench-0.4.12.5.tar.gz"

@@ -209,9 +209,24 @@ LogDestination=FILE:filename=<%= node['ndb']['log_dir'] %>/cluster.log,maxsize=1
 ArbitrationRank=<%= rank %>
 <% id += 1 -%>
 <% rank += 1 -%>
-<% end -%>			#
+<% end -%>
 
 <% id = 1 -%>
+<% if (node.attribute?(:ndb) && node['ndb'].attribute?(:ndbd) && node['ndb']['ndbd'].attribute?(:ips_ids) && !node['ndb']['ndbd']['ips_ids'].empty?) -%>
+
+<% for datanode in node['ndb']['ndbd']['ips_ids'] -%>
+<% theNode = datanode.split(":") -%>
+[NDBD] 
+NodeId=<%= theNode[1] %>
+HostName=<%= theNode[0] %>
+ServerPort=<%= node['ndb']['ndbd']['port'] %>
+DataDir=<%= node['ndb']['log_dir'] %>
+FileSystemPath=<%= "#{node['ndb']['data_dir']}/#{id}" %>
+FileSystemPathDD=<%= "#{node['ndb']['diskdata_dir']}/#{id}" %>
+BackupDataDir=<%= node['ndb']['BackupDataDir'] %>
+<% end -%>
+
+<% else -%>
 <% for ndbdNode in node['ndb']['ndbd']['private_ips'] -%>
 [NDBD] 
 NodeId=<%= id %>
@@ -224,7 +239,21 @@ BackupDataDir=<%= node['ndb']['BackupDataDir'] %>
 <% id += 1 -%>
 <% end -%>
 
+<% end -%> # endif (define ndb/ndbd/ips_ids)
+
 #MySQL Servers, Memcached servers, and Clusterj clients.
+
+<% if (node.attribute?(:ndb) && node['ndb'].attribute?('mysqld') && node['ndb']['myslqd'].attribute?(:ips_ids) && !node['ndb']['mysqld']['ips_ids'].empty?) -%>
+
+<% for mysqld in node['ndb']['mysqld']['ips_ids'] -%>
+<% theMysqld = mysqld.split(":") -%>
+[MYSQLD]
+NodeId=<%= theMysqld[1] %>
+HostName=<%= theMysqld[0] %>
+<% end -%>
+
+<% else -%>
+
 <% hostId = node['mysql']['id'] -%>
 <% if (node.attribute?(:ndb) && node['ndb'].attribute?(:mysqld) && node['ndb']['mysqld'].attribute?(:private_ips) && !node['ndb']['mysqld']['private_ips'].empty?) -%>
 <% for mysql in node['ndb']['mysqld']['private_ips'] -%>
@@ -235,6 +264,9 @@ HostName=<%= mysql %>
 <% hostId += 1 -%>
 <% end -%>
 <% end -%>
+
+<% end -%> # endif (define ndb/mysqld/ips_ids)
+
 
 <% hostId = node['memcached']['id'] -%>
 <% if (node.attribute?(:ndb) && node['ndb'].attribute?(:memcached) && node['ndb']['memcached'].attribute?(:private_ips) && !node['ndb']['memcached']['private_ips'].empty?) -%>
@@ -258,24 +290,6 @@ HostName=<%= nn %>
 
 # These slots are extra slots for any clients.
 # Remove these slots for production use.
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
-[MYSQLD]
 [MYSQLD]
 [MYSQLD]
 [MYSQLD]

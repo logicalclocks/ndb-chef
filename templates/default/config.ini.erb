@@ -243,7 +243,7 @@ BackupDataDir=<%= node['ndb']['BackupDataDir'] %>
 
 #MySQL Servers, Memcached servers, and Clusterj clients.
 
-<% if (node.attribute?(:ndb) && node['ndb'].attribute?('mysqld') && node['ndb']['myslqd'].attribute?(:ips_ids) && !node['ndb']['mysqld']['ips_ids'].empty?) -%>
+<% if (node.attribute?('ndb') && node['ndb'].attribute?('mysqld') && node['ndb']['mysqld'].attribute?(:ips_ids) && !node['ndb']['mysqld']['ips_ids'].empty?) -%>
 
 <% for mysqld in node['ndb']['mysqld']['ips_ids'] -%>
 <% theMysqld = mysqld.split(":") -%>

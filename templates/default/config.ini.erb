@@ -221,8 +221,8 @@ NodeId=<%= theNode[1] %>
 HostName=<%= theNode[0] %>
 ServerPort=<%= node['ndb']['ndbd']['port'] %>
 DataDir=<%= node['ndb']['log_dir'] %>
-FileSystemPath=<%= "#{node['ndb']['data_dir']}/#{id}" %>
-FileSystemPathDD=<%= "#{node['ndb']['diskdata_dir']}/#{id}" %>
+FileSystemPath=<%= "#{node['ndb']['data_dir']}/#{theNode[1]}" %>
+FileSystemPathDD=<%= "#{node['ndb']['diskdata_dir']}/#{theNode[1]}" %>
 BackupDataDir=<%= node['ndb']['BackupDataDir'] %>
 <% end -%>
 

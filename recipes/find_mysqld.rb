@@ -2,6 +2,7 @@
 def find_mysql_id(ip)
   found_id = -1
   id = node['mysql']['id']
+  my_ip = my_private_ip()
 
   if node.attribute?(:ndb) && node['ndb'].attribute?(:mysqld) && node['ndb']['mysqld'].attribute?(:ips_ids) && !node['ndb']['mysqld']['ips_ids'].empty?
     for mysql in node['ndb']['mysqld']['ips_ids']

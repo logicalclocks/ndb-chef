@@ -239,7 +239,7 @@ BackupDataDir=<%= node['ndb']['BackupDataDir'] %>
 <% id += 1 -%>
 <% end -%>
 
-<% end -%> # endif (define ndb/ndbd/ips_ids)
+<% end -%>
 
 #MySQL Servers, Memcached servers, and Clusterj clients.
 
@@ -265,7 +265,7 @@ HostName=<%= mysql %>
 <% end -%>
 <% end -%>
 
-<% end -%> # endif (define ndb/mysqld/ips_ids)
+<% end -%>
 
 
 <% hostId = node['memcached']['id'] -%>

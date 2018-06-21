@@ -6,8 +6,8 @@ def find_mysql_id(ip)
   if node.attribute?(:ndb) && node['ndb'].attribute?(:mysqld) && node['ndb']['mysqld'].attribute?(:ips_ids) && !node['ndb']['mysqld']['ips_ids'].empty?
     for mysql in node['ndb']['mysqld']['ips_ids']
       theNode = mysql.split(":")
-      if my_ip.eql? theNode[1]
-        found_id = theNode[0]
+      if my_ip.eql? theNode[0]
+        found_id = theNode[1]
         break
       end
     end

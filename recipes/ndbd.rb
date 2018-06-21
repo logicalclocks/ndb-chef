@@ -32,8 +32,8 @@ id = 1
 if node.attribute?(:ndb) && node['ndb'].attribute?(:ndbd) && node['ndb']['ndbd'].attribute?(:ips_ids) && !node['ndb']['ndbd']['ips_ids'].empty?
   for datanode in node['ndb']['ndbd']['ips_ids']
     theNode = datanode.split(":")
-    if my_ip.eql? theNode[1]
-      found_id = theNode[0]
+    if my_ip.eql? theNode[0]
+      found_id = theNode[1]
       break
     end
   end

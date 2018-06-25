@@ -267,20 +267,9 @@ HostName=<%= mysql %>
 
 <% end -%>
 
-
-<% hostId = node['memcached']['id'] -%>
-<% if (node.attribute?(:ndb) && node['ndb'].attribute?(:memcached) && node['ndb']['memcached'].attribute?(:private_ips) && !node['ndb']['memcached']['private_ips'].empty?) -%>
-<% for memcached in node['ndb']['memcached']['private_ips'] -%>
-[MYSQLD]
-NodeId=<%= hostId %>
-HostName=<%= memcached %>
-<% hostId += 1 -%>
-<% end -%>
-<% end -%>
-
 <% hostId = node['nn']['id'] -%>
-<% if (node.attribute?(:hop) && node['hop'].attribute?(:nn) && node['hop']['nn'].attribute?(:private_ips) && !node['hop']['nn']['private_ips'].empty?) -%>
-<% for nn in node['hop']['nn']['private_ips'] -%>
+<% if (node.attribute?(:hops) && node['hops'].attribute?(:nn) && node['hops']['nn'].attribute?(:private_ips) && !node['hops']['nn']['private_ips'].empty?) -%>
+<% for nn in node['hops']['nn']['private_ips'] -%>
 [MYSQLD]
 NodeId=<%= hostId %>
 HostName=<%= nn %>

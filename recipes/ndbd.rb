@@ -28,14 +28,25 @@ my_ip = my_private_ip()
 
 found_id = -1
 id = 1
-for ndbd in node['ndb']['ndbd']['private_ips']
-  if my_ip.eql? ndbd 
-    Chef::Log.info "Found matching IP address in the list of data nodes: #{ndbd}. ID= #{id}"
-    found_id = id
+
+if node.attribute?(:ndb) && node['ndb'].attribute?(:ndbd) && node['ndb']['ndbd'].attribute?(:ips_ids) && !node['ndb']['ndbd']['ips_ids'].empty?
+  for datanode in node['ndb']['ndbd']['ips_ids']
+    theNode = datanode.split(":")
+    if my_ip.eql? theNode[0]
+      found_id = theNode[1]
+      break
+    end
   end
-  id += 1
-end 
-Chef::Log.info "ID IS: #{id}"
+else
+  for ndbd in node['ndb']['ndbd']['private_ips']
+    if my_ip.eql? ndbd 
+      Chef::Log.info "Found matching IP address in the list of data nodes: #{ndbd}. ID= #{id}"
+      found_id = id
+    end
+    id += 1
+  end
+end
+Chef::Log.info "ID IS: #{found_id}"
 
 if found_id == -1
   raise "Ndbd: Could not find matching IP address in list of data nodes."
@@ -121,24 +132,6 @@ end
 
 if node['kagent']['enabled'] == "true"
   Chef::Log.info "Trying to infer the #{service_name} ID by examining the local IP. If it matches the config.ini file, then we have our node."
-
-  found_id = -1
-  id = 1
-  my_ip = my_private_ip()
-
-  for ndbd in node['ndb']['ndbd']['private_ips']
-    if my_ip.eql? ndbd
-      Chef::Log.info "Found matching IP address in the list of data nodes: #{ndbd} . ID= #{id}"
-      found_id = id
-    end
-    id += 1
-  end 
-
-  Chef::Log.info "ID IS: #{id}"
-
-  if found_id == -1
-    Chef::Log.fatal "Could not find matching IP address is list of data nodes."
-  end
 
   kagent_config service_name do
     service "NDB" # #{found_id}

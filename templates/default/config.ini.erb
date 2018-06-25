@@ -221,8 +221,8 @@ NodeId=<%= theNode[1] %>
 HostName=<%= theNode[0] %>
 ServerPort=<%= node['ndb']['ndbd']['port'] %>
 DataDir=<%= node['ndb']['log_dir'] %>
-FileSystemPath=<%= "#{node['ndb']['data_dir']}/#{id}" %>
-FileSystemPathDD=<%= "#{node['ndb']['diskdata_dir']}/#{id}" %>
+FileSystemPath=<%= "#{node['ndb']['data_dir']}/#{theNode[1]}" %>
+FileSystemPathDD=<%= "#{node['ndb']['diskdata_dir']}/#{theNode[1]}" %>
 BackupDataDir=<%= node['ndb']['BackupDataDir'] %>
 <% end -%>
 
@@ -239,11 +239,11 @@ BackupDataDir=<%= node['ndb']['BackupDataDir'] %>
 <% id += 1 -%>
 <% end -%>
 
-<% end -%> # endif (define ndb/ndbd/ips_ids)
+<% end -%>
 
 #MySQL Servers, Memcached servers, and Clusterj clients.
 
-<% if (node.attribute?(:ndb) && node['ndb'].attribute?('mysqld') && node['ndb']['myslqd'].attribute?(:ips_ids) && !node['ndb']['mysqld']['ips_ids'].empty?) -%>
+<% if (node.attribute?('ndb') && node['ndb'].attribute?('mysqld') && node['ndb']['mysqld'].attribute?(:ips_ids) && !node['ndb']['mysqld']['ips_ids'].empty?) -%>
 
 <% for mysqld in node['ndb']['mysqld']['ips_ids'] -%>
 <% theMysqld = mysqld.split(":") -%>
@@ -265,7 +265,7 @@ HostName=<%= mysql %>
 <% end -%>
 <% end -%>
 
-<% end -%> # endif (define ndb/mysqld/ips_ids)
+<% end -%>
 
 
 <% hostId = node['memcached']['id'] -%>

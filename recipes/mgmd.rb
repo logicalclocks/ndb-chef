@@ -65,8 +65,19 @@ template "#{node['ndb']['scripts_dir']}/native_ndb_backup.sh" do
     source "native_ndb_backup.sh.erb"
     owner node['ndb']['user']
     group node['ndb']['group']
-    mode 0500
+    mode 0700
 end
+
+#
+# This is a helper script for exapnding tables with on-disk columns
+#
+template "#{node['ndb']['scripts_dir']}/manage-disk-table.py" do
+    source "manage-disk-table.py.erb"
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    mode 0700
+end
+
 
 #
 # Install cron backup job on the node with the first ndb_mgmd

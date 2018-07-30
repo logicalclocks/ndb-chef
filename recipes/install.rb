@@ -8,8 +8,10 @@ user node['ndb']['user'] do
   home "/home/#{node['ndb']['user']}"
   gid node['ndb']['group']
   action :create
-  shell "/bin/bash"
-  manage_home true
+#  shell "/bin/bash"
+  system True
+  shell "/bin/false"
+#  manage_home true
   not_if "getent passwd #{node['ndb']['user']}"
 end
 

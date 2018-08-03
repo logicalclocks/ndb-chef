@@ -13,6 +13,7 @@ user node['ndb']['user'] do
   gid node['ndb']['group']
   action :create
   shell "/bin/bash"
+  system true
   not_if "getent passwd #{node['ndb']['user']}"
 end
 

@@ -278,6 +278,10 @@ attribute "ndb/NoOfFragmentLogParts",
           :description =>  "One per ldm thread. Valid values: 4, 8, 16. Should match the number of CPUs in ThreadConfig's ldm threads.",
           :type => 'string'
 
+attribute "ndb/NoOfFragmentLogFiles",
+          :description =>  "Number of fragment logfiles for writing LCPS.", 
+          :type => 'string'
+
 attribute "ndb/bind_cpus",
           :description =>  "Isolate interrupts from cpus, turn off balance_irqs",
           :type => 'string'
@@ -355,6 +359,10 @@ attribute "ndb/DataMemory",
 
 attribute "ndb/IndexMemory",
           :description => "Index memory for each MySQL Cluster Data Node",
+          :type => 'string'
+
+attribute "ndb/EnableRedoControl",
+          :description => "Control disk read/write speeds automatically for LCPs (default '1', to turn off - set to '0'",
           :type => 'string'
 
 attribute "install/dir",

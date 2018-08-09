@@ -29,9 +29,10 @@ default['ndb']['DataMemory']                          = "50"
 # Calculate IndexMemory size by default, can be overriden by user.
 default['ndb']['IndexMemory']                         = ""
 default['ndb']['NoOfReplicas']                        = "1"
-default['ndb']['FragmentLogFileSize']                 = "64M"
 default['ndb']['TcpBind_INADDR_ANY']                  = "FALSE"
-default['ndb']['NoOfFragmentLogParts']                = "4"
+default['ndb']['NoOfFragmentLogParts']                = "8"
+default['ndb']['NoOfFragmentLogFiles']                = "8"
+default['ndb']['FragmentLogFileSize']                 = "256M"
 default['ndb']['MaxNoOfTables']                       = "3036"
 default['ndb']['MaxNoOfOrderedIndexes']               = "2048"
 default['ndb']['MaxNoOfUniqueHashIndexes']            = "512"
@@ -66,6 +67,10 @@ default['ndb']['DiskIOThreadPool']                    = "2"
 default['ndb']['InitialLogFileGroup=name']            = "LG1; undo_buffer_size=40M; undo1.log:80M;"
 # Move this to another drive to store small files in HopsFS
 default['ndb']['InitialTablespacename']               = "TS1; extent_size=8M; data1.dat:240M;"
+
+# From 7.6.7 - no configuration needed for disk write speeds
+# https://mikaelronstrom.blogspot.com/2018/08/more-automated-control-in-mysql-cluster.html
+default['ndb']['EnableRedoControl']                   = "1"
 
 
 # 0, in which case the effective overload limit is calculated as SendBufferMemory * 0.8 for a given connection.

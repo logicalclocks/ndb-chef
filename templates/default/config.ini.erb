@@ -43,13 +43,7 @@
 NoOfFragmentLogParts=<%= node['ndb']['NoOfFragmentLogParts'] %>
 NoOfFragmentLogFiles=<%= node['ndb']['NoOfFragmentLogFiles'] %>
 
-#   REDO_LOG_SIZE=`expr ${NUM_FRAGMENT_LOGFILES} \* 64`
-#  NUM_FRAGMENT_LOGFILES=`expr ${DATA_MEMORY} \* 6 / 64`
-# See: http://www.slideshare.net/Severalnines/severalnines-my-sqlclusterpt2013
-#The amount of disk space (NoOfFragmentLogFiles * 64MB) used to store the Redo Log (used for node recovery)
-# NoOfFragmentLogFiles=<%= node['ndb']['DataMemory'].to_i / 10 %>
-
-#The size of a Redo Log file on disk.
+#The size of a Redo Log file on disk. Read: https://mikaelronstrom.blogspot.com/2018/08/more-automated-control-in-mysql-cluster.html
 FragmentLogFileSize=<%= node['ndb']['FragmentLogFileSize'] %>
 
 #The number of copies of the data stored on different nodes in the cluster

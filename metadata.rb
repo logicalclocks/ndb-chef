@@ -367,7 +367,7 @@ attribute "ndb/EnableRedoControl",
 
 attribute "ndb/NvmeDisks",
           :description => "Comma separated list of paths of where to store on-disk column data.",
-          :type => 'string',
+          :type => 'string'
 
 attribute "install/dir",
           :description => "Set to a base directory under which we will install.",

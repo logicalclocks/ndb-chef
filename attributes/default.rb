@@ -113,6 +113,12 @@ default['ndb']['data_dir']                            = "#{node['ndb']['root_dir
 default['ndb']['version_dir']                         = "#{node['ndb']['root_dir']}/ndb-#{node['ndb']['version']}"
 default['ndb']['base_dir']                            = "#{node['ndb']['root_dir']}/ndb"
 
+# Small file storage parameters
+default['ndb']['NvmeDisks']                           = ""
+default['ndb']['nvme']['small_file']                  = "2000"
+default['ndb']['nvme']['med_file']                    = "4000"
+default['ndb']['nvme']['large_file']                  = "8000"
+
 # NDB Cluster Disk Data data files and undo log files are placed in the diskdata_dir directory
 default['ndb']['diskdata_dir']                        = "#{node['ndb']['root_dir']}/ndb_disk_columns"
 

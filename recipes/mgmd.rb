@@ -79,7 +79,7 @@ template "#{node['ndb']['scripts_dir']}/manage-disk-table.py" do
 end
 
 template "#{node['ndb']['scripts_dir']}/create-disk-table.sh" do
-    source "create-disk-table.erb"
+    source "create-disk-table.sh.erb"
     owner node['ndb']['user']
     group node['ndb']['group']
     mode 0700

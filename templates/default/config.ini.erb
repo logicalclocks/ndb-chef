@@ -163,10 +163,13 @@ DiskPageBufferMemory=<%= node['ndb']['DiskPageBufferMemory'] %>
 SharedGlobalMemory=<%= node['ndb']['SharedGlobalMemory'] %>
 # number of unbound threads used for Disk Data file access
 DiskIOThreadPool=<%= node['ndb']['DiskIOThreadPool'] %>
+
+
 # Move this to another drive if you have a high number of ops/sec
-#InitialLogFileGroup=<%= node['ndb']['InitialLogFileGroup'] %>
+InitialLogFileGroup=<%= node['ndb']['InitialLogFileGroup'] %>
+
 # Move this to another drive to store small files in HopsFS
-#InitialTablespacename=<%= node['ndb']['InitialTablespacename'] %>
+InitialTablespacename=<%= node['ndb']['InitialTablespacename'] %>
 
 # https://mikaelronstrom.blogspot.com/2018/08/more-automated-control-in-mysql-cluster.html
 EnableRedoControl=<%= node['ndb']['EnableRedoControl'] %>

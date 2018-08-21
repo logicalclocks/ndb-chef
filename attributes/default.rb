@@ -116,12 +116,8 @@ default['ndb']['base_dir']                            = "#{node['ndb']['root_dir
 # Small file storage parameters
 
 default['ndb']['InitialLogFileGroup']                 = "undo_buffer_size=128M; "
-# "/dir1,/dir2"
 # NDB Cluster Disk Data data files and undo log files are placed in the diskdata_dir directory
 default['ndb']['diskdata_dir']                        = "#{node['ndb']['root_dir']}/ndb_disk_columns"
-# default['ndb']['NvmeDisks']                           = ""
-# "/dir1,/dir2"
-# default['ndb']['LogDisks']                            = ""
 default['ndb']['nvme']['small_file']                  = "2000"
 default['ndb']['nvme']['med_file']                    = "4000"
 default['ndb']['nvme']['large_file']                  = "8000"
@@ -134,7 +130,7 @@ default['ndb']['remote_backup_host']                  = ""
 default['ndb']['remote_backup_user']                  = ""
 default['ndb']['remote_backup_dir']                   = ""
 default['ndb']['local_backup_dir']                    = ""
-## How many n*24 hours are the backup files in NDB Data Nodes going to stay until they are removed
+## How many n*24 hours are the backup files in NDB Data Ndes going to stay until they are removed
 ## NOTE: cron_backup attribute should be set to true
 default['ndb']['ndbd_backup_retention']               = "5"
 

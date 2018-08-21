@@ -92,7 +92,7 @@ attribute "ndb/ndbd_backup_retention",
           :type => 'string'
 
 attribute "ndb/diskdata_dir",
-          :description => "Directory on the NDBD machines where the on-disk columns will be stored. This should be a SSD or NVRAM disk.",
+          :description => "Directory on the NDBD machines where the on-disk columns will be stored. This should be a NVMe disk for best performance.",
           :type => 'string'
 
 attribute "ndb/DiskPageBufferEntries",
@@ -363,10 +363,6 @@ attribute "ndb/IndexMemory",
 
 attribute "ndb/EnableRedoControl",
           :description => "Control disk read/write speeds automatically for LCPs (default '1', to turn off - set to '0'",
-          :type => 'string'
-
-attribute "ndb/NvmeDisks",
-          :description => "Comma separated list of paths of where to store on-disk column data.",
           :type => 'string'
 
 attribute "install/dir",

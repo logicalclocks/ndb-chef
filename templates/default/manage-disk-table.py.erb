@@ -20,12 +20,13 @@ group.add_argument('-Drop', action='store_true', dest="drop", help="Drop Files a
 args = parser.parse_args()
 print args
 
-DATA_DISKS = [""]
+#DATA_DISKS = ["/dir1,/dir2"]
+DATA_DISKS = ["<%= node['ndb']['NvmeDisks'] %>"]
 DATAFILE_SIZE = args.dataFileSize 
 DATAFILES_PER_DISK = args.dataFilesCount 
 
 #LOG_DISKS = ["/dir1,/dir2"]
-LOG_DISKS = [""]
+LOG_DISKS = ["<%= node['ndb']['LogDisks'] %>"]
 LOGFILE_SIZE = args.logFileSize
 LOGFILES_PER_DISK = args.logFilesCount 
 
@@ -33,9 +34,9 @@ CONNECT_STRING = "MYSQL_PWD="+args.passwd+" mysql -u"+args.userName+" -P"+args.p
 print CONNECT_STRING
 
 
-ONDISK_SMALL_FILE_INODE_SIZE=2000
-ONDISK_MEDIUM_FILE_INODE_SIZE=4000
-ONDISK_LARGE_FILE_INODE_SIZE=8000
+ONDISK_SMALL_FILE_INODE_SIZE=<%= node['ndb']['nvme']['small_file'] %>
+ONDISK_MEDIUM_FILE_INODE_SIZE=<%= node['ndb']['nvme']['med_file'] %>
+ONDISK_LARGE_FILE_INODE_SIZE=<%= node['ndb']['nvme']['large_file'] %>
 TS_NAME="ts_1"
 
 class bcolors:

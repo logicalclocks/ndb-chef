@@ -4,12 +4,16 @@ group node['ndb']['group'] do
  not_if "getent group #{node['ndb']['group']}"
 end
 
+#
+# Need a managed home account, so that the mgmt server user can ssh to the ndbd nodes to start them.
+#
 user node['ndb']['user'] do
   home "/home/#{node['ndb']['user']}"
+  manage_home true  
   gid node['ndb']['group']
   action :create
   shell "/bin/bash"
-  manage_home true
+  system true
   not_if "getent passwd #{node['ndb']['user']}"
 end
 

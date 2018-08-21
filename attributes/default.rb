@@ -2,7 +2,7 @@ include_attribute "kagent"
 
 version                                               ="7"
 default['ndb']['majorVersion']                        ="6"
-default['ndb']['minorVersion']                        ="6"
+default['ndb']['minorVersion']                        ="7"
 
 default['ndb']['version']                             = "#{version}.#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}"
 default['ndb']['enabled']                             = "true"
@@ -29,9 +29,10 @@ default['ndb']['DataMemory']                          = "50"
 # Calculate IndexMemory size by default, can be overriden by user.
 default['ndb']['IndexMemory']                         = ""
 default['ndb']['NoOfReplicas']                        = "1"
-default['ndb']['FragmentLogFileSize']                 = "64M"
 default['ndb']['TcpBind_INADDR_ANY']                  = "FALSE"
 default['ndb']['NoOfFragmentLogParts']                = "4"
+default['ndb']['NoOfFragmentLogFiles']                = "4"
+default['ndb']['FragmentLogFileSize']                 = "64M"
 default['ndb']['MaxNoOfTables']                       = "3036"
 default['ndb']['MaxNoOfOrderedIndexes']               = "2048"
 default['ndb']['MaxNoOfUniqueHashIndexes']            = "512"
@@ -66,6 +67,10 @@ default['ndb']['DiskIOThreadPool']                    = "2"
 default['ndb']['InitialLogFileGroup=name']            = "LG1; undo_buffer_size=40M; undo1.log:80M;"
 # Move this to another drive to store small files in HopsFS
 default['ndb']['InitialTablespacename']               = "TS1; extent_size=8M; data1.dat:240M;"
+
+# From 7.6.7 - no configuration needed for disk write speeds
+# https://mikaelronstrom.blogspot.com/2018/08/more-automated-control-in-mysql-cluster.html
+default['ndb']['EnableRedoControl']                   = "1"
 
 
 # 0, in which case the effective overload limit is calculated as SendBufferMemory * 0.8 for a given connection.
@@ -108,8 +113,16 @@ default['ndb']['data_dir']                            = "#{node['ndb']['root_dir
 default['ndb']['version_dir']                         = "#{node['ndb']['root_dir']}/ndb-#{node['ndb']['version']}"
 default['ndb']['base_dir']                            = "#{node['ndb']['root_dir']}/ndb"
 
+# Small file storage parameters
+
+default['ndb']['InitialLogFileGroup']                 = "undo_buffer_size=128M; "
 # NDB Cluster Disk Data data files and undo log files are placed in the diskdata_dir directory
 default['ndb']['diskdata_dir']                        = "#{node['ndb']['root_dir']}/ndb_disk_columns"
+default['ndb']['nvme']['small_file']                  = "2000"
+default['ndb']['nvme']['med_file']                    = "4000"
+default['ndb']['nvme']['large_file']                  = "8000"
+default['ndb']['nvme']['logfile_size']                = ""
+default['ndb']['nvme']['num_logfiles']                = ""
 
 default['ndb']['BackupDataDir']                       = "#{node['ndb']['root_dir']}/ndb/backups"
 
@@ -117,7 +130,7 @@ default['ndb']['remote_backup_host']                  = ""
 default['ndb']['remote_backup_user']                  = ""
 default['ndb']['remote_backup_dir']                   = ""
 default['ndb']['local_backup_dir']                    = ""
-## How many n*24 hours are the backup files in NDB Data Nodes going to stay until they are removed
+## How many n*24 hours are the backup files in NDB Data Ndes going to stay until they are removed
 ## NOTE: cron_backup attribute should be set to true
 default['ndb']['ndbd_backup_retention']               = "5"
 

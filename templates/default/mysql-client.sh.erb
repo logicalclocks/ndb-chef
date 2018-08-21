@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 EXECUTE_SQL=""
 DB=
@@ -22,12 +22,12 @@ if [ $# -gt 1 ] ; then
     shift # remove '-e'
 fi
 
-MYSQL_SOCKET=`<%= node['ndb']['scripts_dir'] %>/get-mysql-socket.sh`
+MYSQL_SOCKET=$(<%= node['ndb']['scripts_dir'] %>/get-mysql-socket.sh)
 echo "Using socket: $MYSQL_SOCKET"
  if [ "$EXECUTE_SQL" = "-e" ] ; then
      <%= node['mysql']['base_dir'] %>/bin/mysql --defaults-file=$MYSQL_CONF -u root  $DB $EXECUTE_SQL "$@"
  else
   # Case 3
-    <%= node['mysql']['base_dir'] %>/bin/mysql --defaults-file=$MYSQL_CONF -u root $DB  $@
+    <%= node['mysql']['base_dir'] %>/bin/mysql --defaults-file=$MYSQL_CONF -u root $DB $@
  fi
 exit $?

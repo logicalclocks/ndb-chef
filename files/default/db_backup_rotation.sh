@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ## File for managing NDB backup rotation on the archive host
 ## This file must be put manually on the remote host and configured
@@ -50,7 +50,7 @@ function log_error {
 ## Perform sanity checks
 
 function check_for_empty_properties {
-    if [ -z ${2// } ];
+    if [ -z "${2// }" ];
     then
 	log_error "Property $1 is empty. Aborting backup."
 	exit 10
@@ -85,41 +85,41 @@ sanity_check "ARCHIVE_TIMEOUT" "$ARCHIVE_TIMEOUT"
 ## $2: Error message to be logged
 ## $3: Backup script exit code
 function check_exit_code {
-    if [ $1 -ne 0 ];
+    if [ "$1" -ne 0 ];
     then
-	log_error $2
-	exit $3
+	log_error "$2"
+	exit "$3"
     fi
 }
 
 log_info "Starting backup rotation"
 
-if [ ! -d $ARCHIVE_DIR ];
+if [ ! -d "$ARCHIVE_DIR" ];
 then
-    mkdir -p -m 700 $ARCHIVE_DIR
+    mkdir -p -m 700 "$ARCHIVE_DIR"
     log_warn "Created non existing directory $ARCHIVE_DIR"
 fi
 
-find $RECENT_DIR -type f -regextype posix-extended -regex $RECENT_BACKUP_FILE_REGEX -readable -ctime +$RECENT_TIMEOUT > $FILES_TO_MOVE
+find "$RECENT_DIR" -type f -regextype posix-extended -regex "$RECENT_BACKUP_FILE_REGEX" -readable -ctime +$RECENT_TIMEOUT > "$FILES_TO_MOVE"
 check_exit_code $? "Finding RECENT backups to move failed" 1
 
 while IFS='' read -r backup_file || [[ -n "$backup_file" ]];
 do
     filename=$(basename "$backup_file")
-    date=$(echo $filename | awk -F '_' {'print $3'})
-    year=$(echo $date | awk -F '-' {'print $1'})
-    month=$(echo $date | awk -F '-' {'print $2'})
+    date=$(echo "$filename" | awk -F '_' '{print $3}')
+    year=$(echo "$date" | awk -F '-' '{print $1}')
+    month=$(echo "$date" | awk -F '-' '{print $2}')
 
     destination_dir="$ARCHIVE_DIR/${year}_${month}"
-    if [ ! -d $destination_dir ];
+    if [ ! -d "$destination_dir" ];
     then
-        mkdir -p -m 700 $destination_dir
+        mkdir -p -m 700 "$destination_dir"
 	check_exit_code $? "Failed to create $destination_dir" 2
 	
         log_info "Created directory $destination_dir"
     fi
 
-    mv $backup_file $destination_dir
+    mv "$backup_file" "$destination_dir"
     check_exit_code $? "Failed to move $backup_file to $destination_dir" 3
     
     log_info "Moved file $backup_file"
@@ -128,7 +128,7 @@ done < $FILES_TO_MOVE
 
 rm -f "$FILES_TO_MOVE"
 
-find $ARCHIVE_DIR -type f -regextype posix-extended -regex $ARCHIVE_BACKUP_FILE_REGEX -readable -ctime +$ARCHIVE_TIMEOUT > $FILES_TO_REMOVE
+find "$ARCHIVE_DIR" -type f -regextype posix-extended -regex "$ARCHIVE_BACKUP_FILE_REGEX" -readable -ctime +$ARCHIVE_TIMEOUT > $FILES_TO_REMOVE
 check_exit_code $? "Finding ARCHIVED backups to delete failed" 4
 
 while IFS='' read -r file_to_remove || [[ -n "$file_to_remove" ]];

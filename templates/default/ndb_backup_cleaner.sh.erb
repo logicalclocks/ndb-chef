@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ## Cron job that deletes backups from NDB Data Nodes local backup directory.
 ## This script should be complemented by native_ndb_backup.sh script to perform
@@ -37,4 +37,4 @@ function sanity_check {
 
 sanity_check "BACKUP_DIR" "$BACKUP_DIR"
 
-find $BACKUP_DIR -type d -regextype posix-extended -regex $BACKUPS_REGEX -prune -ctime +$RETENTION_TIME -exec rm -rf {} \;
+find $BACKUP_DIR -type d -regextype posix-extended -regex "$BACKUPS_REGEX" -prune -ctime +$RETENTION_TIME -exec rm -rf {} \;

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ## Connection string to NDB Management server
 MGM_CONN=<%= node['ndb']['connectstring'] %>
@@ -85,15 +85,15 @@ sanity_check "RSYNC_LOG_FILE" "$RSYNC_LOG_FILE"
 ## $2: Error message to be logged
 ## $3: Backup script exit code
 function check_exit_code {
-    if [ $1 -ne 0 ];
+    if [ "$1" -ne 0 ];
     then
-	log_error $2
-	exit $3
+	log_error "$2"
+	exit "$3"
     fi
 }
 
 ## Get participating NDB Data Nodes in the cluster
-NDB_DATANODES="$($MYSQL_ROOT/bin/ndb_mgm -c $MGM_CONN -e "SHOW" | grep Nodegroup | awk -F ' ' {'print $2'} | cut -c2-)"
+NDB_DATANODES="$($MYSQL_ROOT/bin/ndb_mgm -c $MGM_CONN -e "SHOW" | grep Nodegroup | awk -F ' ' '{print $2}' | cut -c2-)"
 log_info "Participating NDB Data Nodes: $NDB_DATANODES"
 
 backup_id=$(date +'%y%m%d%H%M')
@@ -117,7 +117,7 @@ fi
 backup_name=hops_hopsworks_$(date +'%y-%m-%d_%H-%M').backup
 backup_target=$LOCAL_BACKUP_DIR/$backup_name
 
-if [ -d $backup_target ];
+if [ -d "$backup_target" ];
 then
     log_error "Ooops directory $backup_target already exist in the local filesystem! Canceling copying backup from Data Nodes"
     exit 2
@@ -127,13 +127,13 @@ fi
 for i in $NDB_DATANODES
 do
     log_info "Moving backup with ID BACKUP-$backup_id from node $i"
-    mkdir -p $backup_target/$i
-    rsync -az --log-file=$RSYNC_LOG_FILE $MYSQL_USER@$i:$REMOTE_MYSQL_BACKUP_DIR/BACKUP/BACKUP-$backup_id $backup_target/$i
-    check_exit_code $? "rsync from $i failed, aborting. Exit code: $exit_code" 3
+    mkdir -p "$backup_target"/"$i"
+    rsync -az --log-file=$RSYNC_LOG_FILE $MYSQL_USER@"$i":$REMOTE_MYSQL_BACKUP_DIR/BACKUP/BACKUP-"$backup_id" "$backup_target"/"$i"
+    check_exit_code $? "rsync from $i failed, aborting. Exit code: $?" 3
 done
 
 pushd $LOCAL_BACKUP_DIR
-tar cfz $backup_name.tar.gz $backup_name
+tar cfz "$backup_name".tar.gz "$backup_name"
 popd
 
 log_info "Starting rsync backup to $REMOTE_BACKUP_HOST"

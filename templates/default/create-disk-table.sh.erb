@@ -7,6 +7,6 @@ fi
 host=$1
 username=$2
 password=$3
-database=hopsworks
+database=hops
 
 <%= node['ndb']['scripts_dir'] %>/manage-disk-table.py -Create -H $host -u $username -p $password -db $database -ls 1024M -lc 1 -ds 1024M -dc 1

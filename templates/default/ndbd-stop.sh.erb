@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env sh
 FORCE=0
 if [ $# -gt 0 ] ;then
-  if [ $1 = "--force" ] ; then
-    $FORCE=1
+  if [ "$1" = "--force" ] ; then
+    FORCE=1
   else 
     echo "Incorrect parameter. Usage: <prog> [--force]"
     exit 1

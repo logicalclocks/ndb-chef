@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 help() {
 	echo ""
@@ -28,7 +28,7 @@ res=0
 for i in "${datanodes[@]}" 
 do	 
   echo "Removing backup at: $i"
-  ssh $i "rm -rf ${BACKUP_DIR}-${BACKUP_ID}"
+  ssh "$i" "rm -rf ${BACKUP_DIR}-${BACKUP_ID}"
   res=$?
 done
 	 

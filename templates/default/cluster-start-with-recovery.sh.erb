@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/usr/bin/env bash
 
 SKIP_NDBDS=0
 SKIP_MYSQLDS=0
@@ -52,7 +52,7 @@ done
 
 
 
-USERID=`id | sed -e 's/).*//; s/^.*(//;'`
+USERID=$(id | sed -e 's/).*//; s/^.*(//;')
 if [ "X$USERID" != "Xroot" ]; then
  if [ "X$USERID" = "Xroot" ]; then
    echo ""
@@ -105,7 +105,7 @@ echo ""
 echo "Starting the Management Server ....."
 
 if [ -e <%= node['ndb']['log_dir'] %>/cluster.log ] ; then
-    SIZE_CL=`cat <%= node['ndb']['log_dir'] %>/cluster.log | wc -l`
+    SIZE_CL=$(wc -l < <%= node['ndb']['log_dir'] %>/cluster.log)
 else
     SIZE_CL=0
 fi
@@ -133,7 +133,7 @@ MGMD_COUNT=0
 while [ $MGMD_STARTED -eq 0 ] ; do
 
   if [ -e <%= node['ndb']['log_dir'] %>/cluster.log ] ; then
-    UPDATED_SIZE_CL=`cat <%= node['ndb']['log_dir'] %>/cluster.log | wc -l`
+    UPDATED_SIZE_CL=$(wc -l < <%= node['ndb']['log_dir'] %>/cluster.log)
   else
     UPDATED_SIZE_CL=0
   fi
@@ -147,9 +147,9 @@ while [ $MGMD_STARTED -eq 0 ] ; do
 	  echo -n "Seconds left before timeout: "
       fi
 
-      echo -n "`expr ${MGMD_TIMEOUT} - ${MGMD_COUNT}` "
+      echo -n "$((MGMD_TIMEOUT - MGMD_COUNT))"
       sleep 1
-      MGMD_COUNT=`expr ${MGMD_COUNT} + 1`
+      MGMD_COUNT=$((MGMD_COUNT + 1))
 
       if [ $MGMD_COUNT -gt $MGMD_TIMEOUT ] ; then
 	  MGMD_STARTED=2;

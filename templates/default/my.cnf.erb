@@ -21,6 +21,9 @@ init-connect='SET NAMES utf8'
 character-set-server = utf8
 
 
+# Explicit defaults for TS needed by 'airflow initdb'
+explicit_defaults_for_timestamp = 1
+
 [client]
 default-character-set = utf8
 socket                = <%= node['ndb']['mysql_socket'] %>

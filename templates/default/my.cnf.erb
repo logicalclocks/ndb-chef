@@ -1,7 +1,4 @@
   
-#################################################
-# MySQL Cluster client, Jim Dowling.
-#################################################
 [mysql]
 default-character-set = utf8
 
@@ -15,14 +12,12 @@ bind-address    = <%= node['ndb']['mysql_ip'] %>
 pid-file        = <%= node['ndb']['log_dir'] %>/mysql_<%= @mysql_id %>.pid
 tmpdir          = /tmp
 
+# Explicit defaults for TS needed by 'airflow initdb'
+explicit_defaults_for_timestamp = 1
 
 collation-server = utf8_unicode_ci
 init-connect='SET NAMES utf8'
 character-set-server = utf8
-
-
-# Explicit defaults for TS needed by 'airflow initdb'
-explicit_defaults_for_timestamp = 1
 
 [client]
 default-character-set = utf8

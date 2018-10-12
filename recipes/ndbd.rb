@@ -17,6 +17,63 @@ ndb_connectstring()
 Chef::Log.info "Hostname is: #{node['hostname']}"
 Chef::Log.info "IP address is: #{node['ipaddress']}"
 
+#
+# On Disk columns
+#
+if node['ndb']['nvme']['disks'].empty?
+  directory node['ndb']['diskdata_dir'] do
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    mode "750"
+    action :create
+  end
+else
+  directory "#{node['ndb']['nvme']['mount_base_dir']}" do
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    mode "755"
+    action :create
+  end
+end
+
+index=0
+mountPrefix="#{node['ndb']['nvme']['mount_base_dir']}/#{node['ndb']['nvme']['mount_disk_prefix']}"
+
+for nvmeDisk in node['ndb']['nvme']['disks'] do
+  if "#{node['ndb']['nvme']['format']}" == "true"
+    bash 'format_nvme_disk' do
+      user 'root'
+      code <<-EOF
+        set -e
+        mkfs.ext4 -F #{nvmeDisk}
+      EOF
+    end
+  end
+
+  mountPoint="#{mountPrefix}#{index}"
+
+  directory "#{mountPoint}" do
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    mode "755"
+    action :create
+  end
+
+  mount "#{mountPoint}" do
+    device nvmeDisk
+    fstype 'ext4'
+  end
+
+  diskDataDir="#{mountPoint}/#{node['ndb']['ndb_disk_columns_dir_name']}"
+  directory "#{diskDataDir}" do
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    mode "750"
+    action :create
+  end
+  index+=1
+end
+
 directory node['ndb']['data_dir'] do
   owner node['ndb']['user']
   group node['ndb']['group']

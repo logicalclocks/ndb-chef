@@ -279,7 +279,7 @@ attribute "ndb/NoOfFragmentLogParts",
           :type => 'string'
 
 attribute "ndb/NoOfFragmentLogFiles",
-          :description =>  "Number of fragment logfiles for writing LCPS.", 
+          :description =>  "Number of fragment logfiles for writing LCPS.",
           :type => 'string'
 
 attribute "ndb/bind_cpus",
@@ -348,22 +348,25 @@ attribute "ndb/mysqld/ips_ids",
           :description =>  "The format should be ['ip1:id1', 'ip2:id2', ...] for the mysql section in the config.ini file. If no value is supplied, one will be assigned by default.",
           :type => 'array'
 
-attribute "ndb/MaxNoOfExecutionThreads",
-          :description => "Number of execution threads for MySQL Cluster",
-          :type => 'string'
-
-attribute "ndb/DataMemory",
-          :description => "Data memory for each MySQL Cluster Data Node",
-          :type => 'string',
-          :required => "required"
-
-attribute "ndb/IndexMemory",
-          :description => "Index memory for each MySQL Cluster Data Node",
-          :type => 'string'
-
 attribute "ndb/EnableRedoControl",
           :description => "Control disk read/write speeds automatically for LCPs (default '1', to turn off - set to '0'",
           :type => 'string'
+
+attribute "ndb/mgmd/private_ips_domainIds",
+          :description => "private_ips to LocationDomainIds for ndb_mgmds",
+          :type => 'array'
+
+attribute "ndb/ndbd/private_ips_domainIds",
+          :description => "private_ips to LocationDomainIds for ndb data nodes",
+          :type => 'hash'
+
+attribute "ndb/mysqld/private_ips_domainIds",
+          :description => "private_ips to LocationDomainIds mapping for mysql servers",
+          :type => 'hash'
+
+attribute "ndb/ndbapi/private_ips_domainIds",
+          :description => "LocationDomainIds for ndb api nodes (namenodes)",
+          :type => 'hash'
 
 attribute "install/dir",
           :description => "Set to a base directory under which we will install.",
@@ -381,6 +384,22 @@ attribute "services/enabled",
           :description => "Default 'false'. Set to 'true' to enable daemon services, so that they are started on a host restart.",
           :type => "string"
 
+attribute "ndb/nvme/disks",
+          :description => "NVMe disks to use for the on disk columns. This configuration overides ndb/diskdata_dir",
+          :type => "array"
+
+attribute "ndb/nvme/format",
+          :description => "Default 'false'. Set to 'true' to format the NVMe disks specified in ndb/nvme/disks.",
+          :type => "string"
+
+attribute "ndb/num_ndb_slots_per_client",
+          :description => "Number of NDB connection slots per api node",
+          :type => "string"
+
+attribute "ndb/num_ndb_slots_per_mysqld",
+          :description => "Number of NDB connection slots per mysqld node",
+          :type => "string"
+
 # attribute "btsync/ndb/seeder_secret",
 # :display_name => "Ndb seeder's random secret key.",
 # :description => "20 chars or more (normally 32 chars)",
@@ -392,4 +411,3 @@ attribute "services/enabled",
 # :description => "Ndb's random secret (key) generated using the seeder's secret key. 20 chars or more (normally 32 chars)",
 # :type => 'string',
 # :default => "BTHKJKK4PIPIOJZ7GITF2SJ2IYDLSSJVY"
-

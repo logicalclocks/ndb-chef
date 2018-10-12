@@ -44,7 +44,7 @@ optimizer_switch=engine_condition_pushdown=on
 ndb-join-pushdown=1
 
 # use the cluster connection pool to reduce cluster connection setup time
-ndb-cluster-connection-pool=<%= node['ndb']['num_ndb_slots_per_client'] %>
+ndb-cluster-connection-pool=<%= node['ndb']['num_ndb_slots_per_mysqld'] %>
 
 # Log more data at MySQL Server about ndb
 ndb-extra-logging=0

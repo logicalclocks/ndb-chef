@@ -48,6 +48,11 @@ when "rhel"
   package "libaio" do
     action :install
   end
+
+  package "numactl" do
+    action :install
+  end
+
   if "#{node['ndb']['version']}.#{node['ndb']['majorVersion']}".to_f < 7.5
     #scripts/mysql_install_db requires perl-Data-Dumper
     package "perl-Data-Dumper" do
@@ -195,7 +200,43 @@ file "#{Chef::Config.file_cache_path}/grants.sql" do
   action :delete
 end
 
+nvmeDisksMountPoints="[]"
+if !node['ndb']['nvme']['disks'].empty?
+  nvmeDisks = node['ndb']['nvme']['disks'].each_with_index.map do |e, i|
+    "#{node['ndb']['nvme']['mount_base_dir']}/#{node['ndb']['nvme']['mount_disk_prefix']}#{i}/#{node['ndb']['ndb_disk_columns_dir_name']}"
+  end
+  nvmeDisksMountPoints = "['#{nvmeDisks.join("', '")}']"
+end
+#
+# These are helper scripts for exapnding tables with on-disk columns
+#
+template "#{node['ndb']['scripts_dir']}/manage-disk-table.py" do
+    source "manage-disk-table.py.erb"
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    variables ({ :nvmeDisksDataDirs => nvmeDisksMountPoints})
+    mode 0700
+end
 
+template "#{node['ndb']['scripts_dir']}/create-disk-table.sh" do
+    source "create-disk-table.sh.erb"
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    variables({
+                :my_ip => my_ip
+              })
+    mode 0700
+end
+
+template "#{node['ndb']['scripts_dir']}/drop-disk-table.sh" do
+    source "drop-disk-table.sh.erb"
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    variables({
+                :my_ip => my_ip
+              })
+    mode 0700
+end
 
 if node['ndb']['enabled'] == "true"
 
@@ -232,4 +273,4 @@ if node['install']['upgrade'] == "true"
   kagent_config "#{service_name}" do
     action :systemd_reload
   end
-end  
+end

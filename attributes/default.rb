@@ -209,7 +209,7 @@ default['ndb']['ndbapi']['addrs']                        = ['']
 # ndbd entries in the config.ini file.
 # The format should be ["ip1:id1", "ip2:id2", ...]
 # If this attribute is not overriden, the ndbd instances will be ordered by
-# ip_address, and the id '1' will be given to the first nbdd, '2' to the next ndbd, etc.
+# ip_address, and the id '1' will be given to the first ndbd, '2' to the next ndbd, etc.
 #
 default['ndb']['ndbd']['ips_ids']                        = []
 default['ndb']['mysqld']['ips_ids']                      = []

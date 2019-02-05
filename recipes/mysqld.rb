@@ -147,7 +147,7 @@ template "mysql.cnf" do
   path "#{node['ndb']['root_dir']}/my.cnf"
   source "my-ndb.cnf.erb"
   mode "0644"
-  action :create_if_missing
+  action :create
   variables({
               :mysql_id => found_id,
               :my_ip => mysql_ip

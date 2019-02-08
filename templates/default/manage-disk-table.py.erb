@@ -20,13 +20,13 @@ group.add_argument('-Drop', action='store_true', dest="drop", help="Drop Files a
 args = parser.parse_args()
 print args
 
-#DATA_DISKS = ["/dir1,/dir2"]
-DATA_DISKS = ["<%= node['ndb']['NvmeDisks'] %>"]
+#DATA_DISKS = ["/dir1", "/dir2"]
+DATA_DISKS = [""]
 DATAFILE_SIZE = args.dataFileSize 
 DATAFILES_PER_DISK = args.dataFilesCount 
 
-#LOG_DISKS = ["/dir1,/dir2"]
-LOG_DISKS = ["<%= node['ndb']['LogDisks'] %>"]
+#LOG_DISKS = ["/dir1", "/dir2"]
+LOG_DISKS = [""]
 LOGFILE_SIZE = args.logFileSize
 LOGFILES_PER_DISK = args.logFilesCount 
 
@@ -89,18 +89,18 @@ def create():
       if tableSpaceCreated == False:
         printStage("Creating Table Space")
         tableSpaceCreated = True
-        subCommand = ("CREATE TABLESPACE %s ADD datafile '%s%s_data_file_%d.dat' use LOGFILE GROUP lg_1 INITIAL_SIZE = %s  ENGINE ndbcluster" % (TS_NAME, TS_NAME, disk, fileIndex, DATAFILE_SIZE))
+        subCommand = ("CREATE TABLESPACE %s ADD datafile '%s%s_data_file_%d.dat' use LOGFILE GROUP lg_1 INITIAL_SIZE = %s  ENGINE ndbcluster" % (TS_NAME, disk, TS_NAME, fileIndex, DATAFILE_SIZE))
       else:
-        subCommand = ("ALTER TABLESPACE %s ADD datafile '%s%s_data_file_%d.dat' INITIAL_SIZE = %s  ENGINE ndbcluster" % (TS_NAME, TS_NAME, disk, fileIndex, DATAFILE_SIZE))
+        subCommand = ("ALTER TABLESPACE %s ADD datafile '%s%s_data_file_%d.dat' INITIAL_SIZE = %s  ENGINE ndbcluster" % (TS_NAME, disk, TS_NAME, fileIndex, DATAFILE_SIZE))
       executeSQLCommand(subCommand)
 
   #Create Table
   printStage("Creating Tables")
-  subCommand = ("CREATE TABLE IF NOT EXISTS hdfs_ondisk_small_file_inode_data ( inode_id int(11) PRIMARY KEY, data varbinary(%d) not null ) TABLESPACE %s STORAGE DISK ENGINE ndbcluster COMMENT='NDB_TABLE=READ_BACKUP=1' partition by key (\`inode_id\`)"% (ONDISK_SMALL_FILE_INODE_SIZE, TS_NAME))
+  subCommand = ("CREATE TABLE IF NOT EXISTS hdfs_ondisk_small_file_inode_data ( inode_id bigint(20) PRIMARY KEY, data varbinary(%d) not null ) TABLESPACE %s STORAGE DISK ENGINE ndbcluster COMMENT='NDB_TABLE=READ_BACKUP=1' partition by key (\`inode_id\`)"% (ONDISK_SMALL_FILE_INODE_SIZE, TS_NAME))
   executeSQLCommand(subCommand)
-  subCommand = ("CREATE TABLE IF NOT EXISTS hdfs_ondisk_medium_file_inode_data ( inode_id int(11) PRIMARY KEY, data varbinary(%d) not null ) TABLESPACE %s STORAGE DISK ENGINE ndbcluster COMMENT='NDB_TABLE=READ_BACKUP=1' partition by key (\`inode_id\`)"% (ONDISK_MEDIUM_FILE_INODE_SIZE, TS_NAME))
+  subCommand = ("CREATE TABLE IF NOT EXISTS hdfs_ondisk_medium_file_inode_data ( inode_id bigint(20) PRIMARY KEY, data varbinary(%d) not null ) TABLESPACE %s STORAGE DISK ENGINE ndbcluster COMMENT='NDB_TABLE=READ_BACKUP=1' partition by key (\`inode_id\`)"% (ONDISK_MEDIUM_FILE_INODE_SIZE, TS_NAME))
   executeSQLCommand(subCommand)
-  subCommand = ("CREATE TABLE IF NOT EXISTS hdfs_ondisk_large_file_inode_data ( inode_id int(11), dindex int(11), data varbinary(%d) not null,  PRIMARY KEY(inode_id, dindex) ) TABLESPACE %s STORAGE DISK ENGINE ndbcluster COMMENT='NDB_TABLE=READ_BACKUP=1' partition by key (inode_id)"% (ONDISK_LARGE_FILE_INODE_SIZE, TS_NAME))
+  subCommand = ("CREATE TABLE IF NOT EXISTS hdfs_ondisk_large_file_inode_data ( inode_id bigint(20), dindex int(11), data varbinary(%d) not null,  PRIMARY KEY(inode_id, dindex) ) TABLESPACE %s STORAGE DISK ENGINE ndbcluster COMMENT='NDB_TABLE=READ_BACKUP=1' partition by key (inode_id)"% (ONDISK_LARGE_FILE_INODE_SIZE, TS_NAME))
   executeSQLCommand(subCommand)
 
 

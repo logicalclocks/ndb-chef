@@ -69,23 +69,6 @@ template "#{node['ndb']['scripts_dir']}/native_ndb_backup.sh" do
 end
 
 #
-# These are helper scripts for exapnding tables with on-disk columns
-#
-template "#{node['ndb']['scripts_dir']}/manage-disk-table.py" do
-    source "manage-disk-table.py.erb"
-    owner node['ndb']['user']
-    group node['ndb']['group']
-    mode 0700
-end
-
-template "#{node['ndb']['scripts_dir']}/create-disk-table.sh" do
-    source "create-disk-table.sh.erb"
-    owner node['ndb']['user']
-    group node['ndb']['group']
-    mode 0700
-end
-
-#
 # Install cron backup job on the node with the first ndb_mgmd
 #
 if found_id == node['mgm']['id'] && "#{node['ndb']['cron_backup']}" == "true"
@@ -180,6 +163,11 @@ end
 # Need to call get_ndbapi_addrs to set them before instantiating config.ini
 get_ndbapi_addrs()
 
+diskDataDir=node['ndb']['diskdata_dir']
+if !node['ndb']['nvme']['disks'].empty?
+  diskDataDir="#{node['ndb']['nvme']['mount_base_dir']}/#{node['ndb']['nvme']['mount_disk_prefix']}0/#{node['ndb']['ndb_disk_columns_dir_name']}"
+end
+
 template "#{node['ndb']['root_dir']}/config.ini" do
   source "config.ini.erb"
   owner node['ndb']['user']
@@ -187,7 +175,9 @@ template "#{node['ndb']['root_dir']}/config.ini" do
   mode 0644
   action :create_if_missing
   variables({
-              :num_client_slots => node['ndb']['num_ndb_slots_per_client'].to_i
+              :num_ndb_slots_per_client => node['ndb']['num_ndb_slots_per_client'].to_i,
+              :num_ndb_slots_per_mysqld => node['ndb']['num_ndb_slots_per_mysqld'].to_i,
+              :diskDataDir => diskDataDir
             })
 end
 

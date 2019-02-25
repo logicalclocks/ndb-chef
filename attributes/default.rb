@@ -117,12 +117,18 @@ default['ndb']['base_dir']                            = "#{node['ndb']['root_dir
 
 default['ndb']['InitialLogFileGroup']                 = "undo_buffer_size=128M; "
 # NDB Cluster Disk Data data files and undo log files are placed in the diskdata_dir directory
-default['ndb']['diskdata_dir']                        = "#{node['ndb']['root_dir']}/ndb_disk_columns"
+default['ndb']['ndb_disk_columns_dir_name']           = "ndb_disk_columns"
+default['ndb']['diskdata_dir']                        = "#{node['ndb']['root_dir']}/#{node['ndb']['ndb_disk_columns_dir_name']}"
 default['ndb']['nvme']['small_file']                  = "2000"
 default['ndb']['nvme']['med_file']                    = "4000"
 default['ndb']['nvme']['large_file']                  = "8000"
 default['ndb']['nvme']['logfile_size']                = ""
 default['ndb']['nvme']['num_logfiles']                = ""
+
+default['ndb']['nvme']['mount_base_dir']              = "/mnt/nvmeDisks"
+default['ndb']['nvme']['mount_disk_prefix']           = "nvme"
+default['ndb']['nvme']['disks']                       = []
+default['ndb']['nvme']['format']                      = "false"
 
 default['ndb']['BackupDataDir']                       = "#{node['ndb']['root_dir']}/ndb/backups"
 
@@ -140,6 +146,7 @@ default['ndb']['mgm_dir']                             = "#{node['ndb']['root_dir
 # MySQL Server Parameters
 default['ndb']['mysql_server_dir']                    = "#{node['ndb']['root_dir']}/mysql"
 default['ndb']['num_ndb_slots_per_client']            = 1
+default['ndb']['num_ndb_slots_per_mysqld']            = 1
 
 # Max time that the mysqld and memcached will wait for the MySQL Cluster to be up and running.
 # If the mysqld or memcached starts and the MySQL Cluster isn't running, it will not connect and will
@@ -226,3 +233,8 @@ default['ndb']['backup_time']                         = "03:00"
 
 default['ndb']['systemd']                             = node['systemd']
 
+
+#LocationDomainId
+default['ndb']['mgmd']['private_ips_domainIds']          = {}
+default['ndb']['ndbd']['private_ips_domainIds']          = {}
+default['ndb']['mysqld']['private_ips_domainIds']        = {}

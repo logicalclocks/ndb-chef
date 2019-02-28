@@ -7,3 +7,4 @@ cookbook 'conda', github: "logicalclocks/conda-chef", branch: "master"
 
 cookbook 'ulimit', github: "logicalclocks/chef-ulimit", branch: "master"
 
+cookbook 'ulimit2', '~> 0.2.0'

@@ -10,6 +10,8 @@ issues_url       "https://github.com/hopshadoop/ndb-chef/issues"
 
 depends           "kagent"
 depends           "ulimit"
+depends           "ulimit2"
+
 
 recipe            "ndb::install", "Installs MySQL Cluster binaries"
 

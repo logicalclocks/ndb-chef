@@ -191,26 +191,42 @@ end
 # Nice values are -20..20. Higher values get less CPU (they are 'nicer').
 #
 
-ulimit_domain node['ndb']['user'] do
-  rule do
-    item :priority
-    type :hard
-    value -19
-  end
-  rule do
-    item :priority
-    type :soft
-    value -19
-  end
-  rule do
-    item :nice
-    type :hard
-    value -19
-  end
-  rule do
-    item :nice
-    type :soft
-    value -19
-  end
-end
+ ulimit_domain node['ndb']['user'] do
+   rule do
+     item :priority
+     type :hard
+     value -19
+   end
+   rule do
+     item :priority
+     type :soft
+     value -19
+   end
+   rule do
+     item :nice
+     type :hard
+     value -19
+   end
+   rule do
+     item :nice
+     type :soft
+     value -19
+   end
+ end
+
+
+
+node.override['ulimit']['conf_dir'] = "/etc/security"
+node.override['ulimit']['conf_file'] = "limits.conf"
+
+node.override['ulimit']['params']['default']['nofile'] = 65000     # hard and soft open file limit for all users
+node.override['ulimit']['params']['default']['nproc'] = 8000
+
+node.override['ulimit']['conf_dir'] = "/etc/security"
+node.override['ulimit']['conf_file'] = "limits.conf"
+
+node.override['ulimit']['params']['default']['nofile'] = 65000     # hard and soft open file limit for all users
+node.override['ulimit']['params']['default']['nproc'] = 8000
+
+include_recipe "ulimit2"
 

@@ -332,12 +332,32 @@ attribute "ndb/mgmd/private_ips",
           :description =>  "Ips for ndb_mgmds",
           :type => 'array'
 
+attribute "ndb/mgmd/public_ips",
+          :description =>  "Public Ips for ndb_mgmds",
+          :type => 'array'
+
 attribute "ndb/mysqld/private_ips",
           :description =>  "Ips for mysql servers",
           :type => 'array'
 
+attribute "ndb/mysqld/public_ips",
+          :description =>  "PUblic ips for mysql servers",
+          :type => 'array'
+
 attribute "ndb/ndbd/private_ips",
           :description =>  "Ips for ndb data nodes",
+          :type => 'array'
+
+attribute "ndb/ndbd/public_ips",
+          :description =>  "Public ips for ndb data nodes",
+          :type => 'array'
+
+attribute "ndb/memcached/private_ips",
+          :description =>  "Ips for ndb memcached servers",
+          :type => 'array'
+
+attribute "ndb/memcached/public_ips",
+          :description =>  "Public ips for memcached servers",
           :type => 'array'
 
 attribute "ndb/ndbd/ips_ids",

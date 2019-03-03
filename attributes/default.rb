@@ -183,7 +183,7 @@ default['memcached']['id']                            = 125
 # up to 65 NameNodes
 default['nn']['id']                                   = 190
 
-# The address of the mysqld that will be used by hop
+# The address of the mysqld that will be used by hops
 default['ndb']['mysql_ip']                            = "10.0.2.15"
 
 # Size in MB of memcached cache
@@ -199,18 +199,18 @@ default['memcached']['options']                       = ";role=ndb-caching;usec_
 default['btsync']['ndb']['leechers']                     = ['10.0.2.15']
 
 # IP addresses of the mgm-server, ndbds must be overridden by role/recipe caller.
-default['ndb']['public_ips']                             = ['']
-default['ndb']['private_ips']                            = ['']
-default['ndb']['mgmd']['public_ips']                     = ['']
-default['ndb']['mgmd']['private_ips']                    = ['']
-default['ndb']['ndbd']['public_ips']                     = ['']
-default['ndb']['ndbd']['private_ips']                    = ['']
-default['ndb']['mysqld']['public_ips']                   = ['']
-default['ndb']['mysqld']['private_ips']                  = ['']
-default['ndb']['memcached']['public_ips']                = ['']
-default['ndb']['memcached']['private_ips']               = ['']
+default['ndb']['public_ips']                             = node["install"]["public_ips"].empty? ? ['10.0.2.15'] : node["install"]["public_ips"] 
+default['ndb']['private_ips']                            = node["install"]["private_ips"].empty? ? ['10.0.2.15'] : node["install"]["private_ips"]
+default['ndb']['mgmd']['public_ips']                     = node["install"]["public_ips"].empty? ? ['10.0.2.15'] : node["install"]["public_ips"] 
+default['ndb']['mgmd']['private_ips']                    = node["install"]["private_ips"].empty? ? ['10.0.2.15'] : node["install"]["private_ips"]
+default['ndb']['ndbd']['public_ips']                     = node["install"]["public_ips"].empty? ? ['10.0.2.15'] : node["install"]["public_ips"] 
+default['ndb']['ndbd']['private_ips']                    = node["install"]["private_ips"].empty? ? ['10.0.2.15'] : node["install"]["private_ips"]
+default['ndb']['mysqld']['public_ips']                   = node["install"]["public_ips"].empty? ? ['10.0.2.15'] : node["install"]["public_ips"] 
+default['ndb']['mysqld']['private_ips']                  = node["install"]["private_ips"].empty? ? ['10.0.2.15'] : node["install"]["private_ips"]
+default['ndb']['memcached']['public_ips']                = node["install"]["public_ips"].empty? ? ['10.0.2.15'] : node["install"]["public_ips"] 
+default['ndb']['memcached']['private_ips']               = node["install"]["private_ips"].empty? ? ['10.0.2.15'] : node["install"]["private_ips"]
 
-default['ndb']['ndbapi']['addrs']                        = ['']
+default['ndb']['ndbapi']['addrs']                        = node["install"]["private_ips"].empty? ? ['10.0.2.15'] : node["install"]["private_ips"]
 
 #
 # ndbd entries in the config.ini file.

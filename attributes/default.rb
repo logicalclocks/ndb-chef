@@ -2,7 +2,7 @@ include_attribute "kagent"
 
 version                                               ="7"
 default['ndb']['majorVersion']                        ="6"
-default['ndb']['minorVersion']                        ="9"
+default['ndb']['minorVersion']                        ="10"
 
 default['ndb']['version']                             = "#{version}.#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}"
 default['ndb']['enabled']                             = "true"

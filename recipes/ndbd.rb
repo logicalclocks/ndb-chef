@@ -132,6 +132,7 @@ deps = ""
 if exists_local("ndb", "mgmd") 
   deps = "ndb_mgmd.service"
 end  
+
 service_name = "ndbmtd"
 
 if node['ndb']['systemd'] != "true" 
@@ -176,9 +177,9 @@ template systemd_script do
     mode 0754
     cookbook 'ndb'
     variables({
-              :deps => deps
-              })    
-    variables({ :node_id => found_id })
+                :deps => deps,
+                :node_id => found_id
+    })
   if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name)
   end

@@ -131,11 +131,10 @@ else # sytemd is true
     mode 0755
     cookbook 'ndb'
     variables({
-              :deps => deps
-              })    
-    variables({ :node_id => found_id,
-                :pid_file => pid_file
-              })
+              :deps => deps,
+              :node_id => found_id,
+              :pid_file => pid_file
+     })
   end
 
   service "#{service_name}" do

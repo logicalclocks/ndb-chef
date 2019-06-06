@@ -128,6 +128,11 @@ for script in node['ndb']['scripts']
 end 
 
 
+deps = ""
+if exists_local("ndb", "mgmd") 
+  deps = "ndb_mgmd.service"
+end  
+
 service_name = "ndbmtd"
 
 if node['ndb']['systemd'] != "true" 
@@ -171,7 +176,10 @@ template systemd_script do
     group node['ndb']['group']
     mode 0754
     cookbook 'ndb'
-    variables({ :node_id => found_id })
+    variables({
+                :deps => deps,
+                :node_id => found_id
+    })
   if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name)
   end

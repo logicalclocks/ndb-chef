@@ -1,10 +1,4 @@
 dependencies: 
-  - recipe: ndb::install
-    global:  
-      - kagent::install
-  - recipe: ndb::mgmd
-    global:  
-      - kagent::install
   - recipe: ndb::ndbd
     global:  
       - ndb::mgmd

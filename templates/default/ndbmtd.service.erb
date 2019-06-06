@@ -1,6 +1,6 @@
 [Unit]
 Description = NDB Multi-threaded DataNode (ndbmtd)
-After = syslog.target network.target remote-fs.target
+After = syslog.target network.target remote-fs.target <%= @deps %>
 
 [Service]
 User = <%= node['ndb']['user'] %>

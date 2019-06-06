@@ -87,6 +87,12 @@ end
 
 pid_file="#{node['ndb']['log_dir']}/mysql_#{found_id}.pid"
 
+
+
+deps = ""
+if exists_local("ndb", "ndbd") 
+  deps = "ndbmtd.service"
+end  
 service_name = "mysqld"
 
 if node['ndb']['systemd'] != "true"
@@ -124,9 +130,11 @@ else # sytemd is true
     group "root"
     mode 0755
     cookbook 'ndb'
-    variables({ :node_id => found_id,
-                :pid_file => pid_file
-              })
+    variables({
+              :deps => deps,
+              :node_id => found_id,
+              :pid_file => pid_file
+     })
   end
 
   service "#{service_name}" do

@@ -392,6 +392,10 @@ attribute "ndb/nvme/format",
           :description => "Default 'false'. Set to 'true' to format the NVMe disks specified in ndb/nvme/disks.",
           :type => "string"
 
+attribute "ndb/nvme/logfile_size",
+          :description => "Amount of extra disk space to use on the NVMe disks for NDB.",
+          :type => "string"
+
 attribute "ndb/num_ndb_slots_per_client",
           :description => "Number of NDB connection slots per api node",
           :type => "string"

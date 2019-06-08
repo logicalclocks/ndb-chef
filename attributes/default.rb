@@ -122,8 +122,8 @@ default['ndb']['diskdata_dir']                        = "#{node['ndb']['root_dir
 default['ndb']['nvme']['small_file']                  = "2000"
 default['ndb']['nvme']['med_file']                    = "4000"
 default['ndb']['nvme']['large_file']                  = "8000"
+# size in MBs of the logfile
 default['ndb']['nvme']['logfile_size']                = ""
-default['ndb']['nvme']['num_logfiles']                = ""
 
 default['ndb']['nvme']['mount_base_dir']              = "/mnt/nvmeDisks"
 default['ndb']['nvme']['mount_disk_prefix']           = "nvme"

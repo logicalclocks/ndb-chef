@@ -282,3 +282,16 @@ if node['install']['upgrade'] == "true"
     action :systemd_reload
   end
 end
+
+
+if node['ndb']['nvme']['logfile_size'] != ""
+  bash 'add_disk_data_files' do
+    user node['ndb']['user']
+    ignore_failure true
+    code <<-EOF
+        #{node['ndb']['scripts_dir']}/mysql-client.sh -e "ALTER LOGFILE GROUP lg_1 ADD UNDOFILE 'undo_extra.log' INITIAL_SIZE #{node['ndb']['nvme']['undofile_size']} ENGINE NDBCLUSTER;"
+        #{node['ndb']['scripts_dir']}/mysql-client.sh -e "ALTER TABLESPACE ts_1 ADD DATAFILE 'data_extra.dat' INITIAL_SIZE #{node['ndb']['nvme']['logfile_size']};"
+      EOF
+  end
+end
+

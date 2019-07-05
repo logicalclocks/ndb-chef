@@ -295,8 +295,9 @@ if my_ip.eql? node['ndb']['mysqld']['private_ips'][0]
         #{node['ndb']['scripts_dir']}/mysql-client.sh INFORMATION_SCHEMA -e "SELECT MAXIMUM_SIZE from FILES WHERE FILE_TYPE like 'UNDO LOG' AND FILE_NAME like 'undo_%'" | sed 's/\t/,/g'  > /tmp/undo.csv
         # all of the undo file sizes are now in /tmp/undo.csv. Sum them up using awk.
         existing_size=$(awk -F"," '{print;x+=$1}END{print x}' /tmp/undo.csv)
-        desired_size=#{node['ndb']['nvme']['undofile_size']}
-        remaining=$($desired_size - $existing_size)
+        desired_size="#{node['ndb']['nvme']['undofile_size']}"
+        size=$(desired_size/M/000000)
+        remaining=$($size - $existing_size)
         if [ $remaining -gt 0 ] ; then
            #{node['ndb']['scripts_dir']}/mysql-client.sh -e "ALTER LOGFILE GROUP lg_1 ADD UNDOFILE "undo_#{ts}.log" INITIAL_SIZE ${remaining} ENGINE NDBCLUSTER;"        
         fi
@@ -312,8 +313,9 @@ if my_ip.eql? node['ndb']['mysqld']['private_ips'][0]
         #{node['ndb']['scripts_dir']}/mysql-client.sh INFORMATION_SCHEMA -e "SELECT MAXIMUM_SIZE from FILES WHERE FILE_TYPE like 'DATAFILE' AND FILE_NAME like 'ts_1_data_file_%'" | sed 's/\t/,/g'  > /tmp/datafile.csv
 
         existing_size=$(awk -F"," '{print;x+=$1}END{print x}' /tmp/datafile.csv)
-        desired_size=#{node['ndb']['nvme']['logfile_size']}
-        remaining=$($desired_size - $existing_size)
+        desired_size="#{node['ndb']['nvme']['logfile_size']}"
+        size=$(desired_size/M/000000)
+        remaining=$($size - $existing_size)
         if [ $remaining -gt 0 ] ; then
            #{node['ndb']['scripts_dir']}/mysql-client.sh -e "ALTER TABLESPACE ts_1 ADD DATAFILE "ts_1_data_file_#{ts}.dat" INITIAL_SIZE ${remaining} ENGINE NDBCLUSTER;"
         fi

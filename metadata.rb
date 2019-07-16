@@ -408,6 +408,10 @@ attribute "ndb/nvme/logfile_size",
           :description => "Amount of extra disk space to use on the NVMe disks for NDB.",
           :type => "string"
 
+attribute "ndb/nvme/undofile_size",
+          :description => "Amount of extra disk space to use for log files on the NVMe disks for NDB.",
+          :type => "string"
+
 attribute "ndb/num_ndb_slots_per_client",
           :description => "Number of NDB connection slots per api node",
           :type => "string"

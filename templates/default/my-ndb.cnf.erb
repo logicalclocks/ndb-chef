@@ -78,3 +78,5 @@ ndb-connectstring=<%= node['ndb']['connectstring'] %>
 [client]
 default-character-set = utf8
 socket                = <%= node['ndb']['mysql_socket'] %>
+user		          = <%= node['mysql']['user'] %> 
+password 	          = <%= node['mysql']['password'] %> 

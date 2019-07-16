@@ -99,6 +99,18 @@ attribute "ndb/DiskPageBufferEntries",
           :description => "Number of page entries (page references) to allocate.",
           :type => 'string'
 
+attribute "ndb/DiskIOThreadPool",
+          :description => "Default is (2). Increase for higher throughput.",
+          :type => 'string'
+
+attribute "ndb/SharedGlobalMemory",
+          :description => "Default is 128M, increase to 512M for higher throughput.",
+          :type => 'string'
+
+attribute "ndb/DiskPageBufferMemory",
+          :description => "Default is 64M, increase to 512M for higher throughput.",
+          :type => 'string'
+
 attribute "mysql/user",
           :description => "User that runs mysql server",
           :required => "required",
@@ -390,6 +402,10 @@ attribute "ndb/nvme/disks",
 
 attribute "ndb/nvme/format",
           :description => "Default 'false'. Set to 'true' to format the NVMe disks specified in ndb/nvme/disks.",
+          :type => "string"
+
+attribute "ndb/nvme/logfile_size",
+          :description => "Amount of extra disk space to use on the NVMe disks for NDB.",
           :type => "string"
 
 attribute "ndb/num_ndb_slots_per_client",

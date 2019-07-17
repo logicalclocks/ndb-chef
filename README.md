@@ -13,7 +13,7 @@ Platform
 
 
 Tested on:
-* Ubuntu 12.04-14.04
+* Ubuntu 16.04
 * centos 7.0+
 
 

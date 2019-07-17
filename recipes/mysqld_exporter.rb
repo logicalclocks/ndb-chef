@@ -12,14 +12,14 @@ remote_file cached_package_filename do
   action :create_if_missing
 end
 
-mysqld_exporter_downloaded= "#{node['ndb']['mysqld_exporter']['home']}/.mysqld_exporter.extracted_#{node['nbd']['mysqld_exporter']['version']}"
+mysqld_exporter_downloaded= "#{node['ndb']['mysqld_exporter']['home']}/.mysqld_exporter.extracted_#{node['ndb']['mysqld_exporter']['version']}"
 # Extract node_exporter 
 bash 'extract_mysqld_exporter' do
   user "root"
   code <<-EOH
     tar -xf #{cached_package_filename} -C #{node['ndb']['dir']}
     chown -R #{node['ndb']['user']}:#{node['ndb']['group']} #{node['ndb']['mysqld_exporter']['home']}
-    chmod 750 #{node['prometheus']['home']}
+    chmod 750 #{node['ndb']['mysqld_exporter']['home']}
     touch #{mysqld_exporter_downloaded}
     chown #{node['hopsmonitor']['user']} #{mysqld_exporter_downloaded}
   EOH
@@ -53,8 +53,7 @@ template systemd_script do
   if node['services']['enabled'] == "true"
     notifies :enable, "service[mysqld_exporter]"
   end
-    notifies :restart, "service[mysqld_exporter]"
-  end
+  notifies :restart, "service[mysqld_exporter]"
 end
 
 kagent_config "mysqld_exporter" do

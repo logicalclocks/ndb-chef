@@ -1,4 +1,3 @@
-
 action :wait_until_cluster_ready do
 
   bash new_resource.name do

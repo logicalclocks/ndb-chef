@@ -1,6 +1,3 @@
-require File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
-require File.expand_path(File.dirname(__FILE__) + '/find_mysqld')
-
 ndb_connectstring()
 
 case node['platform_family']
@@ -18,7 +15,7 @@ directory node['ndb']['mysql_server_dir'] do
 end
 
 my_ip = my_private_ip()
-found_id=find_mysql_id(my_ip)
+found_id=find_service_id("mysql", node['mysql']['id'])
 
 for script in node['mysql']['scripts']
   template "#{node['ndb']['scripts_dir']}/#{script}" do
@@ -172,8 +169,9 @@ kagent_keys "#{homedir}" do
   action :get_publickey
 end
 
-ndb_start "mysqld" do
-  action :start_if_not_running
+kagent_config "#{service_name}" do
+    action :systemd_reload
+    not_if "systemctl is-alive ndbmtd"
 end
 
 if node['install']['upgrade'] == "true"

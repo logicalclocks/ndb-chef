@@ -1,12 +1,12 @@
 name             "ndb"
 maintainer       "Jim Dowling"
 maintainer_email "jdowling@kth.se"
-license          "GPL 2.0"
+license          "AGPL 2.0"
 description      "Installs/Configures NDB (MySQL Cluster)"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "1.0.0"
-source_url       "https://github.com/hopshadoop/ndb-chef"
-issues_url       "https://github.com/hopshadoop/ndb-chef/issues"
+source_url       "https://github.com/logicalclocks/ndb-chef"
+issues_url       "https://github.com/logicalclocks/ndb-chef/issues"
 
 depends           "kagent"
 depends           "ulimit"
@@ -16,15 +16,8 @@ recipe            "ndb::install", "Installs MySQL Cluster binaries"
 recipe            "ndb::mgmd", "Installs a MySQL Cluster management server (ndb_mgmd)"
 recipe            "ndb::ndbd", "Installs a MySQL Cluster data node (ndbd)"
 recipe            "ndb::mysqld", "Installs a MySQL Server connected to the MySQL Cluster (mysqld)"
-recipe            "ndb::memcached", "Installs a memcached Server connected to the MySQL Cluster (memcached)"
-
-recipe            "ndb::mgmd-purge", "Removes a MySQL Cluster management server (ndb_mgmd)"
-recipe            "ndb::ndbd-purge", "Removes a MySQL Cluster data node (ndbd)"
-recipe            "ndb::mysqld-purge", "Removes a MySQL Server connected to the MySQL Cluster (mysqld)"
-recipe            "ndb::memcached-purge", "Removes a memcached Server connected to the MySQL Cluster (memcached)"
 
 recipe            "ndb::purge", "Removes all data and all binaries related to a MySQL Cluster installation"
-recipe            "ndb::_test", "A unit-test used for testing this cookbook"
 
 supports 'ubuntu', ">= 14.04"
 supports 'rhel',   ">= 7.0"
@@ -46,14 +39,6 @@ attribute "ndb/DataMemory",
           :description => "Data memory for each MySQL Cluster Data Node",
           :type => 'string',
           :required => "required"
-
-attribute "ndb/IndexMemory",
-          :description => "Index memory for each MySQL Cluster Data Node",
-          :type => 'string'
-
-attribute "memcached/mem_size",
-          :description => "Memcached data memory size",
-          :type => 'string'
 
 attribute "ndb/version",
           :description =>  "MySQL Cluster Version",
@@ -330,15 +315,9 @@ attribute "ndb/backup_time",
           :description =>  "Time in 24-hour clock of when to make the regular backup. Default: 03:00 (in the morning)",
           :type => 'string'
 
-
-attribute "ndb/systemd",
-          :description =>  "Use systemd scripts (instead of system-v). Default is 'true'.",
-          :type => 'string'
-
 attribute "ndb/MaxNoOfConcurrentTransactions",
           :description =>  "Maximum number of concurrent transactions (higher consumes more memory)",
           :type => 'string'
-
 
 attribute "ndb/mgmd/private_ips",
           :description =>  "Ips for ndb_mgmds",
@@ -380,6 +359,14 @@ attribute "ndb/ndbapi/private_ips_domainIds",
           :description => "LocationDomainIds for ndb api nodes (namenodes)",
           :type => 'hash'
 
+attribute "ndb/mysql_socket",
+          :description => "Location of the MySQL unix socket"
+          :type => "string"
+
+attribute "ndb/mysql_port",
+          :description => "Port on which the MySQL server binds to"
+          :type => "string"
+
 attribute "install/dir",
           :description => "Set to a base directory under which we will install.",
           :type => "string"
@@ -419,15 +406,3 @@ attribute "ndb/num_ndb_slots_per_client",
 attribute "ndb/num_ndb_slots_per_mysqld",
           :description => "Number of NDB connection slots per mysqld node",
           :type => "string"
-
-# attribute "btsync/ndb/seeder_secret",
-# :display_name => "Ndb seeder's random secret key.",
-# :description => "20 chars or more (normally 32 chars)",
-# :type => 'string',
-# :default => "AY27AAZKTKO3GONE6PBCZZRA6MKGRKBX2"
-
-# attribute "btsync/ndb/leecher_secret",
-# :display_name => "Ndb leecher's secret key.",
-# :description => "Ndb's random secret (key) generated using the seeder's secret key. 20 chars or more (normally 32 chars)",
-# :type => 'string',
-# :default => "BTHKJKK4PIPIOJZ7GITF2SJ2IYDLSSJVY"

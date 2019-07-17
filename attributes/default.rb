@@ -1,7 +1,6 @@
 include_attribute "kagent"
 
-version                                               ="7"
-default['ndb']['majorVersion']                        ="6"
+version                                               ="7"default['ndb']['majorVersion']                        ="6"
 default['ndb']['minorVersion']                        ="9"
 
 default['ndb']['version']                             = "#{version}.#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}"
@@ -26,14 +25,12 @@ default['ndb']['group']                               = node['install']['user'].
 default['ndb']['connectstring']                       = ""
 
 default['ndb']['DataMemory']                          = "50"
-# Calculate IndexMemory size by default, can be overriden by user.
-default['ndb']['IndexMemory']                         = ""
 default['ndb']['NoOfReplicas']                        = "1"
 default['ndb']['TcpBind_INADDR_ANY']                  = "FALSE"
 default['ndb']['NoOfFragmentLogParts']                = "4"
 default['ndb']['NoOfFragmentLogFiles']                = "4"
 default['ndb']['FragmentLogFileSize']                 = "64M"
-default['ndb']['MaxNoOfTables']                       = "3036"
+default['ndb']['MaxNoOfTables']                       = "4096"
 default['ndb']['MaxNoOfOrderedIndexes']               = "2048"
 default['ndb']['MaxNoOfUniqueHashIndexes']            = "512"
 default['ndb']['MaxDMLOperationsPerTransaction']      = "4297295"
@@ -104,7 +101,6 @@ default['ndb']['interrupts_isolated_to_single_cpu']   = "false"
 default['mgm']['scripts']            = %w{ backup-start.sh backup-restore.sh backup-remove.sh enter-singleuser-mode.sh mgm-client.sh mgm-server-start.sh mgm-server-stop.sh mgm-server-restart.sh cluster-shutdown.sh cluster-init.sh cluster-start-with-recovery.sh exit-singleuser-mode.sh }
 default['ndb']['scripts']            = %w{ ndbd-start.sh ndbd-init.sh ndbd-stop.sh ndbd-restart.sh }
 default['mysql']['scripts']          = %w{ get-mysql-socket.sh get-mysql-port.sh mysql-server-start.sh mysql-server-stop.sh mysql-server-restart.sh mysql-client.sh }
-default['memcached']['scripts']      = %w{ memcached-start.sh memcached-stop.sh memcached-restart.sh }
 
 default['ndb']['dir']                                 = node['install']['dir'].empty? ? "/var/lib" : node['install']['dir']
 default['ndb']['root_dir']                            = "#{node['ndb']['dir']}/mysql-cluster"
@@ -148,8 +144,8 @@ default['ndb']['mysql_server_dir']                    = "#{node['ndb']['root_dir
 default['ndb']['num_ndb_slots_per_client']            = 1
 default['ndb']['num_ndb_slots_per_mysqld']            = 1
 
-# Max time that the mysqld and memcached will wait for the MySQL Cluster to be up and running.
-# If the mysqld or memcached starts and the MySQL Cluster isn't running, it will not connect and will
+# Max time that the mysqld will wait for the MySQL Cluster to be up and running.
+# If the mysqld starts and the MySQL Cluster isn't running, it will not connect and will
 # need to be restarted to connect to the cluster.
 # Time in seconds
 default['ndb']['wait_startup']                        = "10800"
@@ -162,9 +158,14 @@ default['mysql']['base_dir']                          = "#{node['mysql']['dir']}
 # Concrete directory with mysql binaries for a specific mysql version
 default['mysql']['version_dir']                       = "#{node['mysql']['base_dir']}-#{node['ndb']['version']}"
 
-default['mysql']['jdbc_url']                          = ""
+# Location for the MySQL socket - needs to be in a directory which is accessible only to the mysql user
+default['ndb']['mysql_socket']                        = "#{node['ndb']['data_dir']}/mysql.sock"
+default['ndb']['mysql_port']                          = "3306"
 
 default['mysql']['localhost']                         = "false"
+
+default['mysql']['jdbc_url']                          = ""
+
 
 # MySQL Server Master-Slave replication binary log is enabled.
 default['mysql']['replication_enabled']               = "false"
@@ -176,27 +177,13 @@ default['mysql']['password']                          = "kthfs"
 
 # Limit the number of mgm_servers to the range 49..51
 default['mgm']['id']                                  = 49
-# All mysqlds, memcacheds, and ndbclients (clusterj) are in the range 52..255
+# All mysqlds, and ndbclients (clusterj) are in the range 52..255
 default['mysql']['id']                                = 52
-# up to 65 memcacheds
-default['memcached']['id']                            = 125
 # up to 65 NameNodes
 default['nn']['id']                                   = 190
 
 # The address of the mysqld that will be used by hop
 default['ndb']['mysql_ip']                            = "10.0.2.15"
-
-# Size in MB of memcached cache
-default['memcached']['mem_size']                      = 64
-# See examples here for configuration: http://dev.mysql.com/doc/ndbapi/en/ndbmemcache-configuration.html
-# options examples: ";dev=role"   or ";dev=role;S:c4,g1,t1" or ";S:c0,g1,t1" ";role=db-only"
-default['memcached']['options']                       = ";role=ndb-caching;usec_rtt=250;max_tps=100000;m=#{default['memcached']['mem_size']}"
-
-#
-# BitTorrent settings for copying NDB binaries
-#
-# default btsync ndb seeder_ip     = "default kagent dashboard_ip "
-default['btsync']['ndb']['leechers']                     = ['10.0.2.15']
 
 # IP addresses of the mgm-server, ndbds must be overridden by role/recipe caller.
 default['ndb']['public_ips']                             = ['']
@@ -207,10 +194,6 @@ default['ndb']['ndbd']['public_ips']                     = ['']
 default['ndb']['ndbd']['private_ips']                    = ['']
 default['ndb']['mysqld']['public_ips']                   = ['']
 default['ndb']['mysqld']['private_ips']                  = ['']
-default['ndb']['memcached']['public_ips']                = ['']
-default['ndb']['memcached']['private_ips']               = ['']
-
-default['ndb']['ndbapi']['addrs']                        = ['']
 
 #
 # ndbd entries in the config.ini file.
@@ -230,9 +213,6 @@ default['ndb']['aws_enhanced_networking']             = "false"
 default['ndb']['cron_backup']                         = "false"
 default['ndb']['backup_frequency']                    = "daily" # 'daily', 'weekly',
 default['ndb']['backup_time']                         = "03:00"
-
-default['ndb']['systemd']                             = node['systemd']
-
 
 #LocationDomainId
 default['ndb']['mgmd']['private_ips_domainIds']          = {}

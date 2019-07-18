@@ -1,7 +1,7 @@
 name             "ndb"
 maintainer       "Jim Dowling"
 maintainer_email "jdowling@kth.se"
-license          "AGPL 2.0"
+license          "AGPL v3"
 description      "Installs/Configures NDB (MySQL Cluster)"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "1.0.0"

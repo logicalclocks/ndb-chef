@@ -94,7 +94,7 @@ default['ndb']['SchedulerResponsiveness']             = 0
 default['ndb']['SchedulerSpinTimer']                  = 0
 default['ndb']['SchedulerExecutionTimer']             = 75
 
-default['ndb']['BuildIndexThreads']                   = 128
+default['ndb']['BuildIndexThreads']                   = "128"
 default['ndb']['TwoPassInitialNodeRestartCopy']       = "true"
 default['ndb']['Numa']                                = 1
 

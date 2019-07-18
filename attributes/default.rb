@@ -151,6 +151,7 @@ default['ndb']['mgm_dir']                             = "#{node['ndb']['root_dir
 default['ndb']['mysql_server_dir']                    = "#{node['ndb']['root_dir']}/mysql"
 default['ndb']['num_ndb_slots_per_client']            = 1
 default['ndb']['num_ndb_slots_per_mysqld']            = 1
+default['ndb']['num_ndb_open_slots']                  = 10
 
 # Max time that the mysqld will wait for the MySQL Cluster to be up and running.
 # If the mysqld starts and the MySQL Cluster isn't running, it will not connect and will
@@ -171,7 +172,6 @@ default['ndb']['mysql_socket']                        = "#{node['ndb']['data_dir
 default['ndb']['mysql_port']                          = "3306"
 
 default['mysql']['localhost']                         = "false"
-
 default['mysql']['jdbc_url']                          = ""
 
 

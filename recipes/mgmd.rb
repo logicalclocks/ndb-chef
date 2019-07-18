@@ -121,6 +121,7 @@ template "#{node['ndb']['root_dir']}/config.ini" do
   variables({
     :num_ndb_slots_per_client => node['ndb']['num_ndb_slots_per_client'].to_i,
     :num_ndb_slots_per_mysqld => node['ndb']['num_ndb_slots_per_mysqld'].to_i,
+    :num_ndb_open_slots => node['ndb']['num_ndb_open_slots'].to_i,
     :diskDataDir => diskDataDir
   })
 end

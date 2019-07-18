@@ -426,3 +426,7 @@ attribute "ndb/num_ndb_slots_per_client",
 attribute "ndb/num_ndb_slots_per_mysqld",
           :description => "Number of NDB connection slots per mysqld node",
           :type => "string"
+
+attribute "ndb/num_ndb_open_slots",
+          :description => "Number of slots open for new clients to connect.",
+          :type => "string"

@@ -7,6 +7,7 @@ action :install_grants do
 
   ndb_mysql_basic "mysqld_start_grants" do
     wait_time 20
+    remove_mycnf 1
     action :wait_until_started
   end
 
@@ -36,6 +37,16 @@ action :install_grants do
 end
 
 action :wait_until_started do
+
+  # mysql_install_db makes a copy of the my.cnf file in /etc/mysql. Remove it.
+  # Useful in dirty machines on which a mysql server was installed before.
+  bash "remove_mycnf_#{new_resource.name}" do
+    user "root"
+    code <<-EOF
+      rm -f /etc/mysql/my.cnf  
+    EOF
+    only_if { new_resource.remove_mycnf == 1 }
+  end
 
   ret_delay = 5
   num_retry = new_resource.wait_time / ret_delay 

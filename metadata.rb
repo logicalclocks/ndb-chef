@@ -202,6 +202,26 @@ attribute "ndb/LongMessageBuffer",
           :description => "LongMessageBuffer",
           :type => 'string'
 
+attribute "ndb/MaxFKBuildBatchSize",
+          :description => "MaxFKBuildBatchSize",
+          :type => 'string'
+
+attribute "ndb/MaxReorgBuildBatchSize",
+          :description => "MaxReorgBuildBatchSize",
+          :type => 'string'
+
+attribute "ndb/EnablePartialLcp",
+          :description => "EnablePartialLcp",
+          :type => 'string'
+
+attribute "ndb/RecoveryWork",
+          :description => "RecoveryWork",
+          :type => 'string'
+
+attribute "ndb/InsertRecoveryWork",
+          :description => "InsertRecoveryWork",
+          :type => 'string'
+
 attribute "ndb/TransactionInactiveTimeout",
           :description => "TransactionInactiveTimeout",
           :type => 'string'

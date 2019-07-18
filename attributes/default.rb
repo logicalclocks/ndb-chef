@@ -24,7 +24,7 @@ default['ndb']['user']                                = node['install']['user'].
 default['ndb']['group']                               = node['install']['user'].empty? ? "mysql" : node['install']['user']
 default['ndb']['connectstring']                       = ""
 
-default['ndb']['DataMemory']                          = "50"
+default['ndb']['DataMemory']                          = "98"
 default['ndb']['NoOfReplicas']                        = "1"
 default['ndb']['TcpBind_INADDR_ANY']                  = "FALSE"
 default['ndb']['NoOfFragmentLogParts']                = "4"
@@ -33,16 +33,18 @@ default['ndb']['FragmentLogFileSize']                 = "64M"
 default['ndb']['MaxNoOfTables']                       = "4096"
 default['ndb']['MaxNoOfOrderedIndexes']               = "2048"
 default['ndb']['MaxNoOfUniqueHashIndexes']            = "512"
-default['ndb']['MaxDMLOperationsPerTransaction']      = "4297295"
+default['ndb']['MaxNoOfTriggers']                     = "768"
+default['ndb']['MaxDMLOperationsPerTransaction']      = "4294967295"
 default['ndb']['TransactionBufferMemory']             = "1M"
 default['ndb']['MaxParallelScansPerFragment']         = "256"
 default['ndb']['MaxDiskWriteSpeed']                   = "20M"
 default['ndb']['MaxDiskWriteSpeedOtherNodeRestart']   = "50M"
 default['ndb']['MaxDiskWriteSpeedOwnRestart']         = "200M"
-default['ndb']['MinDiskWriteSpeed']                   = "5M"
+default['ndb']['MinDiskWriteSpeed']                   = "10M"
 default['ndb']['DiskSyncSize']                        = "4M"
 default['ndb']['RedoBuffer']                          = "32M"
 default['ndb']['LongMessageBuffer']                   = "64M"
+default['ndb']['MaxFKBuildBatchSize']                 = "4"
 default['ndb']['TransactionInactiveTimeout']          = "1500"
 default['ndb']['TransactionDeadlockDetectionTimeout'] = "1500"
 default['ndb']['LockPagesInMainMemory']               = "1"
@@ -54,7 +56,7 @@ default['ndb']['BackupLogBufferSize']                 = "4M"
 default['ndb']['BackupDataBufferSize']                = "16M"
 default['ndb']['MaxAllocate']                         = "32M"
 default['ndb']['DefaultHashMapSize']                  = "3840"
-default['ndb']['ODirect']                             = "0"
+default['ndb']['ODirect']                             = "1"
 default['ndb']['ExtraSendBufferMemory']               = "0"
 default['ndb']['TotalSendBufferMemory']               = "16M"
 default['ndb']['DiskPageBufferEntries']               = "10"
@@ -80,12 +82,18 @@ default['ndb']['MaxNoOfFiredTriggers']                = "4000"
 default['ndb']['MaxNoOfConcurrentTransactions']       = "16192"
 default['ndb']['MaxNoOfAttributes']                   = "5000"
 
+default['ndb']['MaxReorgBuildBatchSize']              = "64" 
+default['ndb']['EnablePartialLcp']                    = "1"
+default['ndb']['RecoveryWork']                        = "60"
+default['ndb']['InsertRecoveryWork']                  = "40"
+
+
 #Optimize for throughput: 0 (range 0..10)
 default['ndb']['SchedulerResponsiveness']             = 0
 default['ndb']['SchedulerSpinTimer']                  = 0
 default['ndb']['SchedulerExecutionTimer']             = 75
 
-default['ndb']['BuildIndexThreads']                   = 8
+default['ndb']['BuildIndexThreads']                   = 128
 default['ndb']['TwoPassInitialNodeRestartCopy']       = "true"
 default['ndb']['Numa']                                = 1
 
@@ -138,7 +146,6 @@ default['ndb']['ndbd_backup_retention']               = "5"
 
 default['ndb']['scripts_dir']                         = "#{node['ndb']['root_dir']}/ndb/scripts"
 default['ndb']['mgm_dir']                             = "#{node['ndb']['root_dir']}/mgmd"
-
 # MySQL Server Parameters
 default['ndb']['mysql_server_dir']                    = "#{node['ndb']['root_dir']}/mysql"
 default['ndb']['num_ndb_slots_per_client']            = 1

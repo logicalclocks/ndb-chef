@@ -81,6 +81,10 @@ TransactionBufferMemory=<%= node['ndb']['TransactionBufferMemory'] %>
 
 MaxParallelScansPerFragment=<%= node['ndb']['MaxParallelScansPerFragment'] %>
 
+MaxNoOfTriggers=<%= node['ndb']['MaxNoOfTriggers'] %>
+MaxNoOfFiredTriggers=<%= node['ndb']['MaxNoOfFiredTriggers'] %>
+
+
 #The maximum number of bytes to store before flushing data to a local checkpoint file
 #Ignored when ODirect is set to true
 DiskSyncSize=<%= node['ndb']['DiskSyncSize'] %>
@@ -90,6 +94,11 @@ RedoBuffer=<%= node['ndb']['RedoBuffer'] %>
 
 #Internal buffer used for passing messages within individual nodes and between nodes. Increase for huge batches.
 LongMessageBuffer=<%= node['ndb']['LongMessageBuffer'] %>
+
+MaxFKBuildBatchSize=<%= node['ndb']['MaxFKBuildBatchSize'] %>
+MaxReorgBuildBatchSize=<%= node['ndb']['MaxReorgBuildBatchSize'] %>
+EnablePartialLcp=<%= node['ndb']['EnablePartialLcp'] %>
+InsertRecoveryWork=<%= node['ndb']['InsertRecoveryWork'] %>
 
 #The maximum time in ms that is permitted to lapse between operations in the same transaction before the transaction is aborted.
 TransactionInactiveTimeout=<%= node['ndb']['TransactionInactiveTimeout'] %>
@@ -273,7 +282,7 @@ HostName=<%= theMysqld[0] %>
 <% if (node.attribute?(:ndb) && node['ndb'].attribute?(:mysqld) && node['ndb']['mysqld'].attribute?(:private_ips) && !node['ndb']['mysqld']['private_ips'].empty?) -%>
 <% for mysql in node['ndb']['mysqld']['private_ips'] -%>
 
-<% for count in 1..node['ndb']['num_ndb_slots_per_mysqld'] -%>
+<% for count in 1..@num_ndb_slots_per_mysqld -%>
 [MYSQLD]
 NodeId=<%= hostId %>
 <% if (node.attribute?(:ndb) && node['ndb'].attribute?(:mysqld) && node['ndb']['mysqld'].attribute?(:private_ips_domainIds) && node['ndb']['mysqld']['private_ips_domainIds'].has_key?(mysql)) -%>
@@ -296,7 +305,7 @@ HostName=<%= mysql %>
 <% if (node.attribute?(:hops) && node['hops'].attribute?(:nn) && node['hops']['nn'].attribute?(:private_ips) && !node['hops']['nn']['private_ips'].empty?) -%>
 
 <% for nn in node['hops']['nn']['private_ips'] -%>
-<% for count in 1..node['ndb']['num_ndb_slots_per_client'] -%>
+<% for count in 1..@num_ndb_slots_per_client -%>
 [API]
 NodeId=<%= hostId %>
 <% if (node.attribute?(:hops) && node['hops'].attribute?(:nn) && node['hops']['nn'].attribute?(:private_ips_domainIds) && node['hops']['nn']['private_ips_domainIds'].has_key?(nn)) -%>
@@ -312,7 +321,7 @@ HostName=<%= nn %>
 
 <% if (node.attribute?(:hops) && node['hops'].attribute?(:rm) && node['hops']['rm'].attribute?(:private_ips) && !node['hops']['rm']['private_ips'].empty?) -%>
 <% for rm in node['hops']['rm']['private_ips'] -%>
-<% for count in 1..node['ndb']['num_ndb_slots_per_client'] -%>
+<% for count in 1..@num_ndb_slots_per_client -%>
 [API]
 NodeId=<%= hostId %>
 HostName=<%= rm %>
@@ -323,7 +332,7 @@ HostName=<%= rm %>
 
 <% if (node.attribute?(:epipe) node['epipe'].attribute?(:private_ips) && !node['epipe']['private_ips'].empty?) -%>
 <% for epipe in node['epipe']['private_ips'] -%>
-<% for count in 1..node['ndb']['num_ndb_slots_per_client'] -%>
+<% for count in 1..@num_ndb_slots_per_client -%>
 [API]
 NodeId=<%= hostId %>
 HostName=<%= epipe %>
@@ -334,7 +343,7 @@ HostName=<%= epipe %>
 
 <% if (node.attribute?(:hive2) node['hive2'].attribute?(:private_ips) && !node['hive2']['private_ips'].empty?) -%>
 <% for hivecleaner in node['hive2']['private_ips'] -%>
-<% for count in 1..node['ndb']['num_ndb_slots_per_client'] -%>
+<% for count in 1..@num_ndb_slots_per_client -%>
 [API]
 NodeId=<%= hostId %>
 HostName=<%= epipe %>

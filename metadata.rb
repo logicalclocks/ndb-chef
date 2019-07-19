@@ -380,11 +380,11 @@ attribute "ndb/ndbapi/private_ips_domainIds",
           :type => 'hash'
 
 attribute "ndb/mysql_socket",
-          :description => "Location of the MySQL unix socket"
+          :description => "Location of the MySQL unix socket",
           :type => "string"
 
 attribute "ndb/mysql_port",
-          :description => "Port on which the MySQL server binds to"
+          :description => "Port on which the MySQL server binds to",
           :type => "string"
 
 attribute "install/dir",

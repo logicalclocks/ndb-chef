@@ -13,12 +13,12 @@ action :install_grants do
 
   grants_path = "#{node['ndb']['base_dir']}/grants.sql"
   template grants_path do
-    source "grants.erb"
+    source "grants.sql.erb"
     owner node['ndb']['user']
     mode "0600"
     action :create_if_missing
     variables({
-      :my_ip => my_ip
+      :my_ip => new_resource.my_ip 
     })
   end
 

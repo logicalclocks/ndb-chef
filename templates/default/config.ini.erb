@@ -330,7 +330,7 @@ HostName=<%= rm %>
 <% end -%>
 <% end -%>
 
-<% if (node.attribute?(:epipe) node['epipe'].attribute?(:private_ips) && !node['epipe']['private_ips'].empty?) -%>
+<% if (node.attribute?(:epipe) && node['epipe'].attribute?(:private_ips) && !node['epipe']['private_ips'].empty?) -%>
 <% for epipe in node['epipe']['private_ips'] -%>
 <% for count in 1..@num_ndb_slots_per_client -%>
 [API]
@@ -341,7 +341,7 @@ HostName=<%= epipe %>
 <% end -%>
 <% end -%>
 
-<% if (node.attribute?(:hive2) node['hive2'].attribute?(:private_ips) && !node['hive2']['private_ips'].empty?) -%>
+<% if (node.attribute?(:hive2) && node['hive2'].attribute?(:private_ips) && !node['hive2']['private_ips'].empty?) -%>
 <% for hivecleaner in node['hive2']['private_ips'] -%>
 <% for count in 1..@num_ndb_slots_per_client -%>
 [API]

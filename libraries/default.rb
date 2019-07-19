@@ -16,7 +16,7 @@ module NDB
             end
           else
             for api in node['ndb'][service]['private_ips']
-              if ip.eql? api
+              if my_ip.eql? api
                 Chef::Log.info "Found matching IP address in the list of #{service} nodes: #{api} . ID= #{id}"
                 found_id = id
               end

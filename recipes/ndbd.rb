@@ -71,7 +71,7 @@ directory node['ndb']['data_dir'] do
   action :create
 end
 
-found_id = find_service_id("ndbd", 0)
+found_id = find_service_id("ndbd", 1)
 directory "#{node['ndb']['data_dir']}/#{found_id}" do
   owner node['ndb']['user']
   group node['ndb']['group']

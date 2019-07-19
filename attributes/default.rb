@@ -45,7 +45,7 @@ default['ndb']['MinDiskWriteSpeed']                   = "10M"
 default['ndb']['DiskSyncSize']                        = "4M"
 default['ndb']['RedoBuffer']                          = "32M"
 default['ndb']['LongMessageBuffer']                   = "64M"
-default['ndb']['MaxFKBuildBatchSize']                 = "4"
+default['ndb']['MaxFKBuildBatchSize']                 = "64"
 default['ndb']['TransactionInactiveTimeout']          = "1500"
 default['ndb']['TransactionDeadlockDetectionTimeout'] = "1500"
 default['ndb']['LockPagesInMainMemory']               = "1"
@@ -168,7 +168,7 @@ default['mysql']['base_dir']                          = "#{node['mysql']['dir']}
 default['mysql']['version_dir']                       = "#{node['mysql']['base_dir']}-#{node['ndb']['version']}"
 
 # Location for the MySQL socket - needs to be in a directory which is accessible only to the mysql user
-default['ndb']['mysql_socket']                        = "#{node['ndb']['data_dir']}/mysql.sock"
+default['ndb']['mysql_socket']                        = "#{node['ndb']['root_dir']}/mysql.sock"
 default['ndb']['mysql_port']                          = "3306"
 
 default['mysql']['localhost']                         = "false"

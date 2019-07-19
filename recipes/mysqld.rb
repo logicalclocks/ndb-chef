@@ -15,7 +15,7 @@ directory node['ndb']['mysql_server_dir'] do
 end
 
 my_ip = my_private_ip()
-found_id=find_service_id("mysql", node['mysql']['id'])
+found_id=find_service_id("mysqld", node['mysql']['id'])
 
 for script in node['mysql']['scripts']
   template "#{node['ndb']['scripts_dir']}/#{script}" do
@@ -98,6 +98,7 @@ end
 
 ndb_mysql_basic "create_users_grants" do
   action :install_grants
+  my_ip my_ip
 end
 
 # Dont leave the username/passwords to mysql lying around in file in the cache

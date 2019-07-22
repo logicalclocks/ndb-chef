@@ -72,9 +72,8 @@ template "#{node['ndb']['root_dir']}/my.cnf" do
    :my_ip => mysql_ip
   })
   if node['services']['enabled'] == "true"
-    notifies :enable, resources(:service => service_name)
+    notifies :enable, resources(:service => service_name), :immediately
   end
-  notifies :start , resources(:service => service_name)
 end
 
 # --force causes mysql_install_db to run even if DNS does not work. In that case, grant table entries that normally use host names will use IP addresses.
@@ -94,6 +93,11 @@ bash 'mysql_install_db' do
     chown -R #{node['ndb']['user']}:#{node['ndb']['group']} #{node['ndb']['mysql_server_dir']}
   EOF
   not_if "#{node['mysql']['base_dir']}/bin/mysql -u root --skip-password -S #{node['ndb']['mysql_socket']} -e \"show databases\" | grep mysql "
+end
+
+kagent_config "#{service_name}" do
+  action :systemd_reload
+  not_if "systemctl is-alive ndbmtd"
 end
 
 ndb_mysql_basic "create_users_grants" do

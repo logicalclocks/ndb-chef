@@ -1,13 +1,3 @@
-require File.expand_path(File.dirname(__FILE__) + '/get_ndbapi_addrs')
-
-
-case node['platform']
-when "ubuntu"
- if node['platform_version'].to_f <= 14.04
-   node.override['ndb']['systemd'] = "false"
- end
-end
-
 if node['ndb']['systemd'] == false
    node.override['ndb']['systemd'] = "false"
 end  
@@ -77,42 +67,15 @@ end
 directory node['ndb']['data_dir'] do
   owner node['ndb']['user']
   group node['ndb']['group']
-  mode "755"
+  mode "750"
   action :create
 end
 
-my_ip = my_private_ip()
-
-found_id = -1
-id = 1
-
-if node.attribute?(:ndb) && node['ndb'].attribute?(:ndbd) && node['ndb']['ndbd'].attribute?(:ips_ids) && !node['ndb']['ndbd']['ips_ids'].empty?
-  for datanode in node['ndb']['ndbd']['ips_ids']
-    theNode = datanode.split(":")
-    if my_ip.eql? theNode[0]
-      found_id = theNode[1]
-      break
-    end
-  end
-else
-  for ndbd in node['ndb']['ndbd']['private_ips']
-    if my_ip.eql? ndbd 
-      Chef::Log.info "Found matching IP address in the list of data nodes: #{ndbd}. ID= #{id}"
-      found_id = id
-    end
-    id += 1
-  end
-end
-Chef::Log.info "ID IS: #{found_id}"
-
-if found_id == -1
-  raise "Ndbd: Could not find matching IP address in list of data nodes."
-end
-
+found_id = find_service_id("ndbd", 1)
 directory "#{node['ndb']['data_dir']}/#{found_id}" do
   owner node['ndb']['user']
   group node['ndb']['group']
-  mode "755"
+  mode "750"
   action :create
 end
 
@@ -122,11 +85,10 @@ for script in node['ndb']['scripts']
     source "#{script}.erb"
     owner node['ndb']['user']
     group node['ndb']['group']
-    mode 0751
+    mode 0750
     variables({ :node_id => found_id })
   end
 end 
-
 
 deps = ""
 if exists_local("ndb", "mgmd") 
@@ -135,27 +97,6 @@ end
 
 service_name = "ndbmtd"
 
-if node['ndb']['systemd'] != "true" 
-
-service "#{service_name}" do
-  provider Chef::Provider::Service::Init::Debian
-  supports :restart => true, :stop => true, :start => true, :status => true
-  action :nothing
-end
-
-template "/etc/init.d/#{service_name}" do
-  source "ndbd.erb"
-  owner "root"
-  group "root"
-  mode 0754
-  variables({ :node_id => found_id })
-if node['services']['enabled'] == "true"
-    notifies :enable, resources(:service => service_name)
-end
-  notifies :restart,"service[#{service_name}]", :immediately
-end
-
-else # systemd is true
 service "#{service_name}" do
   provider Chef::Provider::Service::Systemd
   supports :restart => true, :stop => true, :start => true, :status => true
@@ -163,23 +104,21 @@ service "#{service_name}" do
 end
 
 case node['platform_family']
-  when "debian"
-systemd_script = "/lib/systemd/system/#{service_name}.service"
-  when "rhel"
-systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
+when "debian"
+  systemd_script = "/lib/systemd/system/#{service_name}.service"
+when "rhel"
+  systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
 end
 
 template systemd_script do
-    only_if { node['ndb']['systemd'] == "true" }
-    source "#{service_name}.service.erb"
-    owner node['ndb']['user']
-    group node['ndb']['group']
-    mode 0754
-    cookbook 'ndb'
-    variables({
-                :deps => deps,
-                :node_id => found_id
-    })
+  source "#{service_name}.service.erb"
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode 0754
+  variables({
+              :deps => deps,
+              :node_id => found_id
+  })
   if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name)
   end
@@ -188,11 +127,9 @@ end
 #
 # Note: This will not do a rolling restart - it will bring down the DB.
 #
-  kagent_config "#{service_name}" do
-    action :systemd_reload
-    not_if "systemctl status ndbmtd"
-  end
-
+kagent_config "#{service_name}" do
+  action :systemd_reload
+  not_if "systemctl is-alive ndbmtd"
 end
 
 if node['kagent']['enabled'] == "true"
@@ -274,15 +211,9 @@ kagent_keys "#{homedir}" do
   action :get_publickey
 end  
 
-case node['ndb']['systemd']
-when "true"
-  ndb_start "start-ndbd-systemd" do
-    action :start_if_not_running_systemd
-  end 
-else
-  ndb_start "start-ndbd-sysv" do
-    action :start_if_not_running
-  end 
+kagent_config "#{service_name}" do
+  action :systemd_reload
+  not_if "systemctl is-alive ndbmtd"
 end
 
 #

@@ -21,7 +21,7 @@ bash 'extract_mysqld_exporter' do
     chown -R #{node['ndb']['user']}:#{node['ndb']['group']} #{node['ndb']['mysqld_exporter']['home']}
     chmod 750 #{node['ndb']['mysqld_exporter']['home']}
     touch #{mysqld_exporter_downloaded}
-    chown #{node['hopsmonitor']['user']} #{mysqld_exporter_downloaded}
+    chown #{node['ndb']['user']} #{mysqld_exporter_downloaded}
   EOH
   not_if { ::File.exists?( mysqld_exporter_downloaded ) }
 end

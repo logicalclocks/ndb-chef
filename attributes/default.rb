@@ -178,6 +178,10 @@ default['mysql']['jdbc_url']                          = ""
 # MySQL Server Master-Slave replication binary log is enabled.
 default['mysql']['replication_enabled']               = "false"
 
+# MySQL Server TLS/SSL enabled
+default['mysql']['tls']                               = "false"
+default['mysql']['tls_enabled']                       = "false"
+
 # This is the username/password for any mysql server (mysqld) started.
 # It is required by mysql clients to use the mysql server.
 default['mysql']['user']                              = "kthfs"

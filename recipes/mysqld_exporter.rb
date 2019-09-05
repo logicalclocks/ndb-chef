@@ -59,3 +59,9 @@ end
 kagent_config "mysqld_exporter" do
   action :systemd_reload
 end
+
+if node['kagent']['enabled'] == "true"
+   kagent_config "mysqld_exporter" do
+     service "Monitoring"
+   end
+end

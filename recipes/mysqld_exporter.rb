@@ -63,5 +63,6 @@ end
 if node['kagent']['enabled'] == "true"
    kagent_config "mysqld_exporter" do
      service "Monitoring"
+     restart_agent false
    end
 end

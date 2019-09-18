@@ -179,6 +179,9 @@ kagent_config "#{service_name}" do
     not_if "systemctl is-alive ndbmtd"
 end
 
+# Download and install mysqld_exporter
+include_recipe "ndb::mysqld_exporter"
+
 if node['install']['upgrade'] == "true"
   kagent_config "#{service_name}" do
     action :systemd_reload

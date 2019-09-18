@@ -226,3 +226,10 @@ default['ndb']['backup_time']                         = "03:00"
 default['ndb']['mgmd']['private_ips_domainIds']          = {}
 default['ndb']['ndbd']['private_ips_domainIds']          = {}
 default['ndb']['mysqld']['private_ips_domainIds']        = {}
+
+# Metrics  
+default['ndb']['mysqld_exporter']['version']                = "0.11.0"
+default['ndb']['mysqld_exporter']['url']                    = "#{node['download_url']}/prometheus/mysqld_exporter-#{node['ndb']['mysqld_exporter']['version']}.linux-amd64.tar.gz"
+default['ndb']['mysqld_exporter']['home']                   = "#{node['ndb']['dir']}/mysqld_exporter-#{node['ndb']['mysqld_exporter']['version']}.linux-amd64"
+default['ndb']['mysqld_exporter']['base_dir']               = "#{node['ndb']['dir']}/mysqld_exporter"
+default['ndb']['mysqld']['metrics_port']                    = "9104"

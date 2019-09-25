@@ -69,7 +69,7 @@ log-bin=mysql-bin
 # TLS/SSL Settings
 #################################################
 
-<% if node['mysql']['tls_enabled'] == "true" -%>
+<% if @mysql_tls -%>
 # ssl-ca=<%= node['kagent']['certs_dir'] %>/hops_root_ca.pem
 ssl-cert=<%= node['kagent']['certs_dir'] %>/pub.pem
 ssl-key=<%= node['kagent']['certs_dir'] %>/priv.key.rsa

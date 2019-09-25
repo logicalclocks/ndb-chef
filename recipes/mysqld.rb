@@ -69,7 +69,10 @@ template "#{node['ndb']['root_dir']}/my.cnf" do
   action :create
   variables({
    :mysql_id => found_id,
-   :my_ip => mysql_ip
+   :my_ip => mysql_ip,
+   # Here is always false, as this recipe is run before certificates are available
+   # if mysql/tls is enabled, the file will be re-templated later
+   :mysql_tls => false
   })
   if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name), :immediately

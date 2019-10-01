@@ -5,3 +5,4 @@ Berksfile.lock
 cookbooks/*
 cookbooks
 nohup.out
+.idea

@@ -6,6 +6,9 @@ dependencies:
     global:  
       - ndb::mgmd
       - ndb::ndbd
+  - recipe: ndb::mysqld_tls
+    global:  
+      - kagent::default
   - recipe: ndb::memcached
     global:  
       - ndb::mysqld

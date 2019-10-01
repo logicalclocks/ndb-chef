@@ -16,6 +16,7 @@ recipe            "ndb::install", "Installs MySQL Cluster binaries"
 recipe            "ndb::mgmd", "Installs a MySQL Cluster management server (ndb_mgmd)"
 recipe            "ndb::ndbd", "Installs a MySQL Cluster data node (ndbd)"
 recipe            "ndb::mysqld", "Installs a MySQL Server connected to the MySQL Cluster (mysqld)"
+recipe            "ndb::mysqld_tls", "Configure TLS for MySQL servers using host certificates"
 
 recipe            "ndb::purge", "Removes all data and all binaries related to a MySQL Cluster installation"
 
@@ -116,6 +117,10 @@ attribute "mysql/localhost",
 
 attribute "mysql/replication_enabled",
           :description => "Enable replication for the mysql server",
+          :type => 'string'
+
+attribute "mysql/tls",
+          :description => "Enable TLS/SSL for the mysql server",
           :type => 'string'
 
 attribute "ndb/wait_startup",

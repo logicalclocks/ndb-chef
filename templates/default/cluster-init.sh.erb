@@ -145,7 +145,7 @@ MGMD_COUNT=0
 while [ $MGMD_STARTED -eq 0 ] ; do
 
   if [ -e <%= node['ndb']['log_dir'] %>/cluster.log ] ; then
-    UPDATED_SIZE_CL=$(wc -l <%= node['ndb']['log_dir'] %>/cluster.log)
+    UPDATED_SIZE_CL=$(wc -l < <%= node['ndb']['log_dir'] %>/cluster.log)
   else
     UPDATED_SIZE_CL=0
   fi

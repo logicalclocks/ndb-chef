@@ -22,7 +22,7 @@ fi
 PID=$(cat "$PID_FILE")
 if [ "$INC_PID" -eq 1 ] ; then
   echo "Incremeting the PID by 1 to skip over watchdog process"
-  PID=$((PID + 1)
+  PID=$((PID + 1))
 fi
 echo "Killing $NAME with process-id $PID "
 (kill -TERM "$PID") 2> /dev/null

@@ -50,52 +50,36 @@ done
       exit 2
   fi
 
-
-
 USERID=$(id | sed -e 's/).*//; s/^.*(//;')
-if [ "X$USERID" != "Xroot" ]; then
- if [ "X$USERID" = "Xroot" ]; then
-   echo ""
-   echo "You started cluster as user: 'root'."
-   echo "You should start cluster as user: 'root'."
-   echo "If you continue, you will change ownership of database files"
-   echo "from 'root' to 'root'."
-# TODO: return -2
- else
-   echo ""
-   echo "You started the cluster as user: '$USERID'."
-   echo "You should start the cluster as user: 'root'."
-   echo "If you continue, you will change ownership of database files"
-   echo "from 'root' to '$USERID'."
-# TODO: return -2
- fi
- 
- echo ""
-start_as_wrong_user() 
-{
-  echo -n "Do you really want to start the cluster as user 'root'? y/n/h(help) "
-  read ACCEPT
-  case $ACCEPT in
-   y | Y)
-      ;;
-   n | N)
-      echo ""
-      echo "Bye.."
-      echo ""
-      exit 1
-      ;;
-    *)
-      echo ""
-      echo -n "Please enter 'y' or 'n'." 
-      start_as_wrong_user
-      ;;
-   esac
-}
-start_as_wrong_user
-
-
-fi  
-
+if [ "X$USERID" = "Xroot" ]; then
+    echo ""
+    echo "You are starting cluster as user: 'root'."
+    echo "If you continue, you will change ownership of database files"
+    echo "to 'root'."
+    echo ""
+    
+    start_as_wrong_user() 
+    {
+	echo -n "Do you really want to start the cluster as user \"$USERID\"? y/n/h(help) "
+	read ACCEPT
+	case $ACCEPT in
+	    y | Y)
+	    ;;
+	    n | N)
+		echo ""
+		echo "Bye.."
+		echo ""
+		exit 1
+		;;
+	    *)
+		echo ""
+		echo -n "Please enter 'y' or 'n'." 
+		start_as_wrong_user
+		;;
+	esac
+    }
+    start_as_wrong_user
+fi
 
 
 echo "Starting MySQL Cluster."

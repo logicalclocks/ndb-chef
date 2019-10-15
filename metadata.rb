@@ -400,10 +400,6 @@ attribute "install/user",
           :description => "User to install the services as",
           :type => "string"
 
-attribute "install/upgrade",
-          :description => "User to upgrade the software",
-          :type => "string"
-
 attribute "services/enabled",
           :description => "Default 'false'. Set to 'true' to enable daemon services, so that they are started on a host restart.",
           :type => "string"

@@ -186,6 +186,8 @@ default['mysql']['tls']                               = "false"
 default['mysql']['user']                              = "kthfs"
 default['mysql']['password']                          = "kthfs"
 
+default['mysql']['initialize']                        = "true"
+
 # Limit the number of mgm_servers to the range 49..51
 default['mgm']['id']                                  = 49
 # All mysqlds, and ndbclients (clusterj) are in the range 52..255

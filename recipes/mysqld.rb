@@ -95,6 +95,7 @@ bash 'mysql_install_db' do
     # sanity check to set ownership of files to 'mysql' user
     chown -R #{node['ndb']['user']}:#{node['ndb']['group']} #{node['ndb']['mysql_server_dir']}
   EOF
+  only_if { node['mysql']['initialize'].casecmp?("true") }
   not_if "#{node['mysql']['base_dir']}/bin/mysql -u root --skip-password -S #{node['ndb']['mysql_socket']} -e \"show databases\" | grep mysql "
 end
 

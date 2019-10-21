@@ -107,6 +107,10 @@ attribute "mysql/password",
           :required => "required",
           :type => 'string'
 
+attribute "mysql/initialize",
+          :description => "Initialize the MySQL Servers (Default: true)",
+          :type => "string"
+
 attribute "mysql/dir",
           :description => "Directory in which to install MySQL Binaries",
           :type => 'string'
@@ -390,18 +394,6 @@ attribute "ndb/mysql_socket",
 
 attribute "ndb/mysql_port",
           :description => "Port on which the MySQL server binds to",
-          :type => "string"
-
-attribute "install/dir",
-          :description => "Set to a base directory under which we will install.",
-          :type => "string"
-
-attribute "install/user",
-          :description => "User to install the services as",
-          :type => "string"
-
-attribute "install/upgrade",
-          :description => "User to upgrade the software",
           :type => "string"
 
 attribute "services/enabled",

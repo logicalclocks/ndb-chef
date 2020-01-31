@@ -2,11 +2,13 @@
 
 GRANT ALL PRIVILEGES ON *.* to '<%= node['mysql']['user'] %>'@'localhost' identified by '<%= node['mysql']['password'] %>';
 GRANT ALL PRIVILEGES ON *.* to '<%= node['mysql']['user'] %>'@'127.0.0.1' identified by '<%= node['mysql']['password'] %>';
+<% if node['install']['localhost'].casecmp?("false") -%>
 GRANT ALL PRIVILEGES ON *.* to '<%= node['mysql']['user'] %>'@'<%= @my_ip %>' identified by '<%= node['mysql']['password'] %>';
 GRANT ALL PRIVILEGES ON *.* to '<%= node['mysql']['user'] %>'@'%' identified by '<%= node['mysql']['password'] %>';
+<% end -%>
 GRANT GRANT OPTION ON *.* to '<%= node['mysql']['user'] %>'@'localhost' identified by '<%= node['mysql']['password'] %>';
 GRANT GRANT OPTION ON *.* to '<%= node['mysql']['user'] %>'@'127.0.0.1' identified by '<%= node['mysql']['password'] %>';
+<% if node['install']['localhost'].casecmp?("false") -%>
 GRANT GRANT OPTION ON *.* to '<%= node['mysql']['user'] %>'@'<%= @my_ip %>' identified by '<%= node['mysql']['password'] %>';
 GRANT GRANT OPTION ON *.* to '<%= node['mysql']['user'] %>'@'%' identified by '<%= node['mysql']['password'] %>';
-
-
+<% end -%>

@@ -85,7 +85,10 @@ ndb-connectstring=<%= node['ndb']['connectstring'] %>
 # ndb-wait-setup=<%= node['ndb']['wait_startup'] %>
 
 [client]
-default-character-set = utf8
-socket                = <%= node['ndb']['mysql_socket'] %>
-user		          = <%= node['mysql']['user'] %> 
-password 	          = <%= node['mysql']['password'] %> 
+default-character-set   = utf8
+socket                  = <%= node['ndb']['mysql_socket'] %>
+user                    = <%= node['mysql']['user'] %> 
+password                = <%= node['mysql']['password'] %>
+<% if node['install']['localhost'].casecmp?("true") -%>
+host                    = localhost
+<% end -%>

@@ -18,6 +18,7 @@ default['ndb']['bind_cpus']                           = "false"
 
 default['ndb']['mgmd']['port']                        = 1186
 default['ndb']['ndbd']['port']                        = 10000
+default['ndb']['ndbd']['systemctl_timeout_sec']       = 3600
 default['ndb']['ip']                                  = "10.0.2.15"
 
 default['ndb']['loglevel']                            = "notice"

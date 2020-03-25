@@ -364,6 +364,10 @@ attribute "ndb/ndbd/ips_ids",
           :description =>  "The format should be ['ip1:id1', 'ip2:id2', ...] for the ndbd section in the config.ini file. If no value is supplied, one will be assigned by default.",
           :type => 'array'
 
+attribute "ndb/ndbd/systemctl_timeout_sec",
+          :description =>  "Systemctl start timeout for datanode in seconds",
+          :type => 'string'
+
 attribute "ndb/mysqld/ips_ids",
           :description =>  "The format should be ['ip1:id1', 'ip2:id2', ...] for the mysql section in the config.ini file. If no value is supplied, one will be assigned by default.",
           :type => 'array'

@@ -53,6 +53,10 @@ attribute "ndb/group",
           :description => "Group that runs ndb database",
           :type => 'string'
 
+attribute "ndb/user-home",
+          :description => "Home directory of ndb user",
+          :type => 'string'
+
 attribute "ndb/BackupDataDir",
           :description => "Directory to store mysql cluster backups in",
           :type => 'string'

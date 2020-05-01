@@ -21,68 +21,54 @@ dependencies:
   - recipe: ndb::rr1
     global:  
       - ndb::mgmd
+      - ndb::rr16      
   - recipe: ndb::rr2
     global:  
       - ndb::rr1
-      - ndb::mgmd      
   - recipe: ndb::rr3
     global:  
       - ndb::rr2
-      - ndb::mgmd      
   - recipe: ndb::rr4
     global:  
       - ndb::rr3
-      - ndb::mgmd      
   - recipe: ndb::rr5
     global:  
       - ndb::rr4
-      - ndb::mgmd      
   - recipe: ndb::rr6
     global:  
       - ndb::rr5
-      - ndb::mgmd      
   - recipe: ndb::rr7
     global:  
       - ndb::rr6
-      - ndb::mgmd      
   - recipe: ndb::rr8
     global:  
       - ndb::rr7
-      - ndb::mgmd      
   - recipe: ndb::rr9
     global:  
       - ndb::rr8
-      - ndb::mgmd      
   - recipe: ndb::rr10
     global:  
       - ndb::rr9
-      - ndb::mgmd      
   - recipe: ndb::rr11
     global:  
       - ndb::rr10
-      - ndb::mgmd      
   - recipe: ndb::rr12
     global:  
       - ndb::rr11
-      - ndb::mgmd      
   - recipe: ndb::rr13
     global:  
       - ndb::rr12
-      - ndb::mgmd      
   - recipe: ndb::rr14
     global:  
       - ndb::rr13
-      - ndb::mgmd      
   - recipe: ndb::rr15
     global:  
       - ndb::rr14
-      - ndb::mgmd      
   - recipe: ndb::rr16
     global:  
       - ndb::rr15
-      - ndb::mgmd      
   - recipe: ndb::mr1
-    global:  
+    global:
       - ndb::mgmd
       - ndb::ndbd      
   - recipe: ndb::mr2

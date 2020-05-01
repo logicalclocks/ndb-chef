@@ -66,6 +66,10 @@ dependencies:
   - recipe: ndb::rr16
     global:  
       - ndb::rr15
+  - recipe: ndb::rrdone
+    global:
+      - ndb::mgmd
+      - ndb::rr16
   - recipe: ndb::mr1
     global:
       - ndb::mgmd

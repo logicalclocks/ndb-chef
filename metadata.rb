@@ -17,6 +17,7 @@ recipe            "ndb::mgmd", "Installs a MySQL Cluster management server (ndb_
 recipe            "ndb::ndbd", "Installs a MySQL Cluster data node (ndbd)"
 recipe            "ndb::mysqld", "Installs a MySQL Server connected to the MySQL Cluster (mysqld)"
 recipe            "ndb::mysqld_tls", "Configure TLS for MySQL servers using host certificates"
+recipe            "ndb::rrdone", "Finished Rolling restart of ndbmtd service"
 recipe            "ndb::rr1", "Rolling restart of ndbmtd service"
 recipe            "ndb::rr2", "Rolling restart of ndbmtd service"
 recipe            "ndb::rr3", "Rolling restart of ndbmtd service"

@@ -217,7 +217,7 @@ default['ndb']['mysqld']['private_ips']                  = ['']
 default['ndb']['ndbd']['ips_ids']                        = []
 default['ndb']['mysqld']['ips_ids']                      = []
 
-#default.ndb.dbt2_url                 = "http://downloads.mysql.com/source/dbt2-0.37.50.3.tar.gz"
+default['ndb']['dbt2_url']                               = "http://downloads.mysql.com/source/dbt2-0.37.50.3.tar.gz"
 #default.ndb.sysbench_url             = "http://downloads.mysql.com/source/sysbench-0.4.12.5.tar.gz"
 
 default['ndb']['mgmd']['public_key']                     = ""

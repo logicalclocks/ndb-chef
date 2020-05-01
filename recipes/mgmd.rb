@@ -117,7 +117,11 @@ template "#{node['ndb']['root_dir']}/config.ini" do
   owner node['ndb']['user']
   group node['ndb']['group']
   mode 0644
+if node['ndb']['update'].eql?("true")
   action :create
+else
+  action :create_if_missing  
+end  
   variables({
     :num_ndb_slots_per_client => node['ndb']['num_ndb_slots_per_client'].to_i,
     :num_ndb_slots_per_mysqld => node['ndb']['num_ndb_slots_per_mysqld'].to_i,

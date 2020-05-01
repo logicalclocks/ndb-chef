@@ -460,3 +460,7 @@ attribute "ndb/num_ndb_slots_per_mysqld",
 attribute "ndb/num_ndb_open_slots",
           :description => "Number of slots open for new clients to connect.",
           :type => "string"
+
+attribute "ndb/update",
+          :description => "Default 'false'. When set, config.ini will be updated if mgmd.rb is run.",
+          :type => "string"

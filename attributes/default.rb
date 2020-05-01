@@ -238,3 +238,5 @@ default['ndb']['mysqld_exporter']['url']                    = "#{node['download_
 default['ndb']['mysqld_exporter']['home']                   = "#{node['ndb']['dir']}/mysqld_exporter-#{node['ndb']['mysqld_exporter']['version']}.linux-amd64"
 default['ndb']['mysqld_exporter']['base_dir']               = "#{node['ndb']['dir']}/mysqld_exporter"
 default['ndb']['mysqld']['metrics_port']                    = "9104"
+
+default['ndb']['update']                                    = "false"

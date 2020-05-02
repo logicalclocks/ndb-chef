@@ -5,6 +5,7 @@ action :install_distributed_privileges do
   if node['ndb']['enabled'] == "true"
   
     ndb_waiter "wait_mysql_started" do
+       nowait_nodes node['ndb']['new_node_ids']      
        action :wait_until_cluster_ready
     end
   

@@ -150,6 +150,12 @@ kagent_config "#{service_name}" do
   action :systemd_reload
 end
 
+# If ndb_mgmd doesn't start, the kagent_config resource before this will ignore_failure
+# This LWRP will fail if ndb_mgmd is not running
+systemd_unit service_name do
+  action :restart
+end  
+
 # Put public key of this mgmd-host in .ssh/authorized_keys of all ndbd and mysqld nodes
 homedir = node['ndb']['user'].eql?("root") ? "/root" : "/home/#{node['ndb']['user']}"
 Chef::Log.info "Home dir is #{homedir}. Generating ssh keys..."

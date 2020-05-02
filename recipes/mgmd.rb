@@ -112,31 +112,13 @@ if !node['ndb']['nvme']['disks'].empty?
   diskDataDir="#{node['ndb']['nvme']['mount_base_dir']}/#{node['ndb']['nvme']['mount_disk_prefix']}0/#{node['ndb']['ndb_disk_columns_dir_name']}"
 end
 
-ndb_waiter "backup_config" do
-  action :nothing
-end
-
-# This will backup the config.ini file if it has changed
-template "#{node['ndb']['root_dir']}/config.ini" do
-  source "config.ini.erb"
-  owner node['ndb']['user']
-  group node['ndb']['group']
-  mode 0644
+# This will backup the config.ini file 
+# Unfortunately, it will not check if it has changed
 if node['ndb']['update'].eql?("true")
-  action :nothing
-  notifies :backup_config, resources("ndb_waiter" => "backup_config")  
-else
-  action :nothing
-end  
-  variables({
-    :num_ndb_slots_per_client => node['ndb']['num_ndb_slots_per_client'].to_i,
-    :num_ndb_slots_per_mysqld => node['ndb']['num_ndb_slots_per_mysqld'].to_i,
-    :num_ndb_open_slots => node['ndb']['num_ndb_open_slots'].to_i,
-    :diskDataDir => diskDataDir
-  })
+  ndb_waiter "backup_config" do
+    action :backup_config
+  end
 end
-
-
 
 template "#{node['ndb']['root_dir']}/config.ini" do
   source "config.ini.erb"
@@ -145,6 +127,7 @@ template "#{node['ndb']['root_dir']}/config.ini" do
   mode 0644
 if node['ndb']['update'].eql?("true")
   action :create
+#   notifies :backup_config, resources("ndb_waiter" => "backup_config")    
 else
   action :create_if_missing  
 end  

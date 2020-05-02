@@ -116,7 +116,6 @@ ndb_waiter "backup_config" do
   action :nothing
 end
 
-
 template "#{node['ndb']['root_dir']}/config.ini" do
   source "config.ini.erb"
   owner node['ndb']['user']

@@ -69,6 +69,21 @@ dependencies:
   - recipe: ndb::rrdone
     global:
       - ndb::mgmd
+      - ndb::rr1
+      - ndb::rr2
+      - ndb::rr3
+      - ndb::rr4
+      - ndb::rr5
+      - ndb::rr6
+      - ndb::rr7
+      - ndb::rr8
+      - ndb::rr9
+      - ndb::rr10
+      - ndb::rr11
+      - ndb::rr12
+      - ndb::rr13
+      - ndb::rr14
+      - ndb::rr15      
       - ndb::rr16
   - recipe: ndb::mr1
     global:

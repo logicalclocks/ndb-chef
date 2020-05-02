@@ -116,6 +116,28 @@ ndb_waiter "backup_config" do
   action :nothing
 end
 
+# This will backup the config.ini file if it has changed
+template "#{node['ndb']['root_dir']}/config.ini" do
+  source "config.ini.erb"
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode 0644
+if node['ndb']['update'].eql?("true")
+  action :nothing
+  notifies :backup_config, resources("ndb_waiter" => "backup_config")  
+else
+  action :nothing
+end  
+  variables({
+    :num_ndb_slots_per_client => node['ndb']['num_ndb_slots_per_client'].to_i,
+    :num_ndb_slots_per_mysqld => node['ndb']['num_ndb_slots_per_mysqld'].to_i,
+    :num_ndb_open_slots => node['ndb']['num_ndb_open_slots'].to_i,
+    :diskDataDir => diskDataDir
+  })
+end
+
+
+
 template "#{node['ndb']['root_dir']}/config.ini" do
   source "config.ini.erb"
   owner node['ndb']['user']
@@ -123,7 +145,6 @@ template "#{node['ndb']['root_dir']}/config.ini" do
   mode 0644
 if node['ndb']['update'].eql?("true")
   action :create
-  notifies :backup_config, resources("ndb_waiter" => "backup_config")  
 else
   action :create_if_missing  
 end  

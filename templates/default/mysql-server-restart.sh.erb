@@ -2,6 +2,6 @@
 
 <%= node['ndb']['scripts_dir'] %>/mysql-server-stop.sh
 
-<%= node['ndb']['scripts_dir'] %>/mysql-server-start.sh
+<%= node['ndb']['scripts_dir'] %>/mysql-server-start.sh --skip-ndb-wait
 
 exit $?

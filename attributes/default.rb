@@ -240,3 +240,7 @@ default['ndb']['mysqld_exporter']['base_dir']               = "#{node['ndb']['di
 default['ndb']['mysqld']['metrics_port']                    = "9104"
 
 default['ndb']['update']                                    = "false"
+
+# comma-separated list of node-ids for new NDBD nodes
+# e.g., "3,4"
+default['ndb']['new_node_ids']                              = ""

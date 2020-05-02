@@ -465,3 +465,7 @@ attribute "ndb/num_ndb_open_slots",
 attribute "ndb/update",
           :description => "Default 'false'. When set, config.ini will be updated if mgmd.rb is run.",
           :type => "string"
+
+attribute "ndb/new_node_ids",
+          :description => "Comma-separated list of node-ids for the new nodes, e.g., '3,4'",
+          :type => "string"

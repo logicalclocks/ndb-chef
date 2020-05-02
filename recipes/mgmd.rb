@@ -112,6 +112,11 @@ if !node['ndb']['nvme']['disks'].empty?
   diskDataDir="#{node['ndb']['nvme']['mount_base_dir']}/#{node['ndb']['nvme']['mount_disk_prefix']}0/#{node['ndb']['ndb_disk_columns_dir_name']}"
 end
 
+ndb_waiter "backup_config" do
+  action :nothing
+end
+
+
 template "#{node['ndb']['root_dir']}/config.ini" do
   source "config.ini.erb"
   owner node['ndb']['user']
@@ -119,6 +124,7 @@ template "#{node['ndb']['root_dir']}/config.ini" do
   mode 0644
 if node['ndb']['update'].eql?("true")
   action :create
+  notifies :backup_config, resources("ndb_waiter" => "backup_config")  
 else
   action :create_if_missing  
 end  

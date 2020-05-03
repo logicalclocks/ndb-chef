@@ -84,6 +84,9 @@ action :reorganize_table do
       user node['ndb']['user']
       code <<-EOF
         #{node['ndb']['scripts_dir']}/mysql-client.sh #{db} -e "ALTER TABLE #{table} ALGORITHM=INPLACE, REORGANIZE PARTITION"
+# optimize tables to reclaim free space on old tables (only works for variable sized columns)
+# Ref: https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster-online-add-node-basics.html
+        #{node['ndb']['scripts_dir']}/mysql-client.sh #{db} -e "OPTIMIZE TABLE #{table}"
       EOF
       new_resource.updated_by_last_action(true)
     end

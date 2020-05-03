@@ -469,3 +469,7 @@ attribute "ndb/update",
 attribute "ndb/new_node_ids",
           :description => "Comma-separated list of node-ids for the new nodes, e.g., '3,4'",
           :type => "string"
+
+attribute "ndb/reorganize_tables",
+          :description => "Default 'true'. If you add new data nodes with new_node_ids in phase 2 (installing ndbds), then set this to 'false' to skip calling alter table reorganize partitions on hops and hopsworks tables.",
+          :type => "string"

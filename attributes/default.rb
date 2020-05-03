@@ -244,3 +244,4 @@ default['ndb']['update']                                    = "false"
 # comma-separated list of node-ids for new NDBD nodes
 # e.g., "3,4"
 default['ndb']['new_node_ids']                              = ""
+default['ndb']['reorganize_tables']                         = "true"

@@ -17,7 +17,8 @@ action :backup_config do
     user node['ndb']['user']
     code <<-EOF
     DATE_WITH_TIME=$(date "+%Y%m%d-%H%M%S")
-    cp #{node['ndb']['root_dir']}/config.ini #{node['ndb']['root_dir']}/.config.ini_${DATE_WITH_TIME}
+    mkdir -p #{node['ndb']['root_dir']}/.backup_configs
+    cp #{node['ndb']['root_dir']}/config.ini #{node['ndb']['root_dir']}/.backup_configs/config.ini_${DATE_WITH_TIME}
   EOF
   end
 

@@ -15,6 +15,10 @@ dependencies:
   - recipe: ndb::bench
     global:  
       - ndb::mysqld
+  - recipe: ndb::add_nodes
+    global:  
+      - ndb::ndbd
+      - ndb::mysqld      
   - recipe: ndb::_test
     global:  
       - ndb::mysqld

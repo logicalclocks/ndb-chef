@@ -20,12 +20,39 @@ end
 # This works for space used by variable-width columns of in-memory NDB tables.
 # OPTIMIZE TABLE is not supported for fixed-width columns of in-memory tables; it is also not supported for Disk Data tables.
 
-tables = %w{ }
-for table in tables
+hops="hops-tables-2.8.2.10-SNAPSHOT.txt"
 
-  ndb_mysql_ndb "reorganize_table" do
+cookbook_file "#{Chef::Config['file_cache_path']}/#{hops}" do
+  source hops 
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode 0700
+end
+
+hopsworks="hopsworks_tables-1.3.0.txt"
+
+cookbook_file "#{Chef::Config['file_cache_path']}/#{hopsworks}" do
+  source hopsworks
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode 0700
+end
+
+hops_tables = File.readlines(#{Chef::Config['file_cache_path']}/#{hops})
+hopsworks_tables = File.readlines("#{Chef::Config['file_cache_path']}/#{hopsworks}")
+
+for table in hops_tables
+  ndb_mysql_ndb "reorganize_hops_table" do
+    database "hops"
     table table
-    action :optimize_table
+    action :reorganize_table
   end
+end
 
+for table in hopsworks_tables
+  ndb_mysql_ndb "reorganize_hopsworks_table" do
+    database "hopsworks"    
+    table table
+    action :reorganize_table
+  end
 end

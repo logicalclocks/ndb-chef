@@ -76,13 +76,14 @@ action :create_nodegroup do
 end
 
 
-action :optimize_table do
+action :reorganize_table do
   if node['ndb']['enabled'] == "true"
     table = new_resource.table
+    db = new_resource.database    
     bash 'reorganize_partition' do
       user node['ndb']['user']
       code <<-EOF
-        #{node['ndb']['scripts_dir']}/mysql-client.sh < "ALTER TABLE #{table} ALGORITHM=INPLACE, REORGANIZE PARTITION"
+        #{node['ndb']['scripts_dir']}/mysql-client.sh #{db} -e "ALTER TABLE #{table} ALGORITHM=INPLACE, REORGANIZE PARTITION"
       EOF
       new_resource.updated_by_last_action(true)
     end

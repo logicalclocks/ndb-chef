@@ -100,7 +100,7 @@ default['ndb']['Numa']                                = 1
 
 
 # Up to 8 execution threads supported
-default['ndb']['MaxNoOfExecutionThreads']             = "2"
+default['ndb']['MaxNoOfExecutionThreads']             = "8"
 # Read up on this option first. Benefits from setting to "true" node['ndb']['interrupts_isolated_to_single_cpu']
 default['ndb']['ThreadConfig']                        = ""
 

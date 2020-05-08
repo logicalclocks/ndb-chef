@@ -2,6 +2,7 @@ action :install_grants do
 
   ndb_waiter "wait_ndb_started" do
     action :wait_until_cluster_ready
+    nowait_nodes node['ndb']['new_node_ids']
     only_if { node['ndb']['enabled'] == "true" }
   end
 

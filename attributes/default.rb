@@ -217,7 +217,7 @@ default['ndb']['mysqld']['private_ips']                  = ['']
 default['ndb']['ndbd']['ips_ids']                        = []
 default['ndb']['mysqld']['ips_ids']                      = []
 
-#default.ndb.dbt2_url                 = "http://downloads.mysql.com/source/dbt2-0.37.50.3.tar.gz"
+default['ndb']['dbt2_url']                               = "http://downloads.mysql.com/source/dbt2-0.37.50.3.tar.gz"
 #default.ndb.sysbench_url             = "http://downloads.mysql.com/source/sysbench-0.4.12.5.tar.gz"
 
 default['ndb']['mgmd']['public_key']                     = ""
@@ -238,3 +238,10 @@ default['ndb']['mysqld_exporter']['url']                    = "#{node['download_
 default['ndb']['mysqld_exporter']['home']                   = "#{node['ndb']['dir']}/mysqld_exporter-#{node['ndb']['mysqld_exporter']['version']}.linux-amd64"
 default['ndb']['mysqld_exporter']['base_dir']               = "#{node['ndb']['dir']}/mysqld_exporter"
 default['ndb']['mysqld']['metrics_port']                    = "9104"
+
+default['ndb']['update']                                    = "false"
+
+# comma-separated list of node-ids for new NDBD nodes
+# e.g., "3,4"
+default['ndb']['new_node_ids']                              = ""
+default['ndb']['reorganize_tables']                         = "true"

@@ -5,6 +5,7 @@ action :install_distributed_privileges do
   if node['ndb']['enabled'] == "true"
   
     ndb_waiter "wait_mysql_started" do
+       nowait_nodes node['ndb']['new_node_ids']      
        action :wait_until_cluster_ready
     end
   
@@ -29,3 +30,66 @@ action :install_distributed_privileges do
 
   end
 end
+
+
+action :create_nodegroup do
+
+  new_resource.updated_by_last_action(false)
+  if node['ndb']['enabled'] == "true"
+  
+    ndb_waiter "wait_mysql_started" do
+       nowait_nodes node['ndb']['new_node_ids']      
+       action :wait_until_cluster_ready
+    end
+  
+    ndb_mysql_basic "mysqld_start_hop_install" do
+      wait_time 10
+      action :wait_until_started
+    end
+
+    firstId="#{node['ndb']['new_node_ids']}"
+    firstId = firstId.split(/,/).first
+    # ./mgm-client.sh -e "show"
+    # returns the list of NDBDs and what nodegroups they belong to.
+    # Test if the first new_node_ids entry already belongs to a nodegroup.
+    # If True, then do not create a NodeGroup.
+    # Here is what we are matching against:
+    #
+    # Cluster Configuration
+    # ---------------------
+    #  [ndbd(NDB)]     4 node(s)
+    #
+    # id=3    @10.0.0.10  (mysql-5.7.25 ndb-7.6.9, Nodegroup: 1)
+    # ^^^^                                       ^^^^^^^^^^^^^   
+    
+    bash 'create_nodegroup' do
+      user node['ndb']['user']
+      ignore_failure true
+      code <<-EOF
+        #{node['ndb']['scripts_dir']}/mgm-client.sh -e "CREATE NODEGROUP #{node['ndb']['new_node_ids']}"
+      EOF
+      new_resource.updated_by_last_action(true)
+      not_if "#{node['ndb']['scripts_dir']}/mgm-client.sh -e \"show\"  | grep \"^id=#{firstId}\" | grep \", Nodegroup: \", :user => "#{node['ndb']['user']}"
+    end
+
+  end
+end
+
+
+action :reorganize_table do
+  if node['ndb']['enabled'] == "true"
+    table = new_resource.table
+    db = new_resource.database    
+    bash 'reorganize_partition' do
+      user node['ndb']['user']
+      code <<-EOF
+        #{node['ndb']['scripts_dir']}/mysql-client.sh #{db} -e "ALTER TABLE #{table} ALGORITHM=INPLACE, REORGANIZE PARTITION"
+# optimize tables to reclaim free space on old tables (only works for variable sized columns)
+# Ref: https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster-online-add-node-basics.html
+        #{node['ndb']['scripts_dir']}/mysql-client.sh #{db} -e "OPTIMIZE TABLE #{table}"
+      EOF
+      new_resource.updated_by_last_action(true)
+    end
+  end
+end
+

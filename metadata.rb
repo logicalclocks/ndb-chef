@@ -17,6 +17,40 @@ recipe            "ndb::mgmd", "Installs a MySQL Cluster management server (ndb_
 recipe            "ndb::ndbd", "Installs a MySQL Cluster data node (ndbd)"
 recipe            "ndb::mysqld", "Installs a MySQL Server connected to the MySQL Cluster (mysqld)"
 recipe            "ndb::mysqld_tls", "Configure TLS for MySQL servers using host certificates"
+recipe            "ndb::rrdone", "Finished Rolling restart of ndbmtd service"
+recipe            "ndb::rr1", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr2", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr3", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr4", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr5", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr6", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr7", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr8", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr9", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr10", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr11", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr12", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr13", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr14", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr15", "Rolling restart of ndbmtd service"
+recipe            "ndb::rr16", "Rolling restart of ndbmtd service"
+recipe            "ndb::mr1", "Rolling restart of mysqld service"
+recipe            "ndb::mr2", "Rolling restart of mysqld service"
+recipe            "ndb::mr3", "Rolling restart of mysqld service"
+recipe            "ndb::mr4", "Rolling restart of mysqld service"
+recipe            "ndb::mr5", "Rolling restart of mysqld service"
+recipe            "ndb::mr6", "Rolling restart of mysqld service"
+recipe            "ndb::mr7", "Rolling restart of mysqld service"
+recipe            "ndb::mr8", "Rolling restart of mysqld service"
+recipe            "ndb::mr9", "Rolling restart of mysqld service"
+recipe            "ndb::mr10", "Rolling restart of mysqld service"
+recipe            "ndb::mr11", "Rolling restart of mysqld service"
+recipe            "ndb::mr12", "Rolling restart of mysqld service"
+recipe            "ndb::mr13", "Rolling restart of mysqld service"
+recipe            "ndb::mr14", "Rolling restart of mysqld service"
+recipe            "ndb::mr15", "Rolling restart of mysqld service"
+recipe            "ndb::mr16", "Rolling restart of mysqld service"
+
 
 recipe            "ndb::purge", "Removes all data and all binaries related to a MySQL Cluster installation"
 
@@ -426,4 +460,16 @@ attribute "ndb/num_ndb_slots_per_mysqld",
 
 attribute "ndb/num_ndb_open_slots",
           :description => "Number of slots open for new clients to connect.",
+          :type => "string"
+
+attribute "ndb/update",
+          :description => "Default 'false'. When set, config.ini will be updated if mgmd.rb is run.",
+          :type => "string"
+
+attribute "ndb/new_node_ids",
+          :description => "Comma-separated list of node-ids for the new nodes, e.g., '3,4'",
+          :type => "string"
+
+attribute "ndb/reorganize_tables",
+          :description => "Default 'true'. If you add new data nodes with new_node_ids in phase 2 (installing ndbds), then set this to 'false' to skip calling alter table reorganize partitions on hops and hopsworks tables.",
           :type => "string"

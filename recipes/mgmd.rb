@@ -112,12 +112,25 @@ if !node['ndb']['nvme']['disks'].empty?
   diskDataDir="#{node['ndb']['nvme']['mount_base_dir']}/#{node['ndb']['nvme']['mount_disk_prefix']}0/#{node['ndb']['ndb_disk_columns_dir_name']}"
 end
 
+# This will backup the config.ini file 
+# Unfortunately, it will not check if it has changed
+if node['ndb']['update'].eql?("true")
+  ndb_waiter "backup_config" do
+    action :backup_config
+  end
+end
+
 template "#{node['ndb']['root_dir']}/config.ini" do
   source "config.ini.erb"
   owner node['ndb']['user']
   group node['ndb']['group']
   mode 0644
-  action :create_if_missing
+if node['ndb']['update'].eql?("true")
+  action :create
+#   notifies :backup_config, resources("ndb_waiter" => "backup_config")    
+else
+  action :create_if_missing  
+end  
   variables({
     :num_ndb_slots_per_client => node['ndb']['num_ndb_slots_per_client'].to_i,
     :num_ndb_slots_per_mysqld => node['ndb']['num_ndb_slots_per_mysqld'].to_i,
@@ -139,6 +152,12 @@ end
 kagent_config "#{service_name}" do
   action :systemd_reload
 end
+
+# If ndb_mgmd doesn't start, the kagent_config resource before this will ignore_failure
+# This LWRP will fail if ndb_mgmd is not running
+systemd_unit service_name do
+  action :restart
+end  
 
 # Put public key of this mgmd-host in .ssh/authorized_keys of all ndbd and mysqld nodes
 homedir = node['ndb']['user'].eql?("root") ? "/root" : "/home/#{node['ndb']['user']}"

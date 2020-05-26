@@ -1,0 +1,16 @@
+service {
+    id = "mysql/monitoring"
+    name = "mysql"
+    tags = [
+        "monitoring"
+    ]
+    port = <%= node['ndb']['mysqld']['metrics_port'] %> 
+    check = {
+        id = "mysql-exporter-check"
+        name = "Health check for MySQL exporter"
+        http = "http://localhost:<%= node['ndb']['mysqld']['metrics_port'] %>/metrics"
+        interval = "20s"
+        timeout = "20s"
+        status = "passing"
+    }
+} 

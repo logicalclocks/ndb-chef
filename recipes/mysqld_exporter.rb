@@ -66,3 +66,12 @@ if node['kagent']['enabled'] == "true"
      restart_agent false
    end
 end
+
+if service_discovery_enabled()
+  # Register MySQL exporter with Consul
+  consul_service "Registering MySQL exporter with Consul" do
+    service_definition "mysql-exporter-consul.hcl.erb"
+    restart_consul false
+    action :register
+  end
+end 

@@ -1,6 +1,8 @@
 #
 # Node exporter installation
-# 
+#
+
+Chef::Recipe.send(:include, Hops::Helpers)
 
 base_package_filename = File.basename(node['ndb']['mysqld_exporter']['url'])
 cached_package_filename = "#{Chef::Config['file_cache_path']}/#{base_package_filename}"
@@ -13,7 +15,7 @@ remote_file cached_package_filename do
 end
 
 mysqld_exporter_downloaded= "#{node['ndb']['mysqld_exporter']['home']}/.mysqld_exporter.extracted_#{node['ndb']['mysqld_exporter']['version']}"
-# Extract node_exporter 
+# Extract node_exporter
 bash 'extract_mysqld_exporter' do
   user "root"
   code <<-EOH
@@ -34,7 +36,7 @@ end
 
 case node['platform_family']
 when "rhel"
-  systemd_script = "/usr/lib/systemd/system/mysqld_exporter.service" 
+  systemd_script = "/usr/lib/systemd/system/mysqld_exporter.service"
 else
   systemd_script = "/lib/systemd/system/mysqld_exporter.service"
 end
@@ -74,4 +76,4 @@ if service_discovery_enabled()
     restart_consul false
     action :register
   end
-end 
+end

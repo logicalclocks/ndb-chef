@@ -9,6 +9,7 @@ source_url       "https://github.com/logicalclocks/ndb-chef"
 issues_url       "https://github.com/logicalclocks/ndb-chef/issues"
 
 depends           "kagent"
+depends           "consul"
 depends           "ulimit"
 
 recipe            "ndb::install", "Installs MySQL Cluster binaries"

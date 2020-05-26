@@ -2,8 +2,6 @@
 # Node exporter installation
 #
 
-Chef::Recipe.send(:include, Hops::Helpers)
-
 base_package_filename = File.basename(node['ndb']['mysqld_exporter']['url'])
 cached_package_filename = "#{Chef::Config['file_cache_path']}/#{base_package_filename}"
 
@@ -69,7 +67,7 @@ if node['kagent']['enabled'] == "true"
    end
 end
 
-if service_discovery_enabled()
+if exists_local('consul', 'master') or exists_local('consul', 'slave')
   # Register MySQL exporter with Consul
   consul_service "Registering MySQL exporter with Consul" do
     service_definition "mysql-exporter-consul.hcl.erb"

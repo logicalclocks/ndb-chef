@@ -1,8 +1,7 @@
 #!/bin/bash
 
-host=<%= @my_ip %>
 username=<%= node['mysql']['user']  %>
 password=<%= node['mysql']['password'] %>
 database=<%= node.attribute?(:hops) && node['ndb'].attribute?(:db) ? node['hops']['db'] : "hops" %>
 
-<%= node['ndb']['scripts_dir'] %>/manage-disk-table.py -Drop -H $host -u $username -p $password -db $database -ls 1024M -lc 1 -ds 1024M -dc 1
+<%= node['ndb']['scripts_dir'] %>/manage-disk-table.py -Drop -H 127.0.0.1 -u $username -p $password -db $database -ls 1024M -lc 1 -ds 1024M -dc 1

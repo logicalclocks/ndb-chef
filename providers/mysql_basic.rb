@@ -17,9 +17,6 @@ action :install_grants do
     owner node['ndb']['user']
     mode "0600"
     action :create_if_missing
-    variables({
-      :my_ip => new_resource.my_ip 
-    })
   end
 
   exec= node['ndb']['scripts_dir'] + "/mysql-client.sh"

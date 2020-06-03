@@ -10,7 +10,7 @@ basedir         = <%= node['mysql']['base_dir'] %>
 datadir         = <%= node['ndb']['mysql_server_dir'] %>
 port            = <%= node['ndb']['mysql_port'] %>
 socket          = <%= node['ndb']['mysql_socket'] %>
-bind-address    = <%= @my_ip %>
+bind-address    = 0.0.0.0
 pid-file        = <%= node['ndb']['log_dir'] %>/mysql_<%= @mysql_id %>.pid
 tmpdir          = /tmp
 

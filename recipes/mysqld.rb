@@ -14,7 +14,6 @@ directory node['ndb']['mysql_server_dir'] do
   action :create
 end
 
-my_ip = my_private_ip()
 found_id=find_service_id("mysqld", node['mysql']['id'])
 
 for script in node['mysql']['scripts']
@@ -60,7 +59,6 @@ service "#{service_name}" do
   action :nothing
 end
 
-mysql_ip = node['mysql']['localhost'] == "true" ? "localhost" : my_ip
 template "#{node['ndb']['root_dir']}/my.cnf" do
   source "my-ndb.cnf.erb"
   owner node['ndb']['user']
@@ -69,7 +67,6 @@ template "#{node['ndb']['root_dir']}/my.cnf" do
   action :create
   variables({
    :mysql_id => found_id,
-   :my_ip => mysql_ip,
    # Here is always false, as this recipe is run before certificates are available
    # if mysql/tls is enabled, the file will be re-templated later
    :mysql_tls => false
@@ -106,7 +103,6 @@ end
 
 ndb_mysql_basic "create_users_grants" do
   action :install_grants
-  my_ip my_ip
 end
 
 # Dont leave the username/passwords to mysql lying around in file in the cache
@@ -138,9 +134,6 @@ template "#{node['ndb']['scripts_dir']}/create-disk-table.sh" do
     source "create-disk-table.sh.erb"
     owner node['ndb']['user']
     group node['ndb']['group']
-    variables({
-      :my_ip => my_ip
-    })
     mode 0700
 end
 
@@ -148,9 +141,6 @@ template "#{node['ndb']['scripts_dir']}/drop-disk-table.sh" do
     source "drop-disk-table.sh.erb"
     owner node['ndb']['user']
     group node['ndb']['group']
-    variables({
-      :my_ip => my_ip
-    })
     mode 0700
 end
 

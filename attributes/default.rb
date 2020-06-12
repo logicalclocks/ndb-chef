@@ -195,9 +195,6 @@ default['mysql']['id']                                = 52
 # up to 65 NameNodes
 default['nn']['id']                                   = 190
 
-# The address of the mysqld that will be used by hop
-default['ndb']['mysql_ip']                            = "10.0.2.15"
-
 # IP addresses of the mgm-server, ndbds must be overridden by role/recipe caller.
 default['ndb']['public_ips']                             = ['']
 default['ndb']['private_ips']                            = ['']

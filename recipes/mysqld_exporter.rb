@@ -71,7 +71,7 @@ if exists_local('consul', 'master') or exists_local('consul', 'slave')
   # Register MySQL exporter with Consul
   consul_service "Registering MySQL exporter with Consul" do
     service_definition "mysql-exporter-consul.hcl.erb"
-    restart_consul false
+    reload_consul false
     action :register
   end
 end

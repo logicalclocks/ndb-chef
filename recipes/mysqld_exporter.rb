@@ -1,6 +1,6 @@
 #
 # Node exporter installation
-# 
+#
 
 base_package_filename = File.basename(node['ndb']['mysqld_exporter']['url'])
 cached_package_filename = "#{Chef::Config['file_cache_path']}/#{base_package_filename}"
@@ -13,7 +13,7 @@ remote_file cached_package_filename do
 end
 
 mysqld_exporter_downloaded= "#{node['ndb']['mysqld_exporter']['home']}/.mysqld_exporter.extracted_#{node['ndb']['mysqld_exporter']['version']}"
-# Extract node_exporter 
+# Extract node_exporter
 bash 'extract_mysqld_exporter' do
   user "root"
   code <<-EOH
@@ -34,7 +34,7 @@ end
 
 case node['platform_family']
 when "rhel"
-  systemd_script = "/usr/lib/systemd/system/mysqld_exporter.service" 
+  systemd_script = "/usr/lib/systemd/system/mysqld_exporter.service"
 else
   systemd_script = "/lib/systemd/system/mysqld_exporter.service"
 end
@@ -65,4 +65,13 @@ if node['kagent']['enabled'] == "true"
      service "Monitoring"
      restart_agent false
    end
+end
+
+if exists_local('consul', 'master') or exists_local('consul', 'slave')
+  # Register MySQL exporter with Consul
+  consul_service "Registering MySQL exporter with Consul" do
+    service_definition "mysql-exporter-consul.hcl.erb"
+    reload_consul false
+    action :register
+  end
 end

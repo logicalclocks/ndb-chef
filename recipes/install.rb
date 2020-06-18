@@ -9,7 +9,7 @@ end
 # Need a managed home account, so that the mgmt server user can ssh to the ndbd nodes to start them.
 #
 user node['ndb']['user'] do
-  home "/home/#{node['ndb']['user']}"
+  home node['ndb']['user-home']
   manage_home true  
   gid node['ndb']['group']
   action :create

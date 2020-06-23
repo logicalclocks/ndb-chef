@@ -4,11 +4,18 @@
 # and before the NN - the first service after Hopsworks which needs the database to be up and running 
 
 if node['mysql']['tls'].casecmp?("true")
+    hopsworks_alt_url = "https://#{private_recipe_ip("hopsworks","default")}:8181" 
+    if node.attribute? "hopsworks"
+        if node["hopsworks"].attribute? "https" and node["hopsworks"]['https'].attribute? ('port')
+            hopsworks_alt_url = "https://#{private_recipe_ip("hopsworks","default")}:#{node['hopsworks']['https']['port']}"
+        end
+    end
     crypto_dir = x509_helper.get_crypto_dir(node['ndb']['user'])
     kagent_hopsify "Generate x.509" do
         user node['ndb']['user']
         crypto_directory crypto_dir
         action :generate_x509
+        hopsworks_alt_url hopsworks_alt_url
         not_if { conda_helpers.is_upgrade || node["kagent"]["test"] == true }
     end
 

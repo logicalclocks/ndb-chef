@@ -1,14 +1,14 @@
 include_attribute "kagent"
 
-version                                               ="7"
-default['ndb']['majorVersion']                        ="6"
-default['ndb']['minorVersion']                        ="9"
+version                                               ="8"
+default['ndb']['majorVersion']                        ="0"
+default['ndb']['minorVersion']                        ="21"
 
 default['ndb']['version']                             = "#{version}.#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}"
 default['ndb']['enabled']                             = "true"
 default['ndb']['glib_version']                        = "2.12"
 
-default['ndb']['url']                                 = node['download_url'] + "/mysql-cluster-gpl-#{node['ndb']['version']}-linux-glibc#{node['ndb']['glib_version']}-x86_64.tar.gz"
+default['ndb']['url']                                 = node['download_url'] + "/mysql-cluster-#{node['ndb']['version']}-linux-glibc#{node['ndb']['glib_version']}-x86_64.tar.gz"
 # checksum is not a security check - used to improve the speed of downloads by skipping if matched
 # checksum calculated using: shasum -a 256 /var/www/hops/...tgz | cut -c-12
 # checksum calculated using: sha256sum /var/www/hops/...tgz | cut -c-12

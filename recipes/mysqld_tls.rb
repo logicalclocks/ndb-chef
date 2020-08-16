@@ -16,7 +16,7 @@ if node['mysql']['tls'].casecmp?("true")
         crypto_directory crypto_dir
         action :generate_x509
         hopsworks_alt_url hopsworks_alt_url
-        not_if { conda_helpers.is_upgrade || node["kagent"]["enabled"].eql? "false" }
+        not_if { conda_helpers.is_upgrade || node["kagent"]["enabled"] == "false" }
     end
 
     service "mysqld" do

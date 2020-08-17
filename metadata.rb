@@ -405,8 +405,8 @@ attribute "services/enabled",
           :description => "Default 'false'. Set to 'true' to enable daemon services, so that they are started on a host restart.",
           :type => "string"
 
-attribute "ndb/nvme/disks",
-          :description => "NVMe disks to use for the on disk columns. This configuration overides ndb/diskdata_dir",
+attribute "ndb/nvme/devices",
+          :description => "Array of strings for NVMe devices (e.g., ['/dev/nvme0n1', '/dev/nvme0n2']) to use for the on on-disk data.",
           :type => "array"
 
 attribute "ndb/nvme/format",

@@ -43,7 +43,7 @@ default['ndb']['MaxDiskWriteSpeed']                   = "20M"
 default['ndb']['MaxDiskWriteSpeedOtherNodeRestart']   = "50M"
 default['ndb']['MaxDiskWriteSpeedOwnRestart']         = "200M"
 default['ndb']['MinDiskWriteSpeed']                   = "10M"
-default['ndb']['DiskSyncSize']                        = "4M"
+default['ndb']['DiskSncSize']                        = "4M"
 default['ndb']['RedoBuffer']                          = "32M"
 default['ndb']['LongMessageBuffer']                   = "64M"
 default['ndb']['MaxFKBuildBatchSize']                 = "64"
@@ -133,7 +133,7 @@ default['ndb']['nvme']['logfile_size']                = ""
 default['ndb']['nvme']['undofile_size']               = "3000M"
 default['ndb']['nvme']['mount_base_dir']              = "/mnt/nvmeDisks"
 default['ndb']['nvme']['mount_disk_prefix']           = "nvme"
-default['ndb']['nvme']['disks']                       = []
+default['ndb']['nvme']['devices']                     = []
 default['ndb']['nvme']['format']                      = "false"
 
 default['ndb']['BackupDataDir']                       = "#{node['ndb']['root_dir']}/ndb/backups"

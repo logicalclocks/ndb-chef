@@ -66,6 +66,7 @@ default['ndb']['DiskPageBufferMemory']                = "512M"
 default['ndb']['SharedGlobalMemory']                  = "512M"
 default['ndb']['DiskIOThreadPool']                    = "8"
 default['ndb']['InitialLogFileGroup=name']            = "LG1; undo_buffer_size=40M; undo1.log:80M;"
+default['ndb']['DiskSyncSize']                        = "4M"
 # Move this to another drive to store small files in HopsFS
 default['ndb']['InitialTablespacename']               = "TS1; extent_size=8M; data1.dat:240M;"
 

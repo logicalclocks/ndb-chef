@@ -112,9 +112,9 @@ file "#{Chef::Config.file_cache_path}/grants.sql" do
 end
 
 nvmeDisksMountPoints="[]"
-if !node['ndb']['nvme']['disks'].empty?
-  nvmeDisks = node['ndb']['nvme']['disks'].each_with_index.map do |e, i|
-    "#{node['ndb']['nvme']['mount_base_dir']}/#{node['ndb']['nvme']['mount_disk_prefix']}#{i}/#{node['ndb']['ndb_disk_columns_dir_name']}"
+if !node['ndb']['nvme']['devices'].empty?
+  nvmeDisks = node['ndb']['nvme']['devices'].each_with_index.map do |e, i|
+     "#{node['ndb']['nvme']['mount_base_dir']}/#{node['ndb']['nvme']['mount_disk_prefix']}#{i}/#{node['ndb']['ndb_disk_columns_dir_name']}"
   end
   nvmeDisksMountPoints = "['#{nvmeDisks.join("', '")}']"
 end

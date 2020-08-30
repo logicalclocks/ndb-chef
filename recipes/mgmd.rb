@@ -108,7 +108,7 @@ template systemd_script do
 end
 
 diskDataDir=node['ndb']['diskdata_dir']
-if !node['ndb']['nvme']['disks'].empty?
+if !node['ndb']['nvme']['devices'].empty?
   diskDataDir="#{node['ndb']['nvme']['mount_base_dir']}/#{node['ndb']['nvme']['mount_disk_prefix']}0/#{node['ndb']['ndb_disk_columns_dir_name']}"
 end
 

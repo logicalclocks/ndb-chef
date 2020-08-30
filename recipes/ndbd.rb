@@ -10,7 +10,7 @@ Chef::Log.info "IP address is: #{node['ipaddress']}"
 #
 # On Disk columns
 #
-if node['ndb']['nvme']['disks'].empty?
+if node['ndb']['nvme']['devices'].empty?
   directory node['ndb']['diskdata_dir'] do
     owner node['ndb']['user']
     group node['ndb']['group']
@@ -29,7 +29,9 @@ end
 index=0
 mountPrefix="#{node['ndb']['nvme']['mount_base_dir']}/#{node['ndb']['nvme']['mount_disk_prefix']}"
 
-for nvmeDisk in node['ndb']['nvme']['disks'] do
+volumes = node['ndb']['nvme']['devices']
+
+for nvmeDisk in volumes do
   if "#{node['ndb']['nvme']['format']}" == "true"
     bash 'format_nvme_disk' do
       user 'root'

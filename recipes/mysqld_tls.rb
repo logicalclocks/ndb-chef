@@ -1,10 +1,10 @@
 # This recipe is here to reconfigure the MySQL server to use TLS (if TLS is enabled)
 # It cannot be done in the mysqld.rb recipe as we need MySQL to start Hopsworks to start the CA
 # That's why this recipe is run after kagent::default (responsible for signing the certificates)
-# and before the NN - the first service after Hopsworks which needs the database to be up and running 
+# and before the NN - the first service after Hopsworks which needs the database to be up and running
 
 if node['mysql']['tls'].casecmp?("true")
-    hopsworks_alt_url = "https://#{private_recipe_ip("hopsworks","default")}:8181" 
+    hopsworks_alt_url = "https://#{private_recipe_ip("hopsworks","default")}:8181"
     if node.attribute? "hopsworks"
         if node["hopsworks"].attribute? "https" and node["hopsworks"]['https'].attribute? ('port')
             hopsworks_alt_url = "https://#{private_recipe_ip("hopsworks","default")}:#{node['hopsworks']['https']['port']}"
@@ -16,7 +16,7 @@ if node['mysql']['tls'].casecmp?("true")
         crypto_directory crypto_dir
         action :generate_x509
         hopsworks_alt_url hopsworks_alt_url
-        not_if { conda_helpers.is_upgrade || node["kagent"]["enabled"] == "false" }
+        not_if { node["kagent"]["enabled"] == "false" }
     end
 
     service "mysqld" do
@@ -24,7 +24,7 @@ if node['mysql']['tls'].casecmp?("true")
         supports :restart => true, :stop => true, :start => true, :status => true
         action :nothing
     end
-    
+
     found_id=find_service_id("mysqld", node['mysql']['id'])
     certificate = "#{crypto_dir}/#{x509_helper.get_certificate_bundle_name(node['ndb']['user'])}"
     key = "#{crypto_dir}/#{x509_helper.get_private_key_pkcs1_name(node['ndb']['user'])}"

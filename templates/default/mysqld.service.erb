@@ -1,6 +1,8 @@
 [Unit]
 Description = Mysql Server 
 After = syslog.target network.target remote-fs.target <%= @deps %>
+StartLimitIntervalSec=32400
+StartLimitBurst=2
 
 [Service]
 User = <%= node['ndb']['user'] %>
@@ -9,6 +11,7 @@ ExecStart = <%= node['ndb']['scripts_dir'] %>/mysql-server-start.sh
 ExecStop = <%= node['ndb']['scripts_dir'] %>/mysql-server-stop.sh
 ExecReload = <%= node['ndb']['scripts_dir'] %>/mysql-server-restart.sh
 TimeoutSec = 0
+Restart=on-failure
 
 Type = forking
 

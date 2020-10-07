@@ -1,6 +1,8 @@
 [Unit]
 Description = Mysqld exporter
 After = syslog.target network.target remote-fs.target mysqld.service
+StartLimitIntervalSec=30
+StartLimitBurst=20
 
 [Service]
 User = <%= node['ndb']['user'] %>
@@ -8,6 +10,7 @@ ExecStart = <%= node['ndb']['mysqld_exporter']['home'] %>/mysqld_exporter \
             --web.listen-address=:<%= node['ndb']['mysqld']['metrics_port'] %> \
             --config.my-cnf=<%= node['ndb']['root_dir'] %>/my.cnf
 LimitNOFILE = 20000
+Restart=on-failure
 
 Type = simple
 

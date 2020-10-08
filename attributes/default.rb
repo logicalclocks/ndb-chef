@@ -166,6 +166,7 @@ default['ndb']['wait_startup']                        = "10800"
 default['mysql']['dir']                               = node['install']['dir'].empty? ? "/usr/local" : node['install']['dir']
 # Symbolic link to the current versioned mysql directory
 default['mysql']['base_dir']                          = "#{node['mysql']['dir']}/mysql"
+default['mysql']['bin_dir']                           = "#{node['mysql']['base_dir']}/bin"
 # Concrete directory with mysql binaries for a specific mysql version
 default['mysql']['version_dir']                       = "#{node['mysql']['base_dir']}-#{node['ndb']['version']}"
 

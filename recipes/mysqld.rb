@@ -176,6 +176,15 @@ end
 # Download and install mysqld_exporter
 include_recipe "ndb::mysqld_exporter"
 
+if exists_local('consul', 'master') or exists_local('consul', 'slave')
+  # Register MySQL with Consul
+  consul_service "Registering MySQL with Consul" do
+    service_definition "mysql-consul.hcl.erb"
+    reload_consul false
+    action :register
+  end
+end
+
 if conda_helpers.is_upgrade
   kagent_config "#{service_name}" do
     action :systemd_reload

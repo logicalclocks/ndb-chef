@@ -128,6 +128,10 @@ attribute "mysql/replication_enabled",
           :description => "Enable replication for the mysql server",
           :type => 'string'
 
+attribute "mysql/onlinefs",
+          :description => "Set true to use this MySQL server as online feature store (default: true)",
+          :type => 'string'
+
 attribute "mysql/tls",
           :description => "Enable TLS/SSL for the mysql server",
           :type => 'string'

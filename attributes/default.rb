@@ -85,7 +85,7 @@ default['ndb']['MaxNoOfFiredTriggers']                = "10240"
 default['ndb']['MaxNoOfConcurrentTransactions']       = "16192"
 default['ndb']['MaxNoOfAttributes']                   = "5000"
 
-default['ndb']['MaxReorgBuildBatchSize']              = "64" 
+default['ndb']['MaxReorgBuildBatchSize']              = "64"
 default['ndb']['EnablePartialLcp']                    = "1"
 default['ndb']['RecoveryWork']                        = "60"
 default['ndb']['InsertRecoveryWork']                  = "40"
@@ -94,7 +94,7 @@ default['ndb']['InsertRecoveryWork']                  = "40"
 #Optimize for throughput: 0 (range 0..10)
 default['ndb']['SchedulerResponsiveness']             = 5
 default['ndb']['SchedulerSpinTimer']                  = 0
-default['ndb']['SchedulerExecutionTimer']             = 50 
+default['ndb']['SchedulerExecutionTimer']             = 50
 
 default['ndb']['BuildIndexThreads']                   = "128"
 default['ndb']['TwoPassInitialNodeRestartCopy']       = "true"
@@ -184,6 +184,9 @@ default['mysql']['replication_enabled']               = "false"
 # MySQL Server TLS/SSL enabled
 default['mysql']['tls']                               = "false"
 
+# Use this MySQL server as Online FS
+default['mysql']['onlinefs']                          = "true"
+
 # This is the username/password for any mysql server (mysqld) started.
 # It is required by mysql clients to use the mysql server.
 default['mysql']['user']                              = "kthfs"
@@ -232,7 +235,7 @@ default['ndb']['mgmd']['private_ips_domainIds']          = {}
 default['ndb']['ndbd']['private_ips_domainIds']          = {}
 default['ndb']['mysqld']['private_ips_domainIds']        = {}
 
-# Metrics  
+# Metrics
 default['ndb']['mysqld_exporter']['version']                = "0.11.0"
 default['ndb']['mysqld_exporter']['url']                    = "#{node['download_url']}/prometheus/mysqld_exporter-#{node['ndb']['mysqld_exporter']['version']}.linux-amd64.tar.gz"
 default['ndb']['mysqld_exporter']['home']                   = "#{node['ndb']['dir']}/mysqld_exporter-#{node['ndb']['mysqld_exporter']['version']}.linux-amd64"

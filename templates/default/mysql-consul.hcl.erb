@@ -2,11 +2,14 @@ service {
     id = "mysql/jdbc"
     name = "mysql"
     tags = [
-        "jdbc"
+      "jdbc",
+      <% if node['mysql']['onlinefs'].casecmp?("true") -%>
+      "onlinefs"
+      <% end -%>
     ]
-    port = <%= node['ndb']['mysqld_port'] %> 
+    port = <%= node['ndb']['mysqld_port'] %>
     "check" = {
         "script" = "<%= node['mysql']['bin_dir'] %>/mysqladmin ping --host=127.0.0.1 --port=<%= node['ndb']['mysqld_port'] %> --user=<% node['mysql']['user'] %> --password=<%= node['mysql']['password'] %>"
         "interval" = "3s"
     }
-} 
+}

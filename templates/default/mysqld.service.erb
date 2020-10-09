@@ -1,8 +1,8 @@
 [Unit]
 Description = Mysql Server 
 After = syslog.target network.target remote-fs.target <%= @deps %>
-StartLimitIntervalSec=32400
-StartLimitBurst=2
+StartLimitIntervalSec=80
+StartLimitBurst=10
 
 [Service]
 User = <%= node['ndb']['user'] %>

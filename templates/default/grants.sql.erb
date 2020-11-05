@@ -1,6 +1,13 @@
 # Give access from this IP
 
-GRANT ALL PRIVILEGES ON *.* to '<%= node['mysql']['user'] %>'@'localhost' identified by '<%= node['mysql']['password'] %>';
-GRANT ALL PRIVILEGES ON *.* to '<%= node['mysql']['user'] %>'@'127.0.0.1' identified by '<%= node['mysql']['password'] %>';
-GRANT GRANT OPTION ON *.* to '<%= node['mysql']['user'] %>'@'localhost' identified by '<%= node['mysql']['password'] %>';
-GRANT GRANT OPTION ON *.* to '<%= node['mysql']['user'] %>'@'127.0.0.1' identified by '<%= node['mysql']['password'] %>';
+CREATE USER if not exists '<%= node['mysql']['user'] %>'@'localhost' identified by '<%= node['mysql']['password'] %>';
+CREATE USER if not exists '<%= node['mysql']['user'] %>'@'127.0.0.1' identified by '<%= node['mysql']['password'] %>';
+
+GRANT NDB_STORED_USER ON *.* to '<%= node['mysql']['user'] %>'@'localhost';
+GRANT NDB_STORED_USER ON *.* to '<%= node['mysql']['user'] %>'@'127.0.0.1';
+
+GRANT ALL PRIVILEGES ON *.* to '<%= node['mysql']['user'] %>'@'localhost';
+GRANT ALL PRIVILEGES ON *.* to '<%= node['mysql']['user'] %>'@'127.0.0.1';
+
+GRANT GRANT OPTION ON *.* to '<%= node['mysql']['user'] %>'@'localhost';
+GRANT GRANT OPTION ON *.* to '<%= node['mysql']['user'] %>'@'127.0.0.1';

@@ -81,6 +81,12 @@ directory "#{node['ndb']['data_dir']}/#{found_id}" do
   action :create
 end
 
+cookbook_file "#{node['ndb']['scripts_dir']}/ndbd_env_variables" do
+  source "ndbd_env_variables"
+  user node['ndb']['user']
+  group node['ndb']['group']
+  mode 0750
+end
 
 for script in node['ndb']['scripts']
   template "#{node['ndb']['scripts_dir']}/#{script}" do
@@ -134,18 +140,12 @@ kagent_config "#{service_name}" do
   not_if "systemctl is-alive ndbmtd"
 end
 
-if node['kagent']['enabled'] == "true"
-  Chef::Log.info "Trying to infer the #{service_name} ID by examining the local IP. If it matches the config.ini file, then we have our node."
-
-  kagent_config service_name do
-    service "NDB" # #{found_id}
-    log_file "#{node['ndb']['log_dir']}/ndb_#{found_id}_out.log"
-    restart_agent false    
-    action :add
-  end
-
+kagent_config service_name do
+  service "NDB" # #{found_id}
+  log_file "#{node['ndb']['log_dir']}/ndb_#{found_id}_out.log"
+  restart_agent false    
+  action :add
 end
-
 
 # Here we set interrupts to be handled by only the first CPU
 

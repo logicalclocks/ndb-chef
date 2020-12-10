@@ -8,6 +8,10 @@ if [ "X$USERID" != "X<%= node['ndb']['user'] %>" ]; then
    exit -3
 fi  
 
+if [ "${NDBD_INITIAL_RESTART}" = "true" ]; then
+  INIT_ARG=--initial
+  sed -i 's/^NDBD_INITIAL_RESTART=.*$/NDBD_INITIAL_RESTART=false/g' <%= node['ndb']['scripts_dir'] %>/ndbd_env_variables
+fi
 
 MGM_CONN=<%= node['ndb']['connectstring'] %>
 
@@ -42,7 +46,7 @@ done
 echo "Starting Data Node <%= @node_id %>."
 # --connect-retries == -1 implies that the ndbd keeps trying forever to connect to the ndb_mgmd
 #su <%= node['ndb']['user'] %> -c "<%= node['mysql']['base_dir'] %>/bin/ndbmtd -c $MGM_CONN --ndb-nodeid=<%= @node_id %>  --connect-retries=-1 --connect-delay=10"
-<%= node['mysql']['base_dir'] %>/bin/ndbmtd -c "$MGM_CONN" --ndb-nodeid=<%= @node_id %>  --connect-retries=-1 --connect-delay=10 $NOWAIT_NODES_LIST
+<%= node['mysql']['base_dir'] %>/bin/ndbmtd -c "$MGM_CONN" --ndb-nodeid=<%= @node_id %>  --connect-retries=-1 --connect-delay=10 $INIT_ARG $NOWAIT_NODES_LIST
 
 RES=$(echo $?)
 exit $RES

@@ -126,14 +126,12 @@ template "#{node['ndb']['root_dir']}/config.ini" do
   })
 end
 
-if node['kagent']['enabled'] == "true"
-    kagent_config service_name do
-      service "NDB"
-      log_file "#{node['ndb']['log_dir']}/ndb_#{found_id}_out.log"
-      config_file "#{node['ndb']['root_dir']}/config.ini"
-      restart_agent false
-      action :add
-    end
+kagent_config service_name do
+  service "NDB"
+  log_file "#{node['ndb']['log_dir']}/ndb_#{found_id}_out.log"
+  config_file "#{node['ndb']['root_dir']}/config.ini"
+  restart_agent false
+  action :add
 end
 
 kagent_config "#{service_name}" do

@@ -144,13 +144,11 @@ template "#{node['ndb']['scripts_dir']}/drop-disk-table.sh" do
     mode 0700
 end
 
-if node['kagent']['enabled'] == "true"
-  kagent_config service_name do
-    service "NDB" # #{found_id}
-    log_file "#{node['ndb']['log_dir']}/mysql_#{found_id}_out.log"
-    restart_agent false
-    action :add
-  end
+kagent_config service_name do
+  service "NDB" # #{found_id}
+  log_file "#{node['ndb']['log_dir']}/mysql_#{found_id}_out.log"
+  restart_agent false
+  action :add
 end
 
 homedir = node['ndb']['user'].eql?("root") ? "/root" : "/home/#{node['ndb']['user']}"

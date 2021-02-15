@@ -1,0 +1,21 @@
+#
+# Software definition
+#
+MYSQL_BIN_INSTALL_DIR="<%= node['mysql']['base_dir'] %>"
+BENCHMARK_TO_RUN="dbt2"
+#
+# Storage definition (empty here)
+#
+#
+# MySQL Server definition
+#
+SERVER_HOST="<%= @mysqld_hosts %>"
+#
+# NDB node definitions (empty here)
+#
+#
+# Benchmark definition
+#
+DBT2_TIME="30"
+DBT2_WAREHOUSES="64"
+DBT2_DATA_DIR="<%= node['ndb']['user-home'] %>/benchmarks/dbt2_data"

@@ -1,24 +1,105 @@
-# Run DB benchmarks 
+benchmarks_dir = "#{node['ndb']['user-home']}/benchmarks"
 
-remote_file "#{node['ndb']['scripts_dir']}/flexAsync" do
+directory benchmarks_dir do
   owner node['ndb']['user']
   group node['ndb']['group']
-  source "http://snurran.sics.se/hops/flexAsync"
-  mode 0755
+  mode "750"
   action :create
 end
 
-template "#{node['ndb']['scripts_dir']}/flexAsync.sh" do
-  source "flexAsync.sh.erb"
+sysbench_single_dir = "#{benchmarks_dir}/sysbench_single"
+directory sysbench_single_dir do
   owner node['ndb']['user']
   group node['ndb']['group']
-  mode 0754
-  variables({ :mgmd_ip => node['ndb']['mgmd']['private_ips'][0] })
+  mode "750"
+  action :create
 end
 
-ark "dbt2" do
-  url node['ndb']['dbt2_binaries']
-  home_dir node['ndb']['root_dir']
-  append_env_path true
-  action :install
+mysqld_host = ""
+mysqld_hosts = ""
+number_of_mysqld = 0
+if node['ndb'].attribute?('mysqld')
+  number_of_mysqld = node['ndb']['mysqld']['private_ips'].length()
+  mysqld_hosts = node['ndb']['mysqld']['private_ips'].join(',')
+  mysqld_host = node['ndb']['mysqld']['private_ips'][0]
+end
+
+template "#{sysbench_single_dir}/autobench.conf" do
+  source "autobench_sysbench.conf.erb"
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode 0750
+  variables({
+    :sysbench_instances => "1",
+    :mysqld_hosts => mysqld_host,
+  })
+end
+
+sysbench_multi_dir = "#{benchmarks_dir}/sysbench_multi"
+directory sysbench_multi_dir do
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode "750"
+  action :create
+end
+
+template "#{sysbench_multi_dir}/autobench.conf" do
+  source "autobench_sysbench.conf.erb"
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode 0750
+  variables({
+    :sysbench_instances => number_of_mysqld,
+    :mysqld_hosts => mysqld_hosts,
+  })
+end
+
+dbt2_single_dir = "#{benchmarks_dir}/dbt2_single"
+directory dbt2_single_dir do
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode "750"
+  action :create
+end
+
+template "#{dbt2_single_dir}/autobench.conf" do
+  source "autobench_dbt2.conf.erb"
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode 0750
+  variables({
+    :mysqld_hosts => mysqld_host,
+  })
+end
+
+cookbook_file "#{dbt2_single_dir}/dbt2_run_1.conf" do
+  source "dbt2_run_1.conf.single"
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode 0750
+end
+
+dbt2_multi_dir = "#{benchmarks_dir}/dbt2_multi"
+directory dbt2_multi_dir do
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode "750"
+  action :create
+end
+
+template "#{dbt2_multi_dir}/autobench.conf" do
+  source "autobench_dbt2.conf.erb"
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode 0750
+  variables({
+    :mysqld_hosts => mysqld_hosts,
+  })
+end
+
+cookbook_file "#{dbt2_multi_dir}/dbt2_run_1.conf" do
+  source "dbt2_run_1.conf.multi"
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode 0750
 end

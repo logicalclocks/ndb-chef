@@ -1,0 +1,22 @@
+#
+# Software definition
+#
+MYSQL_BIN_INSTALL_DIR="<%= node['mysql']['base_dir'] %>"
+BENCHMARK_TO_RUN="sysbench"
+#
+# Storage definition (empty here)
+#
+#
+# MySQL Server definition
+#
+SERVER_HOST="<%= @mysqld_hosts %>"
+#
+# NDB node definitions (empty here)
+#
+#
+# Benchmark definition
+#
+SYSBENCH_TEST="oltp_rw"
+SYSBENCH_INSTANCES="<%= @sysbench_instances %>"
+THREAD_COUNTS_TO_RUN="1;2;4;8;12;16;24;32;48;64;96;112;128"
+MAX_TIME="30"

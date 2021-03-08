@@ -112,6 +112,21 @@ if !node['ndb']['nvme']['devices'].empty?
   diskDataDir="#{node['ndb']['nvme']['mount_base_dir']}/#{node['ndb']['nvme']['mount_disk_prefix']}0/#{node['ndb']['ndb_disk_columns_dir_name']}"
 end
 
+if conda_helpers.is_upgrade
+  version_series = node['ndb']['version'].split(".")[0]
+  if version_series.to_i < 21 && node['ndb']['configuration']['type'].casecmp?("auto")
+    node.override['ndb']['configuration']['type'] = "manual"
+    Chef::Log.warn "\nUpgrading to NDB #{node['ndb']['version']} but Configuration is set to auto which is not supported. Setting it to manual!\n"
+  end
+end
+
+if node['ndb']['configuration']['type'].casecmp?("auto")
+  if node['ndb']['configuration']['profile'].casecmp?("tiny")
+    node.override['ndb']['TotalMemoryConfig'] = "3G"
+    node.override['ndb']['LockPagesInMainMemory'] = "0"
+  end
+end
+
 template "#{node['ndb']['root_dir']}/config.ini" do
   source "config.ini.erb"
   owner node['ndb']['user']

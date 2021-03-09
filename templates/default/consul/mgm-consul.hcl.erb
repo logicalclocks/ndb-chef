@@ -1,0 +1,18 @@
+services = [
+    {
+        id = "rondb/mgm"
+        name = "rondb"
+        tags = [
+            "mgm"
+        ]
+        port = <%= node['ndb']['mgmd']['port'] %>
+        check = {
+            id = "mgmd-health-check"
+            name = "Health check for RonDB"
+            args = ["/bin/sh", "-c", "<%= node['mysql']['bin_dir'] %>/ndb_mgm --connect-retries=3 --connect-retry-delay=5 -c localhost:1186 -e show > /dev/null 2>&1"]
+            interval = "20s"
+            timeout = "20s"
+            status = "passing"
+        }
+    }
+]

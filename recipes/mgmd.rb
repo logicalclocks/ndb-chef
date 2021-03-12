@@ -137,7 +137,6 @@ end
 
 kagent_config "#{service_name}" do
   action :systemd_reload
-  not_if { node['kagent']['enabled'].casecmp("false") == 0 }    
 end
 
 # Put public key of this mgmd-host in .ssh/authorized_keys of all ndbd and mysqld nodes

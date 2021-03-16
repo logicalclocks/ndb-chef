@@ -29,6 +29,18 @@ supports 'centos', ">= 7.0"
 # Required Attributes
 #
 
+attribute "ndb/majorVersion",
+          :description => "RonDB major version",
+          :type => 'string'
+
+attribute "ndb/minorVersion",
+          :description => "RonDB minor version",
+          :type => 'string'
+
+attribute "ndb/patchVersion",
+          :description => "RonDB patch version",
+          :type => 'string'
+
 attribute "ndb/url",
           :description => "Download URL for MySQL Cluster binaries",
           :type => 'string'

@@ -1,10 +1,10 @@
 include_attribute "kagent"
 
-version                                               ="21"
-default['ndb']['majorVersion']                        ="04"
-default['ndb']['minorVersion']                        ="0"
+default['ndb']['majorVersion']                        = "21"
+default['ndb']['minorVersion']                        = "04"
+default['ndb']['patchVersion']                        = "0"
 
-default['ndb']['version']                             = "#{version}.#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}"
+default['ndb']['version']                             = "#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}.#{node['ndb']['patchVersion']}"
 default['ndb']['enabled']                             = "true"
 default['ndb']['glib_version']                        = "2.17"
 

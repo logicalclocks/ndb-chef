@@ -13,6 +13,8 @@ default['ndb']['url']                                 = node['download_url'] + "
 # checksum calculated using: shasum -a 256 /var/www/hops/...tgz | cut -c-12
 # checksum calculated using: sha256sum /var/www/hops/...tgz | cut -c-12
 default['ndb']['checksum']                            = ""
+default['ndb']['configuration']['type']               = "auto"
+default['ndb']['configuration']['profile']            = "unlimited"
 
 default['ndb']['bind_cpus']                           = "false"
 
@@ -59,6 +61,7 @@ default['ndb']['BackupDataBufferSize']                = "16M"
 default['ndb']['MaxAllocate']                         = "32M"
 default['ndb']['DefaultHashMapSize']                  = "3840"
 default['ndb']['ODirect']                             = "0"
+default['ndb']['TotalMemoryConfig']                   = "-1"
 default['ndb']['ExtraSendBufferMemory']               = "0"
 default['ndb']['TotalSendBufferMemory']               = "16M"
 default['ndb']['DiskPageBufferEntries']               = "10"
@@ -105,6 +108,7 @@ default['ndb']['Numa']                                = 1
 default['ndb']['MaxNoOfExecutionThreads']             = "8"
 # Read up on this option first. Benefits from setting to "true" node['ndb']['interrupts_isolated_to_single_cpu']
 default['ndb']['ThreadConfig']                        = ""
+default['ndb']['SpinMethod']                          = "LatencyOptimisedSpinning"
 
 
 default['ndb']['interrupts_isolated_to_single_cpu']   = "false"

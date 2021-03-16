@@ -12,7 +12,6 @@ TotalMemoryConfig=<%= node['ndb']['TotalMemoryConfig'] %>
   <% end -%>
 
   <% if node['ndb']['configuration']['profile'].casecmp?("tiny") -%>
-NumCPUs=4
 MaxNoOfTables=2000
 MaxNoOfOrderedIndexes=1000
 MaxNoOfUniqueHashIndexes=1000
@@ -20,6 +19,10 @@ MaxNoOfAttributes=20000
 MaxNoOfTriggers=30000
 TransactionMemory=200M
 SharedGlobalMemory=400M
+  <% end -%>
+
+  <% if !node['ndb']['NumCPUs'].casecmp?(node['ndb']['default']['NumCPUs']) -%>
+NumCPUs=<%= node['ndb']['NumCPUs'] %>
   <% end -%>
 
 ClassicFragmentation=false

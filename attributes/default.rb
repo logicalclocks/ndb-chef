@@ -109,6 +109,8 @@ default['ndb']['MaxNoOfExecutionThreads']             = "8"
 # Read up on this option first. Benefits from setting to "true" node['ndb']['interrupts_isolated_to_single_cpu']
 default['ndb']['ThreadConfig']                        = ""
 default['ndb']['SpinMethod']                          = "LatencyOptimisedSpinning"
+default['ndb']['default']['NumCPUs']                  = "-1"
+default['ndb']['NumCPUs']                             = "#{node['ndb']['default']['NumCPUs']}"
 
 
 default['ndb']['interrupts_isolated_to_single_cpu']   = "false"

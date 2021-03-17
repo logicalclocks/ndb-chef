@@ -320,6 +320,10 @@ attribute "ndb/SpinMethod",
           :description => "SpinMethod",
           :type => 'string'
 
+attribute "ndb/NumCPUs",
+          :description => "If configuration type is set to auto controls how many CPUs will be available to ndbmtd. Default: -1 (use all CPUs)",
+          :type => 'string'
+
 attribute "ndb/TotalMemoryConfig",
           :description => "This configuration defines the amount of memory used by ndbmtd when AutomaticMemoryConfig is turned on. Minimum is 3G",
           :type => 'string'

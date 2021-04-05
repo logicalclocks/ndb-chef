@@ -29,12 +29,32 @@ supports 'centos', ">= 7.0"
 # Required Attributes
 #
 
+attribute "ndb/majorVersion",
+          :description => "RonDB major version",
+          :type => 'string'
+
+attribute "ndb/minorVersion",
+          :description => "RonDB minor version",
+          :type => 'string'
+
+attribute "ndb/patchVersion",
+          :description => "RonDB patch version",
+          :type => 'string'
+
 attribute "ndb/url",
           :description => "Download URL for MySQL Cluster binaries",
           :type => 'string'
 
 attribute "ndb/MaxNoOfExecutionThreads",
           :description => "Number of execution threads for MySQL Cluster",
+          :type => 'string'
+
+attribute "ndb/configuration/type",
+          :description =>  "Control RonDB configuration. auto | manual Default: auto",
+          :type => 'string'
+
+attribute "ndb/configuration/profile",
+          :description =>  "Predefined configurations. unlimited | tiny Default: unlimited",
           :type => 'string'
 
 attribute "ndb/DataMemory",
@@ -294,6 +314,18 @@ attribute "ndb/DefaultHashMapSize",
 
 attribute "ndb/ODirect",
           :description => "ODirect",
+          :type => 'string'
+
+attribute "ndb/SpinMethod",
+          :description => "SpinMethod",
+          :type => 'string'
+
+attribute "ndb/NumCPUs",
+          :description => "If configuration type is set to auto controls how many CPUs will be available to ndbmtd. Default: -1 (use all CPUs)",
+          :type => 'string'
+
+attribute "ndb/TotalMemoryConfig",
+          :description => "This configuration defines the amount of memory used by ndbmtd when AutomaticMemoryConfig is turned on. Minimum is 3G",
           :type => 'string'
 
 attribute "ndb/TotalSendBufferMemory",

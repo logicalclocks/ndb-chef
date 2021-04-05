@@ -155,10 +155,12 @@ kagent_config "#{service_name}" do
   action :systemd_reload
 end
 
-consul_service "Registering RonDB mgm with Consul" do
-  service_definition "consul/mgm-consul.hcl.erb"
-  reload_consul false
-  action :register
+if exists_local('consul', 'master') or exists_local('consul', 'slave')
+  consul_service "Registering RonDB mgm with Consul" do
+    service_definition "consul/mgm-consul.hcl.erb"
+    reload_consul false
+    action :register
+  end
 end
 
 # Put public key of this mgmd-host in .ssh/authorized_keys of all ndbd and mysqld nodes

@@ -11,11 +11,16 @@ action :install_grants do
     action :wait_until_started
   end
 
+  benchmark="false"
+  if node['ndb'].attribute? 'benchmark' and node['benchmark'].attribute? 'private_ips'
+    benchmark="true"
+  end
   grants_path = "#{node['ndb']['base_dir']}/grants.sql"
   template grants_path do
     source "grants.sql.erb"
     owner node['ndb']['user']
     mode "0600"
+    variables({ :benchmark => benchmark })
     action :create_if_missing
   end
 

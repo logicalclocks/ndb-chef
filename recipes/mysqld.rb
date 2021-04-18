@@ -101,8 +101,14 @@ kagent_config "#{service_name}" do
   not_if "systemctl is-alive ndbmtd"
 end
 
+benchmark="false"
+if node['ndb'].attribute? 'bench' and node['bench'].attribute? 'private_ips'
+  benchmark="true"
+end
+
 ndb_mysql_basic "create_users_grants" do
   action :install_grants
+  benchmark benchmark
 end
 
 # Dont leave the username/passwords to mysql lying around in file in the cache

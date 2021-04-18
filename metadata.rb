@@ -20,7 +20,6 @@ recipe            "ndb::mysqld", "Installs a MySQL Server connected to the MySQL
 recipe            "ndb::mysqld_tls", "Configure TLS for MySQL servers using host certificates"
 
 recipe            "ndb::bench", "Configure the benchmark scripts and libraries"
-recipe            "ndb::bench-installer", "Configure the benchmark scripts and libraries - run only on mgmt server node"
 
 recipe            "ndb::purge", "Removes all data and all binaries related to a MySQL Cluster installation"
 

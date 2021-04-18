@@ -20,7 +20,7 @@ GRANT ALL PRIVILEGES ON *.* to '<%= node['bench']['user'] %>'@'<%= mysqld %>';
 <% end -%>
 
 <% for mgmd in node['ndb']['mgmd']['private_ips'] -%>
-CREATE USER if not exists '<%= node['bench']['user'] %>'@'<%= mysqld %>' identified by '<%= node['bench']['password'] %>';
+CREATE USER if not exists '<%= node['bench']['user'] %>'@'<%= mgmd %>' identified by '<%= node['bench']['password'] %>';
 GRANT ALL PRIVILEGES ON *.* to '<%= node['bench']['user'] %>'@'<%= mgmd %>';
 <% end -%>
 

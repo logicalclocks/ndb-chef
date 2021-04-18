@@ -478,3 +478,12 @@ attribute "ndb/num_ndb_slots_per_mysqld",
 attribute "ndb/num_ndb_open_slots",
           :description => "Number of slots open for new clients to connect.",
           :type => "string"
+
+attribute "bench/user",
+          :description => "User that runs benchmarks",
+          :type => 'string'
+
+attribute "bench/password",
+          :description => "User that runs benchmarks",
+          :type => 'string'
+

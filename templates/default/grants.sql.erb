@@ -15,11 +15,13 @@ GRANT GRANT OPTION ON *.* to '<%= node['mysql']['user'] %>'@'127.0.0.1';
 <% if @benchmark == "true" -%>
 
 <% for mysqld in node['ndb']['mysqld']['private_ips'] -%>
-GRANT ALL PRIVILEGES ON *.* to '<%= node['mysql']['user'] %>'@'<%= mysqld %>';
+CREATE USER if not exists '<%= node['bench']['user'] %>'@'<%= mysqld %>' identified by '<%= node['bench']['password'] %>';
+GRANT ALL PRIVILEGES ON *.* to '<%= node['bench']['user'] %>'@'<%= mysqld %>';
 <% end -%>
 
 <% for mgmd in node['ndb']['mgmd']['private_ips'] -%>
-GRANT ALL PRIVILEGES ON *.* to '<%= node['mysql']['user'] %>'@'<%= mgmd %>';
+CREATE USER if not exists '<%= node['bench']['user'] %>'@'<%= mysqld %>' identified by '<%= node['bench']['password'] %>';
+GRANT ALL PRIVILEGES ON *.* to '<%= node['bench']['user'] %>'@'<%= mgmd %>';
 <% end -%>
 
 <% end -%>

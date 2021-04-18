@@ -102,7 +102,7 @@ kagent_config "#{service_name}" do
 end
 
 benchmark="false"
-if node['ndb'].attribute? 'bench' and node['bench'].attribute? 'private_ips'
+if node['ndb'].attribute? 'bench' and node['ndb']['bench'].attribute? 'private_ips'
   benchmark="true"
 end
 

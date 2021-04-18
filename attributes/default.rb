@@ -200,6 +200,9 @@ default['mysql']['onlinefs']                          = "true"
 default['mysql']['user']                              = "kthfs"
 default['mysql']['password']                          = "kthfs"
 
+default['bench']['user']                              = "bench"
+default['bench']['password']                          = "bench"
+
 default['mysql']['initialize']                        = "true"
 
 # Limit the number of mgm_servers to the range 49..51

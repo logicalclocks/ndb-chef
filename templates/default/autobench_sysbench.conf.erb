@@ -11,8 +11,8 @@ BENCHMARK_TO_RUN="sysbench"
 #
 SERVER_HOST="<%= @mysqld_hosts %>"
 
-MYSQL_USER="<%= node['mysql']['user'] %>"
-MYSQL_PASSWORD="<%= node['mysql']['password'] %>"
+MYSQL_USER="<%= node['bench']['user'] %>"
+MYSQL_PASSWORD="<%= node['bench']['password'] %>"
 
 #
 # NDB node definitions (empty here)

@@ -10,6 +10,11 @@ BENCHMARK_TO_RUN="dbt2"
 # MySQL Server definition
 #
 SERVER_HOST="<%= @mysqld_hosts %>"
+
+MYSQL_USER="<%= node['bench']['user'] %>"
+MYSQL_PASSWORD="<%= node['bench']['password'] %>"
+
+
 #
 # NDB node definitions (empty here)
 #

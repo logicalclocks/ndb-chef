@@ -19,6 +19,9 @@ recipe            "ndb::ndbd", "Installs a MySQL Cluster data node (ndbd)"
 recipe            "ndb::mysqld", "Installs a MySQL Server connected to the MySQL Cluster (mysqld)"
 recipe            "ndb::mysqld_tls", "Configure TLS for MySQL servers using host certificates"
 
+recipe            "ndb::bench", "Configure the benchmark scripts and libraries"
+recipe            "ndb::bench-installer", "Configure the benchmark scripts and libraries - run only on mgmt server node"
+
 recipe            "ndb::purge", "Removes all data and all binaries related to a MySQL Cluster installation"
 
 supports 'ubuntu', ">= 14.04"
@@ -28,6 +31,10 @@ supports 'centos', ">= 7.0"
 #
 # Required Attributes
 #
+
+attribute "ndb/benchmark",
+          :description => "Set to 'true' if installing only RonDB standalone  to run the pre-defined  benchmarks, grafaana, etc",
+          :type => "string"
 
 attribute "ndb/majorVersion",
           :description => "RonDB major version",

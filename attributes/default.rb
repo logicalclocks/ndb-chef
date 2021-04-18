@@ -7,6 +7,8 @@ default['ndb']['patchVersion']                        = "0"
 default['ndb']['version']                             = "#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}.#{node['ndb']['patchVersion']}"
 default['ndb']['enabled']                             = "true"
 default['ndb']['glib_version']                        = "2.17"
+default['ndb']['benchmark']                           = "false"
+
 
 default['ndb']['url']                                 = node['download_url'] + "/rondb-#{node['ndb']['version']}-linux-glibc#{node['ndb']['glib_version']}-x86_64.tar.gz"
 # checksum is not a security check - used to improve the speed of downloads by skipping if matched

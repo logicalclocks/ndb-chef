@@ -102,7 +102,7 @@ kagent_config "#{service_name}" do
 end
 
 benchmark="false"
-if node['ndb'].attribute? 'bench' and node['ndb']['bench'].attribute? 'private_ips'
+if exists_local('ndb', 'bench')
   benchmark="true"
   node.override['ndb']['num_ndb_slots_per_mysqld']=4
   node.override['ndb']['num_ndb_slots_per_client']=4  

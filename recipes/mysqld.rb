@@ -104,6 +104,8 @@ end
 benchmark="false"
 if node['ndb'].attribute? 'bench' and node['ndb']['bench'].attribute? 'private_ips'
   benchmark="true"
+  node.override['ndb']['num_ndb_slots_per_mysqld']=4
+  node.override['ndb']['num_ndb_slots_per_client']=4  
 end
 
 ndb_mysql_basic "create_users_grants" do

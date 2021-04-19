@@ -20,7 +20,7 @@ mysqld_hosts = ""
 number_of_mysqld = 0
 if node['ndb'].attribute?('mysqld')
   number_of_mysqld = node['ndb']['mysqld']['private_ips'].length()
-  mysqld_hosts = node['ndb']['mysqld']['private_ips'].join(',')
+  mysqld_hosts = node['ndb']['mysqld']['private_ips'].join(';')
   mysqld_host = node['ndb']['mysqld']['private_ips'][0]
 end
 

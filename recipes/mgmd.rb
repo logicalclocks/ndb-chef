@@ -112,6 +112,22 @@ if !node['ndb']['nvme']['devices'].empty?
   diskDataDir="#{node['ndb']['nvme']['mount_base_dir']}/#{node['ndb']['nvme']['mount_disk_prefix']}0/#{node['ndb']['ndb_disk_columns_dir_name']}"
 end
 
+if conda_helpers.is_upgrade
+  version_series = node['ndb']['version'].split(".")[0]
+  if version_series.to_i < 21 && node['ndb']['configuration']['type'].casecmp?("auto")
+    node.override['ndb']['configuration']['type'] = "manual"
+    Chef::Log.warn "\nUpgrading to NDB #{node['ndb']['version']} but Configuration is set to auto which is not supported. Setting it to manual!\n"
+  end
+end
+
+if node['ndb']['configuration']['type'].casecmp?("auto")
+  if node['ndb']['configuration']['profile'].casecmp?("tiny")
+    node.override['ndb']['TotalMemoryConfig'] = "3G"
+    node.override['ndb']['LockPagesInMainMemory'] = "0"
+    node.override['ndb']['NumCPUs'] = "4"
+  end
+end
+
 template "#{node['ndb']['root_dir']}/config.ini" do
   source "config.ini.erb"
   owner node['ndb']['user']
@@ -132,10 +148,19 @@ kagent_config service_name do
   config_file "#{node['ndb']['root_dir']}/config.ini"
   restart_agent false
   action :add
+  not_if { node['kagent']['enabled'].casecmp("false") == 0 }  
 end
 
 kagent_config "#{service_name}" do
   action :systemd_reload
+end
+
+if exists_local('consul', 'master') or exists_local('consul', 'slave')
+  consul_service "Registering RonDB mgm with Consul" do
+    service_definition "consul/mgm-consul.hcl.erb"
+    reload_consul false
+    action :register
+  end
 end
 
 # Put public key of this mgmd-host in .ssh/authorized_keys of all ndbd and mysqld nodes

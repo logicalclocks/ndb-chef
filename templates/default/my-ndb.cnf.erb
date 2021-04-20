@@ -15,6 +15,7 @@ pid-file        = <%= node['ndb']['log_dir'] %>/mysql_<%= @mysql_id %>.pid
 tmpdir          = /tmp
 max-connections = 512
 max-prepared-stmt-count = 65530
+local_infile = OFF
 
 # Explicit defaults for TS needed by 'airflow initdb'
 explicit_defaults_for_timestamp = 1

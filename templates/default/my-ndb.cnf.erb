@@ -13,6 +13,8 @@ socket          = <%= node['ndb']['mysql_socket'] %>
 bind-address    = 0.0.0.0
 pid-file        = <%= node['ndb']['log_dir'] %>/mysql_<%= @mysql_id %>.pid
 tmpdir          = /tmp
+max-connections = 512
+max-prepared-stmt-count = 65530
 local_infile = OFF
 
 # Explicit defaults for TS needed by 'airflow initdb'
@@ -54,7 +56,7 @@ ndb-extra-logging=0
 ndb-autoincrement-prefetch-sz=1024
 
 # NDB transaction batche sizes. Higher batch sizes to optimize for throughput.
-ndb-batch-size=24M
+ndb-batch-size=1M
 
 #################################################
 # Other [mysqld] params

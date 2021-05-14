@@ -148,7 +148,6 @@ kagent_config service_name do
   config_file "#{node['ndb']['root_dir']}/config.ini"
   restart_agent false
   action :add
-  not_if { node['kagent']['enabled'].casecmp("false") == 0 }  
 end
 
 kagent_config "#{service_name}" do

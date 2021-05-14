@@ -7,4 +7,4 @@ cookbook 'conda', github: "logicalclocks/conda-chef", branch: "master"
 cookbook 'consul', github: "logicalclocks/consul-chef", branch: "master"
 
 cookbook 'ulimit', github: "logicalclocks/chef-ulimit", branch: "master"
-
+cookbook 'java', github: "logicalclocks/java", branch: "v7.0.0-1"

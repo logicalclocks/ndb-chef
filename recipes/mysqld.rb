@@ -149,7 +149,6 @@ kagent_config service_name do
   log_file "#{node['ndb']['log_dir']}/mysql_#{found_id}_out.log"
   restart_agent false
   action :add
-  not_if { node['kagent']['enabled'].casecmp("false") == 0 }      
 end
 
 homedir = node['ndb']['user'].eql?("root") ? "/root" : "/home/#{node['ndb']['user']}"

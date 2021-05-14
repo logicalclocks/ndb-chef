@@ -145,7 +145,6 @@ kagent_config service_name do
   log_file "#{node['ndb']['log_dir']}/ndb_#{found_id}_out.log"
   restart_agent false    
   action :add
-  not_if { node['kagent']['enabled'].casecmp("false") == 0 }    
 end
 
 # Here we set interrupts to be handled by only the first CPU

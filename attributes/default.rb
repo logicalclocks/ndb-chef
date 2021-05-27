@@ -120,11 +120,18 @@ default['ndb']['scripts']            = %w{ ndbd-start.sh ndbd-init.sh ndbd-stop.
 default['mysql']['scripts']          = %w{ get-mysql-socket.sh get-mysql-port.sh mysql-server-start.sh mysql-server-stop.sh mysql-server-restart.sh mysql-client.sh }
 
 default['ndb']['dir']                                 = node['install']['dir'].empty? ? "/var/lib" : node['install']['dir']
+
 default['ndb']['root_dir']                            = "#{node['ndb']['dir']}/mysql-cluster"
 default['ndb']['log_dir']                             = "#{node['ndb']['root_dir']}/log"
 default['ndb']['data_dir']                            = "#{node['ndb']['root_dir']}/ndb_data"
 default['ndb']['version_dir']                         = "#{node['ndb']['root_dir']}/ndb-#{node['ndb']['version']}"
 default['ndb']['base_dir']                            = "#{node['ndb']['root_dir']}/ndb"
+
+# Data volume directories
+default['ndb']['data_volume']['root_dir']             = "#{node['data']['dir']}/rondb"
+default['ndb']['data_volume']['log_dir']              = "#{node['ndb']['data_volume']['root_dir']}/log"
+default['ndb']['data_volume']['data_dir']             = "#{node['ndb']['data_volume']['root_dir']}/ndb_data"
+default['ndb']['data_volume']['on_disk_columns']      = "#{node['ndb']['data_volume']['root_dir']}/#{node['ndb']['ndb_disk_columns_dir_name']}"
 
 # Small file storage parameters
 

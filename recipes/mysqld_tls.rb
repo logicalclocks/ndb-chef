@@ -1,3 +1,5 @@
+require 'time'
+
 # This recipe is here to reconfigure the MySQL server to use TLS (if TLS is enabled)
 # It cannot be done in the mysqld.rb recipe as we need MySQL to start Hopsworks to start the CA
 # That's why this recipe is run after kagent::default (responsible for signing the certificates)
@@ -40,7 +42,8 @@ if node['mysql']['tls'].casecmp?("true")
             :mysql_tls => true,
             :certificate => certificate,
             :key => key,
-            :hops_ca => hops_ca
+            :hops_ca => hops_ca,
+            :timezone => Time.now.strftime("%:z")
     })
     notifies :restart, resources(:service => "mysqld"), :immediately
     end

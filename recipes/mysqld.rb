@@ -1,3 +1,5 @@
+require 'time'
+
 ndb_connectstring()
 
 case node['platform_family']
@@ -69,7 +71,8 @@ template "#{node['ndb']['root_dir']}/my.cnf" do
    :mysql_id => found_id,
    # Here is always false, as this recipe is run before certificates are available
    # if mysql/tls is enabled, the file will be re-templated later
-   :mysql_tls => false
+   :mysql_tls => false,
+   :timezone => Time.now.strftime("%:z")
   })
   if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name), :immediately

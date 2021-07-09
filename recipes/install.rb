@@ -77,11 +77,39 @@ directory "#{node['ndb']['scripts_dir']}/util" do
   action :create
 end
 
-directory node['ndb']['log_dir'] do
+directory node['data']['dir'] do
+  owner 'root'
+  group 'root'
+  mode '0775'
+  action :create
+  not_if { ::File.directory?(node['data']['dir']) }
+end
+
+directory node['ndb']['data_volume']['log_dir'] do
   owner node['ndb']['user']
   group node['ndb']['group']
   mode "750"
+  recursive true
   action :create
+end
+
+bash 'Move RonDB logs to data volume' do
+  user 'root'
+  code <<-EOH
+    set -e
+    mv -f #{node['ndb']['log_dir']}/* #{node['ndb']['data_volume']['log_dir']}
+    rm -rf #{node['ndb']['log_dir']}
+  EOH
+  only_if { conda_helpers.is_upgrade }
+  only_if { File.directory?(node['ndb']['log_dir'])}
+  not_if { File.symlink?(node['ndb']['log_dir'])}
+end
+
+link node['ndb']['log_dir'] do
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode '0750'
+  to node['ndb']['data_volume']['log_dir']
 end
 
 directory node['ndb']['BackupDataDir'] do

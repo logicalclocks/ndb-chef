@@ -11,11 +11,19 @@ Chef::Log.info "IP address is: #{node['ipaddress']}"
 # On Disk columns
 #
 if node['ndb']['nvme']['devices'].empty?
-  directory node['ndb']['diskdata_dir'] do
+  directory node['ndb']['data_volume']['on_disk_columns'] do
     owner node['ndb']['user']
     group node['ndb']['group']
     mode "750"
+    recursive true
     action :create
+  end
+
+  link node['ndb']['diskdata_dir'] do
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    mode "750"
+    to node['ndb']['data_volume']['on_disk_columns']
   end
 else
   directory "#{node['ndb']['nvme']['mount_base_dir']}" do
@@ -66,11 +74,31 @@ for nvmeDisk in volumes do
   index+=1
 end
 
-directory node['ndb']['data_dir'] do
+directory node['ndb']['data_volume']['data_dir'] do
   owner node['ndb']['user']
   group node['ndb']['group']
   mode "750"
+  recursive true
   action :create
+end
+
+bash 'Move RonDB data to data volume' do
+  user 'root'
+  code <<-EOH
+    set -e
+    mv -f #{node['ndb']['data_dir']}/* #{node['ndb']['data_volume']['data_dir']}
+    rm -rf #{node['ndb']['data_dir']}
+  EOH
+  only_if { conda_helpers.is_upgrade }
+  only_if { File.directory?(node['ndb']['data_dir'])}
+  not_if { File.symlink?(node['ndb']['data_dir'])}
+end
+
+link node['ndb']['data_dir'] do
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode "750"
+  to node['ndb']['data_volume']['data_dir']
 end
 
 found_id = find_service_id("ndbd", 1)

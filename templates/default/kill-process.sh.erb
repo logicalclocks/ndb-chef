@@ -7,7 +7,7 @@ fi
 
 NAME=$1
 PID_FILE=$2
-INC_PID=$3
+ALL_PID=$3
 FORCE=$4
 
 if [ "$FORCE" -eq 1 ] ; then
@@ -20,14 +20,19 @@ if [ ! -f "$PID_FILE"  ] ; then
 fi
 
 PID=$(cat "$PID_FILE")
-if [ "$INC_PID" -eq 1 ] ; then
-  echo "Incremeting the PID by 1 to skip over watchdog process"
-  PID=$((PID + 1))
+if [ "$ALL_PID" -eq 1 ] ; then
+# ndbmtd service uses this one
+# We need to perform killall -TERM ndbmtd to kill all ndbmtd processes
+  echo "Killing $NAME with killall -TERM $NAME"
+  (killall -TERM "$NAME") 2> /dev/null
+  RES=$?
+  wait_pid_removed=30
+else
+  echo "Killing $NAME with process-id $PID "
+  (kill -TERM "$PID") 2> /dev/null
+  RES=$?
+  wait_pid_removed=10
 fi
-echo "Killing $NAME with process-id $PID "
-(kill -TERM "$PID") 2> /dev/null
-RES=$?
-wait_pid_removed=10
 timeout=0
 while [ $timeout -lt $wait_pid_removed ] ; do
     sleep 1
@@ -36,8 +41,11 @@ while [ $timeout -lt $wait_pid_removed ] ; do
     timeout=$((timeout + 1))
 done
 if [ "$timeout" -eq $wait_pid_removed ] ; then
-  kill -9 "$PID"
-  RES=$?
+  if [ "$ALL_PID" -eq 1 ] ; then
+    killall -9 "$NAME"
+  else
+    kill -9 "$PID"
+    RES=$?
+  fi
 fi
-
 exit $RES

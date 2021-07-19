@@ -19,6 +19,29 @@ if node['ndb']['nvme']['devices'].empty?
     action :create
   end
 
+  bash 'Move RonDB on-disk columns to data volume' do
+    user 'root'
+    code <<-EOH
+      set -e
+      mv -f #{node['ndb']['diskdata_dir']}/* #{node['ndb']['data_volume']['on_disk_columns']}
+    EOH
+    only_if { conda_helpers.is_upgrade }
+    only_if { File.directory?(node['ndb']['diskdata_dir'])}
+    not_if { File.symlink?(node['ndb']['diskdata_dir'])}
+    not_if { Dir.empty?(node['ndb']['diskdata_dir'])}
+  end
+
+  bash 'Move RonDB on-disk columns to data volume' do
+    user 'root'
+    code <<-EOH
+      set -e
+      rm -rf #{node['ndb']['diskdata_dir']}
+    EOH
+    only_if { conda_helpers.is_upgrade }
+    only_if { File.directory?(node['ndb']['diskdata_dir'])}
+    not_if { File.symlink?(node['ndb']['diskdata_dir'])}
+  end
+  
   link node['ndb']['diskdata_dir'] do
     owner node['ndb']['user']
     group node['ndb']['group']

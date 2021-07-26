@@ -132,6 +132,7 @@ default['ndb']['data_volume']['root_dir']             = "#{node['data']['dir']}/
 default['ndb']['data_volume']['log_dir']              = "#{node['ndb']['data_volume']['root_dir']}/log"
 default['ndb']['data_volume']['data_dir']             = "#{node['ndb']['data_volume']['root_dir']}/ndb_data"
 default['ndb']['data_volume']['on_disk_columns']      = "#{node['ndb']['data_volume']['root_dir']}/#{node['ndb']['ndb_disk_columns_dir_name']}"
+default['ndb']['data_volume']['mysql_server_dir']     = "#{node['ndb']['data_volume']['root_dir']}/mysql"
 
 # Small file storage parameters
 

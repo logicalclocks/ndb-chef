@@ -85,11 +85,17 @@ directory node['data']['dir'] do
   not_if { ::File.directory?(node['data']['dir']) }
 end
 
+directory node['ndb']['data_volume']['root_dir'] do
+  owner node['ndb']['user']
+  group node['ndb']['group']
+  mode "750"
+  action :create
+end
+
 directory node['ndb']['data_volume']['log_dir'] do
   owner node['ndb']['user']
   group node['ndb']['group']
   mode "750"
-  recursive true
   action :create
 end
 

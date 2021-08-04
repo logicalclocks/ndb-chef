@@ -189,8 +189,6 @@ default['ndb']['mysql_socket']                        = "#{node['ndb']['root_dir
 default['ndb']['mysql_port']                          = "3306"
 
 default['mysql']['localhost']                         = "false"
-default['mysql']['jdbc_url']                          = ""
-
 
 # MySQL Server Master-Slave replication binary log is enabled.
 default['mysql']['replication_enabled']               = "false"
@@ -207,6 +205,9 @@ default['mysql']['user']                              = "kthfs"
 default['mysql']['password']                          = "kthfs"
 
 default['mysql']['initialize']                        = "true"
+
+# Number of file descriptor allocated to MySQLd server
+default['mysql']['no_fds']                            = 10000
 
 # Limit the number of mgm_servers to the range 49..51
 default['mgm']['id']                                  = 49

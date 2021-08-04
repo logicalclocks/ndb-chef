@@ -136,6 +136,10 @@ attribute "mysql/initialize",
           :description => "Initialize the MySQL Servers (Default: true)",
           :type => "string"
 
+attribute "mysql/no_fds",
+          :description => "Max number of file descriptors allowed to MySQLd (Default: 10000)",
+          :type => "string"
+
 attribute "mysql/dir",
           :description => "Directory in which to install MySQL Binaries",
           :type => 'string'

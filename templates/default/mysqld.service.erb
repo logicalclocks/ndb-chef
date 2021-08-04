@@ -15,5 +15,7 @@ Restart=on-failure
 
 Type = forking
 
+LimitNOFILE = <%= node['mysql']['no_fds'] %>
+
 [Install]
 WantedBy = multi-user.target

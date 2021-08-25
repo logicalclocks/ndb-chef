@@ -70,8 +70,16 @@ attribute "ndb/user",
           :description => "User that runs ndb database",
           :type => 'string'
 
+attribute "ndb/user_id",
+          :description => "ndb user id. Default: 1519",
+          :type => 'string'
+
 attribute "ndb/group",
           :description => "Group that runs ndb database",
+          :type => 'string'
+
+attribute "ndb/group_id",
+          :description => "ndb group id. Default: 1514",
           :type => 'string'
 
 attribute "ndb/user-home",

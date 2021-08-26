@@ -1,5 +1,6 @@
 
 group node['ndb']['group'] do
+ gid node['ndb']['group_id']
  action :create
  not_if "getent group #{node['ndb']['group']}"
  not_if { node['install']['external_users'].casecmp("true") == 0 }
@@ -10,7 +11,8 @@ end
 #
 user node['ndb']['user'] do
   home node['ndb']['user-home']
-  manage_home true  
+  manage_home true
+  uid node['ndb']['user_id']
   gid node['ndb']['group']
   action :create
   shell "/bin/bash"

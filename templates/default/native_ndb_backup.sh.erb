@@ -10,12 +10,6 @@ MYSQL_ROOT=<%= node['mysql']['base_dir'] %>
 ## NOTE: Do NOT include the BACKUP/ directory that NDB adds by default
 REMOTE_MYSQL_BACKUP_DIR=<%= node['ndb']['BackupDataDir'] %>
 
-## Host the backups will be transfered to
-REMOTE_BACKUP_HOST=<%= node['ndb']['remote_backup_host'] %>
-REMOTE_BACKUP_USER=<%= node['ndb']['remote_backup_user'] %>
-## Directory at REMOTE_BACKUP_HOST that backups will be stored
-## NOTE: It should be the same as in the rotation script if used
-
 ## Location of the socket to connect to mysql
 MYSQL_SOCKET=<%= node['ndb']['mysql_socket'] %>
 
@@ -74,8 +68,6 @@ sanity_check "MGM_CONN" "$MGM_CONN"
 sanity_check "MYSQL_USER" "$MYSQL_USER"
 sanity_check "MYSQL_ROOT" "$MYSQL_ROOT"
 sanity_check "REMOTE_MYSQL_BACKUP_DIR" "$REMOTE_MYSQL_BACKUP_DIR"
-sanity_check "REMOTE_BACKUP_HOST" "$REMOTE_BACKUP_HOST"
-sanity_check "REMOTE_BACKUP_USER" "$REMOTE_BACKUP_USER"
 sanity_check "LOCAL_BACKUP_DIR" "$LOCAL_BACKUP_DIR"
 sanity_check "BACKUP_LOG_FILE" "$BACKUP_LOG_FILE"
 sanity_check "RSYNC_LOG_FILE" "$RSYNC_LOG_FILE"

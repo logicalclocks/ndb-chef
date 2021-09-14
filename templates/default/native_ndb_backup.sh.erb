@@ -10,14 +10,14 @@ MYSQL_ROOT=<%= node['mysql']['base_dir'] %>
 ## NOTE: Do NOT include the BACKUP/ directory that NDB adds by default
 REMOTE_MYSQL_BACKUP_DIR=<%= node['ndb']['BackupDataDir'] %>
 
-
 ## Host the backups will be transfered to
 REMOTE_BACKUP_HOST=<%= node['ndb']['remote_backup_host'] %>
 REMOTE_BACKUP_USER=<%= node['ndb']['remote_backup_user'] %>
 ## Directory at REMOTE_BACKUP_HOST that backups will be stored
 ## NOTE: It should be the same as in the rotation script if used
-REMOTE_ARCHIVE_DIR=<%= node['ndb']['remote_backup_dir'] %>
 
+## Location of the socket to connect to mysql
+MYSQL_SOCKET=<%= node['ndb']['mysql_socket'] %>
 
 ## Directory at local machine where backups will be stored temporarily
 LOCAL_BACKUP_DIR=<%= node['ndb']['local_backup_dir'] %>
@@ -76,7 +76,6 @@ sanity_check "MYSQL_ROOT" "$MYSQL_ROOT"
 sanity_check "REMOTE_MYSQL_BACKUP_DIR" "$REMOTE_MYSQL_BACKUP_DIR"
 sanity_check "REMOTE_BACKUP_HOST" "$REMOTE_BACKUP_HOST"
 sanity_check "REMOTE_BACKUP_USER" "$REMOTE_BACKUP_USER"
-sanity_check "REMOTE_ARCHIVE_DIR" "$REMOTE_ARCHIVE_DIR"
 sanity_check "LOCAL_BACKUP_DIR" "$LOCAL_BACKUP_DIR"
 sanity_check "BACKUP_LOG_FILE" "$BACKUP_LOG_FILE"
 sanity_check "RSYNC_LOG_FILE" "$RSYNC_LOG_FILE"
@@ -132,17 +131,14 @@ do
     check_exit_code $? "rsync from $i failed, aborting. Exit code: $?" 3
 done
 
+# Backing up the schemas
+$MYSQL_ROOT/bin/mysqldump -u root -S $MYSQL_SOCKET --no-data --triggers --routines --events --all-databases > "$backup_target"/schema.sql
+
+# Backing up the users
+$MYSQL_ROOT/bin/mysqlpump -u root -S $MYSQL_SOCKET --exclude-databases=%% --exclude-users=root,mysql.sys,mysql.session,mysql.infoschema --users > "$backup_target"/users.sql
+
 pushd $LOCAL_BACKUP_DIR
 tar cfz "$backup_name".tar.gz "$backup_name"
 popd
-
-log_info "Starting rsync backup to $REMOTE_BACKUP_HOST"
-rsync -za --chmod=u+rx,u-w,g-rwx,o-rwx --log-file=$RSYNC_LOG_FILE --rsync-path="mkdir -p -m 700 $REMOTE_ARCHIVE_DIR/ && rsync" "$backup_target".tar.gz $REMOTE_BACKUP_USER@$REMOTE_BACKUP_HOST:$REMOTE_ARCHIVE_DIR/
-check_exit_code $? "rsync to $REMOTE_BACKUP_HOST failed, aborting. Exit code: $?" 4
-
-
-log_info "Finished rsync of $backup_target.tar.gz Deleting it"
-rm -rf "${backup_target}"
-rm -f "${backup_target}.tar.gz"
 
 log_info "Finished backup"

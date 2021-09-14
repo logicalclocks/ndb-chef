@@ -118,7 +118,8 @@ bash 'mysql_install_db' do
   cwd node['mysql']['base_dir']
   code <<-EOF
     set -e
-    rm -rf #{node['ndb']['mysql_server_dir']}
+    # Do NOT delete the whole directory as it is a symlink to the data drive
+    rm -rf #{node['ndb']['mysql_server_dir']}/*
 
     ./bin/mysqld --defaults-file=#{node['ndb']['root_dir']}/my.cnf --initialize-insecure --explicit_defaults_for_timestamp
 

@@ -124,7 +124,8 @@ do
 done
 
 # Backing up the schemas
-$MYSQL_ROOT/bin/mysqldump -u root -S $MYSQL_SOCKET --no-data --triggers --routines --events --all-databases > "$backup_target"/schema.sql
+DB_LIST=`$MYSQL_ROOT/bin/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT GROUP_CONCAT(SCHEMA_NAME SEPARATOR ' ') FROM information_schema.SCHEMATA WHERE SCHEMA_NAME NOT IN ('mysql','information_schema','performance_schema','sys','ndbinfo');"`
+$MYSQL_ROOT/bin/mysqldump -u root -S $MYSQL_SOCKET --no-data --triggers --routines --events --databases $DB_LIST  > "$backup_target"/schema.sql
 
 # Backing up the users
 $MYSQL_ROOT/bin/mysqlpump -u root -S $MYSQL_SOCKET --exclude-databases=%% --exclude-users=root,mysql.sys,mysql.session,mysql.infoschema --users > "$backup_target"/users.sql

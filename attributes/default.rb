@@ -88,7 +88,7 @@ default['ndb']['MaxNoOfConcurrentIndexOperations']    = "32000"
 default['ndb']['MaxNoOfConcurrentOperations']         = "200000"
 default['ndb']['MaxNoOfFiredTriggers']                = "10240"
 default['ndb']['MaxNoOfConcurrentTransactions']       = "16192"
-default['ndb']['MaxNoOfAttributes']                   = "5000"
+default['ndb']['MaxNoOfAttributes']                   = "20000"
 
 default['ndb']['MaxReorgBuildBatchSize']              = "64"
 default['ndb']['EnablePartialLcp']                    = "1"

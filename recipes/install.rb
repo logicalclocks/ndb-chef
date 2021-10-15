@@ -150,6 +150,10 @@ directory node['mysql']['version_dir'] do
   action :create
 end
 
+if node['platform_family'].eql?('rhel') do
+  package ['ncurses', 'ncurses-compat-libs']
+end
+
 url = node['ndb']['url']
 Chef::Log.info "Downloading mysql cluster binaries from #{url}"
 base_package_filename = File.basename(node['ndb']['url'])

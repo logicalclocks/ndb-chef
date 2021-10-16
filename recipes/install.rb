@@ -150,7 +150,7 @@ directory node['mysql']['version_dir'] do
   action :create
 end
 
-if node['platform_family'].eql?('rhel') do
+if node['platform_family'].eql?('rhel')
   package ['ncurses', 'ncurses-compat-libs']
 end
 

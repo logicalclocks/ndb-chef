@@ -244,6 +244,14 @@ attribute "ndb/DiskSyncSize",
           :description => "DiskSyncSize",
           :type => 'string'
 
+attribute "ndb/InitialLogFileGroup",
+          :description => "Log files to create when performing an initial restart",
+          :type => 'string'
+
+attribute "ndb/InitialTablespace",
+          :description => "Table space to create when performing an initial restart",
+          :type => 'string'
+
 attribute "ndb/RedoBuffer",
           :description => "RedoBuffer",
           :type => 'string'

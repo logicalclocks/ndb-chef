@@ -70,10 +70,11 @@ default['ndb']['DiskPageBufferEntries']               = "10"
 default['ndb']['DiskPageBufferMemory']                = "512M"
 default['ndb']['SharedGlobalMemory']                  = "512M"
 default['ndb']['DiskIOThreadPool']                    = "8"
-default['ndb']['InitialLogFileGroup=name']            = "LG1; undo_buffer_size=40M; undo1.log:80M;"
 default['ndb']['DiskSyncSize']                        = "4M"
-# Move this to another drive to store small files in HopsFS
-default['ndb']['InitialTablespacename']               = "TS1; extent_size=8M; data1.dat:240M;"
+# Consult NDB documentation for the format
+# https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster-ndbd-definition.html#ndbparam-ndbd-initiallogfilegroup
+default['ndb']['InitialLogFileGroup']                 = ""
+default['ndb']['InitialTablespace']                   = ""
 
 # From 7.6.7 - no configuration needed for disk write speeds
 # https://mikaelronstrom.blogspot.com/2018/08/more-automated-control-in-mysql-cluster.html
@@ -138,7 +139,6 @@ default['ndb']['data_volume']['mysql_server_dir']     = "#{node['ndb']['data_vol
 
 # Small file storage parameters
 
-default['ndb']['InitialLogFileGroup']                 = "undo_buffer_size=128M; "
 # NDB Cluster Disk Data data files and undo log files are placed in the diskdata_dir directory
 default['ndb']['ndb_disk_columns_dir_name']           = "ndb_disk_columns"
 default['ndb']['diskdata_dir']                        = "#{node['ndb']['root_dir']}/#{node['ndb']['ndb_disk_columns_dir_name']}"

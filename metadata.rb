@@ -114,6 +114,26 @@ attribute "ndb/diskdata_dir",
           :description => "Directory on the NDBD machines where the on-disk columns will be stored. This should be a NVMe disk for best performance.",
           :type => 'string'
 
+attribute "ndb/data_volume/root_dir",
+          :description => "Root RonDB directory in data volume",
+          :type => 'string'
+
+attribute "ndb/data_volume/log_dir",
+          :description => "RonDB log directory in data volume",
+          :type => 'string'
+
+attribute "ndb/data_volume/data_dir",
+          :description => "FileSystemPath RonDB directory in data volume",
+          :type => 'string'
+
+attribute "ndb/data_volume/on_disk_columns",
+          :description => "FileSystemPathDD RonDB directory in data volume",
+          :type => 'string'
+
+attribute "ndb/data_volume/mysql_server_dir",
+          :description => "MySQL server directory in data volume",
+          :type => 'string'
+
 attribute "ndb/DiskPageBufferEntries",
           :description => "Number of page entries (page references) to allocate.",
           :type => 'string'

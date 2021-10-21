@@ -147,6 +147,14 @@ MinDiskWriteSpeed=<%= node['ndb']['MinDiskWriteSpeed'] %>
   <% end -%>
 <% end -%>
 
+  <% if !node['ndb']['InitialLogFileGroup'].empty? -%>
+InitialLogFileGroup=<%= node['ndb']['InitialLogFileGroup'] %>
+  <% end -%>
+
+  <% if !node['ndb']['InitialTablespace'].empty? -%>
+InitialTablespace=<%= node['ndb']['InitialTablespace'] %>
+  <% end -%>
+  
 #The number of copies of the data stored on different nodes in the cluster
 NoOfReplicas=<%= node['ndb']['NoOfReplicas'] %>
 

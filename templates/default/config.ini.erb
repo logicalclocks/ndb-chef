@@ -78,6 +78,14 @@ FragmentLogFileSize=<%= node['ndb']['FragmentLogFileSize'] %>
 #The amount of main memory (RAM) used to store columns and ordered indexes in tables, plus some overhead
 DataMemory=<%= node['ndb']['DataMemory'] %>M
 
+  <% if !node['ndb']['InitialLogFileGroup'].empty? -%>
+InitialLogFileGroup=<%= node['ndb']['InitialLogFileGroup'] %>
+  <% end -%>
+
+  <% if !node['ndb']['InitialTablespace'].empty? -%>
+InitialTablespace=<%= node['ndb']['InitialTablespace'] %>
+  <% end -%>
+
 # maximum number of attributes, tables, indexes, and trigger objects used by indexes, events, and replication between clusters
 MaxNoOfAttributes=<%= node['ndb']['MaxNoOfAttributes'] %>
 

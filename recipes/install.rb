@@ -151,7 +151,11 @@ directory node['mysql']['version_dir'] do
 end
 
 if node['platform_family'].eql?('rhel')
-  package ['ncurses', 'ncurses-compat-libs']
+  package 'ncurses'
+
+  if node['platform_version'] >= '8'
+    package 'ncurses-compat-libs'
+  end
 end
 
 url = node['ndb']['url']

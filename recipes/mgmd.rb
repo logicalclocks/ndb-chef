@@ -163,7 +163,7 @@ if exists_local('consul', 'master') or exists_local('consul', 'slave')
 end
 
 # Put public key of this mgmd-host in .ssh/authorized_keys of all ndbd and mysqld nodes
-homedir = node['ndb']['user'].eql?("root") ? "/root" : "/home/#{node['ndb']['user']}"
+homedir = node['ndb']['user'].eql?("root") ? "/root" : ::Dir.home(node['ndb']['user'])
 Chef::Log.info "Home dir is #{homedir}. Generating ssh keys..."
 
 kagent_keys "#{homedir}" do

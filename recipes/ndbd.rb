@@ -253,7 +253,7 @@ if (node['ndb']['interrupts_isolated_to_single_cpu'] == "true") && (not ::File.e
 
 end
 
-homedir = node['ndb']['user'].eql?("root") ? "/root" : ::Dir.home(node['ndb']['user'])
+homedir = node['ndb']['user'].eql?("root") ? "/root" : conda_helpers.get_user_home(node['ndb']['user'])
 
 # Add the mgmd hosts' public key, so that it can start/stop the ndbd on this node using passwordless ssh.
 kagent_keys "#{homedir}" do

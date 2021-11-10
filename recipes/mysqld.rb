@@ -185,7 +185,7 @@ kagent_config service_name do
   action :add
 end
 
-homedir = node['ndb']['user'].eql?("root") ? "/root" : ::Dir.home(node['ndb']['user'])
+homedir = node['ndb']['user'].eql?("root") ? "/root" : conda_helpers.get_user_home(node['ndb']['user'])
 kagent_keys "#{homedir}" do
   cb_user "#{node['ndb']['user']}"
   cb_group "#{node['ndb']['group']}"

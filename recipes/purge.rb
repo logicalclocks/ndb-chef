@@ -82,7 +82,7 @@ directory Chef::Config.file_cache_path do
   ignore_failure true
 end
 
-homedir = node['ndb']['user'].eql?("root") ? "/root" : "/home/#{node['ndb']['user']}"
+homedir = node['ndb']['user'].eql?("root") ? "/root" : conda_helpers.get_user_home(node['ndb']['user'])
 bash 'delete_marker_files' do
 user "root"
 ignore_failure true

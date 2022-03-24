@@ -6,6 +6,7 @@ StartLimitBurst=10
 
 [Service]
 User = <%= node['ndb']['user'] %>
+Nice = -19
 PIDFile = <%= "#{node['ndb']['log_dir']}" %>/ndb_<%= @node_id %>.pid
 EnvironmentFile = <%= node['ndb']['scripts_dir'] %>/ndbd_env_variables
 ExecStart = <%= "#{node['ndb']['base_dir']}/scripts/ndbd-start.sh" %> 

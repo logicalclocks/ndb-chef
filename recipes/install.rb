@@ -156,7 +156,10 @@ if node['platform_family'].eql?('rhel')
   if node['platform_version'] >= '8'
     package 'ncurses-compat-libs'
   end
+else # ubuntu 20.04 requires
+  package 'libncurses5'
 end
+
 
 url = node['ndb']['url']
 Chef::Log.info "Downloading mysql cluster binaries from #{url}"

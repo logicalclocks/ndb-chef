@@ -156,8 +156,10 @@ if node['platform_family'].eql?('rhel')
   if node['platform_version'] >= '8'
     package 'ncurses-compat-libs'
   end
-else # ubuntu 20.04 requires
+else
+  # ubuntu 20.04 requires libncurses5 and acl
   package 'libncurses5'
+  package 'acl'
 end
 
 

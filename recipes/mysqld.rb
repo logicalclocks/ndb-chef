@@ -203,6 +203,13 @@ end
 include_recipe "ndb::mysqld_exporter"
 
 if exists_local('consul', 'master') or exists_local('consul', 'slave')
+  template "#{node['consul']['bin_dir']}/ping-mysqld.sh" do
+    source "consul/ping-mysqld.sh.erb"
+    owner node['consul']['user']
+    group node['consul']['group']
+    mode 0750
+  end
+
   # Register MySQL with Consul
   consul_service "Registering MySQL with Consul" do
     service_definition "mysql-consul.hcl.erb"

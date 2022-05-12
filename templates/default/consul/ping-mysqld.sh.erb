@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+<%= node['mysql']['bin_dir'] %>/mysqladmin ping \
+    --host=127.0.0.1 --port=<%= node['ndb']['mysql_port'] %> \
+    --user=<%= node['mysql']['user'] %> \
+    --password=<%= node['mysql']['password'] %>
+
+e_code=$?
+## This script is used by Consul to determine the health of a local MySQL server
+## While mysqladmin exits with 1 when the mysqld is unreachable, Consul expects exit code 2
+## to declare the service as failed. So we need to make the following conversion.
+if [ $e_code -eq 1 ];
+then
+    exit 2
+fi
+exit $e_code

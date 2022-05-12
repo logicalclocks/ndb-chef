@@ -10,12 +10,7 @@ service {
     port = <%= node['ndb']['mysql_port'] %>
     "check" = {
         "id" = "check-db"
-        "args" = ["<%= node['mysql']['bin_dir'] %>/mysqladmin",
-                  "ping",
-                  "--host=127.0.0.1",
-                  "--port=<%= node['ndb']['mysql_port'] %>",
-                  "--user=<%= node['mysql']['user'] %>",
-                  "--password=<%= node['mysql']['password'] %>"]
+        "args" = ["<%= node['consul']['bin_dir'] %>/ping-mysqld.sh"]
         "interval" = "3s"
         "status" = "passing"
     }

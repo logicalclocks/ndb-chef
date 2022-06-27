@@ -1,0 +1,29 @@
+{
+   "RestServer":{
+      "IP":"<%= node['ndb']['rdrs']['bind_ip'] %>",
+      "Port":<%= node['ndb']['rdrs']['bind_port'] %>,
+      "BufferSize":<%= node['ndb']['rdrs']['buffer_size'] %>,
+      "PreAllocatedBuffers":<%= node['ndb']['rdrs']['pre_allocated_buffers'] %>,
+      "GOMAXPROCS":<%= node['ndb']['rdrs']['go_max_procs'] %>
+   },
+   "RonDBConfig":{
+      "IP":"<%= @ndb_mgmd_ip %>",
+      "Port":<%= @ndb_mgmd_port %>
+   },
+   "Security":{
+      "EnableTLS":<%= @enable_tls %>,
+      "RootCACertFile":"<%= @root_ca_cert_file %>",
+      "CertificateFile":"<%= @certificate_file %>",
+      "PrivateKeyFile":"<%= @private_key_file %>",
+      "RequireAndVerifyClientCert":<%= node['ndb']['rdrs']['require_and_verify_client_cert'] %>,
+      "UseHopsWorksAPIKeys":<%= node['ndb']['rdrs']['use_hops_works_api_keys'] %>,
+      "HopsWorksAPIKeysCacheValiditySec":<%= node['ndb']['rdrs']['hops_works_api_keys_cache_validity_sec'] %>
+   },
+   "Log":{
+      "Level":"<%= node['ndb']['rdrs']['log_level'] %>",
+      "FilePath":"<%= node['ndb']['log_dir'] %>/rdrs.log",
+      "MaxSizeMB":<%= node['ndb']['rdrs']['log_max_size_mb'] %>,
+      "MaxBackups":<%= node['ndb']['rdrs']['log_max_backups'] %>,
+      "MaxAge":<%= node['ndb']['rdrs']['log_max_age'] %>
+   }
+}

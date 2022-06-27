@@ -1,0 +1,7 @@
+#!/bin/sh
+
+<%= node['ndb']['scripts_dir'] %>/rdrs-stop.sh
+
+<%= node['ndb']['scripts_dir'] %>/rdrs-start.sh
+
+exit $?

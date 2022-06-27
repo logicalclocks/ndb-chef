@@ -260,3 +260,23 @@ default['ndb']['mysqld_exporter']['url']                    = "#{node['download_
 default['ndb']['mysqld_exporter']['home']                   = "#{node['ndb']['dir']}/mysqld_exporter-#{node['ndb']['mysqld_exporter']['version']}.linux-amd64"
 default['ndb']['mysqld_exporter']['base_dir']               = "#{node['ndb']['dir']}/mysqld_exporter"
 default['ndb']['mysqld']['metrics_port']                    = "9104"
+
+
+# Rondb Rest API Server Configurations
+default['ndb']['rdrs']['bind_ip']                                = "0.0.0.0"
+default['ndb']['rdrs']['bind_port']                              = "4406"
+default['ndb']['rdrs']['version']                                = "0.1.0"
+default['ndb']['rdrs']['buffer_size']                            = "327680"
+default['ndb']['rdrs']['pre_allocated_buffers']                  = "1024"
+default['ndb']['rdrs']['go_max_procs']                           = "-1"
+default['ndb']['rdrs']['require_and_verify_client_cert']         = "false"
+default['ndb']['rdrs']['certificate_file']                       = ""
+default['ndb']['rdrs']['private_key_file']                       = ""
+default['ndb']['rdrs']['root_ca_cert_file']                      = ""
+default['ndb']['rdrs']['use_hops_works_api_keys']                = "false"
+default['ndb']['rdrs']['hops_works_api_keys_cache_validity_sec'] = "3"
+default['ndb']['rdrs']['log_level']                              = "info"
+default['ndb']['rdrs']['log_max_size_mb']                        = "100"
+default['ndb']['rdrs']['log_max_backups']                        = "10"
+default['ndb']['rdrs']['log_max_age']                            = "30"
+default['ndb']['rdrs']['scripts']                                = %w{ rdrs-start.sh rdrs-stop.sh rdrs-restart.sh }

@@ -524,3 +524,69 @@ attribute "ndb/num_ndb_slots_per_mysqld",
 attribute "ndb/num_ndb_open_slots",
           :description => "Number of slots open for new clients to connect.",
           :type => "string"
+
+
+# Rondb Rest API Server Configurations
+attribute "ndb/rdrs/bind_ip",
+          :description => "Bind IP. Default: 0.0.0.0",
+          :type => "string"
+
+attribute "ndb/rdrs/bind_port",
+          :description => "Bind port. Default: 4406",
+          :type => "string"
+
+attribute "ndb/rdrs/version",
+          :description => "Rest API version. Default: 0.1.0",
+          :type => "string"
+
+attribute "ndb/rdrs/buffer_size",
+          :description => "Buffer size. This buffer is used to pass requests from go layer down to C++. The buffer has to be large enough to hold the request/response. Default: 327680",
+          :type => "string"
+
+attribute "ndb/rdrs/pre_allocated_buffers",
+          :description => "Number of preallocated buffers. Default: 1024",
+          :type => "string"
+
+attribute "ndb/rdrs/go_max_procs",
+          :description => "GOMAXPROCS. Default: -1",
+          :type => "string"
+
+attribute "ndb/rdrs/require_and_verify_client_cert",
+           :description => "Require and verify client certificate. Default: false",
+          :type => "string"
+
+attribute "ndb/rdrs/certificate_file",
+          :description => "Certificate file.",
+          :type => "string"
+
+attribute "ndb/rdrs/private_key_file",
+          :description => "Private key file.",
+          :type => "string"
+
+attribute "ndb/rdrs/root_ca_cert_file",
+          :description => "Root CA certificate file.",
+          :type => "string"
+
+attribute "ndb/rdrs/use_hops_works_api_keys",
+          :description => "Use hopsworks based API keys fro authentication and authorization. Default: false",
+          :type => "string"
+
+attribute "ndb/rdrs/hops_works_api_keys_cache_validity_sec",
+          :description => "Cached API keys validity period. Default: 3 seconds",
+          :type => "string"
+
+attribute "ndb/rdrs/log_level",
+          :description => "Log level. Default: info",
+          :type => "string"
+
+attribute "ndb/rdrs/log_max_size_mb",
+          :description => "Log file max size. Default: 100 MB.",
+          :type => "string"
+
+attribute "ndb/rdrs/log_max_backups",
+          :description => "Log max backup files. Default: 10",
+          :type => "string"
+
+attribute "ndb/rdrs/log_max_age",
+          :description => "Log files max age. Default: 30",
+          :type => "string"

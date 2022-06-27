@@ -1,0 +1,19 @@
+[Unit]
+Description = RonDB Rest API Server 
+After = syslog.target network.target remote-fs.target <%= @deps %>
+StartLimitIntervalSec=80
+StartLimitBurst=10
+
+[Service]
+User = <%= node['ndb']['user'] %>
+PIDFile = <%= @pid_file %>
+ExecStart = <%= node['ndb']['scripts_dir'] %>/rdrs-start.sh
+ExecStop = <%= node['ndb']['scripts_dir'] %>/rdrs-stop.sh
+ExecReload = <%= node['ndb']['scripts_dir'] %>/rdrs-restart.sh
+TimeoutSec = 0
+Restart=on-failure
+
+Type = forking
+
+[Install]
+WantedBy = multi-user.target

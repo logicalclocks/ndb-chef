@@ -6,8 +6,17 @@ dependencies:
     global:  
       - ndb::mgmd
       - ndb::ndbd
+  - recipe: ndb::rdrs
+    global:  
+      - ndb::mgmd
+      - ndb::ndbd
+      - ndb::mysqld
   - recipe: ndb::mysqld_tls
     global:  
+      - kagent::default
+  - recipe: ndb::rdrs_tls
+    global:  
+      - ndb::rdrs
       - kagent::default
   - recipe: ndb::memcached
     global:  

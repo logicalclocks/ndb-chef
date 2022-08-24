@@ -282,5 +282,15 @@ ulimit_domain node['ndb']['user'] do
     type :soft
     value -19
   end
+  rule do
+    item :rtprio
+    type :soft
+    value 99
+  end
+  rule do
+    item :rtprio
+    type :hard
+    value 99
+  end
 end
 

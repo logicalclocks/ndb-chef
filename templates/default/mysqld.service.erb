@@ -12,10 +12,13 @@ ExecStop = <%= node['ndb']['scripts_dir'] %>/mysql-server-stop.sh
 ExecReload = <%= node['ndb']['scripts_dir'] %>/mysql-server-restart.sh
 TimeoutSec = 0
 Restart=on-failure
+Nice = -19
 
 Type = forking
 
 LimitNOFILE = <%= node['mysql']['no_fds'] %>
+LimitRTPRIO = 99
+LimitNICE = -19
 
 [Install]
 WantedBy = multi-user.target

@@ -151,10 +151,16 @@ directory node['mysql']['version_dir'] do
 end
 
 if node['platform_family'].eql?('rhel')
-  package 'ncurses'
+  package 'ncurses' do
+    retries 10
+    retry_delay 30
+  end
 
   if node['platform_version'] >= '8'
-    package 'ncurses-compat-libs'
+    package 'ncurses-compat-libs' do
+      retries 10
+      retry_delay 30
+    end
   end
 end
 

@@ -4,9 +4,15 @@ ndb_connectstring()
 
 case node['platform_family']
 when "debian"
-  package  "libaio1"
+  package  "libaio1" do
+    retries 10
+    retry_delay 30
+  end
 when "rhel"
-  package ["libaio", "numactl"] 
+  package ["libaio", "numactl"] do
+    retries 10
+    retry_delay 30
+  end
 end
 
 directory node['ndb']['data_volume']['mysql_server_dir'] do

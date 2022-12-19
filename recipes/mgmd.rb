@@ -128,6 +128,19 @@ if node['ndb']['configuration']['type'].casecmp?("auto")
   end
 end
 
+# In versions older than 21.04.9 the Angel process would always
+# exit with code 0 regardless of the exit status of ndbmtd process
+# Systemd monitors the Anger process, so if ndbmtd died then it (systemd)
+# would not automatically restart it.
+# This behaviour is fixed in 21.04.9 and Angel will exit with abnormal
+# exit code if ndbmtd died.
+# For versions < 21.04.9 we have to rely on Angel process to restart a
+# dead ndbmtd instead of systemd
+stopOnError=1
+if Gem::Version.new(node['ndb']['version']) < Gem::Version.new('21.04.9')
+  stopOnError=0
+end
+
 template "#{node['ndb']['root_dir']}/config.ini" do
   source "config.ini.erb"
   owner node['ndb']['user']
@@ -138,7 +151,8 @@ template "#{node['ndb']['root_dir']}/config.ini" do
     :num_ndb_slots_per_client => node['ndb']['num_ndb_slots_per_client'].to_i,
     :num_ndb_slots_per_mysqld => node['ndb']['num_ndb_slots_per_mysqld'].to_i,
     :num_ndb_open_slots => node['ndb']['num_ndb_open_slots'].to_i,
-    :diskDataDir => diskDataDir
+    :diskDataDir => diskDataDir,
+    :stopOnError => stopOnError
   })
 end
 

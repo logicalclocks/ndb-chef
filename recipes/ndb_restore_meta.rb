@@ -14,7 +14,7 @@ bash 'ndb_restore metadata' do
     group 'root'
     timeout 18000
     code <<-EOH
-        #{node['ndb']['scripts_dir']}/restore_backup.sh ndb-restore -p #{backup_directory}/BACKUP/BACKUP-#{backup_id} -n #{my_node_id} -b #{backup_id} -c #{mgm_connection} -e #{exclude_databases} -m META
+        #{node['ndb']['scripts_dir']}/restore_backup.sh ndb-restore -p #{backup_directory} -n #{my_node_id} -b #{backup_id} -c #{mgm_connection} -e #{exclude_databases} -m META
     EOH
     only_if { should_run }
     not_if { backup_directory.empty? }

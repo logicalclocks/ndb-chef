@@ -56,9 +56,17 @@ _restore_schema_int(){
         _log_error "Backup path is not specified [-p]"
         exit 1
     fi
-    _log_info "Restoring schema from $backup_path"
-    $MYSQL_CLIENT < $backup_path/sql/schemata.sql
-    $MYSQL_CLIENT -e "SOURCE $backup_path/sql/users.sql"
+    schema_file=${backup_path}/sql/schemata.sql
+    _log_info "Restoring SQL schemata and views from $schema_file"
+    $MYSQL_CLIENT < $schema_file >> $log_file 2>&1
+    _log_info "Finished restoring SQL schemata and views"
+    users_file=${backup_path}/sql/users.sql
+    _log_info "Restoring MySQL users from $users_file"
+    _log_warn "Some users such as kthfs might already be present so it is expected to see them failing"
+    set +e
+    $MYSQL_CLIENT -e "SOURCE $backup_path/sql/users.sql" >> $log_file 2>&1
+    set -e
+    _log_info "Finished restoring MySQL users"
 }
 
 ########################

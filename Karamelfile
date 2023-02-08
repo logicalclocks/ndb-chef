@@ -27,3 +27,13 @@ dependencies:
   - recipe: ndb::_test
     global:  
       - ndb::mysqld
+  - recipe: ndb::ndb_restore_meta
+    global:
+      - ndb::ndbd
+  - recipe: ndb::ndb_restore_data
+    global:
+      - ndb::ndb_restore_meta
+  - recipe: ndb::restore_sql
+    global:
+      - ndb::mysqld
+      - ndb::ndb_restore_data

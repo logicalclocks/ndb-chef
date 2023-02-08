@@ -300,3 +300,9 @@ ulimit_domain node['ndb']['user'] do
   end
 end
 
+cookbook_file "#{node['ndb']['scripts_dir']}/restore_backup.sh" do
+  source "restore_backup.sh"
+  user node['ndb']['user']
+  group node['ndb']['group']
+  mode 0750
+end

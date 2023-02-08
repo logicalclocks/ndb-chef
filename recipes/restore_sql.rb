@@ -11,3 +11,16 @@ bash 'Restore SQL' do
     only_if { should_run }
     not_if { backup_directory.empty? }
 end
+
+mysql_cli = "#{node['ndb']['scripts_dir']}/mysql-client.sh"
+hopsworks_consul = consul_helper.get_service_fqdn("hopsworks.glassfish")
+bash 'Remove host certificates' do
+    user 'root'
+    group 'root'
+    code <<-EOH
+        #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^C.+ST=Sweden.+CN.+'"
+        #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^CN=#{hopsworks_consul}.+';"
+    EOH
+    only_if { should_run }
+    not_if { backup_directory.empty? }
+end

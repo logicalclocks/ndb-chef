@@ -105,7 +105,7 @@ then
 fi
 
 ## Name pattern should be the same on the rotation script on target machine, if used
-backup_name=hops_hopsworks_$(date +'%y-%m-%d_%H-%M').backup
+backup_name=hops_hopsworks_$(date +'%y-%m-%d_%H-%M').backup_${backup_id}
 backup_target=$LOCAL_BACKUP_DIR/$backup_name
 
 if [ -d "$backup_target" ];

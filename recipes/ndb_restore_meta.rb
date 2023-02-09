@@ -3,8 +3,8 @@ my_node_id = find_service_id("ndbd", 1)
 # Don't ask
 ndb_connectstring()
 mgm_connection = node['ndb']['connectstring']
-backup_id = 1
-backup_directory = node['ndb']['local_backup_dir']
+backup_id = node['ndb']['restore']['backup_id']
+backup_directory = node['ndb']['restore']['directory']
 exclude_databases="glassfish_timers.EJB__TIMER__TBL"
 private_ip=my_private_ip()
 should_run = private_ip.eql?(node['ndb']['ndbd']['private_ips'].sort[0])

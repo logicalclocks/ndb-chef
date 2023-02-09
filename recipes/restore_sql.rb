@@ -1,4 +1,4 @@
-backup_directory = node['ndb']['local_backup_dir']
+backup_directory = node['ndb']['restore']['directory']
 private_ip=my_private_ip()
 should_run = private_ip.eql?(node['ndb']['mysqld']['private_ips'].sort[0])
 
@@ -18,7 +18,7 @@ bash 'Remove host certificates' do
     user 'root'
     group 'root'
     code <<-EOH
-        #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^C.+ST=Sweden.+CN.+'"
+        #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^C=.+ST=Sweden.+CN.+'"
         #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^CN=#{hopsworks_consul}.+';"
     EOH
     only_if { should_run }

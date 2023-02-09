@@ -1,22 +1,31 @@
 #!/usr/bin/env bash
 set -e
 
-MYSQL_CLIENT=/srv/hops/mysql-cluster/ndb/scripts/mysql-client.sh
-NDB_RESTORE=/srv/hops/mysql/bin/ndb_restore
+## Expected directory structure for the backup directory
+## {ROOT_BACKUP_DIRECTORY}
+## \-> sql
+##    \-> schemata.sql
+##    \-> users.sql
+## \-> BACKUP
+##    \-> BACKUP-{BACKUP_ID}
+##       \-> *.Data
+##       \-> *.ctl
+##       \-> *.log
 
-unset -v backup_path
-unset -v node_id
-unset -v backup_id
-unset -v mgm_connection
-unset -v ndb_restore_exclude_tables
-unset -v ndb_restore_op
+DEFAULT_NDB_ROOT_DIR=/srv/hops/mysql-cluster
+DEFAULT_MYSQL_ROOT_DIR=/srv/hops/mysql
+
+NDB_ROOT_DIR=$DEFAULT_NDB_ROOT_DIR
+MYSQL_ROOT_DIR=$DEFAULT_MYSQL_ROOT_DIR
 
 n=$(date +'%g%m%d')
-log_file=/srv/hops/mysql-cluster/log/ndb_restore_${n}.log
+log_file=${NDB_ROOT_DIR}/log/ndb_restore_${n}.log
 
 _log(){
     now=$(date)
+    set +e
     echo "$now - $1 - $2" |& tee $log_file
+    set -e
 }
 
 _log_info(){
@@ -30,6 +39,24 @@ _log_warn(){
 _log_error(){
     _log "ERROR" "$1"
 }
+
+if [ "$NDB_ROOT_DIR" == "$DEFAULT_NDB_ROOT_DIR" ]; then
+    _log_warn "NDB_ROOT_DIR is not set, using default value $DEFAULT_NDB_ROOT_DIR"
+fi
+
+if [ "$MYSQL_ROOT_DIR" == "$DEFAULT_MYSQL_ROOT_DIR" ]; then
+    _log_warn "MYSQL_ROOT_DIR is not set, using default value $DEFAULT_MYSQL_ROOT_DIR"
+fi
+
+MYSQL_CLIENT=${NDB_ROOT_DIR}/ndb/scripts/mysql-client.sh
+NDB_RESTORE=${MYSQL_ROOT_DIR}/bin/ndb_restore
+
+unset -v backup_path
+unset -v node_id
+unset -v backup_id
+unset -v mgm_connection
+unset -v ndb_restore_exclude_tables
+unset -v ndb_restore_op
 
 ##########################
 ## Restore MySQL schema ##
@@ -95,7 +122,7 @@ _ndb_restore(){
                 ndb_restore_op="$OPTARG"
                 ;;
             ?|h)
-                echo -e "Usage $(basename $0) restore_schema -p ARG\n\t-p: Path to backup directory\n\t-n: Node id to restore\n\t-b: Backup id to restore\n\t-c: Connection to Management server ip_address:port\n\t-m: Restore mode\n\t\tMETA for restoring only metadata\n\t\tDATA for restoring data\n\t-e: OPTIONALLY exclude some comma-sperated tables"
+                echo -e "Usage $(basename $0) restore_schema -p ARG -n ARG -b ARG -c ARG -m ARG [-e ARG]\n\t-p: Path to backup directory\n\t-n: Node id to restore\n\t-b: Backup id to restore\n\t-c: Connection to Management server ip_address:port\n\t-m: Restore mode\n\t\tMETA for restoring only metadata\n\t\tDATA for restoring data\n\t-e: OPTIONALLY exclude some comma-sperated tables"
                 exit 1
                 ;;
         esac
@@ -167,6 +194,9 @@ _help(){
     echo -e "Usage: $(basename $0) create-tablespaces | restore-schema | ndb-restore\nUse -h for further help"
     exit 1
 }
+
+echo "ndb_restore $NDB_RESTORE"
+echo "mysql-client $MYSQL_CLIENT"
 
 subcommand=$1
 case $subcommand in

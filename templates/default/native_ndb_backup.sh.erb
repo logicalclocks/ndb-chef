@@ -87,7 +87,7 @@ function check_exit_code {
 NDB_DATANODES="$($MYSQL_ROOT/bin/ndb_mgm -c $MGM_CONN -e "SHOW" | grep Nodegroup | awk -F ' ' '{print $2}' | cut -c2-)"
 log_info "Participating NDB Data Nodes: $NDB_DATANODES"
 
-backup_id=$(date +'%y%m%d%H%M')
+backup_id=$(date +'%y%V%u%M')
 log_info "Starting NDB native backup with ID BACKUP-$backup_id"
 
 ## Start NDB native backup with backup ID $backup_id

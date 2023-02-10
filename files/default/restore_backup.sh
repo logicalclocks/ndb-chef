@@ -8,9 +8,10 @@ set -e
 ##    \-> users.sql
 ## \-> BACKUP
 ##    \-> BACKUP-{BACKUP_ID}
-##       \-> *.Data
-##       \-> *.ctl
-##       \-> *.log
+##       \-> (BACKUP-{BACKUP_ID}-PART-[1-9]-OF-[1-9]) Optionally if there are multiple LDM threads
+##          \-> *.Data
+##          \-> *.ctl
+##          \-> *.log
 
 DEFAULT_NDB_ROOT_DIR=/srv/hops/mysql-cluster
 DEFAULT_MYSQL_ROOT_DIR=/srv/hops/mysql

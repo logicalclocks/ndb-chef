@@ -87,7 +87,7 @@ function check_exit_code {
 NDB_DATANODES="$($MYSQL_ROOT/bin/ndb_mgm -c $MGM_CONN -e "SHOW" | grep Nodegroup | awk -F ' ' '{print $2}' | cut -c2-)"
 log_info "Participating NDB Data Nodes: $NDB_DATANODES"
 
-backup_id=$(date +'%y%m%d%H%M')
+backup_id=$(date +'%y%V%u%M')
 log_info "Starting NDB native backup with ID BACKUP-$backup_id"
 
 ## Start NDB native backup with backup ID $backup_id
@@ -105,7 +105,7 @@ then
 fi
 
 ## Name pattern should be the same on the rotation script on target machine, if used
-backup_name=hops_hopsworks_$(date +'%y-%m-%d_%H-%M').backup
+backup_name=hops_hopsworks_$(date +'%y-%m-%d_%H-%M').backup_${backup_id}
 backup_target=$LOCAL_BACKUP_DIR/$backup_name
 
 if [ -d "$backup_target" ];
@@ -114,21 +114,30 @@ then
     exit 2
 fi
 
+ndb_backup_target=${backup_target}/BACKUP
+mkdir -p ${ndb_backup_target}
+
 ## copy backup from Data Nodes to localhost
 for i in $NDB_DATANODES
 do
     log_info "Moving backup with ID BACKUP-$backup_id from node $i"
-    mkdir -p "$backup_target"/"$i"
-    rsync -az --log-file=$RSYNC_LOG_FILE $MYSQL_USER@"$i":$REMOTE_MYSQL_BACKUP_DIR/BACKUP/BACKUP-"$backup_id" "$backup_target"/"$i"
+    rsync -e "ssh -o StrictHostKeyChecking=no" -az --log-file=$RSYNC_LOG_FILE $MYSQL_USER@"$i":$REMOTE_MYSQL_BACKUP_DIR/BACKUP/BACKUP-"$backup_id" "$ndb_backup_target"
     check_exit_code $? "rsync from $i failed, aborting. Exit code: $?" 3
 done
 
+sql_backup_target=${backup_target}/sql
+mkdir -p ${sql_backup_target}
+
 # Backing up the schemas
-DB_LIST=`$MYSQL_ROOT/bin/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT GROUP_CONCAT(SCHEMA_NAME SEPARATOR ' ') FROM information_schema.SCHEMATA WHERE SCHEMA_NAME NOT IN ('mysql','information_schema','performance_schema','sys','ndbinfo');"`
-$MYSQL_ROOT/bin/mysqldump -u root -S $MYSQL_SOCKET --no-data --triggers --routines --events --databases $DB_LIST  > "$backup_target"/schema.sql
+DB_LIST=`$MYSQL_ROOT/bin/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT GROUP_CONCAT(SCHEMA_NAME SEPARATOR ' ') FROM information_schema.SCHEMATA WHERE SCHEMA_NAME NOT IN ('mysql','information_schema','performance_schema','sys','ndbinfo','glassfish_timers');"`
+$MYSQL_ROOT/bin/mysqldump -u root -S $MYSQL_SOCKET --no-data --skip-add-drop-table --triggers --routines --events --databases $DB_LIST  > "$sql_backup_target"/schemata.sql
+
+# We need to do this hack because when restoring this file the tables already exist and the restoration fails
+# Still we need to restore this SQL file to re-create the views
+sed -i 's/CREATE TABLE[[:space:]]/CREATE TABLE IF NOT EXISTS /g' "$sql_backup_target"/schemata.sql
 
 # Backing up the users
-$MYSQL_ROOT/bin/mysqlpump -u root -S $MYSQL_SOCKET --exclude-databases=%% --exclude-users=root,mysql.sys,mysql.session,mysql.infoschema --users > "$backup_target"/users.sql
+$MYSQL_ROOT/bin/mysqlpump -u root -S $MYSQL_SOCKET --exclude-databases=%% --exclude-users=root,mysql.sys,mysql.session,mysql.infoschema --users > "$sql_backup_target"/users.sql
 
 pushd $LOCAL_BACKUP_DIR
 tar cfz "$backup_name".tar.gz "$backup_name"

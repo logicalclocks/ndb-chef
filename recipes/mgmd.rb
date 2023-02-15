@@ -1,10 +1,3 @@
-if node['platform_family'].eql?("debian")
-  package  ["libncurses5", "net-tools"] do
-    retries 10
-    retry_delay 30
-  end
-end
-
 if node['ndb']['systemd'] == false
    node.override['ndb']['systemd'] = "false"
 end  

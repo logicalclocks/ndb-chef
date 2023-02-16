@@ -6,6 +6,13 @@ bash 'Restore SQL' do
     user 'root'
     group 'root'
     code <<-EOH
+        set -e
+        # Drop the procedures and view in case we retry
+        #{mysql_cli} -e "DROP PROCEDURE IF EXISTS hops.simpleproc"
+        #{mysql_cli} -e "DROP PROCEDURE IF EXISTS hops.flyway"
+        #{mysql_cli} -e "DROP PROCEDURE IF EXISTS airflow.create_idx"
+        #{mysql_cli} -e "DROP VIEW IF EXISTS hopsworks.users_groups"
+
         #{node['ndb']['scripts_dir']}/restore_backup.sh restore-schema -p #{backup_directory}
     EOH
     only_if { should_run }
@@ -19,12 +26,6 @@ bash 'Remove host certificates' do
     group 'root'
     code <<-EOH
         set -e
-        # Drop the procedures and view in case we retry
-        #{mysql_cli} -e "DROP PROCEDURE IF EXISTS hops.simpleproc"
-        #{mysql_cli} -e "DROP PROCEDURE IF EXISTS hops.flyway"
-        #{mysql_cli} -e "DROP PROCEDURE IF EXISTS airflow.create_idx"
-        #{mysql_cli} -e "DROP VIEW IF EXISTS hopsworks.users_groups"
-
         #{mysql_cli} -e "DELETE FROM hopsworks.pki_certificate WHERE subject REGEXP '^C=.+ST=Sweden.+CN.+' AND status=1"
         #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^C=.+ST=Sweden.+CN.+'"
 

@@ -1,6 +1,7 @@
 backup_directory = node['ndb']['restore']['directory']
 private_ip=my_private_ip()
 should_run = private_ip.eql?(node['ndb']['mysqld']['private_ips'].sort[0])
+mysql_cli = "#{node['ndb']['scripts_dir']}/mysql-client.sh"
 
 bash 'Restore SQL' do
     user 'root'
@@ -19,7 +20,6 @@ bash 'Restore SQL' do
     not_if { backup_directory.empty? }
 end
 
-mysql_cli = "#{node['ndb']['scripts_dir']}/mysql-client.sh"
 hopsworks_consul = consul_helper.get_service_fqdn("hopsworks.glassfish")
 bash 'Remove host certificates' do
     user 'root'

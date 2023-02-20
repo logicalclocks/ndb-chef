@@ -306,3 +306,38 @@ cookbook_file "#{node['ndb']['scripts_dir']}/restore_backup.sh" do
   group node['ndb']['group']
   mode 0750
 end
+
+if !node['ndb']['restore']['tarball'].end_with?("tar.gz") && !node['ndb']['restore']['tarball'].end_with?("tar") && !node['ndb']['restore']['tarball'].end_with?("tgz")
+  raise "Unsupported RonDB backup tarball type. Is should be tar.gz but gotten #{node['ndb']['restore']['tarball']}"
+end
+
+extracted_backup_directory = "#{node['ndb']['local_backup_dir']}/#{File.basename(node['ndb']['restore']['tarball'], ".tar.gz")}"
+downloaded_backup = "#{node['ndb']['local_backup_dir']}/#{File.basename(node['ndb']['restore']['tarball'])}"
+bash 'Download RonDB backup' do
+  user node['ndb']['user']
+  group node['ndb']['group']
+  code <<-EOH
+      wget #{node['ndb']['restore']['tarball']} -O #{downloaded_backup}
+      chmod 750 #{downloaded_backup}
+  EOH
+  not_if { node['ndb']['restore']['tarball'].empty? }
+  only_if { node['ndb']['restore']['tarball'].start_with?("http") }
+  not_if { ::File.exists?(downloaded_backup) }
+end
+
+if node['ndb']['restore']['tarball'].start_with?("http")
+  tarball_to_extract = downloaded_backup
+else
+  tarball_to_extract = node['ndb']['restore']['tarball']
+end
+
+bash 'Extract RonDB backup tarball' do
+  user node['ndb']['user']
+  group node['ndb']['group']
+  code <<-EOH
+    tar xf #{tarball_to_extract} --directory #{node['ndb']['local_backup_dir']}
+  EOH
+  only_if { ::File.exists?(tarball_to_extract) }
+  not_if { node['ndb']['restore']['tarball'].empty? }
+  not_if { ::File.exists?(extracted_backup_directory) }
+end

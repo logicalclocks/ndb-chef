@@ -1,4 +1,4 @@
-backup_directory = node['ndb']['restore']['directory']
+backup_directory = "#{node['ndb']['local_backup_dir']}/#{File.basename(node['ndb']['restore']['tarball'], ".tar.gz")}"
 private_ip=my_private_ip()
 should_run = private_ip.eql?(node['ndb']['mysqld']['private_ips'].sort[0])
 mysql_cli = "#{node['ndb']['scripts_dir']}/mysql-client.sh"

@@ -106,8 +106,8 @@ attribute "ndb/local_backup_dir",
           :description => "Directory on the local MGM machine where backups will temporarily be stored",
           :type => 'string'
 
-attribute "ndb/restore/directory",
-          :description => "Local directory where to restore the backup from. This directory is used by restore_backup.sh script. See comment in the script for the directory structure. Default: """,
+attribute "ndb/restore/tarball",
+          :description => "Location of RonDB backup tarball. The extracted directory is used by restore_backup.sh script. See comment in the script for the directory structure. Default: """,
           :type => 'string'
 
 attribute "ndb/restore/backup_id",

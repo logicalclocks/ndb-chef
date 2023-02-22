@@ -25,7 +25,7 @@ log_file=${NDB_ROOT_DIR}/log/ndb_restore_${n}.log
 _log(){
     now=$(date)
     set +e
-    echo "$now - $1 - $2" |& tee $log_file
+    echo "$now - $1 - $2" |& tee -a $log_file
     set -e
 }
 
@@ -58,6 +58,7 @@ unset -v backup_id
 unset -v mgm_connection
 unset -v ndb_restore_exclude_tables
 unset -v ndb_restore_op
+unset -v ndb_restore_serial
 
 ##########################
 ## Restore MySQL schema ##
@@ -102,7 +103,7 @@ _restore_schema_int(){
 ########################
 
 _ndb_restore(){
-    while getopts 'p:n:b:c:e:m:h' opt; do
+    while getopts 'p:n:b:c:e:m:sh' opt; do
         case "$opt" in
             p)
                 backup_path="$OPTARG"
@@ -122,8 +123,11 @@ _ndb_restore(){
             m)
                 ndb_restore_op="$OPTARG"
                 ;;
+            s)
+                ndb_restore_serial=1
+                ;;
             ?|h)
-                echo -e "Usage $(basename $0) restore_schema -p ARG -n ARG -b ARG -c ARG -m ARG [-e ARG]\n\t-p: Path to backup directory\n\t-n: Node id to restore\n\t-b: Backup id to restore\n\t-c: Connection to Management server ip_address:port\n\t-m: Restore mode\n\t\tMETA for restoring only metadata\n\t\tDATA for restoring data\n\t-e: OPTIONALLY exclude some comma-sperated tables"
+                echo -e "Usage $(basename $0) restore_schema -p ARG -n ARG -b ARG -c ARG -m ARG [-e ARG]\n\t-p: Path to backup directory\n\t-n: Node id to restore\n\t-b: Backup id to restore\n\t-c: Connection to Management server ip_address:port\n\t-m: Restore mode\n\t\tMETA for restoring only metadata\n\t\tDATA for restoring data\n\t-s: Force restore multiple parts serially\n\t-e: OPTIONALLY exclude some comma-sperated tables"
                 exit 1
                 ;;
         esac
@@ -158,11 +162,41 @@ _ndb_restore_int(){
 
     ndb_backup_path=$backup_path/BACKUP/BACKUP-$backup_id
     if [ "$ndb_restore_op" == "META" ]; then
-        _log_info "Restoring METADATA backup id $backup_id from node $node_id from path $ndb_backup_path excluding tables $exclude_tables"
-        $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$ndb_backup_path $exclude_tables --restore_meta >> $log_file 2>&1
+        if [ $ndb_restore_serial ]; then
+            _log_info "Restoring multiparts serially"
+            for d in ${ndb_backup_path}/*/
+            do
+                backup_dirs+=($d)
+                # when restoring metadata we only need to restore one part
+                break
+            done
+        else
+            _log_info "Restoring multiparts in parallel"
+            backup_dirs=($ndb_backup_path)
+        fi
+
+        for d in "${backup_dirs[@]}"
+        do
+            _log_info "Restoring METADATA backup id $backup_id from node $node_id from path $d excluding tables $exclude_tables"
+            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore_meta >> $log_file 2>&1
+        done
     elif [ "$ndb_restore_op" == "DATA" ]; then
-        _log_info "Restoring DATA backup id $backup_id from node $node_id from path $backup_path excluding tables $exclude_tables"
-        $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$ndb_backup_path $exclude_tables --restore_data >> $log_file 2>&1
+        if [ $ndb_restore_serial ]; then
+            _log_info "Restoring multiparts serially"
+            for d in ${ndb_backup_path}/*/
+            do
+                backup_dirs+=($d)
+            done
+        else
+            _log_info "Restoring multiparts in parallel"
+            backup_dirs=($ndb_backup_path)
+        fi
+
+        for d in "${backup_dirs[@]}"
+        do
+            _log_info "Restoring DATA backup id $backup_id from node $node_id from path $d excluding tables $exclude_tables"
+            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore_data >> $log_file 2>&1
+        done
     fi
     _log_info "Finished restoring data"
 }

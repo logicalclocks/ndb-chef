@@ -307,7 +307,7 @@ cookbook_file "#{node['ndb']['scripts_dir']}/restore_backup.sh" do
   mode 0750
 end
 
-if !node['ndb']['restore']['tarball'].end_with?("tar.gz") && !node['ndb']['restore']['tarball'].end_with?("tar") && !node['ndb']['restore']['tarball'].end_with?("tgz")
+if !node['ndb']['restore']['tarball'].empty? && !node['ndb']['restore']['tarball'].end_with?("tar.gz") && !node['ndb']['restore']['tarball'].end_with?("tar") && !node['ndb']['restore']['tarball'].end_with?("tgz")
   raise "Unsupported RonDB backup tarball type. Is should be tar.gz but gotten #{node['ndb']['restore']['tarball']}"
 end
 

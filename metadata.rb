@@ -200,7 +200,7 @@ attribute "ndb/wait_startup",
           :description => "Max amount of time a MySQL server should wait for the ndb nodes to be up",
           :type => 'string'
 
-attribute "ndb/mgm_server/port",
+attribute "ndb/mgmd/port",
           :description => "Port used by Mgm servers in MySQL Cluster",
           :type => 'string'
 
@@ -444,6 +444,10 @@ attribute "ndb/mgmd/private_ips",
 attribute "ndb/mysqld/private_ips",
           :description =>  "Ips for mysql servers",
           :type => 'array'
+
+attribute "ndb/ndbd/port",
+          :description =>  "Datanode port",
+          :type => 'string'
 
 attribute "ndb/ndbd/private_ips",
           :description =>  "Ips for ndb data nodes",

@@ -30,6 +30,10 @@ module NDB
       
           return found_id
         end
+
+        def rondb_restoring_backup
+          !node['ndb']['restore']['backup_id'].empty? && !node['ndb']['restore']['tarball'].empty?
+        end
     end
 end
 

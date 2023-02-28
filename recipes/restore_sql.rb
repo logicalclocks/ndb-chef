@@ -17,7 +17,7 @@ bash 'Restore SQL' do
         #{node['ndb']['scripts_dir']}/restore_backup.sh restore-schema -p #{backup_directory}
     EOH
     only_if { should_run }
-    not_if { backup_directory.empty? }
+    only_if { rondb_restoring_backup() }
 end
 
 hopsworks_consul = consul_helper.get_service_fqdn("hopsworks.glassfish")
@@ -33,5 +33,5 @@ bash 'Remove host certificates' do
         #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^CN=#{hopsworks_consul}.+'"
     EOH
     only_if { should_run }
-    not_if { backup_directory.empty? }
+    only_if { rondb_restoring_backup() }
 end

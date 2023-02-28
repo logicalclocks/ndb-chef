@@ -12,6 +12,5 @@ bash 'ndb_restore data' do
     code <<-EOH
         #{node['ndb']['scripts_dir']}/restore_backup.sh ndb-restore -p #{backup_directory} -n #{my_node_id} -b #{node['ndb']['restore']['backup_id']} -c #{mgm_connection} -e #{exclude_databases} -m DATA
     EOH
-    not_if { node['ndb']['restore']['backup_id'].empty? }
-    not_if { node['ndb']['restore']['tarball'].empty? }
+    only_if { rondb_restoring_backup() }
 end

@@ -16,6 +16,5 @@ bash 'ndb_restore metadata' do
         #{node['ndb']['scripts_dir']}/restore_backup.sh ndb-restore -p #{backup_directory} -n #{my_node_id} -b #{node['ndb']['restore']['backup_id']} -c #{mgm_connection} -s -e #{exclude_databases} -m META
     EOH
     only_if { should_run }
-    not_if { node['ndb']['restore']['backup_id'].empty? }
-    not_if { node['ndb']['restore']['tarball'].empty? }
+    only_if { rondb_restoring_backup() }
 end

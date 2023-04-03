@@ -37,15 +37,10 @@ if [ $SKIP_WAIT -ne 1 ] ; then
 fi
 
 <% if #{node['ndb']['use_systemd']} == "true" then -%>
-  <%= node['mysql']['base_dir'] %>/bin/mysqld --defaults-file=<%= node['ndb']['root_dir'] %>/my.cnf $SKIP_GRANTS >> <%= node['ndb']['log_dir'] %>/mysql_<%= @node_id %>_out.log  2>&1 < /dev/null &
+  <%= node['mysql']['base_dir'] %>/bin/mysqld --defaults-file=<%= node['ndb']['root_dir'] %>/my.cnf $SKIP_GRANTS --daemonize --log-error=<%= node['ndb']['log_dir'] %>/mysql_<%= @node_id %>_out.log --log-error-verbosity=3
 <% else -%>
   su <%= node['ndb']['user'] %> -c "<%= node['mysql']['base_dir'] %>/bin/mysqld --defaults-file=<%= node['ndb']['root_dir'] %>/my.cnf $SKIP_GRANTS >> <%= node['ndb']['log_dir'] %>/mysql_<%= @node_id %>_out.log  2>&1 < /dev/null &"
 <% end -%>
-
-while [ ! -f <%= node['ndb']['log_dir'] %>/mysql_<%= @node_id %>.pid ]
-do
-  sleep 2                                  
-done
 
 exit $?
 

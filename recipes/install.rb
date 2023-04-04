@@ -151,7 +151,7 @@ directory node['mysql']['version_dir'] do
 end
 
 if node['platform_family'].eql?('rhel')
-  package 'ncurses' do
+  package ['ncurses', 'iproute'] do
     retries 10
     retry_delay 30
   end
@@ -165,7 +165,7 @@ if node['platform_family'].eql?('rhel')
 end
 
 if node['platform_family'].eql?("debian")
-  package  ["libncurses5"] do
+  package  ["libncurses5", "iproute2"] do
     retries 10
     retry_delay 30
   end

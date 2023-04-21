@@ -164,12 +164,20 @@ _ndb_restore_int(){
     if [ "$ndb_restore_op" == "META" ]; then
         if [ $ndb_restore_serial ]; then
             _log_info "Restoring multiparts serially"
-            for d in ${ndb_backup_path}/*/
-            do
-                backup_dirs+=($d)
-                # when restoring metadata we only need to restore one part
-                break
-            done
+
+            # If there was a single LDM thread to take the backup
+            # then the backup files whould be directly under BACKUP-{ID}
+            # and we should NOT iterate over any subdirectory
+            if [ -n "$(find $ndb_backup_path -mindepth 1 -type d)" ]; then
+                for d in ${ndb_backup_path}/*/
+                do
+                    backup_dirs+=($d)
+                    # when restoring metadata we only need to restore one part
+                    break
+                done
+            else
+                backup_dirs=($ndb_backup_path)
+            fi
         else
             _log_info "Restoring multiparts in parallel"
             backup_dirs=($ndb_backup_path)
@@ -183,10 +191,17 @@ _ndb_restore_int(){
     elif [ "$ndb_restore_op" == "DATA" ]; then
         if [ $ndb_restore_serial ]; then
             _log_info "Restoring multiparts serially"
-            for d in ${ndb_backup_path}/*/
-            do
-                backup_dirs+=($d)
-            done
+            # If there was a single LDM thread to take the backup
+            # then the backup files whould be directly under BACKUP-{ID}
+            # and we should NOT iterate over any subdirectory
+            if [ -n "$(find $ndb_backup_path -mindepth 1 -type d)" ]; then
+                for d in ${ndb_backup_path}/*/
+                do
+                    backup_dirs+=($d)
+                done
+            else
+                backup_dirs=($ndb_backup_path)
+            fi
         else
             _log_info "Restoring multiparts in parallel"
             backup_dirs=($ndb_backup_path)

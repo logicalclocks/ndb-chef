@@ -1,6 +1,4 @@
 ndb_connectstring()
-
-ndb_connectstring()
 conn_str = "#{node['ndb']['connectstring']}"
 conn_str_split = conn_str.split(/:/, 2)
 

@@ -263,20 +263,39 @@ default['ndb']['mysqld']['metrics_port']                    = "9104"
 
 
 # Rondb Rest API Server Configurations
-default['ndb']['rdrs']['bind_ip']                                = "0.0.0.0"
-default['ndb']['rdrs']['bind_port']                              = "4406"
-default['ndb']['rdrs']['version']                                = "0.1.0"
-default['ndb']['rdrs']['buffer_size']                            = "327680"
-default['ndb']['rdrs']['pre_allocated_buffers']                  = "1024"
-default['ndb']['rdrs']['go_max_procs']                           = "-1"
-default['ndb']['rdrs']['require_and_verify_client_cert']         = "false"
-default['ndb']['rdrs']['certificate_file']                       = ""
-default['ndb']['rdrs']['private_key_file']                       = ""
-default['ndb']['rdrs']['root_ca_cert_file']                      = ""
-default['ndb']['rdrs']['use_hops_works_api_keys']                = "false"
-default['ndb']['rdrs']['hops_works_api_keys_cache_validity_sec'] = "3"
-default['ndb']['rdrs']['log_level']                              = "info"
-default['ndb']['rdrs']['log_max_size_mb']                        = "100"
-default['ndb']['rdrs']['log_max_backups']                        = "10"
-default['ndb']['rdrs']['log_max_age']                            = "30"
-default['ndb']['rdrs']['scripts']                                = %w{ rdrs-start.sh rdrs-stop.sh rdrs-restart.sh }
+default['ndb']['rdrs']['internal']['buffer_size']                      = "327680"
+default['ndb']['rdrs']['internal']['pre_allocated_buffers']            = "1024"
+default['ndb']['rdrs']['internal']['go_max_procs']                     = "-1"
+
+default['ndb']['rdrs']['rest']['bind_ip']                              = "0.0.0.0"
+default['ndb']['rdrs']['rest']['bind_port']                            = "4406"
+
+default['ndb']['rdrs']['grpc']['bind_ip']                              = "0.0.0.0"
+default['ndb']['rdrs']['grpc']['bind_port']                            = "4406"
+
+default['ndb']['rdrs']['rondb']['mgmds']                               = "'Mgmds': [ { 'IP': 'localhost', 'Port': 1186 } ]"
+default['ndb']['rdrs']['rondb']['connection_pool_size']                = "1"
+default['ndb']['rdrs']['rondb']['node_ids']                            = "[0]"
+default['ndb']['rdrs']['rondb']['connection_retries']                  = "1"
+default['ndb']['rdrs']['rondb']['connection_retry_delay_in_sec']       = "1"
+default['ndb']['rdrs']['rondb']['op_retry_on_transient_errors_count']  = "3"
+default['ndb']['rdrs']['rondb']['op_retry_initial_delay_in_ms']        = "500"
+default['ndb']['rdrs']['rondb']['op_retry_jitter_in_ms']               = "100"
+
+default['ndb']['rdrs']['security']['enable_tls']                       = "false"
+default['ndb']['rdrs']['security']['require_and_verify_client_cert']   = "false"
+default['ndb']['rdrs']['security']['certificate_file']                 = ""
+default['ndb']['rdrs']['security']['private_key_file']                 = ""
+default['ndb']['rdrs']['security']['root_ca_cert_file']                = ""
+default['ndb']['rdrs']['security']['use_hopsworks_api_keys']           = "false"
+default['ndb']['rdrs']['security']['cache_refresh_interval_ms']        = "10000"
+default['ndb']['rdrs']['security']['cache_unused_entries_eviction_ms'] = "60000"
+default['ndb']['rdrs']['security']['cache_refresh_interval_jitter_ms'] = "1000"
+
+default['ndb']['rdrs']['log']['level']                                 = "info"
+default['ndb']['rdrs']['log']['file_apth']                             = ""
+default['ndb']['rdrs']['log']['max_size_mb']                           = "100"
+default['ndb']['rdrs']['log']['max_backups']                           = "10"
+default['ndb']['rdrs']['log']['log_max_age']                           = "30"
+
+default['ndb']['rdrs']['scripts']                                      = %w{ rdrs-start.sh rdrs-stop.sh rdrs-restart.sh }

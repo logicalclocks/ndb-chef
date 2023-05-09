@@ -1,29 +1,47 @@
 {
-   "RestServer":{
-      "IP":"<%= node['ndb']['rdrs']['bind_ip'] %>",
-      "Port":<%= node['ndb']['rdrs']['bind_port'] %>,
-      "BufferSize":<%= node['ndb']['rdrs']['buffer_size'] %>,
-      "PreAllocatedBuffers":<%= node['ndb']['rdrs']['pre_allocated_buffers'] %>,
-      "GOMAXPROCS":<%= node['ndb']['rdrs']['go_max_procs'] %>
-   },
-   "RonDBConfig":{
-      "IP":"<%= @ndb_mgmd_ip %>",
-      "Port":<%= @ndb_mgmd_port %>
-   },
-   "Security":{
-      "EnableTLS":<%= @enable_tls %>,
-      "RootCACertFile":"<%= @root_ca_cert_file %>",
-      "CertificateFile":"<%= @certificate_file %>",
-      "PrivateKeyFile":"<%= @private_key_file %>",
-      "RequireAndVerifyClientCert":<%= node['ndb']['rdrs']['require_and_verify_client_cert'] %>,
-      "UseHopsWorksAPIKeys":<%= node['ndb']['rdrs']['use_hops_works_api_keys'] %>,
-      "HopsWorksAPIKeysCacheValiditySec":<%= node['ndb']['rdrs']['hops_works_api_keys_cache_validity_sec'] %>
-   },
-   "Log":{
-      "Level":"<%= node['ndb']['rdrs']['log_level'] %>",
-      "FilePath":"<%= node['ndb']['log_dir'] %>/rdrs.log",
-      "MaxSizeMB":<%= node['ndb']['rdrs']['log_max_size_mb'] %>,
-      "MaxBackups":<%= node['ndb']['rdrs']['log_max_backups'] %>,
-      "MaxAge":<%= node['ndb']['rdrs']['log_max_age'] %>
-   }
+  "Internal": {
+    "BufferSize": <%= node['ndb']['rdrs']['internal']['buffer_size'] %>,
+    "PreAllocatedBuffers": <%= node['ndb']['rdrs']['internal']['pre_allocated_buffers'] %>,
+    "GOMAXPROCS": <%= node['ndb']['rdrs']['internal']['go_max_procs'] %>
+  },
+  "REST": {
+    "ServerIP": "<%= node['ndb']['rdrs']['rest']['bind_ip'] %>",
+    "ServerPort": <%= node['ndb']['rdrs']['rest']['bind_port'] %>
+  },
+  "GRPC": {
+    "ServerIP": "<%= node['ndb']['rdrs']['grpc']['bind_ip'] %>",
+    "ServerPort": <%= node['ndb']['rdrs']['grpc']['bind_port'] %>
+  },
+  "RonDB": {
+    "Mgmds": "'Mgmds': [ { 'IP': '<%= @ndb_mgmd_ip %>', 'Port': <%= @ndb_mgmd_port %> } ]",
+    "ConnectionPoolSize": <%= node['ndb']['rdrs']['rondb']['connection_pool_size'] %>,
+    "NodeIDs": <%= node['ndb']['rdrs']['rondb']['node_ids'] %>,
+    "ConnectionRetries": <%= node['ndb']['rdrs']['rondb']['connection_retries'] %>,
+    "ConnectionRetryDelayInSec": <%= node['ndb']['rdrs']['rondb']['connection_retry_delay_in_sec'] %>,
+    "OpRetryOnTransientErrorsCount": <%= node['ndb']['rdrs']['rondb']['op_retry_on_transient_errors_count'] %>,
+    "OpRetryInitialDelayInMS": <%= node['ndb']['rdrs']['rondb']['op_retry_initial_delay_in_ms'] %>,
+    "OpRetryJitterInMS": <%= node['ndb']['rdrs']['rondb']['op_retry_jitter_in_ms'] %>
+  },
+  "Security": {
+    "TLS": {
+      "EnableTLS": <%= node['ndb']['rdrs']['security']['enable_tls'] %>,
+      "RequireAndVerifyClientCert": <%= node['ndb']['rdrs']['security']['require_and_verify_client_cert'] %>,
+      "CertificateFile": "<%= node['ndb']['rdrs']['security']['certificate_file'] %>",
+      "PrivateKeyFile": "<%= node['ndb']['rdrs']['security']['private_key_file'] %>",
+      "RootCACertFile": "<%= node['ndb']['rdrs']['security']['root_ca_cert_file'] %>"
+    },
+    "APIKey": {
+      "UseHopsworksAPIKeys": <%= node['ndb']['rdrs']['security']['use_hopsworks_api_keys'] %>,
+      "CacheRefreshIntervalMS": <%= node['ndb']['rdrs']['security']['cache_refresh_interval_ms'] %>,
+      "CacheUnusedEntriesEvictionMS": <%= node['ndb']['rdrs']['security']['cache_unused_entries_eviction_ms'] %>,
+      "CacheRefreshIntervalJitterMS": <%= node['ndb']['rdrs']['security']['cache_refresh_interval_jitter_ms'] %>
+    }
+  },
+  "Log": {
+    "Level": "<%= node['ndb']['rdrs']['log']['level'] %>",
+    "FilePath": "<%= node['ndb']['rdrs']['log']['file_apth'] %>",
+    "MaxSizeMB": <%= node['ndb']['rdrs']['log']['max_size_mb'] %>,
+    "MaxBackups": <%= node['ndb']['rdrs']['log']['max_backups'] %>,
+    "MaxAge": <%= node['ndb']['rdrs']['log']['log_max_age'] %>
+  }
 }

@@ -13,7 +13,7 @@
     "ServerPort": <%= node['ndb']['rdrs']['grpc']['bind_port'] %>
   },
   "RonDB": {
-    "Mgmds": "'Mgmds': [ { 'IP': '<%= @ndb_mgmd_ip %>', 'Port': <%= @ndb_mgmd_port %> } ]",
+    "Mgmds":  [ { "IP": "<%= @ndb_mgmd_ip %>", "Port": <%= @ndb_mgmd_port %> } ],
     "ConnectionPoolSize": <%= node['ndb']['rdrs']['rondb']['connection_pool_size'] %>,
     "NodeIDs": <%= node['ndb']['rdrs']['rondb']['node_ids'] %>,
     "ConnectionRetries": <%= node['ndb']['rdrs']['rondb']['connection_retries'] %>,

@@ -273,7 +273,6 @@ default['ndb']['rdrs']['rest']['bind_port']                            = "4406"
 default['ndb']['rdrs']['grpc']['bind_ip']                              = "0.0.0.0"
 default['ndb']['rdrs']['grpc']['bind_port']                            = "5406"
 
-default['ndb']['rdrs']['rondb']['mgmds']                               = "'Mgmds': [ { 'IP': 'localhost', 'Port': 1186 } ]"
 default['ndb']['rdrs']['rondb']['connection_pool_size']                = "1"
 default['ndb']['rdrs']['rondb']['node_ids']                            = "[0]"
 default['ndb']['rdrs']['rondb']['connection_retries']                  = "1"

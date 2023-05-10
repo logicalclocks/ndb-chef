@@ -556,10 +556,6 @@ attribute "ndb/rdrs/grpc/bind_port",
           :description => "gRPC bind port. Default: 5406",
           :type => "string"
 
-attribute "ndb/rdrs/rondb/mgmds",
-          :description => "RonDB mananagement nodes information. It is JSON array. Default: 'Mgmds': [ { 'IP': 'localhost', 'Port': 1186 } ] ",
-          :type => "string"
-
 attribute "ndb/rdrs/rondb/connection_pool_size",
           :description => "Connection pool size. Default: 1",
           :type => "string"

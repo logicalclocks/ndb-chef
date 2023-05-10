@@ -271,7 +271,7 @@ default['ndb']['rdrs']['rest']['bind_ip']                              = "0.0.0.
 default['ndb']['rdrs']['rest']['bind_port']                            = "4406"
 
 default['ndb']['rdrs']['grpc']['bind_ip']                              = "0.0.0.0"
-default['ndb']['rdrs']['grpc']['bind_port']                            = "4406"
+default['ndb']['rdrs']['grpc']['bind_port']                            = "5406"
 
 default['ndb']['rdrs']['rondb']['mgmds']                               = "'Mgmds': [ { 'IP': 'localhost', 'Port': 1186 } ]"
 default['ndb']['rdrs']['rondb']['connection_pool_size']                = "1"
@@ -293,7 +293,7 @@ default['ndb']['rdrs']['security']['cache_unused_entries_eviction_ms'] = "60000"
 default['ndb']['rdrs']['security']['cache_refresh_interval_jitter_ms'] = "1000"
 
 default['ndb']['rdrs']['log']['level']                                 = "info"
-default['ndb']['rdrs']['log']['file_apth']                             = ""
+default['ndb']['rdrs']['log']['file_apth']                             = "/srv/hops/mysql-cluster/log/rdrs.log"
 default['ndb']['rdrs']['log']['max_size_mb']                           = "100"
 default['ndb']['rdrs']['log']['max_backups']                           = "10"
 default['ndb']['rdrs']['log']['log_max_age']                           = "30"

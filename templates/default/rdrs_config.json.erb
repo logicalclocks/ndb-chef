@@ -24,11 +24,11 @@
   },
   "Security": {
     "TLS": {
-      "EnableTLS": <%= node['ndb']['rdrs']['security']['enable_tls'] %>,
+      "EnableTLS": <%= @enable_tls %>,
       "RequireAndVerifyClientCert": <%= node['ndb']['rdrs']['security']['require_and_verify_client_cert'] %>,
-      "CertificateFile": "<%= node['ndb']['rdrs']['security']['certificate_file'] %>",
-      "PrivateKeyFile": "<%= node['ndb']['rdrs']['security']['private_key_file'] %>",
-      "RootCACertFile": "<%= node['ndb']['rdrs']['security']['root_ca_cert_file'] %>"
+      "CertificateFile": "<%= @certificate_file %>",
+      "PrivateKeyFile": "<%= @private_key_file %>",
+      "RootCACertFile": "<%= @root_ca_cert_file %>"
     },
     "APIKey": {
       "UseHopsworksAPIKeys": <%= node['ndb']['rdrs']['security']['use_hopsworks_api_keys'] %>,
@@ -45,3 +45,4 @@
     "MaxAge": <%= node['ndb']['rdrs']['log']['log_max_age'] %>
   }
 }
+

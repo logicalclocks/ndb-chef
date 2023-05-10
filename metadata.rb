@@ -584,24 +584,8 @@ attribute "ndb/rdrs/rondb/op_retry_jitter_in_ms",
           :description => "Op retry jitter in ms",
           :type => "string"
 
-attribute "ndb/rdrs/security/enable_tls",
-          :description => "Enable TLS",
-          :type => "string"
-
 attribute "ndb/rdrs/security/require_and_verify_client_cert",
            :description => "Require and verify client certificate. Default: false",
-          :type => "string"
-
-attribute "ndb/rdrs/security/certificate_file",
-          :description => "Certificate file.",
-          :type => "string"
-
-attribute "ndb/rdrs/security/private_key_file",
-          :description => "Private key file.",
-          :type => "string"
-
-attribute "ndb/rdrs/security/root_ca_cert_file",
-          :description => "Root CA certificate file.",
           :type => "string"
 
 attribute "ndb/rdrs/security/use_hopsworks_api_keys",

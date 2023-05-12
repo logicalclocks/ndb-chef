@@ -183,12 +183,21 @@ template systemd_script do
   end
 end
 
-#
-# Note: This will not do a rolling restart - it will bring down the DB.
-#
 kagent_config "#{service_name}" do
   action :systemd_reload
-  not_if "systemctl is-alive ndbmtd"
+end
+
+# In case of cluster upgrade we need to wait for cluster to become ready before proceeding.
+# In conjuction with serializing ndb::ndbmtd recipe in Karamel (CLOUD-570) will result in
+# a rolling restart
+bash 'wait-for-cluster' do
+  user 'root'
+  group 'root'
+  timeout node['ndb']['wait_startup'].to_i + 2
+  code <<-EOH
+    #{node['mysql']['bin_dir']}/ndb_waiter -c #{node['ndb']['connectstring']} --timeout=#{node['ndb']['wait_startup']}
+  EOH
+  only_if { conda_helpers.is_upgrade }
 end
 
 kagent_config service_name do
@@ -251,6 +260,20 @@ if (node['ndb']['interrupts_isolated_to_single_cpu'] == "true") && (not ::File.e
 
   end
 
+  kagent_config "#{service_name}" do
+    action :systemd_reload
+    not_if "systemctl is-alive ndbmtd"
+  end
+
+  bash 'wait-for-cluster' do
+    user 'root'
+    group 'root'
+    timeout node['ndb']['wait_startup'].to_i + 2
+    code <<-EOH
+      #{node['mysql']['bin_dir']}/ndb_waiter -c #{node['ndb']['connectstring']} --timeout=#{node['ndb']['wait_startup']}
+    EOH
+    only_if { conda_helpers.is_upgrade }
+  end
 end
 
 homedir = node['ndb']['user'].eql?("root") ? "/root" : conda_helpers.get_user_home(node['ndb']['user'])
@@ -263,11 +286,6 @@ kagent_keys "#{homedir}" do
   cb_recipe "mgmd"  
   action :get_publickey
 end  
-
-kagent_config "#{service_name}" do
-  action :systemd_reload
-  not_if "systemctl is-alive ndbmtd"
-end
 
 #
 # Source the native NDB backup cleaner script

@@ -281,6 +281,7 @@ default['ndb']['rdrs']['rondb']['op_retry_on_transient_errors_count']  = "3"
 default['ndb']['rdrs']['rondb']['op_retry_initial_delay_in_ms']        = "500"
 default['ndb']['rdrs']['rondb']['op_retry_jitter_in_ms']               = "100"
 
+default['ndb']['rdrs']['security']['enable_tls']                       = "false"
 default['ndb']['rdrs']['security']['require_and_verify_client_cert']   = "false"
 default['ndb']['rdrs']['security']['use_hopsworks_api_keys']           = "false"
 default['ndb']['rdrs']['security']['cache_refresh_interval_ms']        = "10000"

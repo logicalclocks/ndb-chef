@@ -584,6 +584,10 @@ attribute "ndb/rdrs/rondb/op_retry_jitter_in_ms",
           :description => "Op retry jitter in ms",
           :type => "string"
 
+attribute "ndb/rdrs/security/enable_tls",
+          :description => "Enable TLS",
+          :type => "string"
+
 attribute "ndb/rdrs/security/require_and_verify_client_cert",
            :description => "Require and verify client certificate. Default: false",
           :type => "string"

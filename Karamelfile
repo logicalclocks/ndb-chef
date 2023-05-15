@@ -10,13 +10,9 @@ dependencies:
     global:  
       - ndb::mgmd
       - ndb::ndbd
-      - ndb::mysqld
+      - kagent::default
   - recipe: ndb::mysqld_tls
     global:  
-      - kagent::default
-  - recipe: ndb::rdrs_tls
-    global:  
-      - ndb::rdrs
       - kagent::default
   - recipe: ndb::memcached
     global:  

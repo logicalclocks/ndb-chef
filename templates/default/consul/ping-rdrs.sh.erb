@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+set -e
+
+<% if node['ndb']['rdrs']['security']['enable_tls'].casecmp?("true") -%>
+  test_command="curl -k -s --fail  <%= https://node['ndb']['rdrs']['bind_ip'] %>:<%= node['ndb']['rdrs']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping 2>&1 > /dev/null &"
+<% else %>
+  test_command="curl -s --fail  <%= http://node['ndb']['rdrs']['bind_ip'] %>:<%= node['ndb']['rdrs']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping 2>&1 > /dev/null &"
+<% end %>
+
+source <%= node['consul']['bin_dir'] %>/retryable_health_check.sh
+
+_run_health_check "$test_command"
+

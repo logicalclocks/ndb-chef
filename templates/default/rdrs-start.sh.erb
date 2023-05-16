@@ -9,9 +9,9 @@ pid=$!
 echo $pid > <%= node['ndb']['log_dir'] %>/rdrs.pid
 
 <% if node['ndb']['rdrs']['security']['enable_tls'].casecmp?("true") -%>
-  test_command="curl -k -s --fail  <%= https://node['ndb']['rdrs']['bind_ip'] %>:<%= node['ndb']['rdrs']['bind_port'] %>/metrics 2>&1 > /dev/null &"
+  test_command="curl -k -s --fail  <%= https://node['ndb']['rdrs']['bind_ip'] %>:<%= node['ndb']['rdrs']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping 2>&1 > /dev/null &"
 <% else %>
-  test_command="curl -s --fail  <%= http://node['ndb']['rdrs']['bind_ip'] %>:<%= node['ndb']['rdrs']['bind_port'] %>/metrics 2>&1 > /dev/null &"
+  test_command="curl -s --fail  <%= http://node['ndb']['rdrs']['bind_ip'] %>:<%= node['ndb']['rdrs']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping 2>&1 > /dev/null &"
 <% end %>
 
 

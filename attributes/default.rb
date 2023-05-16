@@ -263,8 +263,10 @@ default['ndb']['mysqld']['metrics_port']                    = "9104"
 
 
 # Rondb Rest API Server Configurations
+default['ndb']['rdrs']['version']                                      = "0.1.0"
 default['ndb']['rdrs']['internal']['buffer_size']                      = "327680"
 default['ndb']['rdrs']['internal']['pre_allocated_buffers']            = "1024"
+default['ndb']['rdrs']['internal']['go_max_procs']                     = "-1"
 default['ndb']['rdrs']['internal']['go_max_procs']                     = "-1"
 
 default['ndb']['rdrs']['rest']['bind_ip']                              = "0.0.0.0"

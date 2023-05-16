@@ -83,6 +83,14 @@ if node['kagent']['enabled'] == "true"
   end
 end
 
+if exists_local('consul', 'master') or exists_local('consul', 'slave')
+  consul_service "Registering RDRS with Consul" do
+    service_definition "consul/rdrs-consul.hcl.erb"
+    reload_consul false
+    action :register
+  end
+end
+
 if node['services']['enabled'] == "true"
   hopsworks_alt_url = "https://#{private_recipe_ip("hopsworks","default")}:8181"
   if node.attribute? "hopsworks"

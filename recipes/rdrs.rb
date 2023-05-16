@@ -43,6 +43,11 @@ service "#{service_name}" do
   action :nothing
 end
 
+rdrs_log_file = "#{node['ndb']['rdrs']['log']['file_apth']}"
+if node['ndb']['rdrs']['log']['file_apth'] == "" 
+  rdrs_log_file = "#{node['ndb']['log_dir']}/rdrs.log"
+end
+
 template "#{node['ndb']['root_dir']}/rdrs_config.json" do
   source "rdrs_config.json.erb"
   owner node['ndb']['user']
@@ -58,6 +63,7 @@ template "#{node['ndb']['root_dir']}/rdrs_config.json" do
    :root_ca_cert_file => "",
    :certificate_file => "",
    :private_key_file => "",
+   :rdrs_log_file => rdrs_log_file,
   })
   if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name), :immediately
@@ -67,6 +73,14 @@ end
 kagent_config "#{service_name}" do
   action :systemd_reload
   not_if "systemctl is-alive rdrs"
+end
+
+if node['kagent']['enabled'] == "true"
+  kagent_config service_name do
+    service "NDB"
+    log_file "#{node['ndb']['root_dir']}/rdrs_config.json"
+    config_file rdrs_log_file 
+  end
 end
 
 if node['services']['enabled'] == "true"
@@ -107,6 +121,7 @@ if node['services']['enabled'] == "true"
           :root_ca_cert_file => hops_ca,
           :certificate_file => certificate,
           :private_key_file => private_key,
+          :rdrs_log_file => rdrs_log_file,
   })
   notifies :restart, resources(:service => "rdrs"), :immediately
   end

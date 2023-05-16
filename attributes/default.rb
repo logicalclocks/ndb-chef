@@ -289,7 +289,7 @@ default['ndb']['rdrs']['security']['cache_unused_entries_eviction_ms'] = "60000"
 default['ndb']['rdrs']['security']['cache_refresh_interval_jitter_ms'] = "1000"
 
 default['ndb']['rdrs']['log']['level']                                 = "info"
-default['ndb']['rdrs']['log']['file_apth']                             = "/srv/hops/mysql-cluster/log/rdrs.log"
+default['ndb']['rdrs']['log']['file_apth']                             = ""
 default['ndb']['rdrs']['log']['max_size_mb']                           = "100"
 default['ndb']['rdrs']['log']['max_backups']                           = "10"
 default['ndb']['rdrs']['log']['log_max_age']                           = "30"

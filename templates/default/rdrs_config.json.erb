@@ -39,10 +39,9 @@
   },
   "Log": {
     "Level": "<%= node['ndb']['rdrs']['log']['level'] %>",
-    "FilePath": "<%= node['ndb']['rdrs']['log']['file_apth'] %>",
+    "FilePath": "<%= @rdrs_log_file %>",
     "MaxSizeMB": <%= node['ndb']['rdrs']['log']['max_size_mb'] %>,
     "MaxBackups": <%= node['ndb']['rdrs']['log']['max_backups'] %>,
     "MaxAge": <%= node['ndb']['rdrs']['log']['log_max_age'] %>
   }
 }
-

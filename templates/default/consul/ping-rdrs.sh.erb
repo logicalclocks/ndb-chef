@@ -1,11 +1,10 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 set -e
 
-<% if node['ndb']['rdrs']['security']['enable_tls'].casecmp?("true") -%>
-  test_command="curl -k -s --fail  <%= https://node['ndb']['rdrs']['bind_ip'] %>:<%= node['ndb']['rdrs']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping 2>&1 > /dev/null &"
-<% else %>
-  test_command="curl -s --fail  <%= http://node['ndb']['rdrs']['bind_ip'] %>:<%= node['ndb']['rdrs']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping 2>&1 > /dev/null &"
-<% end %>
+
+PROTO="http"
+echo ^d | openssl s_client -connect <%= node['ndb']['rdrs']['rest']['bind_ip'] %>:<%= node['ndb']['rdrs']['rest']['bind_port'] %>  > /dev/null 2>&1  && PROTO="https"
+test_command="curl -k -s --fail  $PROTO://<%= node['ndb']['rdrs']['rest']['bind_ip'] %>:<%= node['ndb']['rdrs']['rest']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping > /dev/null 2>&1"
 
 source <%= node['consul']['bin_dir'] %>/retryable_health_check.sh
 

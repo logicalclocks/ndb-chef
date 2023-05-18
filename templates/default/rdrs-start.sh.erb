@@ -3,23 +3,21 @@
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<%= node['mysql']['base_dir'] %>/lib/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<%= node['mysql']['base_dir'] %>/lib/private/
 
-<%= node['mysql']['base_dir'] %>/bin/rdrs -config=<%= node['ndb']['root_dir'] %>/rdrs_config.json  2>&1 > "#{node['ndb']['log_dir']}/rdrs_out.log" &
+<%= node['mysql']['base_dir'] %>/bin/rdrs -config=<%= node['ndb']['root_dir'] %>/rdrs_config.json  2>&1 > <%= node['ndb']['log_dir'] %>/rdrs_out.log &
 
 pid=$!
 echo $pid > <%= node['ndb']['log_dir'] %>/rdrs.pid
-
-<% if node['ndb']['rdrs']['security']['enable_tls'].casecmp?("true") -%>
-  test_command="curl -k -s --fail  <%= https://node['ndb']['rdrs']['bind_ip'] %>:<%= node['ndb']['rdrs']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping 2>&1 > /dev/null &"
-<% else %>
-  test_command="curl -s --fail  <%= http://node['ndb']['rdrs']['bind_ip'] %>:<%= node['ndb']['rdrs']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping 2>&1 > /dev/null &"
-<% end %>
 
 
 # wait for the server to connect to RonDB
 for n in `seq 1 60`
 do
   sleep 1
-  $test_command 
+
+  PROTO="http"
+  echo ^d | openssl s_client -connect <%= node['ndb']['rdrs']['rest']['bind_ip'] %>:<%= node['ndb']['rdrs']['rest']['bind_port'] %>  > /dev/null 2>&1  && PROTO="https"
+  curl -k -s --fail  $PROTO://<%= node['ndb']['rdrs']['rest']['bind_ip'] %>:<%= node['ndb']['rdrs']['rest']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping > /dev/null 2>&1
+
   ret=$?
 
   if [ "$ret" -eq "0" ]; then

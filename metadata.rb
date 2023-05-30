@@ -528,6 +528,10 @@ attribute "ndb/num_ndb_open_slots",
 
 # Rondb Rest API Server Configurations
 
+attribute "ndb/rdrs/version",
+          :description => "RDRS API Version.",
+          :type => "string"
+
 attribute "ndb/rdrs/internal/buffer_size",
           :description => "Buffer size. This buffer is used to pass requests from go layer down to C++. The buffer has to be large enough to hold the request/response. Default: 327680",
           :type => "string"

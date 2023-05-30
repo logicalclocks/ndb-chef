@@ -95,13 +95,6 @@ if node['ndb']['rdrs']['security']['enable_tls'] == "true"
         not_if { node["kagent"]["enabled"] == "false" }
     end
     
-    # can remove this part
-    service "rdrs" do
-        provider Chef::Provider::Service::Systemd
-        supports :restart => true, :stop => true, :start => true, :status => true
-        action :nothing
-    end
-    
     template "#{node['ndb']['root_dir']}/rdrs_config.json" do
         source "rdrs_config.json.erb"
         owner node['ndb']['user']

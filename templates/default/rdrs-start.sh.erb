@@ -3,7 +3,7 @@
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<%= node['mysql']['base_dir'] %>/lib/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<%= node['mysql']['base_dir'] %>/lib/private/
 
-<%= node['mysql']['base_dir'] %>/bin/rdrs -config=<%= node['ndb']['root_dir'] %>/rdrs_config.json  2>&1 > <%= node['ndb']['log_dir'] %>/rdrs_out.log &
+<%= node['mysql']['base_dir'] %>/bin/rdrs -config=<%= node['ndb']['root_dir'] %>/rdrs_config.json  2>&1 >> <%= node['ndb']['log_dir'] %>/rdrs_out.log &
 
 pid=$!
 echo $pid > <%= node['ndb']['log_dir'] %>/rdrs.pid
@@ -15,8 +15,8 @@ do
   sleep 1
 
   PROTO="http"
-  echo ^d | openssl s_client -connect <%= node['ndb']['rdrs']['rest']['bind_ip'] %>:<%= node['ndb']['rdrs']['rest']['bind_port'] %>  > /dev/null 2>&1  && PROTO="https"
-  curl -k -s --fail  $PROTO://<%= node['ndb']['rdrs']['rest']['bind_ip'] %>:<%= node['ndb']['rdrs']['rest']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping > /dev/null 2>&1
+  echo ^d | openssl s_client -connect 127.0.0.1:<%= node['ndb']['rdrs']['rest']['bind_port'] %>  > /dev/null 2>&1  && PROTO="https"
+  curl -k -s --fail  $PROTO://127.0.0.1:<%= node['ndb']['rdrs']['rest']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping > /dev/null 2>&1
 
   ret=$?
 

@@ -524,3 +524,111 @@ attribute "ndb/num_ndb_slots_per_mysqld",
 attribute "ndb/num_ndb_open_slots",
           :description => "Number of slots open for new clients to connect.",
           :type => "string"
+
+
+# Rondb Rest API Server Configurations
+
+attribute "ndb/rdrs/version",
+          :description => "RDRS API Version.",
+          :type => "string"
+
+attribute "ndb/rdrs/internal/buffer_size",
+          :description => "Buffer size. This buffer is used to pass requests from go layer down to C++. The buffer has to be large enough to hold the request/response. Default: 327680",
+          :type => "string"
+
+attribute "ndb/rdrs/internal/pre_allocated_buffers",
+          :description => "Number of preallocated buffers. Default: 1024",
+          :type => "string"
+
+attribute "ndb/rdrs/internal/go_max_procs",
+          :description => "GOMAXPROCS. Default: -1",
+          :type => "string"
+
+attribute "ndb/rdrs/rest/bind_ip",
+          :description => "HTTP REST bind IP. Default: 0.0.0.0",
+          :type => "string"
+
+attribute "ndb/rdrs/rest/bind_port",
+          :description => "HTTP REST bind port. Default: 4406",
+          :type => "string"
+
+attribute "ndb/rdrs/grpc/bind_ip",
+          :description => "gRPC bind IP. Default: 0.0.0.0",
+          :type => "string"
+
+attribute "ndb/rdrs/grpc/bind_port",
+          :description => "gRPC bind port. Default: 5406",
+          :type => "string"
+
+attribute "ndb/rdrs/rondb/connection_pool_size",
+          :description => "Connection pool size. Default: 1",
+          :type => "string"
+
+attribute "ndb/rdrs/rondb/node_ids",
+          :description => "This is the list of node ids to force the connections to be assigned to specific node ids.If this property is specified and connection pool size is not the default, the number of node ids must match the connection pool size",
+          :type => "string"
+
+attribute "ndb/rdrs/rondb/connection_retries",
+          :description => "Connection retry attempts.",
+          :type => "string"
+	
+attribute "ndb/rdrs/rondb/connection_retry_delay_in_sec",
+          :description => "Delay in failed connection retry attempts",
+          :type => "string"
+
+attribute "ndb/rdrs/rondb/op_retry_on_transient_errors_count",
+          :description => "Op retry on transient errors count",
+          :type => "string"
+
+attribute "ndb/rdrs/rondb/op_Retry_initial_delay_in_ms",
+          :description => "Op retry initial delay in ms",
+          :type => "string"
+
+attribute "ndb/rdrs/rondb/op_retry_jitter_in_ms",
+          :description => "Op retry jitter in ms",
+          :type => "string"
+
+attribute "ndb/rdrs/security/enable_tls",
+          :description => "Enable TLS",
+          :type => "string"
+
+attribute "ndb/rdrs/security/require_and_verify_client_cert",
+           :description => "Require and verify client certificate. Default: false",
+          :type => "string"
+
+attribute "ndb/rdrs/security/use_hopsworks_api_keys",
+          :description => "Use hopsworks based API keys fro authentication and authorization. Default: false",
+          :type => "string"
+
+attribute "ndb/rdrs/security/cache_refresh_interval_ms",
+          :description => "Hopsworks cache refresh interval ms",
+          :type => "string"
+
+attribute "ndb/rdrs/security/cache_unused_entries_eviction_ms",
+          :description => "Hopsworks cache unused entries eviction ms",
+          :type => "string"
+
+attribute "ndb/rdrs/security/cache_refresh_interval_jitter_ms",
+          :description => "Hopsworks cache refresh interval jitter ms",
+          :type => "string"
+
+attribute "ndb/rdrs/log/level",
+          :description => "Log level. Default: info",
+          :type => "string"
+
+attribute "ndb/rdrs/log/file_apth",
+          :description => "Log file path.",
+          :type => "string"
+
+attribute "ndb/rdrs/log/max_size_mb",
+          :description => "Log file max size. Default: 100 MB.",
+          :type => "string"
+
+attribute "ndb/rdrs/log/max_backups",
+          :description => "Log max backup files. Default: 10",
+          :type => "string"
+
+attribute "ndb/rdrs/log/log_max_age",
+          :description => "Log files max age. Default: 30",
+          :type => "string"
+

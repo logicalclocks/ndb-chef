@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -e
+
+
+PROTO="http"
+echo ^d | openssl s_client -connect 127.0.0.1:<%= node['ndb']['rdrs']['rest']['bind_port'] %>  > /dev/null 2>&1  && PROTO="https"
+test_command="curl -k -s --fail  $PROTO://127.0.0.1:<%= node['ndb']['rdrs']['rest']['bind_port'] %>/<%= node['ndb']['rdrs']['version'] %>/ping > /dev/null 2>&1"
+
+source <%= node['consul']['bin_dir'] %>/retryable_health_check.sh
+
+_run_health_check "$test_command"
+

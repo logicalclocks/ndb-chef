@@ -1,0 +1,16 @@
+service {
+    id = "rdrs/monitoring"
+    name = "rdrs"
+    tags = [
+        "monitoring"
+    ]
+    port = <%= node['ndb']['rdrs']['rest']['bind_port'] %>
+    check = {
+        id = "rdrs-health-check"
+        name = "Health check for RDRS"
+        args = ["<%= node['consul']['bin_dir'] %>/ping-rdrs.sh"]
+        interval = "3s"
+        timeout = "3s"
+        status = "passing"
+    }
+}

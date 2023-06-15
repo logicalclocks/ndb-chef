@@ -1,5 +1,6 @@
 #!/usr/bin/env sh 
 
+OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<%= node['mysql']['base_dir'] %>/lib/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<%= node['mysql']['base_dir'] %>/lib/private/
 
@@ -8,6 +9,10 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<%= node['mysql']['base_dir'] %>/lib/pri
 pid=$!
 echo $pid > <%= node['ndb']['log_dir'] %>/rdrs.pid
 
+# above we have added .../lib/private to LD_LIBRARY_PATH which contains libcrypto.
+# This libcrypto maybe incompatible with the default libcrypto required by the system.
+# This could fail the openssl command  https://github.com/openssl/openssl/issues/11856
+export LD_LIBRARY_PATH=$OLD_LD_LIBRARY_PATH
 
 # wait for the server to connect to RonDB
 for n in `seq 1 60`

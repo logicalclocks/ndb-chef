@@ -1,4 +1,9 @@
 #!/usr/bin/env sh 
+
+<% if node['ndb']['rdrs']['containerize'].eql? "true" -%>
+docker stop rdrs-<%= node['ndb']['version'] %>.service
+<% else %>
+
 FORCE=0
 if [ $# -gt 0 ] ;then
   if [ "$1" = "--force" ] ; then
@@ -12,4 +17,8 @@ fi
 PID_FILE=<%= node['ndb']['log_dir'] %>/rdrs.pid 
 <%= node['ndb']['scripts_dir'] %>/util/kill-process.sh rdrs $PID_FILE 0 $FORCE
 exit $?
+
+<% end %>
+
+
 

@@ -1,5 +1,20 @@
 #!/usr/bin/env sh 
 
+
+<% if node['ndb']['rdrs']['containerize'].eql? "true" -%>
+
+rm -f <%= node['ndb']['log_dir'] %>/rdrs.cid 
+docker run --rm  \
+  --name rdrs-<%= node['ndb']['version'] %>.service  \
+  --cidfile <%= node['ndb']['log_dir'] %>/rdrs.cid \
+  --mount type=bind,source=<%= node['ndb']['root_dir'] %>/rdrs_config.json,target=<%= node['ndb']['root_dir'] %>/rdrs_config.json,readonly  \
+  --mount type=bind,source=<%= @crypto_dir %>,target=<%= @crypto_dir %>,readonly  \
+  --network=host \
+  rdrs:<%= node['ndb']['version'] %> \
+  /srv/hops/mysql/bin/rdrs -config=<%= node['ndb']['root_dir'] %>/rdrs_config.json
+
+<% else %>
+
 OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<%= node['mysql']['base_dir'] %>/lib/
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<%= node['mysql']['base_dir'] %>/lib/private/
@@ -31,3 +46,5 @@ do
 done
 
 exit 1
+
+<% end %>

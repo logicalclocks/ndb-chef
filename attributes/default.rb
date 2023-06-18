@@ -264,6 +264,8 @@ default['ndb']['mysqld']['metrics_port']                    = "9104"
 
 # Rondb Rest API Server Configurations
 default['ndb']['rdrs']['version']                                      = "0.1.0"
+default['ndb']['rdrs']['containerize']                                 = "true"
+default['ndb']['rdrs']['container_image_url']                          = node['download_url'] + "/docker-image-rdrs-#{node['ndb']['version']}.tar.gz"
 default['ndb']['rdrs']['internal']['buffer_size']                      = "327680"
 default['ndb']['rdrs']['internal']['pre_allocated_buffers']            = "1024"
 default['ndb']['rdrs']['internal']['go_max_procs']                     = "-1" 
@@ -285,7 +287,7 @@ default['ndb']['rdrs']['rondb']['op_retry_jitter_in_ms']               = "100"
 
 default['ndb']['rdrs']['security']['enable_tls']                       = "true"
 default['ndb']['rdrs']['security']['require_and_verify_client_cert']   = "false"
-default['ndb']['rdrs']['security']['use_hopsworks_api_keys']           = "false"
+default['ndb']['rdrs']['security']['use_hopsworks_api_keys']           = "true"
 default['ndb']['rdrs']['security']['cache_refresh_interval_ms']        = "10000"
 default['ndb']['rdrs']['security']['cache_unused_entries_eviction_ms'] = "60000"
 default['ndb']['rdrs']['security']['cache_refresh_interval_jitter_ms'] = "1000"

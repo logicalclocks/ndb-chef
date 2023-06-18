@@ -528,6 +528,14 @@ attribute "ndb/num_ndb_open_slots",
 
 # Rondb Rest API Server Configurations
 
+attribute "ndb/rdrs/containerize",
+          :description => "Run RDRS in a containerized environtment, such as docker. Default: true",
+          :type => "string"
+
+attribute "ndb/rdrs/container_image_url",
+          :description => "RDRS image URL",
+          :type => "string"
+
 attribute "ndb/rdrs/version",
           :description => "RDRS API Version.",
           :type => "string"

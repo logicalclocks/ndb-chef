@@ -8,6 +8,7 @@ if node['ndb']['rdrs']['containerize'] == "true"
     user 'root'
     code <<-EOH
       set -e
+      cd #{Chef::Config['file_cache_path']}
       rm -f docker-image-rdrs-#{node['ndb']['version']}.tar.gz
       wget -O docker-image-rdrs-#{node['ndb']['version']}.tar.gz  #{node['ndb']['rdrs']['container_image_url']}
       docker load < docker-image-rdrs-#{node['ndb']['version']}.tar.gz
@@ -66,7 +67,7 @@ for script in node['ndb']['rdrs']['scripts']
 end
 
 rdrs_log_file = "#{node['ndb']['rdrs']['log']['file_apth']}"
-if node['ndb']['rdrs']['log']['file_apth'] == "" 
+if node['ndb']['rdrs']['log']['file_apth'] == "" || node['ndb']['rdrs']['containerize'] == "true"  
   rdrs_log_file = "#{node['ndb']['log_dir']}/rdrs.log"
 end
 

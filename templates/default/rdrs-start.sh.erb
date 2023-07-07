@@ -8,6 +8,7 @@ docker run --rm  \
   --name rdrs-<%= node['ndb']['version'] %>.service  \
   --cidfile <%= node['ndb']['log_dir'] %>/rdrs.cid \
   --mount type=bind,source=<%= node['ndb']['root_dir'] %>/rdrs_config.json,target=<%= node['ndb']['root_dir'] %>/rdrs_config.json,readonly  \
+  --mount type=bind,source=<%= node['ndb']['log_dir'] %>,target=<%= node['ndb']['log_dir'] %> \
   --mount type=bind,source=<%= @crypto_dir %>,target=<%= @crypto_dir %>,readonly  \
   --network=host \
   rdrs:<%= node['ndb']['version'] %> \

@@ -6,13 +6,13 @@ StartLimitBurst=10
 
 [Service]
 
-<% if node['ndb']['rdrs']['containerize'].eql? "true" -%>
+<% if node['ndb']['rdrs']['containerize'].casecmp?("true") -%>
 User = root 
 <% else %>
 User = <%= node['ndb']['user'] %>
 <% end %>
 
-<% if node['ndb']['rdrs']['containerize'].eql? "false" -%>
+<% if node['ndb']['rdrs']['containerize'].casecmp?("false") -%>
 PIDFile = <%= @pid_file %>
 <% end %>
 
@@ -22,7 +22,7 @@ ExecReload = <%= node['ndb']['scripts_dir'] %>/rdrs-restart.sh
 TimeoutSec = 0
 Restart=on-failure
 
-<% if node['ndb']['rdrs']['containerize'].eql? "false" -%>
+<% if node['ndb']['rdrs']['containerize'].casecmp?("false") -%>
 Type = forking
 <% end %>
 

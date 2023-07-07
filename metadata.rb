@@ -624,7 +624,7 @@ attribute "ndb/rdrs/log/level",
           :description => "Log level. Default: info",
           :type => "string"
 
-attribute "ndb/rdrs/log/file_apth",
+attribute "ndb/rdrs/log/file_path",
           :description => "Log file path.",
           :type => "string"
 

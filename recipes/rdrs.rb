@@ -66,8 +66,8 @@ for script in node['ndb']['rdrs']['scripts']
   end
 end
 
-rdrs_log_file = "#{node['ndb']['rdrs']['log']['file_apth']}"
-if node['ndb']['rdrs']['log']['file_apth'] == "" || node['ndb']['rdrs']['containerize'] == "true"  
+rdrs_log_file = "#{node['ndb']['rdrs']['log']['file_path']}"
+if node['ndb']['rdrs']['log']['file_path'] == "" || node['ndb']['rdrs']['containerize'] == "true"  
   rdrs_log_file = "#{node['ndb']['log_dir']}/rdrs.log"
 end
 

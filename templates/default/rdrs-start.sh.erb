@@ -5,7 +5,7 @@
 
 rm -f <%= node['ndb']['log_dir'] %>/rdrs.cid 
 docker run --rm  \
-  --name rdrs-<%= node['ndb']['version'] %>.service  \
+  --name rdrs.service  \
   --cidfile <%= node['ndb']['log_dir'] %>/rdrs.cid \
   --mount type=bind,source=<%= node['ndb']['root_dir'] %>/rdrs_config.json,target=<%= node['ndb']['root_dir'] %>/rdrs_config.json,readonly  \
   --mount type=bind,source=<%= node['ndb']['log_dir'] %>,target=<%= node['ndb']['log_dir'] %> \

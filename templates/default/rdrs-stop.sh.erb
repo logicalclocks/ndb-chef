@@ -1,7 +1,7 @@
 #!/usr/bin/env sh 
 
 <% if node['ndb']['rdrs']['containerize'].eql? "true" -%>
-docker stop rdrs-<%= node['ndb']['version'] %>.service
+docker stop rdrs.service
 <% else %>
 
 FORCE=0

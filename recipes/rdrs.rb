@@ -3,6 +3,19 @@ conn_str = "#{node['ndb']['connectstring']}"
 conn_str_split = conn_str.split(/:/, 2)
 
 
+if node['ndb']['rdrs']['containerize'] == "true" 
+  bash 'Setting-RDRS-Image' do
+    user 'root'
+    code <<-EOH
+      set -e
+      cd #{Chef::Config['file_cache_path']}
+      rm -f docker-image-rdrs-#{node['ndb']['version']}.tar.gz
+      wget -O docker-image-rdrs-#{node['ndb']['version']}.tar.gz  #{node['ndb']['rdrs']['container_image_url']}
+      docker load < docker-image-rdrs-#{node['ndb']['version']}.tar.gz
+    EOH
+  end
+end
+
 deps = ""
 if exists_local("ndb", "ndbd") 
   deps = "ndbmtd.service"
@@ -34,25 +47,29 @@ service "#{service_name}" do
   action :nothing
 end
 
-for script in node['ndb']['rdrs']['scripts']
-  template "#{node['ndb']['scripts_dir']}/#{script}" do
-    source "#{script}.erb"
-    owner node['ndb']['user']
-    group node['ndb']['group']
-    mode 0750
-  end
-end
-
-rdrs_log_file = "#{node['ndb']['rdrs']['log']['file_apth']}"
-if node['ndb']['rdrs']['log']['file_apth'] == "" 
-  rdrs_log_file = "#{node['ndb']['log_dir']}/rdrs.log"
-end
-
 #Paths to certificates. The certificates may not exist
 crypto_dir = x509_helper.get_crypto_dir(node['ndb']['user'])
 certificate = "#{crypto_dir}/#{x509_helper.get_certificate_bundle_name(node['ndb']['user'])}"
 private_key = "#{crypto_dir}/#{x509_helper.get_private_key_pkcs1_name(node['ndb']['user'])}"
 hops_ca = "#{crypto_dir}/#{x509_helper.get_hops_ca_bundle_name()}"
+
+for script in node['ndb']['rdrs']['scripts']
+  template "#{node['ndb']['scripts_dir']}/#{script}" do
+    source "#{script}.erb"
+    owner node['ndb']['user']
+    group node['ndb']['group']
+    action :create
+    mode 0750
+    variables({
+      :crypto_dir => crypto_dir,
+    })
+  end
+end
+
+rdrs_log_file = "#{node['ndb']['rdrs']['log']['file_path']}"
+if node['ndb']['rdrs']['log']['file_path'] == "" || node['ndb']['rdrs']['containerize'] == "true"  
+  rdrs_log_file = "#{node['ndb']['log_dir']}/rdrs.log"
+end
 
 # template rdrs-config file
 template "#{node['ndb']['root_dir']}/rdrs_config.json" do

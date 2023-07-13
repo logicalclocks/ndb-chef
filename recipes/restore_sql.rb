@@ -29,8 +29,12 @@ bash 'Remove host certificates' do
         #{mysql_cli} -e "DELETE FROM hopsworks.pki_certificate WHERE subject REGEXP '^C=.+ST=Sweden.+CN.+' AND status=1"
         #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^C=.+ST=Sweden.+CN.+'"
 
+        # Two following queries revoke Glassfish'es internal certificate. First 2 are for before Hopsworks HA
+        # and last two are after Hopsworks HA where we changed the Subject of the certificate
         #{mysql_cli} -e "DELETE FROM hopsworks.pki_certificate WHERE subject REGEXP '^CN=#{hopsworks_consul}.+' AND status=1"
         #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^CN=#{hopsworks_consul}.+'"
+        #{mysql_cli} -e "DELETE FROM hopsworks.pki_certificate WHERE subject REGEXP 'L=glassfishinternal.+' AND status=1"
+        #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP 'L=glassfishinternal.+'"
     EOH
     only_if { should_run }
     only_if { rondb_restoring_backup() }

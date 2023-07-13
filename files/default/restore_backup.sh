@@ -216,7 +216,7 @@ _ndb_restore_int(){
         _log_info "Finished restoring DATA"
     elif [ "$ndb_restore_op" == "REBUILD-INDEXES" ]; then
         _log_info "Rebuilding INDEXES"
-        $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$ndb_backup_path --rebuild-indexes >> $log_file 2>&1
+        $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$ndb_backup_path $exclude_tables --rebuild-indexes >> $log_file 2>&1
         _log_info "Finished rebuilding indexes"
     fi
 }

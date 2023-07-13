@@ -186,8 +186,9 @@ _ndb_restore_int(){
         for d in "${backup_dirs[@]}"
         do
             _log_info "Restoring METADATA backup id $backup_id from node $node_id from path $d excluding tables $exclude_tables"
-            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore_meta >> $log_file 2>&1
+            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore-meta --disable-indexes >> $log_file 2>&1
         done
+        _log_info "Finished restoring METADATA"
     elif [ "$ndb_restore_op" == "DATA" ]; then
         if [ $ndb_restore_serial ]; then
             _log_info "Restoring multiparts serially"
@@ -210,10 +211,14 @@ _ndb_restore_int(){
         for d in "${backup_dirs[@]}"
         do
             _log_info "Restoring DATA backup id $backup_id from node $node_id from path $d excluding tables $exclude_tables"
-            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore_data >> $log_file 2>&1
+            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore-data >> $log_file 2>&1
         done
+        _log_info "Finished restoring DATA"
+    elif [ "$ndb_restore_op" == "REBUILD-INDEXES" ]; then
+        _log_info "Rebuilding INDEXES"
+        $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$ndb_backup_path --rebuild-indexes >> $log_file 2>&1
+        _log_info "Finished rebuilding indexes"
     fi
-    _log_info "Finished restoring data"
 }
 
 ########################

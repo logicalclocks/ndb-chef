@@ -274,37 +274,18 @@ end
 # Nice values are -20..20. Higher values get less CPU (they are 'nicer').
 #
 
-ulimit_domain node['ndb']['user'] do
-  rule do
-    item :priority
-    type :hard
-    value -19
-  end
-  rule do
-    item :priority
-    type :soft
-    value -19
-  end
-  rule do
-    item :nice
-    type :hard
-    value -19
-  end
-  rule do
-    item :nice
-    type :soft
-    value -19
-  end
-  rule do
-    item :rtprio
-    type :soft
-    value 99
-  end
-  rule do
-    item :rtprio
-    type :hard
-    value 99
-  end
+file node['ndb']['ulimit_file'] do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  content <<-EOH
+    #{node['ndb']['user']} hard priority -19
+    #{node['ndb']['user']} soft priority -19
+    #{node['ndb']['user']} hard nice -19
+    #{node['ndb']['user']} soft nice -19
+    #{node['ndb']['user']} soft rtprio 99
+    #{node['ndb']['user']} hard rtprio 99
+  EOH
 end
 
 cookbook_file "#{node['ndb']['scripts_dir']}/restore_backup.sh" do

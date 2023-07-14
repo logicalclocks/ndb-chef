@@ -279,12 +279,12 @@ file node['ndb']['ulimit_file'] do
   group 'root'
   mode '0755'
   content <<-EOH
-    #{node['ndb']['user']} hard priority -19
-    #{node['ndb']['user']} soft priority -19
-    #{node['ndb']['user']} hard nice -19
-    #{node['ndb']['user']} soft nice -19
-    #{node['ndb']['user']} soft rtprio 99
-    #{node['ndb']['user']} hard rtprio 99
+#{node['ndb']['user']} hard priority -19
+#{node['ndb']['user']} soft priority -19
+#{node['ndb']['user']} hard nice -19
+#{node['ndb']['user']} soft nice -19
+#{node['ndb']['user']} soft rtprio 99
+#{node['ndb']['user']} hard rtprio 99
   EOH
 end
 

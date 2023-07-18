@@ -60,6 +60,20 @@ unset -v ndb_restore_exclude_tables
 unset -v ndb_restore_op
 unset -v ndb_restore_serial
 
+#################
+## Show tables ##
+#################
+
+_show_tables(){
+    _log_info "Executing SHOW TABLES for all databases"
+    DB_LIST=$($MYSQL_ROOT_DIR/bin/mysql -u root -S $NDB_ROOT_DIR/mysql.sock -Nse "SELECT GROUP_CONCAT(SCHEMA_NAME SEPARATOR ' ') FROM information_schema.SCHEMATA;")
+    for d in $DB_LIST; do
+        _log_info "SHOW TABLES for database $d"
+        $MYSQL_CLIENT $d -e "SHOW TABLES" >> /dev/null 2>&1
+    done
+    _log_info "Finished SHOW TABLES for all databases"
+}
+
 ##########################
 ## Restore MySQL schema ##
 ##########################
@@ -246,7 +260,7 @@ _create_tablespaces_int(){
 }
 
 _help(){
-    echo -e "Usage: $(basename $0) create-tablespaces | restore-schema | ndb-restore\nUse -h for further help"
+    echo -e "Usage: $(basename $0) create-tablespaces | restore-schema | ndb-restore | show-tables\nUse -h for further help"
     exit 1
 }
 
@@ -266,6 +280,10 @@ case $subcommand in
     "ndb-restore")
         shift
         _ndb_restore $@
+        ;;
+    "show-tables")
+        shift
+        _show_tables $@
         ;;
     *)
         _help

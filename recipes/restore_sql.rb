@@ -39,6 +39,19 @@ bash 'Restore SQL' do
     only_if { rondb_restoring_backup() }
 end
 
+# This step is needed to initialize some internal data structures in case of Global async
+# replication (https://docs.rondb.com/rondb_restore/#restoring-metadata)
+# We do it regardless the setup as it is harmless
+bash 'Initialize MySQL binlog' do
+    user 'root'
+    group 'root'
+    code <<-EOH
+        set -e
+        #{node['ndb']['scripts_dir']}/restore_backup.sh show-tables
+    EOH
+    only_if { rondb_restoring_backup() }
+end
+
 hopsworks_consul = consul_helper.get_service_fqdn("hopsworks.glassfish")
 bash 'Remove host certificates' do
     user 'root'

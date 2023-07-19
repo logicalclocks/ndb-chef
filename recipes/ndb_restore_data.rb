@@ -4,7 +4,7 @@ my_node_id = find_service_id("ndbd", 1)
 ndb_connectstring()
 mgm_connection = node['ndb']['connectstring']
 backup_directory = "#{node['ndb']['local_backup_dir']}/#{File.basename(node['ndb']['restore']['tarball'], ".tar.gz")}"
-exclude_databases="glassfish_timers.EJB__TIMER__TBL,hopsworks.hosts,hopsworks.host_services"
+exclude_databases=node['ndb']['restore']['exclude_databases_data']
 
 bash 'ndb_restore data' do
     user 'root'

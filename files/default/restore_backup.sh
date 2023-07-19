@@ -60,6 +60,20 @@ unset -v ndb_restore_exclude_tables
 unset -v ndb_restore_op
 unset -v ndb_restore_serial
 
+#################
+## Show tables ##
+#################
+
+_show_tables(){
+    _log_info "Executing SHOW TABLES for all databases"
+    DB_LIST=$($MYSQL_ROOT_DIR/bin/mysql -u root -S $NDB_ROOT_DIR/mysql.sock -Nse "SELECT GROUP_CONCAT(SCHEMA_NAME SEPARATOR ' ') FROM information_schema.SCHEMATA;")
+    for d in $DB_LIST; do
+        _log_info "SHOW TABLES for database $d"
+        $MYSQL_CLIENT $d -e "SHOW TABLES" >> /dev/null 2>&1
+    done
+    _log_info "Finished SHOW TABLES for all databases"
+}
+
 ##########################
 ## Restore MySQL schema ##
 ##########################
@@ -186,8 +200,9 @@ _ndb_restore_int(){
         for d in "${backup_dirs[@]}"
         do
             _log_info "Restoring METADATA backup id $backup_id from node $node_id from path $d excluding tables $exclude_tables"
-            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore_meta >> $log_file 2>&1
+            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore-meta --disable-indexes >> $log_file 2>&1
         done
+        _log_info "Finished restoring METADATA"
     elif [ "$ndb_restore_op" == "DATA" ]; then
         if [ $ndb_restore_serial ]; then
             _log_info "Restoring multiparts serially"
@@ -210,10 +225,14 @@ _ndb_restore_int(){
         for d in "${backup_dirs[@]}"
         do
             _log_info "Restoring DATA backup id $backup_id from node $node_id from path $d excluding tables $exclude_tables"
-            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore_data >> $log_file 2>&1
+            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore-data >> $log_file 2>&1
         done
+        _log_info "Finished restoring DATA"
+    elif [ "$ndb_restore_op" == "REBUILD-INDEXES" ]; then
+        _log_info "Rebuilding INDEXES"
+        $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$ndb_backup_path $exclude_tables --rebuild-indexes >> $log_file 2>&1
+        _log_info "Finished rebuilding indexes"
     fi
-    _log_info "Finished restoring data"
 }
 
 ########################
@@ -241,7 +260,7 @@ _create_tablespaces_int(){
 }
 
 _help(){
-    echo -e "Usage: $(basename $0) create-tablespaces | restore-schema | ndb-restore\nUse -h for further help"
+    echo -e "Usage: $(basename $0) create-tablespaces | restore-schema | ndb-restore | show-tables\nUse -h for further help"
     exit 1
 }
 
@@ -261,6 +280,10 @@ case $subcommand in
     "ndb-restore")
         shift
         _ndb_restore $@
+        ;;
+    "show-tables")
+        shift
+        _show_tables $@
         ;;
     *)
         _help

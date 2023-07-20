@@ -493,6 +493,10 @@ attribute "ndb/mysql_port",
           :description => "Port on which the MySQL server binds to",
           :type => "string"
 
+attribute "ndb/mysqlx_port",
+          :description => "Port on which the MySQL X plugin binds to",
+          :type => "string"
+
 attribute "services/enabled",
           :description => "Default 'false'. Set to 'true' to enable daemon services, so that they are started on a host restart.",
           :type => "string"

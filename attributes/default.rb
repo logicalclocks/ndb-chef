@@ -192,7 +192,9 @@ default['mysql']['version_dir']                       = "#{node['mysql']['base_d
 
 # Location for the MySQL socket - needs to be in a directory which is accessible only to the mysql user
 default['ndb']['mysql_socket']                        = "#{node['ndb']['root_dir']}/mysql.sock"
+default['ndb']['mysqlx_socket']                       = "#{node['ndb']['root_dir']}/mysqlx.sock"
 default['ndb']['mysql_port']                          = "3306"
+default['ndb']['mysqlx_port']                         = "33060"
 
 default['mysql']['localhost']                         = "false"
 

@@ -275,9 +275,11 @@ default['ndb']['rdrs']['internal']['pre_allocated_buffers']            = "1024"
 default['ndb']['rdrs']['internal']['go_max_procs']                     = "-1" 
 #if go_max_procs is -1 then number of threads used by go runtime is same as no of CPU cores
 
+default['ndb']['rdrs']['rest']['enable']                               = "true"
 default['ndb']['rdrs']['rest']['bind_ip']                              = "0.0.0.0"
 default['ndb']['rdrs']['rest']['bind_port']                            = "4406"
 
+default['ndb']['rdrs']['grpc']['enable']                               = "true"
 default['ndb']['rdrs']['grpc']['bind_ip']                              = "0.0.0.0"
 default['ndb']['rdrs']['grpc']['bind_port']                            = "5406"
 

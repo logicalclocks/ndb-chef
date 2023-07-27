@@ -5,10 +5,12 @@
     "GOMAXPROCS": <%= node['ndb']['rdrs']['internal']['go_max_procs'] %>
   },
   "REST": {
+    "Enable": "<%= node['ndb']['rdrs']['rest']['enable'] %>",
     "ServerIP": "<%= node['ndb']['rdrs']['rest']['bind_ip'] %>",
     "ServerPort": <%= node['ndb']['rdrs']['rest']['bind_port'] %>
   },
   "GRPC": {
+    "Enable": "<%= node['ndb']['rdrs']['grpc']['enable'] %>",
     "ServerIP": "<%= node['ndb']['rdrs']['grpc']['bind_ip'] %>",
     "ServerPort": <%= node['ndb']['rdrs']['grpc']['bind_port'] %>
   },

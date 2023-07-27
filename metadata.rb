@@ -555,12 +555,20 @@ attribute "ndb/rdrs/internal/go_max_procs",
           :description => "GOMAXPROCS. Default: -1",
           :type => "string"
 
+attribute "ndb/rdrs/rest/enable",
+          :description => "Enable/Disable REST Interface. Default: true",
+          :type => "string"
+
 attribute "ndb/rdrs/rest/bind_ip",
           :description => "HTTP REST bind IP. Default: 0.0.0.0",
           :type => "string"
 
 attribute "ndb/rdrs/rest/bind_port",
           :description => "HTTP REST bind port. Default: 4406",
+          :type => "string"
+
+attribute "ndb/rdrs/grpc/enable",
+          :description => "Enable/Disable gRPC Interface. Default: true",
           :type => "string"
 
 attribute "ndb/rdrs/grpc/bind_ip",

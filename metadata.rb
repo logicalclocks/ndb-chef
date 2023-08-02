@@ -555,6 +555,18 @@ attribute "ndb/rdrs/internal/go_max_procs",
           :description => "GOMAXPROCS. Default: -1",
           :type => "string"
 
+attribute "ndb/rdrs/certificate_url",
+          :description => "Optionally supply url to user issued certificate for REST/gRPC server, if not specified Hopsworks issued will be used. Default: """,
+          :type => "string"
+
+attribute "ndb/rdrs/key_url",
+          :description => "Optionally supply url to user issued key for REST/gRPC server, if not specified Hopsworks issued will be used. Default: """,
+          :type => "string"
+
+attribute "ndb/rdrs/ca_url",
+          :description => "Optionally supply url to CA certificate issued user certificate, if not specified Hopsworks (intermediate) CA bundle will be used. Default: """,
+          :type => "string"
+
 attribute "ndb/rdrs/rest/enable",
           :description => "Enable/Disable REST Interface. Default: true",
           :type => "string"

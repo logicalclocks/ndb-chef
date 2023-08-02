@@ -274,6 +274,9 @@ default['ndb']['rdrs']['internal']['buffer_size']                      = "327680
 default['ndb']['rdrs']['internal']['pre_allocated_buffers']            = "1024"
 default['ndb']['rdrs']['internal']['go_max_procs']                     = "-1" 
 #if go_max_procs is -1 then number of threads used by go runtime is same as no of CPU cores
+default['ndb']['rdrs']['certificate_url']                              = ""
+default['ndb']['rdrs']['key_url']                                      = ""
+default['ndb']['rdrs']['ca_url']                                       = ""
 
 default['ndb']['rdrs']['rest']['enable']                               = "true"
 default['ndb']['rdrs']['rest']['bind_ip']                              = "0.0.0.0"

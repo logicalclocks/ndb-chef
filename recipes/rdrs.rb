@@ -53,6 +53,39 @@ certificate = "#{crypto_dir}/#{x509_helper.get_certificate_bundle_name(node['ndb
 private_key = "#{crypto_dir}/#{x509_helper.get_private_key_pkcs1_name(node['ndb']['user'])}"
 hops_ca = "#{crypto_dir}/#{x509_helper.get_hops_ca_bundle_name()}"
 
+unless node['ndb']['rdrs']['key_url'].empty?
+  remote_file "#{crypto_dir}/#{File.basename(node['ndb']['rdrs']['key_url'])}" do
+    source node['ndb']['rdrs']['key_url']
+    user node['ndb']['user']
+    group node['ndb']['group']
+    mode 0700
+    action :create
+  end
+  private_key = "#{crypto_dir}/#{File.basename(node['ndb']['rdrs']['key_url'])}"
+end
+
+unless node['ndb']['rdrs']['certificate_url'].empty?
+  remote_file "#{crypto_dir}/#{File.basename(node['ndb']['rdrs']['certificate_url'])}" do
+    source node['ndb']['rdrs']['certificate_url']
+    user node['ndb']['user']
+    group node['ndb']['group']
+    mode 0700
+    action :create
+  end
+  certificate = "#{crypto_dir}/#{File.basename(node['ndb']['rdrs']['certificate_url'])}"
+end
+
+unless node['ndb']['rdrs']['ca_url'].empty?
+  remote_file "#{crypto_dir}/#{File.basename(node['ndb']['rdrs']['ca_url'])}" do
+    source node['ndb']['rdrs']['ca_url']
+    user node['ndb']['user']
+    group node['ndb']['group']
+    mode 0700
+    action :create
+  end
+  hops_ca = "#{crypto_dir}/#{File.basename(node['ndb']['rdrs']['ca_url'])}"
+end
+
 for script in node['ndb']['rdrs']['scripts']
   template "#{node['ndb']['scripts_dir']}/#{script}" do
     source "#{script}.erb"

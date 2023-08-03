@@ -53,6 +53,21 @@ certificate = "#{crypto_dir}/#{x509_helper.get_certificate_bundle_name(node['ndb
 private_key = "#{crypto_dir}/#{x509_helper.get_private_key_pkcs1_name(node['ndb']['user'])}"
 hops_ca = "#{crypto_dir}/#{x509_helper.get_hops_ca_bundle_name()}"
 
+hopsworks_alt_url = "https://#{private_recipe_ip("hopsworks","default")}:8181"
+if node.attribute? "hopsworks"
+  if node["hopsworks"].attribute? "https" and node["hopsworks"]['https'].attribute? ('port')
+    hopsworks_alt_url = "https://#{private_recipe_ip("hopsworks","default")}:#{node['hopsworks']['https']['port']}"
+  end
+end
+
+kagent_hopsify "Generate x.509" do
+  user node['ndb']['user']
+  crypto_directory crypto_dir
+  action :generate_x509
+  hopsworks_alt_url hopsworks_alt_url
+  not_if { node["kagent"]["enabled"] == "false" }
+end
+
 unless node['ndb']['rdrs']['key_url'].empty?
   remote_file "#{crypto_dir}/#{File.basename(node['ndb']['rdrs']['key_url'])}" do
     source node['ndb']['rdrs']['key_url']
@@ -130,21 +145,6 @@ end
 if node['ndb']['rdrs']['security']['enable_tls'] == "true"
 
   if node['services']['enabled'] == "true"
-    hopsworks_alt_url = "https://#{private_recipe_ip("hopsworks","default")}:8181"
-    if node.attribute? "hopsworks"
-        if node["hopsworks"].attribute? "https" and node["hopsworks"]['https'].attribute? ('port')
-            hopsworks_alt_url = "https://#{private_recipe_ip("hopsworks","default")}:#{node['hopsworks']['https']['port']}"
-        end
-    end
-
-    kagent_hopsify "Generate x.509" do
-        user node['ndb']['user']
-        crypto_directory crypto_dir
-        action :generate_x509
-        hopsworks_alt_url hopsworks_alt_url
-        not_if { node["kagent"]["enabled"] == "false" }
-    end
-    
     template "#{node['ndb']['root_dir']}/rdrs_config.json" do
         source "rdrs_config.json.erb"
         owner node['ndb']['user']

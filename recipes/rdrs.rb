@@ -82,6 +82,13 @@ if exists_local("hopsworks", "default")
     hopsworks_alt_url hopsworks_alt_url
     not_if { node["kagent"]["enabled"] == "false" }
   end
+# If deployed on managed with kagent disabled, create mysql crypto dir
+elsif node['install']['managed_docker_registry'].casecmp?("true") and !node['install']['cloud'].empty?  and node["kagent"]["enabled"].casecmp?("false")
+  kagent_hopsify "Create mysql crypto directory" do
+    user node['ndb']['user']
+    crypto_directory crypto_dir
+    action :create_user_directory
+  end
 end 
 
 unless node['ndb']['rdrs']['key_url'].empty?

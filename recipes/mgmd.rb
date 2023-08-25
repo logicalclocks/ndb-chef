@@ -154,7 +154,7 @@ kagent_config "#{service_name}" do
   action :systemd_reload
 end
 
-if exists_local('consul', 'master') or exists_local('consul', 'slave')
+if service_discovery_enabled()
   consul_service "Registering RonDB mgm with Consul" do
     service_definition "consul/mgm-consul.hcl.erb"
     reload_consul false

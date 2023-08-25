@@ -67,7 +67,7 @@ if node['kagent']['enabled'] == "true"
    end
 end
 
-if exists_local('consul', 'master') or exists_local('consul', 'slave')
+if service_discovery_enabled()
   # Register MySQL exporter with Consul
   consul_service "Registering MySQL exporter with Consul" do
     service_definition "mysql-exporter-consul.hcl.erb"

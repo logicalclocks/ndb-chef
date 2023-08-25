@@ -208,7 +208,7 @@ end
 # Download and install mysqld_exporter
 include_recipe "ndb::mysqld_exporter"
 
-if exists_local('consul', 'master') or exists_local('consul', 'slave')
+if service_discovery_enabled()
   template "#{node['consul']['bin_dir']}/ping-mysqld.sh" do
     source "consul/ping-mysqld.sh.erb"
     owner node['consul']['user']

@@ -34,6 +34,14 @@ module NDB
         def rondb_restoring_backup
           !node['ndb']['restore']['backup_id'].empty? && !node['ndb']['restore']['tarball'].empty?
         end
+
+        def mysql_server_id
+          startId = node['ndb']['replication']['cluster-id'].to_i
+          my_ip = my_private_ip()
+          idx = node['ndb']['mysqld']['private_ips'].sort().index(my_ip)
+          server_id = startId + idx
+          return server_id
+        end
     end
 end
 

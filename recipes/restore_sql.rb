@@ -2,9 +2,12 @@ backup_directory = "#{node['ndb']['local_backup_dir']}/#{File.basename(node['ndb
 private_ip=my_private_ip()
 ndb_connectstring()
 mgm_connection = node['ndb']['connectstring']
-should_run = private_ip.eql?(node['ndb']['mysqld']['private_ips'].sort[0])
+should_run = private_ip.eql?(node['ndb']['restore_sql']['private_ips'].sort[0])
 mysql_cli = "#{node['ndb']['scripts_dir']}/mysql-client.sh"
-exclude_databases=node['ndb']['restore']['exclude_databases_meta']
+exclude_databases_option = ""
+unless node['ndb']['restore']['exclude_databases_meta'].empty?
+    exclude_databases_option = "-e #{node['ndb']['restore']['exclude_databases_meta']}"
+end
 rebuild_indexes_check = "#{Chef::Config['file_cache_path']}/rondb_rebuild_indexes_#{node['install']['version']}_#{node['ndb']['version']}"
 
 bash 'Rebuild indexes' do
@@ -12,7 +15,7 @@ bash 'Rebuild indexes' do
     group 'root'
     code <<-EOH
         set -e
-        #{node['ndb']['scripts_dir']}/restore_backup.sh ndb-restore -p #{backup_directory} -n 1 -b #{node['ndb']['restore']['backup_id']} -c #{mgm_connection} -e #{exclude_databases} -m REBUILD-INDEXES
+        #{node['ndb']['scripts_dir']}/restore_backup.sh ndb-restore -p #{backup_directory} -n 1 -b #{node['ndb']['restore']['backup_id']} -c #{mgm_connection} #{exclude_databases_option} -m REBUILD-INDEXES
         touch #{rebuild_indexes_check}
     EOH
     # Add this check to avoid re-running this block in case one of the following steps
@@ -57,16 +60,23 @@ bash 'Remove host certificates' do
     user 'root'
     group 'root'
     code <<-EOH
-        set -e
-        #{mysql_cli} -e "DELETE FROM hopsworks.pki_certificate WHERE subject REGEXP '^C=.+ST=Sweden.+CN.+' AND status=1"
-        #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^C=.+ST=Sweden.+CN.+'"
+        set +e
+        #{mysql_cli} -e "use hopsworks" 1> /dev/null 2> /dev/null
+        if [ "$?" -eq 0 ]; then
+            set -e
+            echo "Hopsworks database exists"
+            #{mysql_cli} -e "DELETE FROM hopsworks.pki_certificate WHERE subject REGEXP '^C=.+ST=Sweden.+CN.+' AND status=1"
+            #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^C=.+ST=Sweden.+CN.+'"
 
-        # Two following queries revoke Glassfish'es internal certificate. First 2 are for before Hopsworks HA
-        # and last two are after Hopsworks HA where we changed the Subject of the certificate
-        #{mysql_cli} -e "DELETE FROM hopsworks.pki_certificate WHERE subject REGEXP '^CN=#{hopsworks_consul}.+' AND status=1"
-        #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^CN=#{hopsworks_consul}.+'"
-        #{mysql_cli} -e "DELETE FROM hopsworks.pki_certificate WHERE subject REGEXP 'L=glassfishinternal.+' AND status=1"
-        #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP 'L=glassfishinternal.+'"
+            # Two following queries revoke Glassfish'es internal certificate. First 2 are for before Hopsworks HA
+            # and last two are after Hopsworks HA where we changed the Subject of the certificate
+            #{mysql_cli} -e "DELETE FROM hopsworks.pki_certificate WHERE subject REGEXP '^CN=#{hopsworks_consul}.+' AND status=1"
+            #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP '^CN=#{hopsworks_consul}.+'"
+            #{mysql_cli} -e "DELETE FROM hopsworks.pki_certificate WHERE subject REGEXP 'L=glassfishinternal.+' AND status=1"
+            #{mysql_cli} -e "UPDATE hopsworks.pki_certificate SET status=1 WHERE subject REGEXP 'L=glassfishinternal.+'"
+        else
+            echo "Hopsworks database DOES NOT exist"
+        fi
     EOH
     only_if { should_run }
     only_if { rondb_restoring_backup() }

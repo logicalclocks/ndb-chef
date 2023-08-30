@@ -97,6 +97,8 @@ service "#{service_name}" do
   action :nothing
 end
 
+server_id = mysql_server_id()
+
 template "#{node['ndb']['root_dir']}/my.cnf" do
   source "my-ndb.cnf.erb"
   owner node['ndb']['user']
@@ -108,7 +110,9 @@ template "#{node['ndb']['root_dir']}/my.cnf" do
    # Here is always false, as this recipe is run before certificates are available
    # if mysql/tls is enabled, the file will be re-templated later
    :mysql_tls => false,
-   :timezone => Time.now.strftime("%:z")
+   :timezone => Time.now.strftime("%:z"),
+   :server_id => server_id,
+   :am_i_primary => node['ndb']['replication']['role'].casecmp?('primary')
   })
   if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name), :immediately
@@ -231,3 +235,4 @@ if conda_helpers.is_upgrade
 end
 
 
+include_recipe "ndb::replication_configuration"

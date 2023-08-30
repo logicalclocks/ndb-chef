@@ -15,6 +15,15 @@ default['ndb']['url']                                 = node['download_url'] + "
 default['ndb']['checksum']                            = ""
 default['ndb']['configuration']['type']               = "auto"
 default['ndb']['configuration']['profile']            = "unlimited"
+## TODO maybe I can remove cluster-id and role and keep only primary-cluster-id and replica-cluster-id
+default['ndb']['replication']['cluster-id']           = "100"
+default['ndb']['replication']['role']                 = "primary"
+default['ndb']['replication']['primary-cluster-id']   = ""
+default['ndb']['replication']['replica-cluster-id']   = ""
+default['ndb']['replication']['replicate-ignore-tables'] = "glassfish_timers.EJB__TIMER__TBL"
+
+default['ndb']['replication']['user']                 = "repl_user"
+default['ndb']['replication']['password']             = "repl_password"
 
 default['ndb']['bind_cpus']                           = "false"
 
@@ -161,8 +170,8 @@ default['ndb']['remote_backup_dir']                   = ""
 default['ndb']['local_backup_dir']                    = "#{node['ndb']['root_dir']}/ndb/backups"
 default['ndb']['restore']['tarball']                  = ""
 default['ndb']['restore']['backup_id']                = ""
-default['ndb']['restore']['exclude_databases_meta']   = "glassfish_timers.EJB__TIMER__TBL"
-default['ndb']['restore']['exclude_databases_data']   = "glassfish_timers.EJB__TIMER__TBL,hopsworks.hosts,hopsworks.host_services"
+default['ndb']['restore']['exclude_databases_meta']   = "mysql.ndb_apply_status,glassfish_timers.EJB__TIMER__TBL"
+default['ndb']['restore']['exclude_databases_data']   = "mysql.ndb_apply_status,glassfish_timers.EJB__TIMER__TBL,hopsworks.hosts,hopsworks.host_services"
 ## How many n*24 hours are the backup files in NDB Data Ndes going to stay until they are removed
 ## NOTE: cron_backup attribute should be set to true
 default['ndb']['ndbd_backup_retention']               = "5"

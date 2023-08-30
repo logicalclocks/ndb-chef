@@ -56,6 +56,34 @@ attribute "ndb/configuration/profile",
           :description =>  "Predefined configurations. unlimited | tiny Default: unlimited",
           :type => 'string'
 
+attribute "ndb/replication/cluster-id",
+          :description =>  "Cluster ID used to compute monotonicaly increasing MySQL server-id. In Global Replication these IDs need to be globally unique. Default: 100",
+          :type => 'string'
+
+attribute "ndb/replication/primary-cluster-id",
+          :description =>  "Primary cluster id when configuring Global replication",
+          :type => 'string'
+
+attribute "ndb/replication/replica-cluster-id",
+          :description =>  "Replica cluster id when configuring Global replication",
+          :type => 'string'
+
+attribute "ndb/replication/replicate-ignore-tables",
+          :description =>  "Tables to ignore on the MySQL replica at Global replication",
+          :type => 'string'
+
+attribute "ndb/replication/role",
+          :description =>  "In case of replication indicate if this cluster will be the primary or replica. Default: primary",
+          :type => 'string'
+
+attribute "ndb/replication/user",
+          :description =>  "Replication user. Default: repl_user",
+          :type => 'string'
+
+attribute "ndb/replication/password",
+          :description =>  "Password of the user doing the replication",
+          :type => 'string'
+
 attribute "ndb/DataMemory",
           :description => "Data memory for each MySQL Cluster Data Node",
           :type => 'string',
@@ -111,6 +139,14 @@ attribute "ndb/restore/tarball",
 
 attribute "ndb/restore/backup_id",
           :description => "RonDB native RonDB backup ID to restore. It is used by restore_backup.sh script. Default: """,
+          :type => 'string'
+
+attribute "ndb/restore/exclude_databases_meta",
+          :description => "Databases to exclude from restore-meta operation",
+          :type => 'string'
+
+attribute "ndb/restore/exclude_databases_data",
+          :description => "Databases to exclude from restore-data operation",
           :type => 'string'
 
 attribute "ndb/ndbd_backup_retention",
@@ -666,4 +702,3 @@ attribute "ndb/rdrs/log/max_backups",
 attribute "ndb/rdrs/log/log_max_age",
           :description => "Log files max age. Default: 30",
           :type => "string"
-

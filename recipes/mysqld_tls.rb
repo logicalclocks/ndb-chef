@@ -27,6 +27,8 @@ if node['mysql']['tls'].casecmp?("true")
         action :nothing
     end
 
+    server_id = mysql_server_id()
+
     found_id=find_service_id("mysqld", node['mysql']['id'])
     certificate = "#{crypto_dir}/#{x509_helper.get_certificate_bundle_name(node['ndb']['user'])}"
     key = "#{crypto_dir}/#{x509_helper.get_private_key_pkcs1_name(node['ndb']['user'])}"
@@ -43,7 +45,9 @@ if node['mysql']['tls'].casecmp?("true")
             :certificate => certificate,
             :key => key,
             :hops_ca => hops_ca,
-            :timezone => Time.now.strftime("%:z")
+            :timezone => Time.now.strftime("%:z"),
+            :server_id => server_id,
+            :am_i_primary => node['ndb']['replication']['role'].casecmp?('primary')
     })
     notifies :restart, resources(:service => "mysqld"), :immediately
     end

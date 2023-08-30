@@ -26,6 +26,7 @@ dependencies:
   - recipe: ndb::ndb_restore_meta
     global:
       - ndb::ndbd
+      - ndb::download_backup
   - recipe: ndb::ndb_restore_data
     global:
       - ndb::ndb_restore_meta
@@ -33,3 +34,10 @@ dependencies:
     global:
       - ndb::mysqld
       - ndb::ndb_restore_data
+  - recipe: ndb::download_backup
+    global:
+      - ndb::replication_backup
+  - recipe: ndb::mysql_replica
+    global:
+      - ndb::restore_sql
+      - ndb::mysql_primary

@@ -310,3 +310,6 @@ default['ndb']['rdrs']['log']['log_max_age']                           = "30"
 default['ndb']['rdrs']['scripts']                                      = %w{ rdrs-start.sh rdrs-stop.sh rdrs-restart.sh }
 
 default['ndb']['ulimit_file']                                          = "/etc/security/limits.d/#{node['ndb']['user']}.conf"
+
+## Consul
+default['ndb']['mgmd']['consul_tag']                                   = "mgm"

@@ -3,7 +3,7 @@ services = [
         id = "rondb/mgm"
         name = "rondb"
         tags = [
-            "mgm"
+            <%= node['ndb']['mgmd']['consul_tag'] %>
         ]
         port = <%= node['ndb']['mgmd']['port'] %>
         check = {

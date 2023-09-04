@@ -203,6 +203,10 @@ attribute "ndb/mgmd/port",
           :description => "Port used by Mgm servers in MySQL Cluster",
           :type => 'string'
 
+attribute "ndb/mgmd/consul_tag",
+          :description => "Consul tag associated to this mgmd service (Default: mgm)",
+          :type => 'string'
+
 attribute "ndb/NoOfReplicas",
           :description => "Num of replicas of the MySQL Cluster Data Nodes",
           :type => 'string'

@@ -15,7 +15,7 @@
     "ServerPort": <%= node['ndb']['rdrs']['grpc']['bind_port'] %>
   },
   "RonDB": {
-    "Mgmds":  [ { "IP": "<%= @ndb_mgmd_ip %>", "Port": <%= @ndb_mgmd_port %> } ],
+    "Mgmds":  <%= @rondb_conn_str_arr %>,
     "ConnectionPoolSize": <%= node['ndb']['rdrs']['rondb']['connection_pool_size'] %>,
     "NodeIDs": <%= node['ndb']['rdrs']['rondb']['node_ids'] %>,
     "ConnectionRetries": <%= node['ndb']['rdrs']['rondb']['connection_retries'] %>,
@@ -23,6 +23,16 @@
     "OpRetryOnTransientErrorsCount": <%= node['ndb']['rdrs']['rondb']['op_retry_on_transient_errors_count'] %>,
     "OpRetryInitialDelayInMS": <%= node['ndb']['rdrs']['rondb']['op_retry_initial_delay_in_ms'] %>,
     "OpRetryJitterInMS": <%= node['ndb']['rdrs']['rondb']['op_retry_jitter_in_ms'] %>
+  },
+  "RonDBMetadataCluster": {
+    "Mgmds":  <%= @rondb_metadata_cluster_conn_str_arr %>,
+    "ConnectionPoolSize": <%= node['ndb']['rdrs']['rondbmetadatacluster']['connection_pool_size'] %>,
+    "NodeIDs": <%= node['ndb']['rdrs']['rondbmetadatacluster']['node_ids'] %>,
+    "ConnectionRetries": <%= node['ndb']['rdrs']['rondbmetadatacluster']['connection_retries'] %>,
+    "ConnectionRetryDelayInSec": <%= node['ndb']['rdrs']['rondbmetadatacluster']['connection_retry_delay_in_sec'] %>,
+    "OpRetryOnTransientErrorsCount": <%= node['ndb']['rdrs']['rondbmetadatacluster']['op_retry_on_transient_errors_count'] %>,
+    "OpRetryInitialDelayInMS": <%= node['ndb']['rdrs']['rondbmetadatacluster']['op_retry_initial_delay_in_ms'] %>,
+    "OpRetryJitterInMS": <%= node['ndb']['rdrs']['rondbmetadatacluster']['op_retry_jitter_in_ms'] %>
   },
   "Security": {
     "TLS": {

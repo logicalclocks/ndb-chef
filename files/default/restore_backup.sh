@@ -105,10 +105,9 @@ _restore_schema_int(){
     _log_info "Finished restoring SQL schemata and views"
     users_file=${backup_path}/sql/users.sql
     _log_info "Restoring MySQL users from $users_file"
-    _log_warn "Some users such as kthfs might already be present so it is expected to see them failing"
-    set +e
-    $MYSQL_CLIENT -e "SOURCE $backup_path/sql/users.sql" >> $log_file 2>&1
-    set -e
+    # do not create a user if it already exists
+    sed -i "s/CREATE USER[[:space:]]'/CREATE USER IF NOT EXISTS '/g" $users_file
+    $MYSQL_CLIENT -e "SOURCE $users_file" >> $log_file 2>&1
     _log_info "Finished restoring MySQL users"
 }
 
@@ -232,6 +231,12 @@ _ndb_restore_int(){
         _log_info "Rebuilding INDEXES"
         $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$ndb_backup_path $exclude_tables --rebuild-indexes >> $log_file 2>&1
         _log_info "Finished rebuilding indexes"
+    elif [ "$ndb_restore_op" == "RESTORE-EPOCH" ]; then
+        _log_info "Restoring epoch"
+        $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$ndb_backup_path --restore-epoch >> $log_file 2>&1
+    else
+        _log_error "Unknown operation $ndb_restore_op"
+        exit 1
     fi
 }
 

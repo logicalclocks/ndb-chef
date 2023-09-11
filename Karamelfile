@@ -37,7 +37,10 @@ dependencies:
       - ndb::ndb_restore_data
   - recipe: ndb::download_backup
     global:
-      - ndb::replication_backup
+      - ndb::backup
+  - recipe: ndb::backup
+    global:
+      - ndb::mysql_primary
   - recipe: ndb::mysql_replica
     global:
       - ndb::restore_sql

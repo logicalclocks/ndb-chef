@@ -87,7 +87,12 @@ function check_exit_code {
 NDB_DATANODES="$($MYSQL_ROOT/bin/ndb_mgm -c $MGM_CONN -e "SHOW" | grep Nodegroup | awk -F ' ' '{print $2}' | cut -c2-)"
 log_info "Participating NDB Data Nodes: $NDB_DATANODES"
 
-backup_id=$(date +'%y%V%u%M')
+if [ -z "$RONDB_BACKUP_ID" ];
+then
+    backup_id=$(date +'%y%V%u%M')
+else
+    backup_id=$RONDB_BACKUP_ID
+fi
 log_info "Starting NDB native backup with ID BACKUP-$backup_id"
 
 ## Start NDB native backup with backup ID $backup_id
@@ -105,7 +110,12 @@ then
 fi
 
 ## Name pattern should be the same on the rotation script on target machine, if used
-backup_name=hops_hopsworks_$(date +'%y-%m-%d_%H-%M').backup_${backup_id}
+if [ -z "$RONDB_BACKUP_NAME" ];
+then
+    backup_name=hops_hopsworks_$(date +'%y-%m-%d_%H-%M').backup_${backup_id}
+else
+    backup_name=$RONDB_BACKUP_NAME
+fi
 backup_target=$LOCAL_BACKUP_DIR/$backup_name
 
 if [ -d "$backup_target" ];
@@ -138,6 +148,8 @@ sed -i 's/CREATE TABLE[[:space:]]/CREATE TABLE IF NOT EXISTS /g' "$sql_backup_ta
 
 # Backing up the users
 $MYSQL_ROOT/bin/mysqlpump -u root -S $MYSQL_SOCKET --exclude-databases=%% --exclude-users=root,mysql.sys,mysql.session,mysql.infoschema --users > "$sql_backup_target"/users.sql
+# do not create a user if it already exists
+sed -i "s/CREATE USER[[:space:]]'/CREATE USER IF NOT EXISTS '/g" "$sql_backup_target"/users.sql
 
 pushd $LOCAL_BACKUP_DIR
 tar cfz "$backup_name".tar.gz "$backup_name"

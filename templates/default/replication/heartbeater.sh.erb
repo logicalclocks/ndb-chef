@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+MYSQL_BIN_DIR=<%= node['mysql']['bin_dir'] %>
+MYSQL_SOCKET=<%= node['ndb']['mysql_socket'] %>
+LOG_DIR=<%= node['ndb']['log_dir'] %>
+MY_CNF=<%= node['ndb']['root_dir'] %>/my.cnf
+## 0 - No log
+## 1 - ERROR
+## 2 - WARN
+## 3 - INFO
+## 4 - DEBUG
+LOG_LEVEL=4
+
+COUNTER_MAX_VALUE=2147483640
+
+grep "^[[:space:]]*skip-slave-start" $MY_CNF >/dev/null 2>&1
+if [ "$?" -eq 0 ];then
+    echo "I am replica. Exit"
+    exit 1
+fi
+
+n=$(date +'%g%m%d')
+log_file=${LOG_DIR}/replication_heartbeater_${n}.log
+
+_log(){
+    now=$(date)
+    set +e
+    echo "$now - $1 - $2" >> $log_file
+    set -e
+}
+
+_log_error(){
+    if [ "$LOG_LEVEL" -ge 1 ]; then
+        _log "ERROR" "$1"
+    fi
+}
+
+_log_warn(){
+    if [ "$LOG_LEVEL" -ge 2 ]; then
+        _log "WARN" "$1"
+    fi
+}
+
+_log_info(){
+    if [ "$LOG_LEVEL" -gt 3 ]; then
+        _log "INFO" "$1"
+    fi
+}
+
+_log_debug(){
+    if [ "$LOG_LEVEL" -gt 4 ]; then
+        _log "DEBUG" "$1"
+    fi
+}
+
+set -e
+MY_ID=$(grep server-id $MY_CNF | awk -F '=' '{print $2}' | sed -e 's/^[[:space:]]*//')
+_log_info "My server-id: $MY_ID"
+
+while true; do
+    row=$($MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT counter, active FROM rondb_replication.heartbeat_tbl WHERE primary_id = $MY_ID")
+    counter=$(echo $row | awk -F ' ' '{print $1}')
+    active=$(echo $row | awk -F ' ' '{print $2}')
+    _log_debug "Row: $row"
+
+    if [ "$active" -eq 0 ]; then
+        _log_debug "ID: $MY_ID is not active, not heartbeating"
+    else
+        if [ "$counter" -gt "$COUNTER_MAX_VALUE" ]; then
+            counter=0
+        else
+            counter=$((counter+1))
+        fi
+        _log_info "Updating rondb_replication.heartbeat_tbl with COUNTER=$counter for ID=$MY_ID"
+        $MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "UPDATE rondb_replication.heartbeat_tbl SET counter=$counter WHERE primary_id=$MY_ID"
+        _log_info "Updated rondb_replication.heartbeat_tbl"
+    fi
+    sleep 3s
+done

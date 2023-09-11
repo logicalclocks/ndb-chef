@@ -18,6 +18,20 @@ tmpdir          = /tmp
 max-connections = 512
 max-prepared-stmt-count = 65530
 local_infile = OFF
+server-id = <%= @server_id %>
+log-bin = binlog
+binlog-format = ROW
+ndb_log_bin = ON
+log_bin_trust_function_creators = ON
+sync_binlog = 1
+binlog_expire_logs_seconds = 100000
+binlog-cache-size = 8M
+slave_allow_batching = ON
+<% for t in node['ndb']['replication']['replicate-ignore-tables'].split(",") -%>
+replicate-ignore-table=<%= t.strip() %>
+<% end -%>
+# Do not remove the commented skip-slave-start because it will be uncommented automatically when the server switches roles
+<% if @am_i_primary -%>#<% end -%>skip-slave-start
 
 default-time-zone = "<%= @timezone %>"
 

@@ -1,0 +1,15 @@
+[Unit]
+Description = RonDB replication heartbeater
+After = syslog.target network.target remote-fs.target mysqld.service
+StartLimitIntervalSec = 20
+StartLimitBurst = 15
+
+[Service]
+User = <%= node['ndb']['user'] %>
+ExecStart = <%= node['ndb']['scripts_dir'] %>/heartbeater.sh
+Restart = on-failure
+RestartSec = 2
+Type = exec
+
+[Install]
+WantedBy = multi-user.target

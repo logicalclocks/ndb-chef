@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+set -e
+
+MYSQL_BIN_DIR=<%= node['mysql']['bin_dir'] %>
+MYSQL_SOCKET=<%= node['ndb']['mysql_socket'] %>
+MYSQL_SCRIPTS_DIR=<%= node['ndb']['scripts_dir'] %>
+NDB_ROOT_DIR=<%= node['ndb']['root_dir'] %>
+LOG_DIR=<%= node['ndb']['log_dir'] %>
+
+## 0 - No log
+## 1 - ERROR
+## 2 - WARN
+## 3 - INFO
+## 4 - DEBUG
+LOG_LEVEL=4
+
+CHECK_FILE=$NDB_ROOT_DIR/ndb/replication_channel_configured
+
+unset -v REPLICATE_FROM_IDS
+unset -v PRIMARY_SERVER
+unset -v MYSQL_USER
+unset -v MYSQL_PASSWORD
+
+log_file=${LOG_DIR}/replication_configuration.log
+
+_log(){
+    now=$(date)
+    set +e
+    echo "$now - $1 - $2" >> $log_file
+    set -e
+}
+
+_log_error(){
+    if [ "$LOG_LEVEL" -ge 1 ]; then
+        _log "ERROR" "$1"
+    fi
+}
+
+_log_warn(){
+    if [ "$LOG_LEVEL" -ge 2 ]; then
+        _log "WARN" "$1"
+    fi
+}
+
+_log_info(){
+    if [ "$LOG_LEVEL" -gt 3 ]; then
+        _log "INFO" "$1"
+    fi
+}
+
+_log_debug(){
+    if [ "$LOG_LEVEL" -gt 4 ]; then
+        _log "DEBUG" "$1"
+    fi
+}
+
+_help() {
+    echo -e "Usage $(basename $0) -r REPLICATE_FROM_SERVER_IDS -m PRIMARY_MYSQL_SERVER -u MYSQL_USER -p MYSQL_PASSWORD"
+}
+
+while getopts 'r:m:u:p:i:h' opt; do
+    case "$opt" in
+        r)
+            REPLICATE_FROM_IDS="$OPTARG"
+            ;;
+        m)
+            PRIMARY_SERVER="$OPTARG"
+            ;;
+        u)
+            MYSQL_USER="$OPTARG"
+            ;;
+        p)
+            MYSQL_PASSWORD="$OPTARG"
+            ;;
+        ?|h)
+            _help
+            exit 1
+            ;;
+    esac
+done
+
+if [ -z "$REPLICATE_FROM_IDS" ]; then
+    _log_error "REPLICATE_FROM_SERVER_IDS is not set"
+    _help
+    exit 1
+fi
+
+if [ -z "$PRIMARY_SERVER" ]; then
+    _log_error "PRIMARY_MYSQL_SERVER is not set"
+    _help
+    exit 1
+fi
+
+if [ -z "$MYSQL_USER" ]; then
+    _log_error "MYSQL_USER is not set"
+    _help
+    exit 1
+fi
+
+if [ -z "$MYSQL_PASSWORD" ]; then
+    _log_error "MYSQL_PASSWORD is not set"
+    _help
+    exit 1
+fi
+
+_log_info "Starting replication configuration"
+
+if [ -e $CHECK_FILE ];then
+    _log_error "Replication configuration has already been done. File $CHECK_FILE exists!" >> /tmp/repl_log
+    exit 1
+fi
+
+defIFS=$IFS
+IFS=','
+read -ra RIDS <<< "$REPLICATE_FROM_IDS"
+IFS=$defIFS
+
+restore_epoch_where=""
+idx=1
+size=${#RIDS[@]}
+for id in "${RIDS[@]}"; do
+    restore_epoch_where="$restore_epoch_where server_id = $id"
+    if [ "$size" -gt 1 ] && [ "$idx" -ne "$size" ]; then
+        restore_epoch_where="$restore_epoch_where OR"
+    fi
+    idx=$((idx+1))
+done
+
+_log_debug "Restore epoch clause: $restore_epoch_where"
+
+restore_epoch=$($MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT MAX(epoch) AS restore_epoch from mysql.ndb_apply_status WHERE $restore_epoch_where;")
+
+_log_info "Restore epoch: $restore_epoch"
+
+row=$($MYSQL_BIN_DIR/mysql -h $PRIMARY_SERVER -u $MYSQL_USER -p$MYSQL_PASSWORD -Nse "SELECT SUBSTRING_INDEX(next_file, '/', -1) AS file, next_position AS position FROM mysql.ndb_binlog_index WHERE epoch <= $restore_epoch ORDER BY epoch DESC LIMIT 1")
+_log_info "Row0: $row"
+if [ -z "$row" ]; then
+    row=$($MYSQL_BIN_DIR/mysql -h $PRIMARY_SERVER -u $MYSQL_USER -p$MYSQL_PASSWORD -Nse "SELECT SUBSTRING_INDEX(File, '/', -1) AS file, position AS position FROM mysql.ndb_binlog_index WHERE epoch > $restore_epoch ORDER BY epoch ASC LIMIT 1")
+    _log_info "Row1: $row"
+fi
+file=$(echo $row | awk -F ' ' '{print $1}')
+position=$(echo $row | awk -F ' ' '{print $2}')
+
+_log_info "Binlog file: $file"
+_log_info "Binlog file position: $position"
+$MYSQL_SCRIPTS_DIR/mysql-client.sh -e "CHANGE REPLICATION SOURCE TO \
+        SOURCE_LOG_FILE=\"$file\", \
+        SOURCE_LOG_POS=$position;"
+
+# Re-doing the configuration above will break the replication channel
+touch $CHECK_FILE
+_log_info "Finished setting up replication"

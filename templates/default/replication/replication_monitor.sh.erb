@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+set -e
+
+MYSQL_BIN_DIR=<%= node['mysql']['bin_dir'] %>
+MYSQL_SOCKET=<%= node['ndb']['mysql_socket'] %>
+MYSQL_SCRIPTS_DIR=<%= node['ndb']['scripts_dir'] %>
+REPLICATION_USER=<%= node['ndb']['replication']['user'] %>
+REPLICATION_PASSWORD=<%= node['ndb']['replication']['password'] %>
+NDB_ROOT_DIR=<%= node['ndb']['root_dir'] %>
+LOG_DIR=<%= node['ndb']['log_dir'] %>
+MY_CNF=$NDB_ROOT_DIR/my.cnf
+
+## 0 - No log
+## 1 - ERROR
+## 2 - WARN
+## 3 - INFO
+## 4 - DEBUG
+LOG_LEVEL=4
+
+CHECK_FILE=$NDB_ROOT_DIR/ndb/replication_channel_configured
+
+n=$(date +'%g%m%d')
+log_file=${LOG_DIR}/replication_monitor_${n}.log
+
+_log(){
+    now=$(date)
+    set +e
+    echo "$now - $1 - $2" >> $log_file
+    set -e
+}
+
+_log_error(){
+    if [ "$LOG_LEVEL" -ge 1 ]; then
+        _log "ERROR" "$1"
+    fi
+}
+
+_log_warn(){
+    if [ "$LOG_LEVEL" -ge 2 ]; then
+        _log "WARN" "$1"
+    fi
+}
+
+_log_info(){
+    if [ "$LOG_LEVEL" -gt 3 ]; then
+        _log "INFO" "$1"
+    fi
+}
+
+_log_debug(){
+    if [ "$LOG_LEVEL" -gt 4 ]; then
+        _log "DEBUG" "$1"
+    fi
+}
+
+row=$($MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT primary_id from rondb_replication.heartbeat_tbl")
+primary_ids=$(echo $row | sed 's/[[:space:]]/,/g')
+_log_debug "Replication Primary server ids: $primary_ids"
+
+_channel_takeover() {
+    my_id=$(grep server-id $MY_CNF | awk -F '=' '{print $2}' | sed -e 's/^[[:space:]]*//')
+    take_over_id=$($MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT replica_id FROM rondb_replication.heartbeat_tbl WHERE active=false ORDER BY replica_id ASC LIMIT 1;")
+    _log_debug "My server id: $my_id"
+    _log_debug "Replica server id that should take over: $take_over_id"
+
+    if [ "$take_over_id" -eq "$my_id" ]; then
+        _log_info "My server id is $my_id and I should take over replication"
+	    current_active_row=$($MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT replica, primary_id FROM rondb_replication.heartbeat_tbl WHERE active=true")
+	    current_active_replica=$(echo $current_active_row | awk -F ' ' '{print $1}')
+	    current_active_primary_id=$(echo $current_active_row | awk -F ' ' '{print $2}')
+
+        _log_info "Currently active replica is $current_active_replica"
+        _log_info "Trying to stop replication channel at $current_active_replica"
+        set +e
+	    $MYSQL_BIN_DIR/mysql -h $current_active_replica -u $REPLICATION_USER -p$REPLICATION_PASSWORD -Nse "STOP REPLICA"
+        if [ "$?" -ne 0 ]; then
+            _log_warn "Could not STOP REPLICA at $current_active_replica, maybe it is dead. Continue..."
+        fi
+        set -e
+	    primary_row=$($MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT primary_id, \`primary\` FROM rondb_replication.heartbeat_tbl WHERE replica_id=$my_id;")
+	    primary_id=$(echo $primary_row | awk -F ' ' '{print $1}')
+	    primary_ip=$(echo $primary_row | awk -F ' ' '{print $2}')
+
+        _log_info "Marking the following channel as ACTIVE: Primary: $primary_id/$primary_ip Replica: $my_id"
+        $MYSQL_BIN_DIR/mysql -h $primary_ip -u $REPLICATION_USER -p$REPLICATION_PASSWORD -Nse "UPDATE rondb_replication.heartbeat_tbl SET active=false WHERE primary_id=$current_active_primary_id;"
+	    $MYSQL_BIN_DIR/mysql -h $primary_ip -u $REPLICATION_USER -p$REPLICATION_PASSWORD -Nse "UPDATE rondb_replication.heartbeat_tbl SET active=true WHERE primary_id=$primary_id;"
+        _log_info "Setting new replication configuration"
+        rm -f "$CHECK_FILE"
+	    $MYSQL_SCRIPTS_DIR/replication_configuration.sh -m $primary_ip -u $REPLICATION_USER -p $REPLICATION_PASSWORD -r $primary_ids
+        _log_info "Executing START REPLICA"
+        $MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "START REPLICA"
+        _log_info "Finished taking over replication"
+    else
+        _log_info "I will not take over replication. Server with ID: $take_over_id will"
+    fi
+}
+
+last_epoch=0
+num_failures=0
+MAX_NUM_FAILURES=4
+while true; do
+    latest_epoch=$($MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT MAX(epoch) AS last_epoch from mysql.ndb_apply_status WHERE server_id IN ($primary_ids);")
+    if [ "$latest_epoch" -le "$last_epoch" ]; then
+        num_failures=$((num_failures+1))
+        _log_warn "Replication has not progressed $num_failures/$MAX_NUM_FAILURES"
+        if [ "$num_failures" -gt "$MAX_NUM_FAILURES" ]; then
+            _log_warn "Starting replication channel take-over process"
+            _channel_takeover
+            num_failures=0
+        fi
+    else
+        _log_debug "Replication active"
+        num_failures=0
+    fi
+    last_epoch=$latest_epoch
+
+    sleep 3s
+done

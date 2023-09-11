@@ -1,0 +1,12 @@
+CREATE DATABASE IF NOT EXISTS `rondb_replication`;
+CREATE TABLE IF NOT EXISTS `rondb_replication`.`heartbeat_tbl` (
+    `primary_id` SMALLINT NOT NULL,
+    `replica_id` SMALLINT NOT NULL,
+    `counter` INT NOT NULL DEFAULT 0,
+    `active` BOOLEAN NOT NULL DEFAULT false,
+    `primary` VARCHAR(30) NOT NULL,
+    `replica` VARCHAR(30) DEFAULT "",
+     PRIMARY KEY (`primary_id`)
+) ENGINE=ndbcluster;
+
+REPLACE INTO rondb_replication.heartbeat_tbl(`primary_id`, `replica_id`, `primary`) values (<%= @server_id %>, -1, "<%= @my_ip %>");

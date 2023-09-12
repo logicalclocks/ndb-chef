@@ -332,8 +332,8 @@ default['ndb']['ulimit_file']                                          = "/etc/s
 default['ndb']['mgmd']['consul_tag']                                   = "mgm"
 
 # Featurestore MySQL Configuration
-default['featurestore']['user']                       = node['mysql']['user']
-default['featurestore']['password']                   = node['mysql']['password']
+default['featurestore']['user']                       = "featurestore_admin_user"
+default['featurestore']['password']                   = "featurestore_admin_pwd"
 
 # Use this MySQL server as Online FS
 default['mysql']['onlinefs']                          = "true"

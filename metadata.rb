@@ -738,3 +738,11 @@ attribute "ndb/rdrs/log/max_backups",
 attribute "ndb/rdrs/log/log_max_age",
           :description => "Log files max age. Default: 30",
           :type => "string"
+
+attribute "featurestore/user",
+          :description => "User for the JDBC Connection to the the Online FeatureStore",
+          :type => 'string'
+
+attribute "featurestore/password",
+          :description => "Password for the JDBC Connection to the the Online FeatureStore",
+          :type => 'string'

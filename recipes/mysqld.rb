@@ -234,5 +234,23 @@ if conda_helpers.is_upgrade
   end
 end
 
+# Grant permissions to feature store admin user
+grants_path = "#{node['ndb']['base_dir']}/featurestore_grants.sql"
+template grants_path do
+  source "featurestore_grants.sql.erb"
+  owner node['ndb']['user']
+  mode "0600"
+  action :create_if_missing
+  only_if {node['mysql']['onlinefs'].casecmp?("true")}
+end
+
+exec= node['ndb']['scripts_dir'] + "/mysql-client.sh"
+bash 'run_featurestore_grants' do
+  user node['ndb']['user']
+  code <<-EOF
+   #{exec} -e "source #{grants_path}"
+  EOF
+  only_if {node['mysql']['onlinefs'].casecmp?("true")}
+end
 
 include_recipe "ndb::replication_configuration"

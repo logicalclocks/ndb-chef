@@ -631,6 +631,10 @@ attribute "ndb/rdrs/grpc/bind_port",
           :description => "gRPC bind port. Default: 5406",
           :type => "string"
 
+attribute "ndb/rdrs/rondb/mgmds",
+          :description => "Json array of RonDB management nodes connection information.",
+          :type => "string"
+
 attribute "ndb/rdrs/rondb/connection_pool_size",
           :description => "Connection pool size. Default: 1",
           :type => "string"
@@ -656,6 +660,38 @@ attribute "ndb/rdrs/rondb/op_Retry_initial_delay_in_ms",
           :type => "string"
 
 attribute "ndb/rdrs/rondb/op_retry_jitter_in_ms",
+          :description => "Op retry jitter in ms",
+          :type => "string"
+
+attribute "ndb/rdrs/rondbmetadatacluster/mgmds",
+          :description => "Json array of RonDB management nodes connection information.",
+          :type => "string"
+
+attribute "ndb/rdrs/rondbmetadatacluster/connection_pool_size",
+          :description => "Connection pool size. Default: 1",
+          :type => "string"
+
+attribute "ndb/rdrs/rondbmetadatacluster/node_ids",
+          :description => "This is the list of node ids to force the connections to be assigned to specific node ids.If this property is specified and connection pool size is not the default, the number of node ids must match the connection pool size",
+          :type => "string"
+
+attribute "ndb/rdrs/rondbmetadatacluster/connection_retries",
+          :description => "Connection retry attempts.",
+          :type => "string"
+	
+attribute "ndb/rdrs/rondbmetadatacluster/connection_retry_delay_in_sec",
+          :description => "Delay in failed connection retry attempts",
+          :type => "string"
+
+attribute "ndb/rdrs/rondbmetadatacluster/op_retry_on_transient_errors_count",
+          :description => "Op retry on transient errors count",
+          :type => "string"
+
+attribute "ndb/rdrs/rondbmetadatacluster/op_Retry_initial_delay_in_ms",
+          :description => "Op retry initial delay in ms",
+          :type => "string"
+
+attribute "ndb/rdrs/rondbmetadatacluster/op_retry_jitter_in_ms",
           :description => "Op retry jitter in ms",
           :type => "string"
 

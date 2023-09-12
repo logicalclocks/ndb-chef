@@ -3,6 +3,20 @@ conn_str = "#{node['ndb']['connectstring']}"
 conn_str_split = conn_str.split(/:/, 2)
 
 
+if node['ndb']['rdrs']['rondb']['mgmds'].empty?
+  rondb_conn_str_arr="[ { \"IP\": \"#{conn_str_split[0]}\", \"Port\": #{conn_str_split[1]} } ]"
+else
+  rondb_conn_str_arr="#{node['ndb']['rdrs']['rondb']['mgmds']}"
+end
+
+if node['ndb']['rdrs']['rondbmetadatacluster']['mgmds'].empty?
+  rondb_metadata_cluster_conn_str_arr="#{rondb_conn_str_arr}"
+else
+  rondb_metadata_cluster_conn_str_arr="#{node['ndb']['rdrs']['rondbmetadatacluster']['mgmds']}"
+end
+
+
+
 if node['ndb']['rdrs']['containerize'] == "true" 
   bash 'Setting-RDRS-Image' do
     user 'root'
@@ -130,8 +144,8 @@ template "#{node['ndb']['root_dir']}/rdrs_config.json" do
    # Here is always false, as this recipe is run before certificates are available
    # if rdrs/tls is enabled, the file will be re-templated later
    :enable_tls => false,
-   :ndb_mgmd_ip => conn_str_split[0],
-   :ndb_mgmd_port => conn_str_split[1],
+   :rondb_conn_str_arr => rondb_conn_str_arr,
+   :rondb_metadata_cluster_conn_str_arr => rondb_metadata_cluster_conn_str_arr,
    :root_ca_cert_file => "",
    :certificate_file => "",
    :private_key_file => "",
@@ -153,8 +167,8 @@ if node['ndb']['rdrs']['security']['enable_tls'] == "true"
         action :create
         variables({
             :enable_tls => true,
-            :ndb_mgmd_ip => conn_str_split[0],
-            :ndb_mgmd_port => conn_str_split[1],
+            :rondb_conn_str_arr => rondb_conn_str_arr,
+            :rondb_metadata_cluster_conn_str_arr => rondb_metadata_cluster_conn_str_arr,
             :root_ca_cert_file => hops_ca,
             :certificate_file => certificate,
             :private_key_file => private_key,

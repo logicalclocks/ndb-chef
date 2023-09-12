@@ -7,7 +7,7 @@ bash 'copy-backup-from-primary' do
     code <<-EOF
         set -e
         pushd #{node['ndb']['local_backup_dir']}
-        scp #{node['ndb']['user']}@#{primary_mgm}:#{node['ndb']['local_backup_dir']}/#{backup_tarball} .
+        scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null #{node['ndb']['user']}@#{primary_mgm}:#{node['ndb']['local_backup_dir']}/#{backup_tarball} .
         tar xzf #{backup_tarball}
         popd
     EOF

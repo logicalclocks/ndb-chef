@@ -1,0 +1,4 @@
+CREATE USER if not exists '<%= node['featurestore']['user'] %>'@'%' identified by '<%= node['featurestore']['password'] %>';
+GRANT NDB_STORED_USER ON *.* to '<%= node['featurestore']['user'] %>'@'%';
+GRANT ALL PRIVILEGES ON *.* to '<%= node['featurestore']['user'] %>'@'%';
+GRANT GRANT OPTION ON *.* to '<%= node['featurestore']['user'] %>'@'%';

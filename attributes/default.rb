@@ -213,9 +213,6 @@ default['mysql']['replication_enabled']               = "false"
 # MySQL Server TLS/SSL enabled
 default['mysql']['tls']                               = "false"
 
-# Use this MySQL server as Online FS
-default['mysql']['onlinefs']                          = "true"
-
 # This is the username/password for any mysql server (mysqld) started.
 # It is required by mysql clients to use the mysql server.
 default['mysql']['user']                              = "kthfs"
@@ -333,3 +330,10 @@ default['ndb']['ulimit_file']                                          = "/etc/s
 
 ## Consul
 default['ndb']['mgmd']['consul_tag']                                   = "mgm"
+
+# Featurestore MySQL Configuration
+default['featurestore']['user']                       = node['mysql']['user']
+default['featurestore']['password']                   = node['mysql']['password']
+
+# Use this MySQL server as Online FS
+default['mysql']['onlinefs']                          = "true"

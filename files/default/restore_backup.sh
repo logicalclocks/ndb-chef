@@ -59,6 +59,7 @@ unset -v mgm_connection
 unset -v ndb_restore_exclude_tables
 unset -v ndb_restore_op
 unset -v ndb_restore_serial
+unset -v no_restore_disk_objects
 
 #################
 ## Show tables ##
@@ -116,7 +117,7 @@ _restore_schema_int(){
 ########################
 
 _ndb_restore(){
-    while getopts 'p:n:b:c:e:m:sh' opt; do
+    while getopts 'p:n:b:c:e:m:sdh' opt; do
         case "$opt" in
             p)
                 backup_path="$OPTARG"
@@ -139,8 +140,11 @@ _ndb_restore(){
             s)
                 ndb_restore_serial=1
                 ;;
+            d)
+                no_restore_disk_objects=1
+                ;;
             ?|h)
-                echo -e "Usage $(basename $0) restore_schema -p ARG -n ARG -b ARG -c ARG -m ARG [-e ARG]\n\t-p: Path to backup directory\n\t-n: Node id to restore\n\t-b: Backup id to restore\n\t-c: Connection to Management server ip_address:port\n\t-m: Restore mode\n\t\tMETA for restoring only metadata\n\t\tDATA for restoring data\n\t-s: Force restore multiple parts serially\n\t-e: OPTIONALLY exclude some comma-sperated tables"
+                echo -e "Usage $(basename $0) restore_schema -p ARG -n ARG -b ARG -c ARG -m ARG [-e ARG]\n\t-p: Path to backup directory\n\t-n: Node id to restore\n\t-b: Backup id to restore\n\t-c: Connection to Management server ip_address:port\n\t-m: Restore mode\n\t\tMETA for restoring only metadata\n\t\tDATA for restoring data\n\t-s: Force restore multiple parts serially\n\t-e: OPTIONALLY exclude some comma-sperated tables\n\t-d OPTIONALLY ignore restoring disk data objects (tablespaces, logfiles, etc)"
                 exit 1
                 ;;
         esac
@@ -173,6 +177,10 @@ _ndb_restore_int(){
         exclude_tables="--exclude-tables=$ndb_restore_exclude_tables"
     fi
 
+    if [ $no_restore_disk_objects ]; then
+        no_restore_disk_objects_param="--no-restore-disk-objects"
+    fi
+
     ndb_backup_path=$backup_path/BACKUP/BACKUP-$backup_id
     if [ "$ndb_restore_op" == "META" ]; then
         if [ $ndb_restore_serial ]; then
@@ -199,7 +207,7 @@ _ndb_restore_int(){
         for d in "${backup_dirs[@]}"
         do
             _log_info "Restoring METADATA backup id $backup_id from node $node_id from path $d excluding tables $exclude_tables"
-            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore-meta --disable-indexes >> $log_file 2>&1
+            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables $no_restore_disk_objects_param --restore-meta --disable-indexes >> $log_file 2>&1
         done
         _log_info "Finished restoring METADATA"
     elif [ "$ndb_restore_op" == "DATA" ]; then

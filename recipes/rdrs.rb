@@ -192,7 +192,7 @@ if node['kagent']['enabled'] == "true"
   end
 end
 
-if exists_local('consul', 'master') or exists_local('consul', 'slave')
+if service_discovery_enabled()
   template "#{node['consul']['bin_dir']}/ping-rdrs.sh" do
     source "consul/ping-rdrs.sh.erb"
     owner node['consul']['user']

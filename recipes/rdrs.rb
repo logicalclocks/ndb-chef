@@ -1,21 +1,16 @@
 ndb_connectstring()
-conn_str = "#{node['ndb']['connectstring']}"
-conn_str_split = conn_str.split(/:/, 2)
-
 
 if node['ndb']['rdrs']['rondb']['mgmds'].empty?
-  rondb_conn_str_arr="[ { \"IP\": \"#{conn_str_split[0]}\", \"Port\": #{conn_str_split[1]} } ]"
+  rondb_conn_str_arr=generate_rdrs_mgmd_conf(node['ndb']['connectstring'])
 else
-  rondb_conn_str_arr="#{node['ndb']['rdrs']['rondb']['mgmds']}"
+  rondb_conn_str_arr=generate_rdrs_mgmd_conf(node['ndb']['rdrs']['rondb']['mgmds'])
 end
 
 if node['ndb']['rdrs']['rondbmetadatacluster']['mgmds'].empty?
-  rondb_metadata_cluster_conn_str_arr="#{rondb_conn_str_arr}"
+  rondb_metadata_cluster_conn_str_arr=rondb_conn_str_arr
 else
-  rondb_metadata_cluster_conn_str_arr="#{node['ndb']['rdrs']['rondbmetadatacluster']['mgmds']}"
+  rondb_metadata_cluster_conn_str_arr=generate_rdrs_mgmd_conf(node['ndb']['rdrs']['rondbmetadatacluster']['mgmds'])
 end
-
-
 
 if node['ndb']['rdrs']['containerize'] == "true" 
   bash 'Setting-RDRS-Image' do

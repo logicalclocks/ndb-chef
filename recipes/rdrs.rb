@@ -1,6 +1,4 @@
 ndb_connectstring()
-conn_str_split = conn_str.split(/:/, 2)
-
 
 if node['ndb']['rdrs']['rondb']['mgmds'].empty?
   rondb_conn_str_arr=generate_rdrs_mgmd_conf(node['ndb']['connectstring'])

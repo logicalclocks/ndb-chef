@@ -632,7 +632,7 @@ attribute "ndb/rdrs/grpc/bind_port",
           :type => "string"
 
 attribute "ndb/rdrs/rondb/mgmds",
-          :description => "Json array of RonDB management nodes connection information.",
+          :description => "RonDB management nodes connection information for data (Format: string IP:PORT)",
           :type => "string"
 
 attribute "ndb/rdrs/rondb/connection_pool_size",
@@ -664,7 +664,7 @@ attribute "ndb/rdrs/rondb/op_retry_jitter_in_ms",
           :type => "string"
 
 attribute "ndb/rdrs/rondbmetadatacluster/mgmds",
-          :description => "Json array of RonDB management nodes connection information.",
+          :description => "RonDB management nodes connection information for Hopsworks metadata (Format: string IP:PORT)",
           :type => "string"
 
 attribute "ndb/rdrs/rondbmetadatacluster/connection_pool_size",

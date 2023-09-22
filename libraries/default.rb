@@ -42,6 +42,11 @@ module NDB
           server_id = startId + idx
           return server_id
         end
+
+        def generate_rdrs_mgmd_conf(conn_str)
+          conn_str_split = conn_str.split(/:/, 2)
+          return "[{\"IP\": \"#{conn_str_split[0]}\", \"Port\": #{conn_str_split[1]} }]"
+        end
     end
 end
 

@@ -12,6 +12,7 @@ dependencies:
       - ndb::ndbd
       - kagent::default
       - hops::docker
+      - ndb::restore_sql
   - recipe: ndb::mysqld_tls
     global:  
       - kagent::default

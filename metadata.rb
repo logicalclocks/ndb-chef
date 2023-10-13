@@ -584,11 +584,11 @@ attribute "ndb/rdrs/version",
           :type => "string"
 
 attribute "ndb/rdrs/internal/buffer_size",
-          :description => "Buffer size. This buffer is used to pass requests from go layer down to C++. The buffer has to be large enough to hold the request/response. Default: 327680",
+          :description => "Buffer size. This buffer is used to pass requests from go layer down to C++. The buffer has to be large enough to hold the request/response. Default: 5242880",
           :type => "string"
 
 attribute "ndb/rdrs/internal/pre_allocated_buffers",
-          :description => "Number of preallocated buffers. Default: 1024",
+          :description => "Number of preallocated buffers. Default: 32",
           :type => "string"
 
 attribute "ndb/rdrs/internal/go_max_procs",

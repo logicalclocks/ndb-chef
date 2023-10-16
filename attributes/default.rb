@@ -276,8 +276,8 @@ default['ndb']['mysqld']['metrics_port']                    = "9104"
 default['ndb']['rdrs']['version']                                                    = "0.1.0"
 default['ndb']['rdrs']['containerize']                                               = "true"
 default['ndb']['rdrs']['container_image_url']                                        = node['download_url'] + "/docker-image-rdrs-#{node['ndb']['version']}.tar.gz"
-default['ndb']['rdrs']['internal']['buffer_size']                                    = "327680"
-default['ndb']['rdrs']['internal']['pre_allocated_buffers']                          = "1024"
+default['ndb']['rdrs']['internal']['buffer_size']                                    = "5242880"
+default['ndb']['rdrs']['internal']['pre_allocated_buffers']                          = "32"
 default['ndb']['rdrs']['internal']['go_max_procs']                                   = "-1"
 #if go_max_procs is -1 then number of threads
 #used by go runtime is same as no of CPU cores

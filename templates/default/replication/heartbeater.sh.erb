@@ -42,13 +42,13 @@ _log_warn(){
 }
 
 _log_info(){
-    if [ "$LOG_LEVEL" -gt 3 ]; then
+    if [ "$LOG_LEVEL" -ge 3 ]; then
         _log "INFO" "$1"
     fi
 }
 
 _log_debug(){
-    if [ "$LOG_LEVEL" -gt 4 ]; then
+    if [ "$LOG_LEVEL" -ge 4 ]; then
         _log "DEBUG" "$1"
     fi
 }

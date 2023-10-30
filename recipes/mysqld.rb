@@ -97,7 +97,7 @@ service "#{service_name}" do
   action :nothing
 end
 
-server_id = mysql_server_id()
+server_id = mysql_server_id(my_private_ip(), node['ndb']['replication']['cluster-id'])
 
 template "#{node['ndb']['root_dir']}/my.cnf" do
   source "my-ndb.cnf.erb"
@@ -252,5 +252,3 @@ bash 'run_featurestore_grants' do
   EOF
   only_if {node['mysql']['onlinefs'].casecmp?("true")}
 end
-
-include_recipe "ndb::replication_configuration"

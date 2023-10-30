@@ -27,7 +27,7 @@ if node['mysql']['tls'].casecmp?("true")
         action :nothing
     end
 
-    server_id = mysql_server_id()
+    server_id = get_mysql_server_id()
 
     found_id=find_service_id("mysqld", node['mysql']['id'])
     certificate = "#{crypto_dir}/#{x509_helper.get_certificate_bundle_name(node['ndb']['user'])}"

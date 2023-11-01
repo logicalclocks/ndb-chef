@@ -1,24 +1,22 @@
-include_recipe 'ndb::replication_common'
+include_recipe "ndb::replication_configuration"
 
 my_ip = my_private_ip()
-primary_ips = node['ndb']['mysql_primary']['private_ips']
-idx = primary_ips.sort().index(my_ip)
-primary_cluster_id = node['ndb']['replication']['primary-cluster-id'].to_i
-my_server_id = primary_cluster_id + idx
 
-heartbeat_tbl = "#{node['ndb']['base_dir']}/heartbeat_tbl.sql"
+my_server_id = get_mysql_server_id()
+
+heartbeat_tbl = "#{node['ndb']['base_dir']}/replication_conf.sql"
 template heartbeat_tbl do
-    source "replication/heartbeat_tbl.sql.erb"
+    source "replication/replication_conf.sql.erb"
     owner node['ndb']['user']
     group node['ndb']['group']
     mode "0600"
     variables({
         :server_id => my_server_id,
-        :my_ip => my_ip
+        :my_ip => my_ip,
     })
 end
 
-bash 'create-populate-heartbeat_tbl' do
+bash 'apply-configuration' do
     user node['ndb']['user']
     code <<-EOF
         #{node['ndb']['scripts_dir']}/mysql-client.sh -e "source #{heartbeat_tbl}"

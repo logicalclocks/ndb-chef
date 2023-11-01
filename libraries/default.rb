@@ -1,3 +1,5 @@
+require 'open3'
+
 module NDB
     module Helpers
         # TODO(Fabio): this method was moved from a recipe. Check if the ID thing actually works.
@@ -35,11 +37,20 @@ module NDB
           !node['ndb']['restore']['backup_id'].empty? && !node['ndb']['restore']['tarball'].empty?
         end
 
-        def mysql_server_id
-          startId = node['ndb']['replication']['cluster-id'].to_i
-          my_ip = my_private_ip()
-          idx = node['ndb']['mysqld']['private_ips'].sort().index(my_ip)
-          server_id = startId + idx
+        def mysql_server_id(node_ip, clusterId)
+          startId = clusterId.to_i
+          octets = node_ip.split(".")
+          server_id = "#{startId}#{octets[2]}#{octets[3]}"
+          return server_id
+        end
+
+        def get_mysql_server_id()
+          o, s = Open3.capture2("grep -r \"server-id\" #{node['ndb']['root_dir']}/my.cnf")
+          if !s.success?
+            raise "Could not read server-id from #{node['ndb']['root_dir']}/my.cnf"
+          end
+          server_id = o.split("=")[1].strip().to_s()
+          Chef::Log.info "Read server-id #{server_id}"
           return server_id
         end
 

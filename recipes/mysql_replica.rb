@@ -1,4 +1,4 @@
-include_recipe 'ndb::replication_common'
+include_recipe "ndb::replication_configuration"
 
 my_ip = my_private_ip()
 replica_ips = node['ndb']['mysql_replica']['private_ips']
@@ -7,10 +7,9 @@ idx = replica_ips.sort().index(my_ip)
 ips = node['ndb']['mysql_primary']['private_ips']
 primary_mysql = ips.sort()[idx]
 
-replica_cluster_id = node['ndb']['replication']['replica-cluster-id'].to_i
-primary_cluster_id = node['ndb']['replication']['primary-cluster-id'].to_i
-primary_server_id = primary_cluster_id + idx
-my_server_id = replica_cluster_id + idx
+primary_server_id = mysql_server_id(primary_mysql, node['ndb']['replication']['primary-cluster-id'])
+
+my_server_id = mysql_server_id(my_ip, node['ndb']['replication']['replica-cluster-id'])
 
 configured_check_file = "#{node['ndb']['root_dir']}/ndb/replication_channel_configured"
 if ::File.exists?(configured_check_file)
@@ -26,10 +25,11 @@ bash 'delete-primary-with-my-id' do
         #{node['mysql']['bin_dir']}/mysql -h #{primary_mysql} -u #{node['ndb']['replication']['user']} -p#{node['ndb']['replication']['password']} -Nse "DELETE FROM rondb_replication.heartbeat_tbl WHERE primary_id=#{my_server_id}"
     EOF
 end
-    
+
 ids = []
-for i in 0..replica_ips.length.to_i-1 do
-    ids.push(replica_cluster_id+i)
+
+for replica_ip in replica_ips do
+    ids.push(mysql_server_id(replica_ip, node['ndb']['replication']['replica-cluster-id']))
 end
 replica_server_ids = ids.join(",")
 

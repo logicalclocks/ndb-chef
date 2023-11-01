@@ -1,19 +1,7 @@
-CREATE USER if not exists '<%= node['ndb']['replication']['user'] %>'@'%' identified WITH mysql_native_password by '<%= node['ndb']['replication']['password'] %>';
-GRANT NDB_STORED_USER ON *.* to '<%= node['ndb']['replication']['user'] %>'@'%';
-GRANT ALL PRIVILEGES ON rondb_replication.* to '<%= node['ndb']['replication']['user'] %>'@'%';
-
-GRANT REPLICATION SLAVE ON *.* TO '<%= node['ndb']['replication']['user'] %>'@'%';
-GRANT REPLICATION CLIENT ON *.* TO '<%= node['ndb']['replication']['user'] %>'@'%';
-GRANT REPLICATION_SLAVE_ADMIN ON *.* TO '<%= node['ndb']['replication']['user'] %>'@'%';
-GRANT SELECT ON mysql.ndb_apply_status TO '<%= node['ndb']['replication']['user'] %>'@'%';
-GRANT SELECT ON mysql.ndb_binlog_index TO '<%= node['ndb']['replication']['user'] %>'@'%';
-FLUSH PRIVILEGES;
-
-<% if @am_i_primary -%>
 CREATE DATABASE IF NOT EXISTS `rondb_replication`;
 CREATE TABLE IF NOT EXISTS `rondb_replication`.`heartbeat_tbl` (
-    `primary_id` SMALLINT NOT NULL,
-    `replica_id` SMALLINT NOT NULL,
+    `primary_id` INT NOT NULL,
+    `replica_id` INT NOT NULL,
     `counter` INT NOT NULL DEFAULT 0,
     `active` BOOLEAN NOT NULL DEFAULT false,
     `primary` VARCHAR(30) NOT NULL,
@@ -22,4 +10,3 @@ CREATE TABLE IF NOT EXISTS `rondb_replication`.`heartbeat_tbl` (
 ) ENGINE=ndbcluster;
 
 REPLACE INTO rondb_replication.heartbeat_tbl(`primary_id`, `replica_id`, `primary`) values (<%= @server_id %>, -1, "<%= @my_ip %>");
-<% end -%>

@@ -13,7 +13,7 @@ socket          = <%= node['ndb']['mysql_socket'] %>
 mysqlx_port     = <%= node['ndb']['mysqlx_port'] %>
 mysqlx_socket   = <%= node['ndb']['mysqlx_socket'] %>
 bind-address    = 0.0.0.0
-pid-file        = <%= node['ndb']['log_dir'] %>/mysql_<%= @mysql_id %>.pid
+pid-file        = <%= node['ndb']['log_dir'] %>/<% node['ndb']['mysqld_pid'] %>
 tmpdir          = /tmp
 max-connections = 512
 max-prepared-stmt-count = 65530

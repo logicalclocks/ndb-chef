@@ -23,11 +23,20 @@ if [ ! -e <%= node['mysql']['base_dir'] %>/bin/ndb_mgmd ] ; then
     exit 3
 fi
 
+INITIAL_START_ARG=
+if [ -n "$INITIAL_START" ]; then
+    INITIAL_START_ARG="--initial"
+fi
+
+SERVICE_ARG=
+if [ -n "$SERVICE_NAME" ]; then
+    SERVICE_ARG="--service-name $SERVICE_NAME"
+fi
 
 <% if #{node['ndb']['use_systemd']} == "true" -%>
-<%= node['mysql']['base_dir'] %>/bin/ndb_mgmd --ndb-nodeid=<%= @node_id %> -f <%= node['ndb']['root_dir'] %>/config.ini  --configdir=<%= node['ndb']['mgm_dir'] %> --reload --initial
+<%= node['mysql']['base_dir'] %>/bin/ndb_mgmd --ndb-nodeid=<%= @node_id %> -f <%= node['ndb']['root_dir'] %>/config.ini  --configdir=<%= node['ndb']['mgm_dir'] %> --reload ${INITIAL_START_ARG} ${SERVICE_ARG}
 <% else -%>
-su <%= node['ndb']['user'] %> -c \"<% node['mysql']['base_dir'] %>/bin/ndb_mgmd --ndb-nodeid=<%= @node_id %> -f <%= node['ndb']['root_dir'] %>/config.ini  --configdir=<%= node['ndb']['mgm_dir'] %> --reload --initial\"
+su <%= node['ndb']['user'] %> -c \"<% node['mysql']['base_dir'] %>/bin/ndb_mgmd --ndb-nodeid=<%= @node_id %> -f <%= node['ndb']['root_dir'] %>/config.ini  --configdir=<%= node['ndb']['mgm_dir'] %> --reload ${INITIAL_START_ARG} ${SERVICE_ARG}\"
 <% end -%>
 
 

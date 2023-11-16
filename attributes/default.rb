@@ -1,14 +1,15 @@
 include_attribute "kagent"
 
-default['ndb']['majorVersion']                        = "21"
-default['ndb']['minorVersion']                        = "04"
-default['ndb']['patchVersion']                        = "15"
+default['ndb']['majorVersion']                        = "22"
+default['ndb']['minorVersion']                        = "10"
+default['ndb']['patchVersion']                        = "1"
 
 default['ndb']['version']                             = "#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}.#{node['ndb']['patchVersion']}"
 default['ndb']['enabled']                             = "true"
-default['ndb']['glib_version']                        = "2.17"
+default['ndb']['glib_version']                        = "2.28"
+default['ndb']['cpu_platform']                        = "x86_64"
 
-default['ndb']['url']                                 = node['download_url'] + "/rondb-#{node['ndb']['version']}-linux-glibc#{node['ndb']['glib_version']}-x86_64.tar.gz"
+default['ndb']['url']                                 = node['download_url'] + "/rondb-#{node['ndb']['version']}-linux-glibc#{node['ndb']['glib_version']}-#{node['ndb']['cpu_platform'].tar.gz"
 # checksum is not a security check - used to improve the speed of downloads by skipping if matched
 # checksum calculated using: shasum -a 256 /var/www/hops/...tgz | cut -c-12
 # checksum calculated using: sha256sum /var/www/hops/...tgz | cut -c-12
@@ -28,7 +29,9 @@ default['ndb']['replication']['password']             = "repl_password"
 default['ndb']['bind_cpus']                           = "false"
 
 default['ndb']['mgmd']['port']                        = 1186
-default['ndb']['ndbd']['port']                        = 10000
+default['ndb']['mgmd']['pidfile']                     = "ndb_mgmd.pid"
+default['ndb']['ndbd']['port']                        = 11860
+default['ndb']['ndbd']['pidfile']                     = "ndbmtd.pid"
 default['ndb']['ndbd']['systemctl_timeout_sec']       = 3600
 default['ndb']['ip']                                  = "10.0.2.15"
 
@@ -204,6 +207,7 @@ default['ndb']['mysql_socket']                        = "#{node['ndb']['root_dir
 default['ndb']['mysqlx_socket']                       = "#{node['ndb']['root_dir']}/mysqlx.sock"
 default['ndb']['mysql_port']                          = "3306"
 default['ndb']['mysqlx_port']                         = "33060"
+default['ndb']['mysqld_pid']                          = "mysqld.pid"
 
 default['mysql']['localhost']                         = "false"
 

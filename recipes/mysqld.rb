@@ -86,8 +86,7 @@ template systemd_script do
   mode 0755
   cookbook 'ndb'
   variables({
-      :deps => deps,
-      :pid_file => "#{node['ndb']['log_dir']}/mysql_#{found_id}.pid"
+      :deps => deps
    })
 end
 

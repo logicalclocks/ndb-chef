@@ -176,7 +176,6 @@ template systemd_script do
   mode 0754
   variables({
               :deps => deps,
-              :node_id => found_id
   })
   if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name)

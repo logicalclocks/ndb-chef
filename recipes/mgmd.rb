@@ -101,7 +101,7 @@ template systemd_script do
   group "root"
   mode 0754
   cookbook 'ndb'
-  variables({ :node_id => found_id })
+  variables({})
   if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name)
   end

@@ -140,7 +140,13 @@ mkdir -p ${sql_backup_target}
 
 # Backing up the schemas
 DB_LIST=`$MYSQL_ROOT/bin/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT GROUP_CONCAT(SCHEMA_NAME SEPARATOR ' ') FROM information_schema.SCHEMATA WHERE SCHEMA_NAME NOT IN ('mysql','information_schema','performance_schema','sys','ndbinfo','glassfish_timers');"`
-$MYSQL_ROOT/bin/mysqldump -u root -S $MYSQL_SOCKET --no-data --skip-add-drop-table --triggers --routines --events --databases $DB_LIST  > "$sql_backup_target"/schemata.sql
+if [ "$DB_LIST" == "NULL" ];
+then
+    log_info "No MySQL databases to backup, continue..."
+    touch "$sql_backup_target"/schemata.sql
+else
+    $MYSQL_ROOT/bin/mysqldump -u root -S $MYSQL_SOCKET --no-data --skip-add-drop-table --triggers --routines --events --databases $DB_LIST  > "$sql_backup_target"/schemata.sql
+fi
 
 # We need to do this hack because when restoring this file the tables already exist and the restoration fails
 # Still we need to restore this SQL file to re-create the views

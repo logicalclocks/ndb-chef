@@ -101,9 +101,13 @@ _restore_schema_int(){
         exit 1
     fi
     schema_file=${backup_path}/sql/schemata.sql
-    _log_info "Restoring SQL schemata and views from $schema_file"
-    $MYSQL_CLIENT < $schema_file >> $log_file 2>&1
-    _log_info "Finished restoring SQL schemata and views"
+    if [ ! -s "$schema_file" ]; then
+        _log_warn "Schemata file is empty, not restoring any MySQL database"
+    else
+        _log_info "Restoring SQL schemata and views from $schema_file"
+        $MYSQL_CLIENT < $schema_file >> $log_file 2>&1
+        _log_info "Finished restoring SQL schemata and views"
+    fi
     users_file=${backup_path}/sql/users.sql
     _log_info "Restoring MySQL users from $users_file"
     # do not create a user if it already exists

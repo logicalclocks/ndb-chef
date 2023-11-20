@@ -1,12 +1,12 @@
 include_attribute "kagent"
 
-default['ndb']['majorVersion']                        = "22"
-default['ndb']['minorVersion']                        = "10"
-default['ndb']['patchVersion']                        = "1"
+default['ndb']['majorVersion']                        = "21"
+default['ndb']['minorVersion']                        = "04"
+default['ndb']['patchVersion']                        = "15"
 
 default['ndb']['version']                             = "#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}.#{node['ndb']['patchVersion']}"
 default['ndb']['enabled']                             = "true"
-default['ndb']['glib_version']                        = "2.28"
+default['ndb']['glib_version']                        = "2.17"
 default['ndb']['cpu_platform']                        = "x86_64"
 
 default['ndb']['url']                                 = node['download_url'] + "/rondb-#{node['ndb']['version']}-linux-glibc#{node['ndb']['glib_version']}-#{node['ndb']['cpu_platform'].tar.gz"

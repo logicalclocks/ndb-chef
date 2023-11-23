@@ -4,7 +4,7 @@ maintainer_email "jdowling@kth.se"
 license          "AGPL v3"
 description      "Installs/Configures NDB (MySQL Cluster)"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "3.5.0"
+version          "3.7.0"
 source_url       "https://github.com/logicalclocks/ndb-chef"
 issues_url       "https://github.com/logicalclocks/ndb-chef/issues"
 

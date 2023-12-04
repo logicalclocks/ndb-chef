@@ -83,6 +83,20 @@ function check_exit_code {
     fi
 }
 
+unset -v delete_existing_backup
+
+while getopts 'fh' opt; do
+    case "$opt" in
+        f)
+            delete_existing_backup=1
+            ;;
+        ?|h)
+            echo -e "Usage $(basename $0) -f\n\t-f Optionally delete backup with the same ID instead of failing"
+            exit 2
+            ;;
+    esac
+done
+
 ## Get participating NDB Data Nodes in the cluster
 NDB_DATANODES="$($MYSQL_ROOT/bin/ndb_mgm -c $MGM_CONN -e "SHOW" | grep Nodegroup | awk -F ' ' '{print $2}' | cut -c2-)"
 log_info "Participating NDB Data Nodes: $NDB_DATANODES"
@@ -93,8 +107,18 @@ then
 else
     backup_id=$RONDB_BACKUP_ID
 fi
-log_info "Starting NDB native backup with ID BACKUP-$backup_id"
 
+if [ $delete_existing_backup ]; then
+    # Delete existing backup with the same id
+    for i in $NDB_DATANODES
+    do
+        log_info "Deleting backup with ID BACKUP-$backup_id from node $i"
+        ssh ${MYSQL_USER}@${i} "rm -rf $REMOTE_MYSQL_BACKUP_DIR/BACKUP/BACKUP-$backup_id"
+        check_exit_code $? "Deleting existing backup with id $backup_id from $i failed, aborting. Exit code: $?" 3
+    done
+fi
+
+log_info "Starting NDB native backup with ID BACKUP-$backup_id"
 ## Start NDB native backup with backup ID $backup_id
 ## SNAPSHOTEND: Transactions committed during backup will be restored
 ## WAIT COMPLETED: Command will return when backup has completed
@@ -117,6 +141,14 @@ else
     backup_name=$RONDB_BACKUP_NAME
 fi
 backup_target=$LOCAL_BACKUP_DIR/$backup_name
+
+if [ $delete_existing_backup ]; then
+    # Delete existing backup with the same id
+    log_info "Deleting $backup_target"
+    rm -rf "$backup_target"
+    log_info "Deleting $LOCAL_BACKUP_DIR/$backup_name.tar.gz"
+    rm -f "$LOCAL_BACKUP_DIR/$backup_name".tar.gz
+fi
 
 if [ -d "$backup_target" ];
 then

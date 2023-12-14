@@ -412,7 +412,7 @@ attribute "ndb/NumCPUs",
           :type => 'string'
 
 attribute "ndb/TotalMemoryConfig",
-          :description => "This configuration defines the amount of memory used by ndbmtd when AutomaticMemoryConfig is turned on. Minimum is 3G",
+          :description => "This configuration defines the amount of memory used by ndbmtd when AutomaticMemoryConfig is turned on. Minimum is 5G",
           :type => 'string'
 
 attribute "ndb/TotalSendBufferMemory",

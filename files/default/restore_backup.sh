@@ -236,7 +236,7 @@ _ndb_restore_int(){
         for d in "${backup_dirs[@]}"
         do
             _log_info "Restoring DATA backup id $backup_id from node $node_id from path $d excluding tables $exclude_tables"
-            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore-data --allow-unique-indexes >> $log_file 2>&1
+            $NDB_RESTORE --ndb-connectstring=$mgm_connection --nodeid=$node_id --backupid=$backup_id --backup_path=$d $exclude_tables --restore-data >> $log_file 2>&1
         done
         _log_info "Finished restoring DATA"
     elif [ "$ndb_restore_op" == "REBUILD-INDEXES" ]; then

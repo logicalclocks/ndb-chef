@@ -15,6 +15,7 @@ bash 'rondb_backup' do
     environment env_vars
     code <<-EOH
         set -e
-        #{node['ndb']['scripts_dir']}/native_ndb_backup.sh
+        # Delete existing backup with the same id
+        #{node['ndb']['scripts_dir']}/native_ndb_backup.sh -f
     EOH
 end

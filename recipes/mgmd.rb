@@ -121,7 +121,7 @@ end
 
 if node['ndb']['configuration']['type'].casecmp?("auto")
   if node['ndb']['configuration']['profile'].casecmp?("tiny")
-    node.override['ndb']['TotalMemoryConfig'] = "3G"
+    node.override['ndb']['TotalMemoryConfig'] = "5G"
     node.override['ndb']['LockPagesInMainMemory'] = "0"
     node.override['ndb']['NumCPUs'] = "4"
   end

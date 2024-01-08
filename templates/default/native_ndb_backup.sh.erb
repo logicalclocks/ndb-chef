@@ -83,6 +83,20 @@ function check_exit_code {
     fi
 }
 
+unset -v delete_existing_backup
+
+while getopts 'fh' opt; do
+    case "$opt" in
+        f)
+            delete_existing_backup=1
+            ;;
+        ?|h)
+            echo -e "Usage $(basename $0) -f\n\t-f Optionally delete backup with the same ID instead of failing"
+            exit 2
+            ;;
+    esac
+done
+
 ## Get participating NDB Data Nodes in the cluster
 NDB_DATANODES="$($MYSQL_ROOT/bin/ndb_mgm -c $MGM_CONN -e "SHOW" | grep Nodegroup | awk -F ' ' '{print $2}' | cut -c2-)"
 log_info "Participating NDB Data Nodes: $NDB_DATANODES"
@@ -93,8 +107,18 @@ then
 else
     backup_id=$RONDB_BACKUP_ID
 fi
-log_info "Starting NDB native backup with ID BACKUP-$backup_id"
 
+if [ $delete_existing_backup ]; then
+    # Delete existing backup with the same id
+    for i in $NDB_DATANODES
+    do
+        log_info "Deleting backup with ID BACKUP-$backup_id from node $i"
+        ssh ${MYSQL_USER}@${i} "rm -rf $REMOTE_MYSQL_BACKUP_DIR/BACKUP/BACKUP-$backup_id"
+        check_exit_code $? "Deleting existing backup with id $backup_id from $i failed, aborting. Exit code: $?" 3
+    done
+fi
+
+log_info "Starting NDB native backup with ID BACKUP-$backup_id"
 ## Start NDB native backup with backup ID $backup_id
 ## SNAPSHOTEND: Transactions committed during backup will be restored
 ## WAIT COMPLETED: Command will return when backup has completed
@@ -118,6 +142,14 @@ else
 fi
 backup_target=$LOCAL_BACKUP_DIR/$backup_name
 
+if [ $delete_existing_backup ]; then
+    # Delete existing backup with the same id
+    log_info "Deleting $backup_target"
+    rm -rf "$backup_target"
+    log_info "Deleting $LOCAL_BACKUP_DIR/$backup_name.tar.gz"
+    rm -f "$LOCAL_BACKUP_DIR/$backup_name".tar.gz
+fi
+
 if [ -d "$backup_target" ];
 then
     log_error "Ooops directory $backup_target already exist in the local filesystem! Canceling copying backup from Data Nodes"
@@ -140,7 +172,13 @@ mkdir -p ${sql_backup_target}
 
 # Backing up the schemas
 DB_LIST=`$MYSQL_ROOT/bin/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT GROUP_CONCAT(SCHEMA_NAME SEPARATOR ' ') FROM information_schema.SCHEMATA WHERE SCHEMA_NAME NOT IN ('mysql','information_schema','performance_schema','sys','ndbinfo','glassfish_timers');"`
-$MYSQL_ROOT/bin/mysqldump -u root -S $MYSQL_SOCKET --no-data --skip-add-drop-table --triggers --routines --events --databases $DB_LIST  > "$sql_backup_target"/schemata.sql
+if [ "$DB_LIST" == "NULL" ];
+then
+    log_info "No MySQL databases to backup, continue..."
+    touch "$sql_backup_target"/schemata.sql
+else
+    $MYSQL_ROOT/bin/mysqldump -u root -S $MYSQL_SOCKET --no-data --skip-add-drop-table --triggers --routines --events --databases $DB_LIST  > "$sql_backup_target"/schemata.sql
+fi
 
 # We need to do this hack because when restoring this file the tables already exist and the restoration fails
 # Still we need to restore this SQL file to re-create the views

@@ -15,6 +15,7 @@ default['ndb']['url']                                 = node['download_url'] + "
 default['ndb']['checksum']                            = ""
 default['ndb']['configuration']['type']               = "auto"
 default['ndb']['configuration']['profile']            = "unlimited"
+default['ndb']['replication']['enabled']              = "false"
 ## TODO maybe I can remove cluster-id and role and keep only primary-cluster-id and replica-cluster-id
 default['ndb']['replication']['cluster-id']           = "100"
 default['ndb']['replication']['role']                 = "primary"
@@ -206,9 +207,6 @@ default['ndb']['mysql_port']                          = "3306"
 default['ndb']['mysqlx_port']                         = "33060"
 
 default['mysql']['localhost']                         = "false"
-
-# MySQL Server Master-Slave replication binary log is enabled.
-default['mysql']['replication_enabled']               = "false"
 
 # MySQL Server TLS/SSL enabled
 default['mysql']['tls']                               = "false"

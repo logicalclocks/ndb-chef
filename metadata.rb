@@ -56,6 +56,10 @@ attribute "ndb/configuration/profile",
           :description =>  "Predefined configurations. unlimited | tiny Default: unlimited",
           :type => 'string'
 
+attribute "ndb/replication/enabled",
+          :description =>  "Enable MySQL Global replication. Default: false",
+          :type => 'string'
+
 attribute "ndb/replication/cluster-id",
           :description =>  "Cluster ID used to compute monotonicaly increasing MySQL server-id. In Global Replication these IDs need to be globally unique. Default: 100",
           :type => 'string'
@@ -217,10 +221,6 @@ attribute "mysql/dir",
 
 attribute "mysql/localhost",
           :description => "MySQL server binds to localhost (not a public/private network interface)",
-          :type => 'string'
-
-attribute "mysql/replication_enabled",
-          :description => "Enable replication for the mysql server",
           :type => 'string'
 
 attribute "mysql/onlinefs",

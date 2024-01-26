@@ -14,10 +14,7 @@ if [ "${NDBD_INITIAL_RESTART}" = "true" ] || [ -n "${INITIAL_START}" ]; then
   sed -i 's/^NDBD_INITIAL_RESTART=.*$/NDBD_INITIAL_RESTART=false/g' <%= node['ndb']['scripts_dir'] %>/ndbd_env_variables
 fi
 
-SERVICE_ARG=
-if [ -n "$SERVICE_NAME" ]; then
-    SERVICE_ARG="--service-name $SERVICE_NAME"
-fi
+SERVICE_ARG="--service-name ${SERVICE_NAME:-ndbmtd}"
 
 MGM_CONN=<%= node['ndb']['connectstring'] %>
 

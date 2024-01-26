@@ -9,7 +9,6 @@ if [ $# -gt 0 ] ;then
   fi
 fi
 
-ID=<%= @node_id %>
-PID_FILE=<%= "#{node['ndb']['log_dir']}/ndb_${ID}.pid" %> 
+PID_FILE=<%= "#{node['ndb']['log_dir']}/ndb_mgmd.pid" %> 
 <%= node['ndb']['scripts_dir'] %>/util/kill-process.sh ndb_mgmd $PID_FILE 0 $FORCE
 exit $?

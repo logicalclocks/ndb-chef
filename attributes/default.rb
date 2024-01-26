@@ -30,9 +30,7 @@ default['ndb']['replication']['password']             = "repl_password"
 default['ndb']['bind_cpus']                           = "false"
 
 default['ndb']['mgmd']['port']                        = 1186
-default['ndb']['mgmd']['pidfile']                     = "ndb_mgmd.pid"
 default['ndb']['ndbd']['port']                        = 11860
-default['ndb']['ndbd']['pidfile']                     = "ndbmtd.pid"
 default['ndb']['ndbd']['systemctl_timeout_sec']       = 3600
 default['ndb']['ip']                                  = "10.0.2.15"
 
@@ -208,7 +206,6 @@ default['ndb']['mysql_socket']                        = "#{node['ndb']['root_dir
 default['ndb']['mysqlx_socket']                       = "#{node['ndb']['root_dir']}/mysqlx.sock"
 default['ndb']['mysql_port']                          = "3306"
 default['ndb']['mysqlx_port']                         = "33060"
-default['ndb']['mysqld_pid']                          = "mysqld.pid"
 
 default['mysql']['localhost']                         = "false"
 

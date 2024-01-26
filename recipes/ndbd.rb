@@ -132,13 +132,6 @@ directory "#{node['ndb']['data_dir']}/#{found_id}" do
   action :create
 end
 
-cookbook_file "#{node['ndb']['scripts_dir']}/ndbd_env_variables" do
-  source "ndbd_env_variables"
-  user node['ndb']['user']
-  group node['ndb']['group']
-  mode 0750
-end
-
 for script in node['ndb']['scripts']
   template "#{node['ndb']['scripts_dir']}/#{script}" do
     source "#{script}.erb"

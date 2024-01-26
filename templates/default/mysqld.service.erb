@@ -7,6 +7,7 @@ StartLimitBurst=10
 [Service]
 User = <%= node['ndb']['user'] %>
 PIDFile =<%= node['ndb']['log_dir'] %>/mysqld.pid
+EnvironmentFile = <%= node['ndb']['scripts_dir'] %>/mysqld_env_variables
 ExecStart = <%= node['ndb']['scripts_dir'] %>/mysql-server-start.sh
 ExecStop = <%= node['ndb']['scripts_dir'] %>/mysql-server-stop.sh
 ExecReload = <%= node['ndb']['scripts_dir'] %>/mysql-server-restart.sh

@@ -12,6 +12,7 @@ INIT_ARG=
 if [ "${NDBD_INITIAL_RESTART}" = "true" ] || [ -n "${INITIAL_START}" ]; then
   INIT_ARG=--initial
   sed -i 's/^NDBD_INITIAL_RESTART=.*$/NDBD_INITIAL_RESTART=false/g' <%= node['ndb']['scripts_dir'] %>/ndbd_env_variables
+  sed -i 's/^INITIAL_START=.*$/INITIAL_START=/g' <%= node['ndb']['scripts_dir'] %>/ndbd_env_variables
 fi
 
 SERVICE_ARG="--service-name ${SERVICE_NAME:-ndbmtd}"

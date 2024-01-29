@@ -111,7 +111,7 @@ _restore_schema_int(){
     users_file=${backup_path}/sql/users.sql
     _log_info "Restoring MySQL users from $users_file"
     # do not create a user if it already exists
-    sed -i "s/CREATE USER[[:space:]]'/CREATE USER IF NOT EXISTS '/g" $users_file
+    sed -i "s/CREATE USER[[:space:]]\`/CREATE USER IF NOT EXISTS \`/g" $users_file
     $MYSQL_CLIENT -e "SOURCE $users_file" >> $log_file 2>&1
     _log_info "Finished restoring MySQL users"
 }

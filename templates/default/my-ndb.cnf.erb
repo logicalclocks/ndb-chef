@@ -21,7 +21,7 @@ local_infile = OFF
 server-id = <%= @server_id %>
 log-bin = binlog
 binlog-format = ROW
-ndb_log_bin = <% if node['ndb']['replication']['enabled'].casecmp?("true") -%>ON<% else -%>OFF<% end -%>
+ndb_log_bin = <% if node['ndb']['replication']['enabled'].casecmp?("true") && node['ndb']['replication']['role'].casecmp?("primary") -%>ON<% else -%>OFF<% end -%>
 log_bin_trust_function_creators = ON
 sync_binlog = 1
 binlog_expire_logs_seconds = 100000

@@ -16,6 +16,20 @@ if ::File.exists?(configured_check_file)
     raise "RonDB replication has already been configured! If you really want to proceed delete #{configured_check_file} and re-try with a different backup-id"
 end
 
+bash 'conf-mysql-replica' do
+    user node['ndb']['user']
+    code <<-EOF
+        set -e
+        sed -i 's/ndb_log_bin[[:space:]]=[[:space:]]ON/ndb_log_bin = OFF/' #{node['ndb']['root_dir']}/my.cnf
+    EOF
+    only_if "grep 'ndb_log_bin[[:space:]]*=[[:space:]]*ON' #{node['ndb']['root_dir']}/my.cnf"
+    notifies :restart, "systemd_unit[mysqld.service]"
+end
+
+systemd_unit "mysqld.service" do
+    action :nothing
+end
+
 # make sure there is no entry in the heartbeat table where I am primary ie switching role
 bash 'delete-primary-with-my-id' do
     user node['ndb']['user']

@@ -32,13 +32,14 @@ bash 'stop-replica' do
     EOF
 end
 
-bash 'comment-out-replica-start' do
+bash 'conf-mysql-primary' do
     user node['ndb']['user']
     code <<-EOF
         set -e
+        sed -i 's/ndb_log_bin[[:space:]]=[[:space:]]OFF/ndb_log_bin = ON/' #{node['ndb']['root_dir']}/my.cnf
         sed -i '/skip-slave-start/ s/^#*/#/' #{node['ndb']['root_dir']}/my.cnf
     EOF
-    only_if "grep '^[[:space:]]*skip-slave-start' #{node['ndb']['root_dir']}/my.cnf"
+    only_if "grep '^[[:space:]]*skip-slave-start|ndb_log_bin[[:space:]]*=[[:space:]]*OFF' #{node['ndb']['root_dir']}/my.cnf"
     notifies :restart, "systemd_unit[mysqld.service]"
 end
 

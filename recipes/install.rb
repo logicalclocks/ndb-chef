@@ -228,7 +228,7 @@ mv #{ndb_package_dirname}/* #{node['mysql']['version_dir']}
 
 chown -R #{node['ndb']['user']}:#{node['ndb']['group']} #{node['mysql']['version_dir']}
 EOF
-  not_if { ::File.exists?( "#{node['mysql']['version_dir']}/bin/ndbd" ) }
+  not_if { ::File.exists?( "#{node['mysql']['version_dir']}/bin/ndb_mgmd" ) }
 end
 
 

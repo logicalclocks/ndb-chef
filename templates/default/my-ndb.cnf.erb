@@ -27,6 +27,10 @@ sync_binlog = 1
 binlog_expire_logs_seconds = 100000
 binlog-cache-size = 8M
 slave_allow_batching = ON
+# entries in binlog index are deleted from the rondb-monitor process
+# we don't want these events to be replicated because these entries
+# do not exist on the replica cluster
+replicate-ignore-table=mysql.ndb_binlog_index
 <% for t in node['ndb']['replication']['replicate-ignore-tables'].split(",") -%>
 replicate-ignore-table=<%= t.strip() %>
 <% end -%>

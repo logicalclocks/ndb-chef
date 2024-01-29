@@ -9,6 +9,7 @@ REPLICATION_PASSWORD=<%= node['ndb']['replication']['password'] %>
 NDB_ROOT_DIR=<%= node['ndb']['root_dir'] %>
 LOG_DIR=<%= node['ndb']['log_dir'] %>
 MY_CNF=$NDB_ROOT_DIR/my.cnf
+PURGE_BINLOGS_INTERVAL_SEC=30
 
 ## 0 - No log
 ## 1 - ERROR
@@ -57,8 +58,12 @@ row=$($MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT primary_id from
 primary_ids=$(echo $row | sed 's/[[:space:]]/,/g')
 _log_debug "Replication Primary server ids: $primary_ids"
 
+my_id=$(grep server-id $MY_CNF | awk -F '=' '{print $2}' | sed -e 's/^[[:space:]]*//')
+primary_row=$($MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT primary_id, \`primary\` FROM rondb_replication.heartbeat_tbl WHERE replica_id=$my_id;")
+primary_id=$(echo $primary_row | awk -F ' ' '{print $1}')
+primary_ip=$(echo $primary_row | awk -F ' ' '{print $2}')
+
 _channel_takeover() {
-    my_id=$(grep server-id $MY_CNF | awk -F '=' '{print $2}' | sed -e 's/^[[:space:]]*//')
     take_over_id=$($MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT replica_id FROM rondb_replication.heartbeat_tbl WHERE active=false ORDER BY replica_id ASC LIMIT 1;")
     _log_debug "My server id: $my_id"
     _log_debug "Replica server id that should take over: $take_over_id"
@@ -77,9 +82,6 @@ _channel_takeover() {
             _log_warn "Could not STOP REPLICA at $current_active_replica, maybe it is dead. Continue..."
         fi
         set -e
-	    primary_row=$($MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT primary_id, \`primary\` FROM rondb_replication.heartbeat_tbl WHERE replica_id=$my_id;")
-	    primary_id=$(echo $primary_row | awk -F ' ' '{print $1}')
-	    primary_ip=$(echo $primary_row | awk -F ' ' '{print $2}')
 
         _log_info "Marking the following channel as ACTIVE: Primary: $primary_id/$primary_ip Replica: $my_id"
         $MYSQL_BIN_DIR/mysql -h $primary_ip -u $REPLICATION_USER -p$REPLICATION_PASSWORD -Nse "UPDATE rondb_replication.heartbeat_tbl SET active=false WHERE primary_id=$current_active_primary_id;"
@@ -95,12 +97,37 @@ _channel_takeover() {
     fi
 }
 
+_purge_binlog() {
+    local latest_applied_epoch=$1
+    if [[ "$latest_applied_epoch" == "NULL" ]]; then
+        _log_warn "Latest applied epoch is NULL. Skip purging binlog files"
+        return
+    fi
+
+    # Query MySQL on Primary site which binlog file maps to the last applied epoch
+    binlog=$($MYSQL_BIN_DIR/mysql -h $primary_ip -u $REPLICATION_USER -p$REPLICATION_PASSWORD -Nse "SELECT File FROM mysql.ndb_binlog_index WHERE epoch = $latest_epoch;")
+    if [[ "$binlog" != "NULL" ]]; then
+        _log_info "Purging binary logs up to $binlog"
+        # Purge binlogs up to (exclusive) last applied binlog
+        $MYSQL_BIN_DIR/mysql -h $primary_ip -u $REPLICATION_USER -p$REPLICATION_PASSWORD -Nse "PURGE BINARY LOGS TO '$binlog'"
+
+        _log_info "Deleted applied binary logs"
+        _log_info "Deleting entries from mysql.ndb_binlog_index where epoch < $latest_applied_epoch"
+        # we also need to delete records from ndb_binlog_index periodically otherwise this table will keep increasing
+        $MYSQL_BIN_DIR/mysql -h $primary_ip -u $REPLICATION_USER -p$REPLICATION_PASSWORD -Nse "DELETE FROM mysql.ndb_binlog_index WHERE epoch < $latest_applied_epoch LIMIT 500;"
+        _log_info "Done deleting entries from mysql.ndb_binlog_index"
+    fi
+}
+
 last_epoch=0
 num_failures=0
 MAX_NUM_FAILURES=4
+last_binlog_purge=$(date +%s)
 while true; do
+    replication_active=false
     latest_epoch=$($MYSQL_BIN_DIR/mysql -u root -S $MYSQL_SOCKET -Nse "SELECT MAX(epoch) AS last_epoch from mysql.ndb_apply_status WHERE server_id IN ($primary_ids);")
     if [ "$latest_epoch" -le "$last_epoch" ]; then
+        replication_active=false
         num_failures=$((num_failures+1))
         _log_warn "Replication has not progressed $num_failures/$MAX_NUM_FAILURES"
         if [ "$num_failures" -gt "$MAX_NUM_FAILURES" ]; then
@@ -109,10 +136,32 @@ while true; do
             num_failures=0
         fi
     else
+        replication_active=true
         _log_debug "Replication active"
         num_failures=0
     fi
     last_epoch=$latest_epoch
+
+    # Do not purge any binary log if replication is not ongoing
+    if [[ "$replication_active" == "true" ]]; then
+        # Skip if purging is disabled
+        if [[ $PURGE_BINLOGS_INTERVAL_SEC -gt 0 ]]; then
+            _now=$(date +%s)
+            purge_delta=$((_now-last_binlog_purge))
+            if [[ "$purge_delta" -gt $PURGE_BINLOGS_INTERVAL_SEC ]]; then
+                _log_info "Purging binlogs"
+                _purge_binlog $latest_epoch
+                last_binlog_purge=$(date +%s)
+            else
+                _log_debug "Not time to purge binlogs yet"
+            fi
+        else
+            _log_debug "Skip purge binlogs because PURGE_BINLOGS_SEC <= 0"
+        fi
+    else
+        _log_warn "Skip purging binlogs because replication is not active!"
+    fi
+
 
     sleep 3s
 done

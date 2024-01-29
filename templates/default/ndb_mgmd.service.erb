@@ -1,6 +1,6 @@
 [Unit]
 Description = NDB Mgmt Server (ndb_mgmd)
-After = syslog.target network.target remote-fs.target
+After = syslog.target network.target remote-fs.target <%= node['install']['systemd']['after'] %>
 StartLimitIntervalSec=30
 StartLimitBurst=20
 

@@ -88,6 +88,10 @@ attribute "ndb/replication/password",
           :description =>  "Password of the user doing the replication",
           :type => 'string'
 
+attribute "ndb/replication/purge-binlog-interval-secs",
+          :description =>  "Interval in seconds for purging applied binary logs used for Global Replication. Values <= 0 disable purging. Default: 1800",
+          :type => 'string'
+
 attribute "ndb/DataMemory",
           :description => "Data memory for each MySQL Cluster Data Node",
           :type => 'string',

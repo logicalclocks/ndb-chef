@@ -9,7 +9,7 @@ REPLICATION_PASSWORD=<%= node['ndb']['replication']['password'] %>
 NDB_ROOT_DIR=<%= node['ndb']['root_dir'] %>
 LOG_DIR=<%= node['ndb']['log_dir'] %>
 MY_CNF=$NDB_ROOT_DIR/my.cnf
-PURGE_BINLOGS_INTERVAL_SEC=30
+PURGE_BINLOGS_INTERVAL_SEC=<%= node['ndb']['replication']['purge-binlog-interval-secs'] %>
 
 ## 0 - No log
 ## 1 - ERROR
@@ -105,14 +105,21 @@ _purge_binlog() {
     fi
 
     # Query MySQL on Primary site which binlog file maps to the last applied epoch
+    set +e
     binlog=$($MYSQL_BIN_DIR/mysql -h $primary_ip -u $REPLICATION_USER -p$REPLICATION_PASSWORD -Nse "SELECT File FROM mysql.ndb_binlog_index WHERE epoch = $latest_epoch;")
+    local r=$?
+    set -e
+    if [[ "$r" -ne 0 ]]; then
+        _log_warn "Primary MySQL $primary_ip (ID: $primary_id) is not running? Skip purging binlogs"
+        return
+    fi
     if [[ "$binlog" != "NULL" ]]; then
-        _log_info "Purging binary logs up to $binlog"
+        _log_info "Purging binary logs up to $binlog at Primary $primary_ip (ID: $primary_id)"
         # Purge binlogs up to (exclusive) last applied binlog
         $MYSQL_BIN_DIR/mysql -h $primary_ip -u $REPLICATION_USER -p$REPLICATION_PASSWORD -Nse "PURGE BINARY LOGS TO '$binlog'"
 
         _log_info "Deleted applied binary logs"
-        _log_info "Deleting entries from mysql.ndb_binlog_index where epoch < $latest_applied_epoch"
+        _log_info "Deleting entries from mysql.ndb_binlog_index where epoch < $latest_applied_epoch at Primary $primary_ip (ID: $primary_id)"
         # we also need to delete records from ndb_binlog_index periodically otherwise this table will keep increasing
         $MYSQL_BIN_DIR/mysql -h $primary_ip -u $REPLICATION_USER -p$REPLICATION_PASSWORD -Nse "DELETE FROM mysql.ndb_binlog_index WHERE epoch < $latest_applied_epoch LIMIT 500;"
         _log_info "Done deleting entries from mysql.ndb_binlog_index"

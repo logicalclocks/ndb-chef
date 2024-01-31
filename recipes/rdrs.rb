@@ -25,9 +25,9 @@ if node['ndb']['rdrs']['containerize'] == "true"
   end
 end
 
-deps = ""
+deps = node['install']['systemd']['after']
 if exists_local("ndb", "ndbd") 
-  deps = "ndbmtd.service"
+  deps += " ndbmtd.service"
 end  
 
 service_name = "rdrs"

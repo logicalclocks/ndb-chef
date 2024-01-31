@@ -142,10 +142,10 @@ for script in node['ndb']['scripts']
   end
 end 
 
-deps = ""
+deps = node['install']['systemd']['after']
 if exists_local("ndb", "mgmd") 
-  deps = "ndb_mgmd.service"
-end  
+  deps += " ndb_mgmd.service"
+end
 
 service_name = "ndbmtd"
 

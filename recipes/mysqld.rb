@@ -66,9 +66,9 @@ for script in node['mysql']['scripts']
   end
 end
 
-deps = ""
+deps = node['install']['systemd']['after']
 if exists_local("ndb", "ndbd") 
-  deps = "ndbmtd.service"
+  deps += " ndbmtd.service"
 end  
 service_name = "mysqld"
 

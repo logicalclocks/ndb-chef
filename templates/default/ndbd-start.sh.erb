@@ -17,7 +17,7 @@ fi
 
 SERVICE_ARG="--service-name ${SERVICE_NAME:-ndbmtd}"
 
-MGM_CONN=<%= node['ndb']['connectstring'] %>
+MGM_CONN=${MGM_CONN_STRING}
 
 # comma separated list of node-ids of nodes not to wait for when starting this ndbmtd
 NOWAIT_NODES_LIST=
@@ -49,8 +49,8 @@ done
 
 echo "Starting Data Node <%= @node_id %>."
 # --connect-retries == -1 implies that the ndbd keeps trying forever to connect to the ndb_mgmd
-#su <%= node['ndb']['user'] %> -c "<%= node['mysql']['base_dir'] %>/bin/ndbmtd -c $MGM_CONN --ndb-nodeid=<%= @node_id %>  --connect-retries=-1 --connect-delay=10 ${SERVICE_ARG}"
-<%= node['mysql']['base_dir'] %>/bin/ndbmtd -c "$MGM_CONN" --ndb-nodeid=<%= @node_id %>  --connect-retries=-1 --connect-delay=10 $INIT_ARG $NOWAIT_NODES_LIST ${SERVICE_ARG}
+#su <%= node['ndb']['user'] %> -c "<%= node['mysql']['base_dir'] %>/bin/ndbmtd -c $MGM_CONN --ndb-nodeid=${NDB_NDBD_NODE_ID}  --connect-retries=-1 --connect-delay=10 ${SERVICE_ARG}"
+<%= node['mysql']['base_dir'] %>/bin/ndbmtd -c "$MGM_CONN" --ndb-nodeid=${NDB_NDBD_NODE_ID}  --connect-retries=-1 --connect-delay=10 $INIT_ARG $NOWAIT_NODES_LIST ${SERVICE_ARG}
 
 RES=$(echo $?)
 exit $RES

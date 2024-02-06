@@ -121,7 +121,7 @@ _purge_binlog() {
         _log_info "Deleted applied binary logs"
         _log_info "Deleting entries from mysql.ndb_binlog_index where epoch < $latest_applied_epoch at Primary $primary_ip (ID: $primary_id)"
         # we also need to delete records from ndb_binlog_index periodically otherwise this table will keep increasing
-        $MYSQL_BIN_DIR/mysql -h $primary_ip -u $REPLICATION_USER -p$REPLICATION_PASSWORD -Nse "DELETE FROM mysql.ndb_binlog_index WHERE epoch < $latest_applied_epoch LIMIT 500;"
+        $MYSQL_BIN_DIR/mysql -h $primary_ip -u $REPLICATION_USER -p$REPLICATION_PASSWORD -Nse "DELETE FROM mysql.ndb_binlog_index WHERE epoch < $latest_applied_epoch LIMIT 3000;"
         _log_info "Done deleting entries from mysql.ndb_binlog_index"
     fi
 }

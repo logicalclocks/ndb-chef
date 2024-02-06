@@ -2,9 +2,10 @@ CREATE USER if not exists '<%= node['ndb']['replication']['user'] %>'@'%' identi
 GRANT NDB_STORED_USER ON *.* to '<%= node['ndb']['replication']['user'] %>'@'%';
 GRANT ALL PRIVILEGES ON rondb_replication.* to '<%= node['ndb']['replication']['user'] %>'@'%';
 
+GRANT BINLOG_ADMIN ON *.* TO '<%= node['ndb']['replication']['user'] %>'@'%';
 GRANT REPLICATION SLAVE ON *.* TO '<%= node['ndb']['replication']['user'] %>'@'%';
 GRANT REPLICATION CLIENT ON *.* TO '<%= node['ndb']['replication']['user'] %>'@'%';
 GRANT REPLICATION_SLAVE_ADMIN ON *.* TO '<%= node['ndb']['replication']['user'] %>'@'%';
 GRANT SELECT ON mysql.ndb_apply_status TO '<%= node['ndb']['replication']['user'] %>'@'%';
-GRANT SELECT ON mysql.ndb_binlog_index TO '<%= node['ndb']['replication']['user'] %>'@'%';
+GRANT SELECT, DELETE ON mysql.ndb_binlog_index TO '<%= node['ndb']['replication']['user'] %>'@'%';
 FLUSH PRIVILEGES;

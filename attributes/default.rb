@@ -22,6 +22,7 @@ default['ndb']['replication']['role']                 = "primary"
 default['ndb']['replication']['primary-cluster-id']   = ""
 default['ndb']['replication']['replica-cluster-id']   = ""
 default['ndb']['replication']['replicate-ignore-tables'] = "glassfish_timers.EJB__TIMER__TBL"
+default['ndb']['replication']['purge-binlog-interval-secs'] = "10"
 
 default['ndb']['replication']['user']                 = "repl_user"
 default['ndb']['replication']['password']             = "repl_password"

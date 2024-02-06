@@ -1,6 +1,7 @@
 #!/usr/bin/env sh 
 
-source <%= node['ndb']['scripts_dir'] %>/mgmd_env_variables
+. <%= node['ndb']['scripts_dir'] %>/mgmd_env_variables
+
 MGM_CONN=${MGM_CONN_STRING}
 PARAMS=
 EXEC=

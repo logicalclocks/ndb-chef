@@ -7,8 +7,9 @@ default['ndb']['patchVersion']                        = "1"
 default['ndb']['version']                             = "#{node['ndb']['majorVersion']}.#{node['ndb']['minorVersion']}.#{node['ndb']['patchVersion']}"
 default['ndb']['enabled']                             = "true"
 default['ndb']['glib_version']                        = "2.28"
+default['ndb']['cpu_platform']                        = "x86_64"
 
-default['ndb']['url']                                 = node['download_url'] + "/rondb-#{node['ndb']['version']}-linux-glibc#{node['ndb']['glib_version']}-x86_64.tar.gz"
+default['ndb']['url']                                 = node['download_url'] + "/rondb-#{node['ndb']['version']}-linux-glibc#{node['ndb']['glib_version']}-#{node['ndb']['cpu_platform']}.tar.gz"
 # checksum is not a security check - used to improve the speed of downloads by skipping if matched
 # checksum calculated using: shasum -a 256 /var/www/hops/...tgz | cut -c-12
 # checksum calculated using: sha256sum /var/www/hops/...tgz | cut -c-12
@@ -30,7 +31,7 @@ default['ndb']['replication']['password']             = "repl_password"
 default['ndb']['bind_cpus']                           = "false"
 
 default['ndb']['mgmd']['port']                        = 1186
-default['ndb']['ndbd']['port']                        = 10000
+default['ndb']['ndbd']['port']                        = 11860
 default['ndb']['ndbd']['systemctl_timeout_sec']       = 3600
 default['ndb']['ip']                                  = "10.0.2.15"
 
@@ -129,9 +130,9 @@ default['ndb']['NumCPUs']                             = "#{node['ndb']['default'
 
 default['ndb']['interrupts_isolated_to_single_cpu']   = "false"
 
-default['mgm']['scripts']            = %w{ enter-singleuser-mode.sh mgm-client.sh mgm-server-start.sh mgm-server-stop.sh mgm-server-restart.sh cluster-shutdown.sh cluster-init.sh cluster-start-with-recovery.sh exit-singleuser-mode.sh }
-default['ndb']['scripts']            = %w{ ndbd-start.sh ndbd-init.sh ndbd-stop.sh ndbd-restart.sh }
-default['mysql']['scripts']          = %w{ get-mysql-socket.sh get-mysql-port.sh mysql-server-start.sh mysql-server-stop.sh mysql-server-restart.sh mysql-client.sh }
+default['mgm']['scripts']            = %w{ enter-singleuser-mode.sh mgm-client.sh mgm-server-start.sh mgm-server-stop.sh mgm-server-restart.sh cluster-shutdown.sh cluster-init.sh cluster-start-with-recovery.sh exit-singleuser-mode.sh mgmd_env_variables }
+default['ndb']['scripts']            = %w{ ndbd-start.sh ndbd-init.sh ndbd-stop.sh ndbd-restart.sh ndbd_env_variables }
+default['mysql']['scripts']          = %w{ get-mysql-socket.sh get-mysql-port.sh mysql-server-start.sh mysql-server-stop.sh mysql-server-restart.sh mysql-client.sh mysqld_env_variables }
 
 default['ndb']['dir']                                 = node['install']['dir'].empty? ? "/var/lib" : node['install']['dir']
 

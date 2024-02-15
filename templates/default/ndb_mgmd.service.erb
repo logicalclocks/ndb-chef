@@ -6,7 +6,8 @@ StartLimitBurst=20
 
 [Service]
 User = <%= node['ndb']['user'] %>
-PIDFile = <%= "#{node['ndb']['log_dir']}" %>/ndb_<%= @node_id %>.pid
+PIDFile = <%= "#{node['ndb']['log_dir']}" %>/ndb_mgmd.pid
+EnvironmentFile = <%= node['ndb']['scripts_dir'] %>/mgmd_env_variables
 ExecStart = <%= "#{node['ndb']['base_dir']}/scripts/mgm-server-start.sh"  %>
 ExecStop = <%= "#{node['ndb']['base_dir']}/scripts/mgm-server-stop.sh"  %>
 ExecReload = <%= "#{node['ndb']['base_dir']}/scripts/mgm-server-restart.sh"  %>

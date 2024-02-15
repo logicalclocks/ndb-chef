@@ -1,6 +1,8 @@
 #!/usr/bin/env sh 
 
-MGM_CONN=<%= node['ndb']['connectstring'] %>
+. <%= node['ndb']['scripts_dir'] %>/mgmd_env_variables
+
+MGM_CONN=${MGM_CONN_STRING}
 PARAMS=
 EXEC=
 while [ $# -gt 0 ]; do

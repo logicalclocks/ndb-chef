@@ -30,6 +30,7 @@ while [ $# -gt 0 ]; do
   shift       
 done
 
+SERVICE_ARG="--service-name ${SERVICE_NAME:-ndbmtd}"
 
 echo "Initializing Data Node <%= @node_id %>."
 echo ""

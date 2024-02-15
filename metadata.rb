@@ -4,7 +4,7 @@ maintainer_email "jdowling@kth.se"
 license          "AGPL v3"
 description      "Installs/Configures NDB (MySQL Cluster)"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "3.7.0"
+version          "3.8.0"
 source_url       "https://github.com/logicalclocks/ndb-chef"
 issues_url       "https://github.com/logicalclocks/ndb-chef/issues"
 
@@ -86,6 +86,10 @@ attribute "ndb/replication/user",
 
 attribute "ndb/replication/password",
           :description =>  "Password of the user doing the replication",
+          :type => 'string'
+
+attribute "ndb/replication/purge-binlog-interval-secs",
+          :description =>  "Interval in seconds for purging applied binary logs used for Global Replication. Values <= 0 disable purging. Default: 1800",
           :type => 'string'
 
 attribute "ndb/DataMemory",

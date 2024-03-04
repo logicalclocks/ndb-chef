@@ -65,9 +65,9 @@ module NDB
           return s.success?
         end
 
-        def mysqld_configuration(tls = false)
+        def mysqld_configuration(tls = false, recipe = "mysqld")
           conf = Hash.new
-          conf[:mysql_id] = find_service_id("mysqld", node['mysql']['id'])
+          conf[:mysql_id] = find_service_id(recipe, node['mysql']['id'])
           conf[:timezone] = Time.now.strftime("%:z")
           conf[:server_id] = mysql_server_id(my_private_ip(), node['ndb']['replication']['cluster-id'])
           conf[:am_i_primary] = node['ndb']['replication']['role'].casecmp?('primary')

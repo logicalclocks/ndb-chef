@@ -4,7 +4,7 @@ service "mysqld" do
     action :nothing
 end
 
-mycnf_conf = mysqld_configuration(is_tls_already_configured())
+mycnf_conf = mysqld_configuration(is_tls_already_configured(), "commit_upgrade")
 # override dist_upgrade_allowed since we are committed to the upgrade
 mycnf_conf[:dist_upgrade_allowed] = 1
 

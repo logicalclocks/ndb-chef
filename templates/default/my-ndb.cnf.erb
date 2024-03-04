@@ -39,6 +39,7 @@ replicate-ignore-table=<%= t.strip() %>
 # Do not remove the commented skip-slave-start because it will be uncommented automatically when the server switches roles
 <% if @am_i_primary -%>#<% end -%>skip-slave-start
 
+# dist upgrade should be allowed only on fresh installation or after committed the upgrade
 ndb-schema-dist-upgrade-allowed = <%= @dist_upgrade_allowed %>
 default-time-zone = "<%= @timezone %>"
 

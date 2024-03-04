@@ -60,12 +60,22 @@ module NDB
           return "[{\"IP\": \"#{conn_str_split[0]}\", \"Port\": #{conn_str_split[1]} }]"
         end
 
+        def is_tls_already_configured()
+          _, s = Open3.capture2("grep -e \"^[[:space:]]*ssl-cert\" #{node['ndb']['root_dir']}/my.cnf")
+          return s.success?
+        end
+
         def mysqld_configuration(tls = false)
           conf = Hash.new
           conf[:mysql_id] = find_service_id("mysqld", node['mysql']['id'])
           conf[:timezone] = Time.now.strftime("%:z")
           conf[:server_id] = mysql_server_id(my_private_ip(), node['ndb']['replication']['cluster-id'])
           conf[:am_i_primary] = node['ndb']['replication']['role'].casecmp?('primary')
+          if conda_helpers.is_upgrade() && node['mysql']['safe-upgrade'].casecmp?("true")
+            conf[:dist_upgrade_allowed] = 0
+          else
+            conf[:dist_upgrade_allowed] = 1
+          end
           if tls
             conf[:mysql_tls] = true
             crypto_dir = x509_helper.get_crypto_dir(node['ndb']['user'])

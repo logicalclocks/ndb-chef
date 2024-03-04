@@ -219,6 +219,15 @@ default['mysql']['password']                          = "kthfs"
 
 default['mysql']['initialize']                        = "true"
 
+# When this attribute is enabled incompatible changes in mysql.ndb_schema
+# will NOT be made
+#
+#
+# NOTE: You need to run recipe ndb::commit_upgrade on all MySQL servers MANUALLY post upgrade
+#
+#
+default['mysql']['safe-upgrade']                      = "false"
+
 # Number of file descriptor allocated to MySQLd server
 default['mysql']['no_fds']                            = 10000
 

@@ -1,4 +1,5 @@
 require 'open3'
+require 'time'
 
 module NDB
     module Helpers
@@ -57,6 +58,25 @@ module NDB
         def generate_rdrs_mgmd_conf(conn_str)
           conn_str_split = conn_str.split(/:/, 2)
           return "[{\"IP\": \"#{conn_str_split[0]}\", \"Port\": #{conn_str_split[1]} }]"
+        end
+
+        def mysqld_configuration(tls = false)
+          conf = Hash.new
+          conf[:mysql_id] = find_service_id("mysqld", node['mysql']['id'])
+          conf[:timezone] = Time.now.strftime("%:z")
+          conf[:server_id] = mysql_server_id(my_private_ip(), node['ndb']['replication']['cluster-id'])
+          conf[:am_i_primary] = node['ndb']['replication']['role'].casecmp?('primary')
+          if tls
+            conf[:mysql_tls] = true
+            crypto_dir = x509_helper.get_crypto_dir(node['ndb']['user'])
+            conf[:certificate] = "#{crypto_dir}/#{x509_helper.get_certificate_bundle_name(node['ndb']['user'])}"
+            conf[:key] = "#{crypto_dir}/#{x509_helper.get_private_key_pkcs1_name(node['ndb']['user'])}"
+            conf[:hops_ca] = "#{crypto_dir}/#{x509_helper.get_hops_ca_bundle_name()}"
+          else
+            conf[:mysql_tls] = false
+          end
+
+          return conf
         end
     end
 end

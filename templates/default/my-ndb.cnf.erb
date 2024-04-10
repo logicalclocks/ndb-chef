@@ -31,7 +31,6 @@ slave_allow_batching = ON
 # we don't want these events to be replicated because these entries
 # do not exist on the replica cluster
 replicate-ignore-table=mysql.ndb_binlog_index
-replicate-ignore-table=mysql.ndb_apply_status
 <% for t in node['ndb']['replication']['replicate-ignore-tables'].split(",") -%>
 replicate-ignore-table=<%= t.strip() %>
 <% end -%>

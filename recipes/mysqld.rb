@@ -1,5 +1,3 @@
-require 'time'
-
 ndb_connectstring()
 
 case node['platform_family']
@@ -97,7 +95,8 @@ service "#{service_name}" do
   action :nothing
 end
 
-server_id = mysql_server_id(my_private_ip(), node['ndb']['replication']['cluster-id'])
+
+mycnf_conf = mysqld_configuration()
 
 template "#{node['ndb']['root_dir']}/my.cnf" do
   source "my-ndb.cnf.erb"
@@ -105,15 +104,7 @@ template "#{node['ndb']['root_dir']}/my.cnf" do
   group node['ndb']['group']
   mode "0640"
   action :create
-  variables({
-   :mysql_id => found_id,
-   # Here is always false, as this recipe is run before certificates are available
-   # if mysql/tls is enabled, the file will be re-templated later
-   :mysql_tls => false,
-   :timezone => Time.now.strftime("%:z"),
-   :server_id => server_id,
-   :am_i_primary => node['ndb']['replication']['role'].casecmp?('primary')
-  })
+  variables(mycnf_conf)
   if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name), :immediately
   end

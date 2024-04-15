@@ -17,6 +17,7 @@ recipe            "ndb::mgmd", "Installs a MySQL Cluster management server (ndb_
 recipe            "ndb::ndbd", "Installs a MySQL Cluster data node (ndbd)"
 recipe            "ndb::mysqld", "Installs a MySQL Server connected to the MySQL Cluster (mysqld)"
 recipe            "ndb::mysqld_tls", "Configure TLS for MySQL servers using host certificates"
+recipe            "ndb::commit_upgrade", "If RonDB upgrade and safe-upgrade == true then this recipe will commit the upgrade, downgrade after this point might not be possible!"
 
 recipe            "ndb::purge", "Removes all data and all binaries related to a MySQL Cluster installation"
 
@@ -213,6 +214,10 @@ attribute "mysql/password",
 
 attribute "mysql/initialize",
           :description => "Initialize the MySQL Servers (Default: true)",
+          :type => "string"
+
+attribute "mysql/safe-upgrade",
+          :description => "When this attribute is set to 'true' incompatible changes in mysql.ndb_schema will NOT be made, you will need to run ndb::commit_upgrade recipe manually. Default: false",
           :type => "string"
 
 attribute "mysql/no_fds",

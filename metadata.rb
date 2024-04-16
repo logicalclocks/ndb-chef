@@ -42,7 +42,7 @@ attribute "ndb/patchVersion",
           :type => 'string'
 
 attribute "ndb/glib_version",
-          :desctiption => "glibc version",
+          :description => "glibc version",
           :type => 'string'
 
 attribute "ndb/url",

@@ -41,6 +41,10 @@ attribute "ndb/patchVersion",
           :description => "RonDB patch version",
           :type => 'string'
 
+attribute "ndb/glib_version",
+          :description => "glibc version",
+          :type => 'string'
+
 attribute "ndb/url",
           :description => "Download URL for MySQL Cluster binaries",
           :type => 'string'

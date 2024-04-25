@@ -243,3 +243,7 @@ bash 'run_featurestore_grants' do
   EOF
   only_if {node['mysql']['onlinefs'].casecmp?("true")}
 end
+
+if node['ndb']['replication']['enabled'].casecmp?("true")
+  include_recipe "ndb::replication_configuration"
+end

@@ -162,6 +162,10 @@ attribute "ndb/restore/exclude_databases_data",
           :description => "Databases to exclude from restore-data operation",
           :type => 'string'
 
+attribute "ndb/restore/revoke_host_certificates",
+          :description => "Revoke Host certificates restored from backup. In case of complete disaster recovery we want to set this to true, otherwise keep it false. Default: false",
+          :type => 'string'
+
 attribute "ndb/ndbd_backup_retention",
           :description => "How many n*24 hours are the backup files in NDB Data Nodes going to stay until they are removed",
           :type => 'string'

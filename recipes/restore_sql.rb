@@ -16,6 +16,7 @@ rebuild_indexes_check = "#{Chef::Config['file_cache_path']}/rondb_rebuild_indexe
 bash 'Rebuild indexes' do
     user 'root'
     group 'root'
+    live_stream true
     code <<-EOH
         set -e
         #{node['ndb']['scripts_dir']}/restore_backup.sh ndb-restore -p #{backup_directory} -n 1 -b #{node['ndb']['restore']['backup_id']} -c #{mgm_connection} #{exclude_databases_option} -m REBUILD-INDEXES
@@ -38,6 +39,7 @@ end
 bash 'Restore SQL' do
     user 'root'
     group 'root'
+    live_stream true
     code <<-EOH
         set -e
         # Drop existing procedures as they will be restored from the backup

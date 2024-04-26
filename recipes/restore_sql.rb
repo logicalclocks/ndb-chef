@@ -94,6 +94,7 @@ bash 'Remove host certificates' do
             echo "Hopsworks database DOES NOT exist"
         fi
     EOH
+    only_if { node['ndb']['restore']['revoke_host_certificates'].casecmp?("true") }
     only_if { should_run }
     only_if { rondb_restoring_backup() }
 end

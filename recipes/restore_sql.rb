@@ -28,6 +28,13 @@ bash 'Rebuild indexes' do
     only_if { rondb_restoring_backup() }
 end
 
+# Temporary fix for the GRANTS propagation issue
+# https://hopsworks.atlassian.net/browse/RONDB-647
+# restarting mysqld will syncronize the tables
+systemd_unit "mysqld.service" do
+    action [:restart]
+end
+
 bash 'Restore SQL' do
     user 'root'
     group 'root'

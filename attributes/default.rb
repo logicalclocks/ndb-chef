@@ -116,6 +116,7 @@ default['ndb']['SchedulerExecutionTimer']             = 50
 default['ndb']['BuildIndexThreads']                   = "128"
 default['ndb']['TwoPassInitialNodeRestartCopy']       = "true"
 default['ndb']['Numa']                                = 1
+default['ndb']['PartitionsPerNode']                   = "2"
 
 
 # Up to 8 execution threads supported

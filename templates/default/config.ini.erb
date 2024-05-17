@@ -11,6 +11,8 @@ AutomaticThreadConfig=true
 TotalMemoryConfig=<%= node['ndb']['TotalMemoryConfig'] %>
   <% end -%>
 
+PartitionsPerNode=<%= node['ndb']['PartitionsPerNode'] %>
+
   <% if node['ndb']['configuration']['profile'].casecmp?("tiny") -%>
 MaxNoOfTables=2000
 MaxNoOfOrderedIndexes=1000

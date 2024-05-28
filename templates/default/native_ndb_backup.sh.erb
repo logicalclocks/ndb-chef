@@ -113,7 +113,7 @@ if [ $delete_existing_backup ]; then
     for i in $NDB_DATANODES
     do
         log_info "Deleting backup with ID BACKUP-$backup_id from node $i"
-        ssh ${MYSQL_USER}@${i} "rm -rf $REMOTE_MYSQL_BACKUP_DIR/BACKUP/BACKUP-$backup_id"
+        ssh -o StrictHostKeyChecking=no ${MYSQL_USER}@${i} "rm -rf $REMOTE_MYSQL_BACKUP_DIR/BACKUP/BACKUP-$backup_id"
         check_exit_code $? "Deleting existing backup with id $backup_id from $i failed, aborting. Exit code: $?" 3
     done
 fi

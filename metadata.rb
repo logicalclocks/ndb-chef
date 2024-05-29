@@ -85,6 +85,10 @@ attribute "ndb/replication/replicate-ignore-tables",
           :description =>  "Tables to ignore on the MySQL replica at Global replication",
           :type => 'string'
 
+attribute "ndb/replication/replicate-ignore-dbs",
+          :description =>  "DBs to ignore on the MySQL replica at Global replication",
+          :type => 'string'
+
 attribute "ndb/replication/role",
           :description =>  "In case of replication indicate if this cluster will be the primary or replica. Default: primary",
           :type => 'string'

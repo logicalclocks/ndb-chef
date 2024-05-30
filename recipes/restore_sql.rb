@@ -22,7 +22,7 @@ bash 'Rebuild indexes' do
     group 'root'
     live_stream true
     code <<-EOH
-        set -
+        set -e
         #{node['ndb']['scripts_dir']}/restore_backup.sh ndb-restore -p #{backup_directory} -n 1 -b #{node['ndb']['restore']['backup_id']} -c #{mgm_connection} #{exclude_tables_option} #{exclude_databases_option} -m REBUILD-INDEXES
         touch #{rebuild_indexes_check}
     EOH

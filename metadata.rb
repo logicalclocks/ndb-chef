@@ -170,6 +170,14 @@ attribute "ndb/restore/exclude_databases_data",
           :description => "Databases to exclude from restore-data operation",
           :type => 'string'
 
+attribute "ndb/restore/exclude_tables_meta",
+          :description => "Tables to exclude from restore-meta operation",
+          :type => 'string'
+
+attribute "ndb/restore/exclude_tables_data",
+          :description => "Tables to exclude from restore-data operation",
+          :type => 'string'
+
 attribute "ndb/restore/revoke_host_certificates",
           :description => "Revoke Host certificates restored from backup. In case of complete disaster recovery we want to set this to true, otherwise keep it false. Default: false",
           :type => 'string'

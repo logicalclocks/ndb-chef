@@ -173,9 +173,14 @@ default['ndb']['remote_backup_dir']                   = ""
 default['ndb']['local_backup_dir']                    = "#{node['ndb']['root_dir']}/ndb/backups"
 default['ndb']['restore']['tarball']                  = ""
 default['ndb']['restore']['backup_id']                = ""
-default['ndb']['restore']['exclude_databases_meta']   = "mysql.ndb_apply_status,glassfish_timers.EJB__TIMER__TBL"
-default['ndb']['restore']['exclude_databases_data']   = "mysql.ndb_apply_status,glassfish_timers.EJB__TIMER__TBL,hopsworks.hosts,hopsworks.host_services"
+default['ndb']['restore']['exclude_tables_meta']      = "mysql.ndb_apply_status,glassfish_timers.EJB__TIMER__TBL"
+default['ndb']['restore']['exclude_tables_data']      = "mysql.ndb_apply_status,glassfish_timers.EJB__TIMER__TBL,hopsworks.hosts,hopsworks.host_services"
+
+default['ndb']['restore']['exclude_databases_meta']   = ""
+default['ndb']['restore']['exclude_databases_data']   = ""
+
 default['ndb']['restore']['revoke_host_certificates'] = "false"
+
 ## How many n*24 hours are the backup files in NDB Data Ndes going to stay until they are removed
 ## NOTE: cron_backup attribute should be set to true
 default['ndb']['ndbd_backup_retention']               = "5"

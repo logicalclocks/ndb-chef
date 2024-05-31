@@ -7,11 +7,15 @@ backup_directory = "#{node['ndb']['local_backup_dir']}/#{File.basename(node['ndb
 
 exclude_databases_option = ""
 exclude_tables_option = ""
+exclude_disk_objects_option = ""
 unless node['ndb']['restore']['exclude_tables_meta'].empty?
     exclude_tables_option = "-e #{node['ndb']['restore']['exclude_tables_meta']}"
 end
 unless node['ndb']['restore']['exclude_databases_meta'].empty?
     exclude_databases_option = "-x #{node['ndb']['restore']['exclude_databases_meta']}"
+end
+unless node['ndb']['restore']['exclude_disk_objects'].eql?("false")
+    exclude_disk_objects_option = "-d"
 end
 
 private_ip=my_private_ip()
@@ -22,7 +26,7 @@ bash 'ndb_restore metadata' do
     group 'root'
     timeout 18000
     code <<-EOH
-        #{node['ndb']['scripts_dir']}/restore_backup.sh ndb-restore -p #{backup_directory} -n #{my_node_id} -b #{node['ndb']['restore']['backup_id']} -c #{mgm_connection} -s #{exclude_tables_option} #{exclude_databases_option} -m META
+        #{node['ndb']['scripts_dir']}/restore_backup.sh ndb-restore -p #{backup_directory} -n #{my_node_id} -b #{node['ndb']['restore']['backup_id']} -c #{mgm_connection} -s #{exclude_tables_option} #{exclude_databases_option} #{exclude_disk_objects_option} -m META
     EOH
     only_if { should_run }
     only_if { rondb_restoring_backup() }

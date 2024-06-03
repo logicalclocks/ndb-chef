@@ -179,6 +179,8 @@ default['ndb']['restore']['exclude_tables_data']      = "mysql.ndb_apply_status,
 default['ndb']['restore']['exclude_databases_meta']   = ""
 default['ndb']['restore']['exclude_databases_data']   = ""
 
+default['ndb']['restore']['exclude_disk_objects']     = "false"
+
 default['ndb']['restore']['revoke_host_certificates'] = "false"
 
 ## How many n*24 hours are the backup files in NDB Data Ndes going to stay until they are removed

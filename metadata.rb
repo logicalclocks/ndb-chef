@@ -178,6 +178,10 @@ attribute "ndb/restore/exclude_tables_data",
           :description => "Tables to exclude from restore-data operation",
           :type => 'string'
 
+attribute "ndb/restore/exclude_disk_objects",
+          :description => "Whether or not to exclude disk objects from the restore operation (Default: false)",
+          :type => 'string'
+
 attribute "ndb/restore/revoke_host_certificates",
           :description => "Revoke Host certificates restored from backup. In case of complete disaster recovery we want to set this to true, otherwise keep it false. Default: false",
           :type => 'string'

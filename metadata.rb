@@ -154,6 +154,10 @@ attribute "ndb/local_backup_dir",
           :description => "Directory on the local MGM machine where backups will temporarily be stored",
           :type => 'string'
 
+attribute "ndb/PartitionsPerNode",
+          :description => "If you have >4 LDM threads and want to use all LDM threads, increase this to the number of LDM threads",
+          :type => 'string'
+
 attribute "ndb/restore/tarball",
           :description => "Location of RonDB backup tarball. The extracted directory is used by restore_backup.sh script. See comment in the script for the directory structure. Default: """,
           :type => 'string'

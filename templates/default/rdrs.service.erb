@@ -21,6 +21,7 @@ ExecStop = <%= node['ndb']['scripts_dir'] %>/rdrs-stop.sh
 ExecReload = <%= node['ndb']['scripts_dir'] %>/rdrs-restart.sh
 TimeoutSec = 0
 Restart=on-failure
+RestartSec=40
 
 <% if node['ndb']['rdrs']['containerize'].casecmp?("false") -%>
 Type = forking

@@ -12,15 +12,17 @@ else
   rondb_metadata_cluster_conn_str_arr=generate_rdrs_mgmd_conf(node['ndb']['rdrs']['rondbmetadatacluster']['mgmds'])
 end
 
+rdrs_tgz_name = File.basename(node['ndb']['rdrs']['container_image_url'])
+
 if node['ndb']['rdrs']['containerize'] == "true" 
   bash 'Setting-RDRS-Image' do
     user 'root'
     code <<-EOH
       set -e
       cd #{Chef::Config['file_cache_path']}
-      rm -f docker-image-rdrs-#{node['ndb']['version']}.tar.gz
-      wget -O docker-image-rdrs-#{node['ndb']['version']}.tar.gz  #{node['ndb']['rdrs']['container_image_url']}
-      docker load < docker-image-rdrs-#{node['ndb']['version']}.tar.gz
+      rm -f #{rdrs_tgz_name}
+      wget -O #{rdrs_tgz_name} #{node['ndb']['rdrs']['container_image_url']}
+      docker load < #{rdrs_tgz_name}
     EOH
   end
 end

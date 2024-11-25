@@ -11,7 +11,7 @@ docker run --rm  \
   --mount type=bind,source=<%= node['ndb']['log_dir'] %>,target=<%= node['ndb']['log_dir'] %> \
   --mount type=bind,source=<%= @crypto_dir %>,target=<%= @crypto_dir %>,readonly  \
   --network=host \
-  rdrs:<%= node['ndb']['version'] %> \
+  rdrs:<%= node['ndb']['rdrs']['image_version'] %> \
   /srv/hops/mysql/bin/rdrs -config=<%= node['ndb']['root_dir'] %>/rdrs_config.json
 
 <% else %>

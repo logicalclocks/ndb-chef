@@ -291,7 +291,7 @@ default['ndb']['mysqld']['metrics_port']                    = "9104"
 
 # Rondb Rest API Server Configurations
 default['ndb']['rdrs']['version']                                                    = "0.1.0"
-default['ndb']['rdrs']['image_version']                                              = "22.10.7"
+default['ndb']['rdrs']['image_version']                                              = "22.10.8"
 default['ndb']['rdrs']['containerize']                                               = "true"
 default['ndb']['rdrs']['container_image_url']                                        = node['download_url'] + "/docker-image-rdrs-#{node['ndb']['rdrs']['image_version']}.tar.gz"
 default['ndb']['rdrs']['internal']['buffer_size']                                    = "5242880"
